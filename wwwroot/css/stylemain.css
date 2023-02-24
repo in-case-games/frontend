@@ -1,0 +1,42 @@
+:root {
+	--text_color: #B8FFDC;
+	--background_page_color: #1A1A1D;
+	--background_button_submit_color: #B8FFDC;
+	--text_button_submit_color: #1A1A1D;
+}
+.--hidden {
+	display: none;
+	visibility: hidden;
+}
+html {
+	background-color: var(--background_page_color);
+	color: var(--text_color);
+}
+.header .footer {
+	flex: 0 0 auto;
+}
+.wrapper {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+.main {
+    flex: 1 0 auto;
+}
+.container {
+    margin: 0 auto;
+    max-width: 1060px;
+    height: 100%;
+    padding: 0 40px;
+}
+.btn {
+	border-radius: 10px;
+    opacity: 0.8;
+    padding: 8px 10px;
+    width: 250px;
+}
+.button-submit {
+	background: var(--background_button_submit_color);
+	color: var(--text_button_submit_color);
+}

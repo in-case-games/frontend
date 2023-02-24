@@ -2,8 +2,8 @@
   "name": "modulesapp",
   "version": "1.0.0",
   "scripts" : {
-    "start" : "node app.js",
-    "dev" : "node app.js"
+    "start" : "start http://localhost:3000/ && node app.js",
+    "dev" : "start http://localhost:3000/ && node app.js"
   },
   "dependencies": {
     "express": "^4.18.2",
