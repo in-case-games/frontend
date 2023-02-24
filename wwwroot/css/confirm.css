@@ -1,0 +1,89 @@
+body {
+	background-color: #1A1A1D;
+	color: #B8FFDC;
+}
+.wrapper {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	background-color: #1A1A1D;
+}
+.main {
+	flex: 1 1 0;
+	height: 100%;
+	width: 100%;
+}
+.container {
+	display: block;
+	max-width: 1086px;
+	margin: 0 auto;
+	height: 100%;
+}
+.main-window {
+	display: flex;
+	height: 100%;
+	width: 100%;
+}
+.window {
+	max-width: 400px;
+	max-width: 1086px;
+	min-height: 400px;
+	min-width: 400px;
+	margin: auto;
+	border-radius: 10px;
+	border: 1px solid #B8FFDC;
+}
+.window-handler {
+	position: relative;
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	height: 100%;
+}
+
+.window-img {
+	height: 400px;
+	flex: 0.4 1 auto;
+	border-right: 1px solid #B8FFDC;
+	background: #B8FFDC;
+	border-radius: 8px 0 0 8px;
+}
+
+.window-form {
+	flex: 0.6 1 auto;
+}
+
+.window-header {
+	text-align: center;
+	color: #B8FFDC;
+	font-size: 30px;
+	flex: 0.2 0 auto;
+}
+
+.window-logo {
+	width: 100px;
+	display: block;
+	margin: 0 auto;
+}
+
+.form {
+	flex: 0.6 0 auto;
+}
+
+.window-footer {
+	flex: 0.2 0 auto;
+}
+
+.form-input {
+	text-align: center;
+}
+.window-delimiter {
+	border: 1px solid #bdeed6;
+    width: 90%;
+}
+
+.handler {
+	flex-direction: column;
+	display: flex;
+}
+
