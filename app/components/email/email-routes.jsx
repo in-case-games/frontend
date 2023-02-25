@@ -11,11 +11,11 @@ import ErrorNotFound from "../error/error-not-found"
 function EmailRoutes() {
 	return (
 		<Routes>
-			<Route path="/receive/:userId/:emailToken" element={<ReceiveEmailConfirm/>}/>
-			<Route path="/receive/new/:userId/:emailToken" element={<ReceiveEmailNewConfirm/>}/>
-			<Route path="/receive/update/email/:userId/:emailToken" element={<ReceiveEmailUpdateConfirm/>}/>
-			<Route path="/receive/update/password/:userId/:emailToken" element={<ReceivePasswordUpdateConfirm/>}/>
-			<Route path="/receive/delete/:userId/:emailToken" element={<ReceiveAccountDeleteConfirm/>}/>
+			<Route path="/receive/:userId" element={<ReceiveEmailConfirm/>}/>
+			<Route path="/receive/new/:userId" element={<ReceiveEmailNewConfirm/>}/>
+			<Route path="/receive/update/email/:userId" element={<ReceiveEmailUpdateConfirm/>}/>
+			<Route path="/receive/update/password/:userId" element={<ReceivePasswordUpdateConfirm/>}/>
+			<Route path="/receive/delete/:userId" element={<ReceiveAccountDeleteConfirm/>}/>
 			<Route path="*" element={<ErrorNotFound/>}/>
 		</Routes>
 )}
