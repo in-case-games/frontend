@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import {useParams, useSearchParams, useNavigate} from "react-router-dom";
 
-function ReceiveEmailUpdateConfirm() {
+function ReceiveAccountDeleteConfirm() {
 	const params = useParams();
 	const [searchParams, setSearchParams] = useSearchParams();
 	const user = {
@@ -12,12 +12,13 @@ function ReceiveEmailUpdateConfirm() {
 		UserIp: searchParams.get("ip"),
 		UserPlatforms: searchParams.get("platform")
 	};
+	
 	return (
 		<div>
-			<h1>UserId: {params.userId}</h1>
-			<h1>EmailToken: {params.emailToken}</h1>
+			<h1>UserId: {user.UserId}</h1>
+			<h1>EmailToken: {user.EmailToken}</h1>
 		</div>
 
 )}
 
-export default ReceiveEmailUpdateConfirm;
+export default ReceiveAccountDeleteConfirm;

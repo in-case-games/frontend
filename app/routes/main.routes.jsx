@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
-import EmailRoutes from "./email/email-routes";
-import ErrorNotFound from "./error/error-not-found"
+import EmailRoutes from "./email.routes";
+import ErrorNotFound from "../components/error/error.notFound"
 
 function ApplicationRoutes() {
 	return (

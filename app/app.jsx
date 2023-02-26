@@ -1,6 +1,6 @@
 const ReactDOM = require("react-dom/client");
 const React = require("react");
-import ApplicationRoutes from "./components/routes";
+import ApplicationRoutes from "./routes/main.routes";
 import "../public/css/stylenull.css";
 import "../public/css/stylemain.css";
 

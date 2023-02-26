@@ -1,12 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import {Routes, Route} from "react-router-dom";
-import ReceiveEmailConfirm from "./email-confirm";
-import ReceiveEmailNewConfirm from "./email-new-confirm";
-import ReceiveEmailUpdateConfirm from "./email-update-confirm";
-import ReceivePasswordUpdateConfirm from "./email-update-password-confirm";
-import ReceiveAccountDeleteConfirm from "./email-account-delete-confirm";
-import ErrorNotFound from "../error/error-not-found"
+import ReceiveEmailConfirm from "../components/email/EmailConfirm";
+import ReceiveEmailNewConfirm from "../components/email/EmailNewConfirm";
+import ReceiveEmailUpdateConfirm from "../components/email/EmailUpdate";
+import ReceivePasswordUpdateConfirm from "../components/email/EmailUpdatePassword";
+import ReceiveAccountDeleteConfirm from "../components/email/EmailAccountDelete";
+import ErrorNotFound from "../components/error/error.notFound"
 
 function EmailRoutes() {
 	return (

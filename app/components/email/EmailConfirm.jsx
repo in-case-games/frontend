@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
 import ReactDOM from "react-dom";
+import api from "../../services/api";
+import TokenService from "../../services/token.service";
+import ErrorForbid from "../error/error.forbid";
 import {useParams, useSearchParams, useNavigate} from "react-router-dom";
 
 function ReceiveEmailConfirm() {
 	const params = useParams();
 	const [searchParams, setSearchParams] = useSearchParams();
-	const [appState, setAppState] = useState();
+	const [currentUser, setCurrentUser] = useState(undefined);
 	const user = {
 		UserId: params.userId,
 		UserEmail: "yt_ferbray@mail.ru",
@@ -17,31 +20,28 @@ function ReceiveEmailConfirm() {
 
 	useEffect(() => {
 		const apiUrl = 'https://localhost:7138/email/api/EmailTokenReceive/confirm';
-		axios.post(apiUrl, user).then(
+		api.post(apiUrl, user).then(
 		response => {
-			console.log(response.data);
-			const result = "true";
-			setAppState(result);
+			if (response.data.data.accessToken) {
+				TokenService.setUser(response.data.data);
+				setCurrentUser(response.data.data);
+			}
 		}).catch(
-		error => {
-			setAppState(null);
-		});
-	}, [setAppState]);
+			error => {
+				setCurrentUser(undefined);
+			});
+	}, [setCurrentUser]);
 
-	let result = appState;
-
-	if(result === null)  {
+	if(currentUser === undefined)  {
 		return (
 			<div>
-				<h1>mmmXyina</h1>
+				<ErrorForbid/>
 			</div>)
 	}
 
 	return (
 		<div>
-			<h1>UserId: {user.UserId}</h1>
-			<h1>EmailToken: {user.EmailToken}</h1>
-			<h1>{result}</h1>
+			<h1>Вы успешно авторизовались!</h1>
 		</div>
 
 )}
