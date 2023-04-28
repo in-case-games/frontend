@@ -1,0 +1,14 @@
+import React from "react";
+import App from "./App";
+import ReactDOMClient from "react-dom/client";
+import "./assets/styles/zeroing.css";
+import "./assets/styles/fonts.css";
+import "./assets/styles/main.css";
+import "./assets/styles/buttons.css";
+
+
+const root = ReactDOMClient.createRoot(document.getElementById("root"));
+
+root.render(
+    <App/>
+);

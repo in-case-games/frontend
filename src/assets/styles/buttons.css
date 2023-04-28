@@ -1,0 +1,22 @@
+:root {
+    --background_header_button: #F8B415;
+    --color_header_button: #1A1A1D;
+}
+
+.btn {
+	border-radius: 8px;
+    padding: 8px 10px;
+    width: 200px;
+}
+
+.header-button {
+    background-color: var(--background_header_button);
+    color: var(--color_header_button);
+    font-family: 'Play';
+    font-weight: 400;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
