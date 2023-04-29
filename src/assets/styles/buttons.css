@@ -9,7 +9,21 @@
     width: 200px;
 }
 
-.header-button {
+.btn-lang {
+    display: flex;
+    align-items: center;
+    font-family: 'Play';
+    font-weight: 400;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 35px;
+}
+
+.btn-lang img {
+    margin: 0 5px;
+}
+
+.btn-default {
     background-color: var(--background_header_button);
     color: var(--color_header_button);
     font-family: 'Play';

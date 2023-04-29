@@ -1,7 +1,6 @@
 import React from "react";
-import MainRoutes from "./routing/MainRoutes";
-import Footer from "./components/Common/Footer";
-import Header from "./components/Common/Header";
+import { Main as MainRoutes } from "./routing";
+import { Header, Footer } from "./components/сommon";
 
 class App extends React.Component {
     render() {

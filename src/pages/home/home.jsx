@@ -1,13 +1,13 @@
 import React from "react";
 
-class HomePage extends React.Component {
+class Home extends React.Component {
     render() {
         return (
-             <div>
+             <div className="main">
                 Main
              </div>
         );
     }
 }
 
-export default HomePage;
+export default Home;
