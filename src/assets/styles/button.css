@@ -45,8 +45,12 @@
 }
 
 .btn-anchor div {
-    height: 10px;
     width: 200px;
     margin: 0 auto;
-    background-color: var(--color_anchor_button);
+    height: 0; 
+    width: 200px;
+    border-top: 10px solid var(--color_anchor_button);
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    margin: 0 auto;
 }

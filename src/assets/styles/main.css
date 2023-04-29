@@ -165,16 +165,16 @@ html {
 }
 
 .butterfly {
-  position: absolute;
-  left: 0;
-  -webkit-transform: rotate(180deg);
-  -moz-transform: rotate(180deg);
-  -o-transform: rotate(180deg);
-  -ms-transform: rotate(180deg);
-  transform: rotate(180deg);
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
-  top: 0;
-  height: 100%;
-  width: 100%;
-  background-color: var(--background_page_color);
+	position: absolute;
+	left: 0;
+	-webkit-transform: rotate(180deg);
+	-moz-transform: rotate(180deg);
+	-o-transform: rotate(180deg);
+	-ms-transform: rotate(180deg);
+	transform: rotate(180deg);
+	clip-path: polygon(50% 0, 100% 100%, 0 100%);
+	top: 0;
+	height: 100%;
+	width: 100%;
+	background-color: var(--background_page_color);
 }
