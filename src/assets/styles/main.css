@@ -1,6 +1,11 @@
 :root {
 	--text_color: #F8B415;
 	--background_page_color: #1A1A1D;
+	--background_footer_top_color: #F47D27;
+	--background_footer_bot_default: rgba(168,76,15,1);
+	--background_footer_bot_filter_start: #a84c0f;
+	--background_footer_bot_filter_end: #491e03;
+	--background_footer_bot_color: 180deg, rgba(168,76,15,1) 0%, rgba(73,30,3,1) 100%;
 }
 
 #root {
@@ -123,4 +128,53 @@ html {
 	font-size: 16px;
 	font-family: 'Play';
 	font-weight: normal;
+}
+
+.footer {
+	display: flex;
+	flex-direction: column;
+	height: 570px;
+}
+
+.footer-transition {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex: 0 0 auto;
+	height: 200px;
+	background-color: var(--background_footer_top_color);
+}
+
+.footer-site {
+	flex: 0 0 auto;
+	height: 370px;
+	background: var(--background_footer_bot_color_default);
+	background: -moz-linear-gradient(var(--background_footer_bot_color));
+	background: -webkit-linear-gradient(var(--background_footer_bot_color));
+	background: linear-gradient(var(--background_footer_bot_color));
+	filter: progid:DXImageTransform.Microsoft.gradient(
+		startColorstr=var(--background_footer_bot_filter_start), 
+		endColorstr=var(--background_footer_bot_filter_end),
+		GradientType=1);
+}
+
+.footer-butterfly {
+	height: 100px;
+	position: relative;
+	width: 100%;
+}
+
+.butterfly {
+  position: absolute;
+  left: 0;
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  top: 0;
+  height: 100%;
+  width: 100%;
+  background-color: var(--background_page_color);
 }

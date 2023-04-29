@@ -5,7 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import "./assets/styles/zeroing.css";
 import "./assets/styles/fonts.css";
 import "./assets/styles/main.css";
-import "./assets/styles/buttons.css";
+import "./assets/styles/button.css";
 
 
 const root = ReactDOMClient.createRoot(document.getElementById("root"));

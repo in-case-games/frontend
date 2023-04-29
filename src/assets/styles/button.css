@@ -1,5 +1,7 @@
 :root {
     --background_header_button: #F8B415;
+    --background_anchor_button: #1A1A1D;
+    --color_anchor_button: #FFE665;
     --color_header_button: #1A1A1D;
 }
 
@@ -33,4 +35,18 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.btn-anchor {
+    height: 60px;
+    width: 300px;
+
+    background-color: var(--background_anchor_button);
+}
+
+.btn-anchor div {
+    height: 10px;
+    width: 200px;
+    margin: 0 auto;
+    background-color: var(--color_anchor_button);
 }
