@@ -20,20 +20,6 @@ class Home extends React.Component {
                 <ItemRoulette/>
                 <Banner/>
                 <h1>Main</h1>
-                <h1>Main</h1>
-                <h1>Main</h1>
-                <h1>Main</h1>
-                <h1>Main</h1>
-                <h1>Main</h1>
-                <h1>Main</h1>
-                <h1>Main</h1>
-                <h1>Main</h1>
-                <h1>Main</h1>
-                <h1>Main</h1>
-                <h1>Main</h1>
-                <h1>Main</h1>
-                <h1>Main</h1>
-                <h1>Main</h1>
             </div>
         );
     }

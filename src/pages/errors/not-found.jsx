@@ -1,5 +1,6 @@
 import React from "react";
 import {Helmet} from "react-helmet";
+import classes from './error.module.css'
 
 class NotFound extends React.Component {
     title = "InCase - ";
@@ -14,7 +15,8 @@ class NotFound extends React.Component {
                 <Helmet>
                     <title>{this.title}</title>
                 </Helmet>
-                Not Found
+                <h1 className={classes.error_title}>Упс... Такой страницы не существует, возможно, вам и не
+                нужно переходить по данной ссылке :)</h1>
             </div>
         );
     }
