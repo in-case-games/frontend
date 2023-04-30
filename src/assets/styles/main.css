@@ -25,6 +25,7 @@ html {
 }
 
 .main {
+	margin-top: 80px;
     flex: 1 0 auto;
 }
 
