@@ -33,13 +33,13 @@ class Footer extends React.Component {
                                 </div>
                             </div>
                             <div className="social-link">
-                                <a className="document-link">
+                                <a className="document-link" href="/#">
                                     Пользовательское соглашение
                                 </a>
-                                <a className="document-link">
+                                <a className="document-link" href="/#">
                                     Политика использование файлов cookie
                                 </a>
-                                <a className="document-link">
+                                <a className="document-link" href="/#">
                                     Политика конфиденциальности
                                 </a>
                             </div>

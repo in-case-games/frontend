@@ -8,8 +8,8 @@ class Main extends React.Component {
     render() {
         return (
         <Routes>
-            <Route path="/" element={<HomePage/>}/>
-            <Route path="*" element={<NotFoundPage/>}/>
+            <Route path="/" element={<HomePage title="Главная"/>}/>
+            <Route path="*" element={<NotFoundPage title="Страница не найдена"/>}/>
         </Routes>
         );
     }

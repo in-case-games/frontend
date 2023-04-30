@@ -1,9 +1,20 @@
 import React from "react";
+import {Helmet} from "react-helmet";
 
 class Home extends React.Component {
+    title = "InCase - ";
+
+    constructor(props) {
+        super(props);
+        this.title = this.title + props.title;
+    }
+
     render() {
         return (
-             <div className="main">
+            <div className="main">
+                <Helmet>
+                    <title>{this.title}</title>
+                </Helmet>
                 <h1>Main</h1>
                 <h1>Main</h1>
                 <h1>Main</h1>
@@ -19,7 +30,7 @@ class Home extends React.Component {
                 <h1>Main</h1>
                 <h1>Main</h1>
                 <h1>Main</h1>
-             </div>
+            </div>
         );
     }
 }

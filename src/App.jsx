@@ -10,7 +10,7 @@ class App extends React.Component {
                 <Header/>
                 <MainRoutes/>
                 <Footer/>
-                <img src={background} id="background-man-absolute"/>
+                <img src={background} id="background-man-absolute" alt="bg-man"/>
             </div>
         )
     }

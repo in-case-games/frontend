@@ -162,6 +162,7 @@ html {
 	align-items: center;
 	flex: 0 0 auto;
 	height: 200px;
+	z-index: -11;
 	background-color: var(--background_footer_top_color);
 }
 
