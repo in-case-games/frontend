@@ -1,6 +1,7 @@
 :root {
 	--text_color: #F8B415;
 	--text_color_footer: #F4AB75;
+	--text_color_sub-statistic: #C5753A;
 	--background_page_color: #1A1A1D;
 	--background_footer_top_color: #F47D27;
 	--background_footer_bot_default: rgba(168,76,15,1);
@@ -137,8 +138,8 @@ html {
 
 .footer {
 	display: flex;
+	min-height: 570px;
 	flex-direction: column;
-	height: 570px;
 	font-family: 'Play';
 	font-weight: 400;
 	color: var(--text_color_footer);
@@ -154,11 +155,8 @@ html {
 }
 
 .footer-site {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
+	min-height: 370px;
 	flex: 0 0 auto;
-	height: 370px;
 	background: var(--background_footer_bot_color_default);
 	background: -moz-linear-gradient(var(--background_footer_bot_color));
 	background: -webkit-linear-gradient(var(--background_footer_bot_color));
@@ -167,6 +165,11 @@ html {
 		startColorstr=var(--background_footer_bot_filter_start), 
 		endColorstr=var(--background_footer_bot_filter_end),
 		GradientType=1);
+}
+
+.footer-site .container {
+	display: flex;
+	justify-content: space-between;
 }
 
 .footer-butterfly {
@@ -195,6 +198,7 @@ html {
 	flex-direction: column;
 	justify-content: space-evenly;
 	flex: 0 0 auto;
+	width: 30%;
 }
 
 .social-link {
@@ -248,12 +252,83 @@ html {
 
 .site-statistics {
 	display: flex;
+	flex-wrap: wrap;
 	flex-direction: column;
-	flex: 0 0 auto;
+	flex: 1 1 auto;
+	align-items: center;
+    justify-content: space-around;
+}
+
+.statistics {
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+}
+
+.statistics-wrapper {
+	display: flex;
+	justify-content: space-evenly;
+	flex-wrap: wrap;
+	margin-bottom: 30px;
+}
+
+.statistic { 
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.statistic img {
+	height: 32px;
+}
+
+.statistic-counter {
+	font-size: 28px;
+}
+
+.statistic-sub {
+	font-size: 20px;
+	color: var(--text_color_sub-statistic);
+}
+
+.types-payment {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	margin: 0 -10px;
+}
+
+.types-payment img {
+	padding: 0 10px;
 }
 
 .site-info {
 	display: flex;
+	justify-content: space-around;
+	align-items: flex-end;
+	width: 30%;
 	flex-direction: column;
 	flex: 0 1 auto
+}
+
+.info-bar {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	margin: 0 -40px;
+}
+
+.info {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 0 40px;
+	font-size: 18px;
+}
+
+.info-additional {
+	word-break: normal;
+	text-align: right;
+	font-size: 13px;
 }
