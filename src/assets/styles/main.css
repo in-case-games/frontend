@@ -23,6 +23,7 @@
 html {
 	background-color: var(--background_page_color);
 	color: var(--text_color);
+	overflow-x: hidden;
 }
 #background-man-absolute {
 	position: fixed;

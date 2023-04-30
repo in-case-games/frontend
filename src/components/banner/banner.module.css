@@ -1,0 +1,25 @@
+:root {
+    --background_banner: #D3861C;
+    --dev-banner-height: 420px;
+}
+
+.banner {
+    display: flex;
+    justify-content: center;
+    min-height: var(--dev-banner-height);
+    background: var(--background_banner);
+}
+
+.banner_content {
+    height: 420px;
+    width: 100vh;
+    -webkit-clip-path: polygon(0 0, 100% 0, 97% 100%, 4% 100%);
+    clip-path: polygon(0 0, 100% 0, 97% 100%, 4% 100%);
+    background: #EAA22F;
+}
+
+.banner_image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
