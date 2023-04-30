@@ -4,7 +4,21 @@ class Home extends React.Component {
     render() {
         return (
              <div className="main">
-                Main
+                <h1>Main</h1>
+                <h1>Main</h1>
+                <h1>Main</h1>
+                <h1>Main</h1>
+                <h1>Main</h1>
+                <h1>Main</h1>
+                <h1>Main</h1>
+                <h1>Main</h1>
+                <h1>Main</h1>
+                <h1>Main</h1>
+                <h1>Main</h1>
+                <h1>Main</h1>
+                <h1>Main</h1>
+                <h1>Main</h1>
+                <h1>Main</h1>
              </div>
         );
     }

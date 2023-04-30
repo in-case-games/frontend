@@ -7,3 +7,6 @@ export { default as Key } from "./key.svg";
 export { default as ListLunge } from "./list-lunge.svg";
 export { default as LogoMen } from "./logo-men.svg";
 export { default as LootBox } from "./loot-box.svg";
+export { default as Telegram } from "./telegram.svg";
+export { default as VK } from "./vk.svg";
+export { default as YouTube } from "./youtube.svg";
