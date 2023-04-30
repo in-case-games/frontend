@@ -38,14 +38,16 @@
 }
 
 .btn-anchor {
+    cursor: pointer;
     height: 60px;
     width: 300px;
-    margin-top: 20px;
+    margin: 20px auto 0 auto;
 
     background-color: var(--background_anchor_button);
 }
 
-.btn-anchor div {
+.btn-anchor .anchor-inside {
+    display: block;
     width: 200px;
     margin: 0 auto;
     height: 0; 

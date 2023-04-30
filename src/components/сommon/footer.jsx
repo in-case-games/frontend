@@ -14,9 +14,10 @@ class Footer extends React.Component {
         return (
             <footer className="footer">
                 <div className="footer-transition">
-                    <div class="footer-butterfly">
-                        <div class="butterfly"></div>
-                    </div>
+                    <div className="butterfly"></div>
+                    <div className="footer-butterfly"></div>
+                </div>
+                <div className="footer-anchor">
                     <AnchorButton/>
                 </div>
                 <div className="footer-site">
