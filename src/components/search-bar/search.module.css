@@ -1,0 +1,37 @@
+@import url("/src/assets/styles/colors.css");
+
+.search_section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+}
+
+.search_bar {
+    border: 3px solid var(--main-color);
+    border-radius: 8px;
+    padding: 10px 20px;
+    min-width: 35%;
+    font-size: 20px;
+    font-family: Nunito;
+    color: var(--main-color);
+    background: none;
+    outline: none;
+}
+
+.search_filter {
+    border: 3px solid var(--main-color);
+    height: 50px;
+    margin: 10px;
+    width: 50px;
+    border-radius: 15px;
+    background: none;
+    outline: none;
+    cursor: pointer;
+}
+
+.filter_image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
