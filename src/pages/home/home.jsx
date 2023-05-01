@@ -70,10 +70,12 @@ class Home extends React.Component {
                 </Helmet>
                 <ItemRoulette/>
                 <Banner/>
-                <SearchBar/>
-                <BoxGroup name="Пушечные кейсы кс го" boxes={this.boxesOne}/>
-                <BoxGroup name="Экхтеме бархот за рубль" boxes={this.boxesTwo}/>
-                <BoxGroup name="Ну тьи панял?:" boxes={this.boxesThird}/>
+                <div className="container-small">
+                    <SearchBar/>
+                    <BoxGroup name="Пушечные кейсы кс го" boxes={this.boxesOne}/>
+                    <BoxGroup name="Экхтеме бархот за рубль" boxes={this.boxesTwo}/>
+                    <BoxGroup name="Ну тьи панял?:" boxes={this.boxesThird}/>
+                </div>
             </div>
         );
     }
