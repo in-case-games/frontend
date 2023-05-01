@@ -1,7 +1,6 @@
 import React from "react";
-import classes from './review.module.css'
 import Review from "./review";
-import {ListLunge} from "../../assets/images/icon";
+import Group from "../group/group";
 
 let reviewsTemplate = [
     {
@@ -34,38 +33,14 @@ let reviewsTemplate = [
     }
 ]
 
-const ReviewSlider = (props) => {
+const ReviewSlider = () => {
     let reviews = reviewsTemplate.map((review) =>
     {
         return <Review img={review.img} username={review.username} date={review.date} content={review.content} key={review.id}/>
     })
 
-    const [showBoxes, setShowBoxes] = React.useState(true);
-    const onClick = () => setShowBoxes(!showBoxes);
-
     return(
-        <div className={classes.box_group}>
-            <div className={classes.group_title}>
-                <div className={classes.group_wrapper}>
-                    <div>{props.name}</div>
-                    <img alt="" href="#" src={ListLunge} onClick={onClick}></img>
-                </div>
-                <div className={classes.group_delimiter}>
-                    <div className={classes.delimiter_top}></div>
-                    <div className={classes.delimiter_bot}>
-                        <div className={classes.delimiter_vertical}></div>
-                        <div className={classes.delimiter_center}>
-                            <div></div>
-                            <div></div>
-                        </div>
-                        <div className={classes.delimiter_vertical}></div>
-                    </div>
-                </div>
-            </div>
-            <div className={classes.group_content}>
-                {showBoxes ? reviews : null }
-            </div>
-        </div>
+        <Group name="Отзывы" items={reviews}/>
     )
 }
 
