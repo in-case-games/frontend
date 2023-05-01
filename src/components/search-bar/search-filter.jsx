@@ -2,7 +2,7 @@ import React from "react";
 import classes from './search.module.css';
 
 const SearchFilter = (props) => {
-    let button_func = props.buttonFunc ? props.buttonFunc: "javascript.void(0)";
+    let button_func = props.buttonFunc ? props.buttonFunc: () => console.log();
 
     return (
         <button className={classes.search_filter} onClick={button_func}>
