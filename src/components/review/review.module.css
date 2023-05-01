@@ -1,0 +1,61 @@
+@import url("/src/assets/styles/colors.css");
+
+.review {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    height: 200px;
+    background: var(--main-gradient);
+    border-radius: 15px;
+    align-items: center;
+    justify-content: space-evenly;
+    color: #000;
+    margin: 20px;
+    padding: 15px;
+}
+
+.review_info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.review_additional_info {
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: flex-start;
+}
+
+.review_info img {
+    border-radius: 15px;
+    width: 25%;
+    object-fit: cover;
+}
+
+.review_name {
+    font-size: 20px;
+    margin: 0 0 5px 0;
+    font-weight: 800;
+    font-family: Nunito;
+}
+
+.reviewer_date {
+    font-size: 14px;
+    font-family: Nunito;
+    font-weight: 600;
+    margin: 0;
+}
+
+.review_content {
+    font-size: 16px;
+    font-family: Nunito;
+    text-align: center;
+}
+
+.review_slider {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
