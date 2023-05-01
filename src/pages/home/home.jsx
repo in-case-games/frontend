@@ -1,7 +1,6 @@
 import React from "react";
-import {Helmet} from "react-helmet";
-import ItemRoulette from "../../components/item/item-roulette";
-import Banner from "../../components/banner/banner";
+import { Helmet } from "react-helmet";
+import { ItemRoulette, BoxGroup, Banner } from "../../components";
 
 class Home extends React.Component {
     title = "InCase - ";
@@ -19,7 +18,9 @@ class Home extends React.Component {
                 </Helmet>
                 <ItemRoulette/>
                 <Banner/>
-                <h1>Main</h1>
+                <BoxGroup/>
+                <BoxGroup/>
+                <BoxGroup/>
             </div>
         );
     }

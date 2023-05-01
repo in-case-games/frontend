@@ -49,6 +49,12 @@ html {
     padding: 0 40px;
 }
 
+.container-small {
+    margin: 0 auto;
+    max-width: 1060px;
+    padding: 0 40px;
+}
+
 .wrapper {
 	width: 100%;
 	height: 100%;
