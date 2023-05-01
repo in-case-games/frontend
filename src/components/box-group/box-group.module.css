@@ -23,6 +23,7 @@
 .group_wrapper img {
     height: 20px;
     margin-left: 20px;
+    cursor: pointer;
 }
 
 .group_delimiter {
@@ -66,4 +67,9 @@
     font-size: 20px;
     font-family: 'Play';
     font-weight: normal;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin: 0 -30px;
+    padding: 0 40px;
 }
