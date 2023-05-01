@@ -73,3 +73,13 @@
     margin: 0 -30px;
     padding: 0 40px;
 }
+
+.empty_text {
+    font-family: Nunito;
+    text-align: center;
+    font-size: 32px;
+    font-weight: 900;
+    color: #313138;
+    margin-left: auto;
+    margin-right: auto;
+}

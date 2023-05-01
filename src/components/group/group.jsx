@@ -6,6 +6,14 @@ const Group = (props) => {
     const [showItems, setShowItems] = React.useState(true);
     const onClick = () => setShowItems(!showItems);
 
+    let items = props.items;
+
+    if (items.length === 0)
+    {
+        items = <p className={classes.empty_text}>Пусто</p>
+    }
+
+
     return (
         <div className={classes.group}>
             <div className={classes.group_title}>
@@ -26,7 +34,7 @@ const Group = (props) => {
                 </div>
             </div>
             <div className={classes.group_content}>
-                {showItems ? props.items : null }
+                {showItems ? items : null }
             </div>
         </div>
     )
