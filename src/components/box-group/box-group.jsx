@@ -4,10 +4,10 @@ import { ListLunge } from "../../assets/images/icon";
 import LootBox from "../loot-box/loot-box";
 
 const BoxGroup = (props) => {
-    const [showBoxes, setShowBoxes] = React.useState(true)
-    const onClick = () => setShowBoxes(!showBoxes)
+    const [showBoxes, setShowBoxes] = React.useState(true);
+    const onClick = () => setShowBoxes(!showBoxes);
 
-    const boxes = props.boxes.map((box) => <LootBox box={box} key={box.id}/>);
+    const boxes = props.boxes?.map((box) => <LootBox box={box} key={box.id}/>);
 
     return(
         <div className={classes.box_group}>
