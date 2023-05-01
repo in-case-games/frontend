@@ -73,7 +73,7 @@
     align-items: center;
 }
 
-.btn-cost-box img {
+.btn-cost-box svg {
     color: var(--color_coin_cost_box);
     height: 20px;
     width: 20px;
