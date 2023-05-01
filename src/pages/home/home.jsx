@@ -85,8 +85,8 @@ class Home extends React.Component {
                     <BoxGroup name="Пушечные кейсы кс го" boxes={this.boxesOne}/>
                     <BoxGroup name="Экхтеме бархот за рубль" boxes={this.boxesTwo}/>
                     <BoxGroup name="Ну тьи панял?:" boxes={this.boxesThird}/>
+                    <ReviewSlider name="Отзывы"/>
                 </div>
-                <ReviewSlider/>
             </div>
         );
     }

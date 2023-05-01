@@ -16,7 +16,7 @@ const SearchBar = () =>
                 />
                 <SearchFilter iconUri={Banner}
                 />
-                <SearchFilter iconUri={Banner}
+                <SearchFilter iconUri={Star}
                 />
                 <SearchFilter iconUri="https://psv4.userapi.com/c237331/u299329049/docs/d37/6eec55cad150/pngegg.png?extra=oct6iPr0GVZG2u4W9U1luEEsnDTtSxnhhAGLeR2zH1k1-E9_tmi12SRNT1n-oq8VHN3tQ7rDWCbIzIhO9fpi9mlfvwOA6_XTVHn_bxNVdIztTbM4OgEYnJfnSlroaH8l8vD_LZhbGr7S4sn2k6BGJ0VHwQ"
                 />
