@@ -3,6 +3,9 @@
     --background_anchor_button: #1A1A1D;
     --color_anchor_button: #FFE665;
     --color_header_button: #1A1A1D;
+    --color_border_cost_box: #F8B415;
+    --color_font_cost_box: #F8B415;
+    --color_coin_cost_box: #F8B415;
 }
 
 .btn {
@@ -56,4 +59,23 @@
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
     margin: 0 auto;
+}
+
+.btn-cost-box {
+    border: 1px solid var(--color_border_cost_box);
+    color: var(--color_font_cost_box);
+    font-family: 'Play';
+    font-weight: 400;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-cost-box img {
+    color: var(--color_coin_cost_box);
+    height: 20px;
+    width: 20px;
+    margin-left: 10px;
 }
