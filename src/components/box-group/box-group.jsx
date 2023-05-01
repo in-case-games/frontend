@@ -7,7 +7,7 @@ const BoxGroup = (props) => {
     const [showBoxes, setShowBoxes] = React.useState(true)
     const onClick = () => setShowBoxes(!showBoxes)
 
-    const boxes = props.boxes.map((box) => <LootBox box={box}/>);
+    const boxes = props.boxes.map((box) => <LootBox box={box} key={box.id}/>);
 
     return(
         <div className={classes.box_group}>
