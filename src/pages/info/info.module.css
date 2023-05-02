@@ -1,0 +1,11 @@
+.info {
+    font-family: 'Nunito';
+}
+
+.info h1 {
+    text-align: center;
+}
+
+.info p {
+    text-align: justify;
+}

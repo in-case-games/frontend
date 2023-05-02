@@ -1,6 +1,8 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import { Panel as PanelButton } from "../../components/сommon/button";
+import { ItemRoulette } from "../../components";
+import "./info.module.css";
+import {InfoSlider} from "./components";
 
 class InfoSite extends React.Component {
     title = "InCase - ";
@@ -16,9 +18,10 @@ class InfoSite extends React.Component {
                 <Helmet>
                     <title>{this.title}</title>
                 </Helmet>
+                <ItemRoulette/>
                 <div className="container-small">
-                    <div className="panels">
-                        <PanelButton/>
+                    <div className="info">
+                        <InfoSlider/>
                     </div>
                 </div>
              </div>

@@ -34,9 +34,9 @@ class Footer extends React.Component {
                                 </div>
                             </div>
                             <div className="social-link">
-                                <DocumentLink link="/info" text="Пользовательское соглашение"/>
-                                <DocumentLink link="/info" text="Политика использование файлов cookie"/>
-                                <DocumentLink link="/info" text="Политика конфиденциальности"/>
+                                <DocumentLink link="/info/user-agreement" text="Пользовательское соглашение"/>
+                                <DocumentLink link="/info/cookie-policy" text="Политика использование файлов cookie"/>
+                                <DocumentLink link="/info/privacy-policy" text="Политика конфиденциальности"/>
                             </div>
                             <div className="social-small-info">
                                 <img className="info-flag" alt="" src={FlagRUS}></img>
