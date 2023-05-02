@@ -1,0 +1,8 @@
+@import url("/src/assets/styles/colors.css");
+
+.sign_in_window {
+    width: 55vw;
+    height: 50vh;
+    background: var(--background_modal-window);
+    border-radius: 15px;
+}

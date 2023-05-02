@@ -9,9 +9,30 @@
     top: 0;
     left: 0;
     position: fixed;
-    transform: scale(0);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0s linear 0.3s;
 }
 
 .modal.active {
-    transform: scale(1);
+    opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
+}
+
+.modal__content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.hidden_text {
+    position: fixed;
+    margin-top: 30px;
+    margin-left: 30px;
+    font-size: 18px;
+    font-weight: 900;
+    font-family: Nunito;
+    color: #808080;
 }

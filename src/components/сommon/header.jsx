@@ -10,6 +10,7 @@ import {
     Info, Key, ListLunge, LootBox
 } from "../../assets/images/icon";
 import Modal from "../modal/modal";
+import SignInWindow from "../modal/sign-in-window";
 
 const Header = () => {
     const [modalActive, setModalActive] = useState(false)
@@ -59,7 +60,7 @@ const Header = () => {
                 </div>
             </div>
 
-            <Modal active={modalActive} setActive={setModalActive}/>
+            <Modal active={modalActive} setActive={setModalActive} content={<SignInWindow/>}/>
         </header>
     );
 }
