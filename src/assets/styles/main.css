@@ -24,6 +24,7 @@ html {
 	background-color: var(--background_page_color);
 	color: var(--text_color);
 	overflow-x: hidden;
+	user-select: none;
 }
 #background-man-absolute {
 	position: fixed;

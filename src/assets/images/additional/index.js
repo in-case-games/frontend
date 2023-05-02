@@ -1,0 +1,1 @@
+export { default as ManLogoNoBg } from "./men-logo-3d-bg-remove.svg";
