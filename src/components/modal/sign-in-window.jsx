@@ -13,8 +13,8 @@ const SignInWindow = () => {
                 <form className={classes.sign_in_window_content__form}>
                     <p>Регистрация</p>
                     <input className={classes.input_form} placeholder="Имя аккаунта"/>
-                    <input className={classes.input_form} placeholder="E-mail"/>
-                    <input className={classes.input_form} placeholder="Пароль"/>
+                    <input className={classes.input_form} placeholder="E-mail" type="email"/>
+                    <input className={classes.input_form} placeholder="Пароль" type="password"/>
                     <div className={classes.checkbox_section}>
                         <input type="checkbox" value="Admin" name="agree-eta" className={classes.checkbox_form}/>
                         <label htmlFor="agree-eta">Пошел ты нахуй, козел</label>
