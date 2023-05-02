@@ -1,5 +1,5 @@
 import React from "react";
-import {Banner, Box, Star} from "../../assets/images/icon";
+import {Banner, BoxYellow, Gun} from "../../assets/images/icon";
 import classes from './search.module.css'
 import SearchFilter from "./search-filter";
 
@@ -16,11 +16,11 @@ const SearchBar = () =>
             />
             <div>
                 <SearchFilter 
-                    iconUri={Box}
+                    iconUri={BoxYellow}
                     buttonFunc={goFuck}
                 />
+                <SearchFilter iconUri={Gun}/>
                 <SearchFilter iconUri={Banner}/>
-                <SearchFilter iconUri={Star}/>
             </div>
         </div>
     );

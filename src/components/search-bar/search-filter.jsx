@@ -6,8 +6,7 @@ const SearchFilter = (props) => {
 
     return (
         <button className={classes.search_filter} onClick={button_func}>
-            <img alt="filter" className={classes.filter_image} src={props.iconUri}
-            />
+            <img alt="filter" className={classes.filter_image} src={props.iconUri}/>
         </button>
     )
 }
