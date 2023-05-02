@@ -24,3 +24,5 @@ export { default as Peoples } from "./peoples.svg";
 export { default as Project } from "./project.svg";
 export { default as Radar } from "./radar.svg";
 export { default as Star } from "./star.svg";
+export { default as BoxYellow } from "./box.yellow.svg";
+export { default as Gun } from "./gun.svg";
