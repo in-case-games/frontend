@@ -1,5 +1,5 @@
 import React from "react";
-import { Anchor as AnchorButton } from "./button";
+import { Anchor as AnchorButton, DocumentLink } from "./button";
 import { 
     Telegram, VK, YouTube, 
     FlagRUS, ListLunge, Account,
@@ -34,15 +34,9 @@ class Footer extends React.Component {
                                 </div>
                             </div>
                             <div className="social-link">
-                                <a className="document-link" href="/#">
-                                    Пользовательское соглашение
-                                </a>
-                                <a className="document-link" href="/#">
-                                    Политика использование файлов cookie
-                                </a>
-                                <a className="document-link" href="/#">
-                                    Политика конфиденциальности
-                                </a>
+                                <DocumentLink link="/info" text="Пользовательское соглашение"/>
+                                <DocumentLink link="/info" text="Политика использование файлов cookie"/>
+                                <DocumentLink link="/info" text="Политика конфиденциальности"/>
                             </div>
                             <div className="social-small-info">
                                 <img className="info-flag" alt="" src={FlagRUS}></img>

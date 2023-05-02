@@ -7,6 +7,11 @@
     --color_font_cost_box: #622F00;
     --color_coin_cost_box: #622F00;
     --background_cost_box_color: 180deg, rgba(255,230,101,1) 0%, rgba(254,115,36,1) 67%;
+    --background_panel_color: 180deg, rgba(255,230,101,1) 0%, rgba(254,115,36,1) 67%;
+}
+
+button {
+    cursor: pointer;
 }
 
 .btn {
@@ -14,6 +19,12 @@
     padding: 8px 10px;
     width: 200px;
     cursor: pointer;
+}
+
+.btn-panel {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(var(--background_panel_color));
 }
 
 .btn-lang {
@@ -90,4 +101,11 @@
     height: 20px;
     width: 20px;
     margin-left: 10px;
+}
+
+.document-link {
+    padding: 0;
+	font-size: 18px;
+	text-decoration: underline;
+	color: var(--text_color_footer);
 }
