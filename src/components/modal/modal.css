@@ -1,0 +1,17 @@
+:root {
+    --background_modal: rgb(0,0,0, 0.62);
+}
+
+.modal {
+    width: 100vw;
+    height: 100vh;
+    background: var(--background_modal);
+    top: 0;
+    left: 0;
+    position: fixed;
+    transform: scale(0);
+}
+
+.modal.active {
+    transform: scale(1);
+}

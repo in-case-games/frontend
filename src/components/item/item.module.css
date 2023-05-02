@@ -23,6 +23,7 @@
     text-decoration: none;
     padding: 20px;
     background: rgb(255,0,0);
+    user-select: none;
 }
 
 .big_item img{
