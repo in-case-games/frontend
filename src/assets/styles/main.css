@@ -23,6 +23,7 @@
 html {
 	background-color: var(--background_page_color);
 	color: var(--text_color);
+	font-family: 'Play';
 	overflow-x: hidden;
 	user-select: none;
 }
@@ -41,6 +42,14 @@ html {
 .main {
 	margin-top: 80px;
     flex: 1 0 auto;
+}
+
+.texts h1 {
+	text-align: center;
+}
+
+.texts p {
+	text-align: justify;
 }
 
 .container {
@@ -250,12 +259,6 @@ html {
 .social-text {
 	text-align: center;
 	font-size: 18px;
-}
-
-.social-link .document-link {
-	font-size: 18px;
-	text-decoration: underline;
-	color: var(--text_color_footer);
 }
 
 .social-small-info {
