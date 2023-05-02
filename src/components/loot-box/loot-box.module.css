@@ -2,6 +2,7 @@
     --color_font_box: #F8B415;
     --color_border_box_delimiter: #313138;
     --color_border_box_delimiter--hover: #F8B415;
+    --background_cost_box_color: 180deg, rgba(255,230,101,1) 100%, rgba(254,115,36,1) 100%;
 }
 
 .lootbox {
@@ -19,6 +20,10 @@
     -webkit-transition: border-color 400ms linear;
     -ms-transition: border-color 400ms linear;
     transition: border-color 400ms linear;
+}
+
+.lootbox:hover .btn_cost_box button {
+    background-position:40px;
 }
 
 .lootbox img {
