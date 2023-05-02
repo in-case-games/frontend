@@ -32,6 +32,7 @@
 
 .item_roulette {
     display: flex;
+    background-color: var(--background_page_color);
     flex-direction: row;
     justify-content: left;
 }

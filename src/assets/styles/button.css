@@ -4,8 +4,9 @@
     --color_anchor_button: #FFE665;
     --color_header_button: #1A1A1D;
     --color_border_cost_box: #F8B415;
-    --color_font_cost_box: #F8B415;
-    --color_coin_cost_box: #F8B415;
+    --color_font_cost_box: #622F00;
+    --color_coin_cost_box: #622F00;
+    --background_cost_box_color: 180deg, rgba(255,230,101,1) 0%, rgba(254,115,36,1) 67%;
 }
 
 .btn {
@@ -62,8 +63,18 @@
 }
 
 .btn-cost-box {
-    border: 1px solid var(--color_border_cost_box);
     color: var(--color_font_cost_box);
+    background: -moz-linear-gradient(var(--background_cost_box_color));
+	background: -webkit-linear-gradient(var(--background_cost_box_color));
+	background: linear-gradient(var(--background_cost_box_color));
+
+    -webkit-transition: background 400ms ease-out;  
+    -moz-transition: background 400ms ease-out;  
+    -o-transition: background 400ms ease-out;  
+    transition: background 400ms ease-out;  
+
+    background-size:1px 80px;  
+
     font-family: 'Play';
     font-weight: 400;
     font-size: 20px;
