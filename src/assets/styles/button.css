@@ -22,10 +22,10 @@ button {
 }
 
 .btn-info {
-    -webkit-transition: all 400ms ease-out;  
-    -moz-transition: all 400ms ease-out;  
-    -o-transition: all 400ms ease-out;  
-    transition: all 400ms ease-out;
+    -webkit-transition: all 200ms ease-out;  
+    -moz-transition: all 200ms ease-out;  
+    -o-transition: all 200ms ease-out;  
+    transition: all 200ms ease-out;
     border: 2px solid var(--color_border_info);
     color: var(--color_border_info);
 
@@ -34,12 +34,13 @@ button {
 }
 
 .btn-info:hover {
-    border: 2px solid #F8B415;
+    border-bottom: 2px solid #F8B415;
     color: #F8B415;
 }
 
 .btn-info--activate {
-    border: 2px solid #F8B415;
+    border-radius: 0px;
+    border-bottom: 2px solid #F8B415;
     font-size: 16px;
     font-family: 'Nunito';
     color: #F8B415;

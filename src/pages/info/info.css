@@ -1,15 +1,20 @@
-.info {
-    margin-top: 30px;
+.info-slider {
+    width: 100%;
 }
 
-.info h1 {
+.info-slider {
+    margin-top: 30px;
+    width: 100%;
+}
+
+.info-slider h1 {
     text-align: center;
 }
 
-.info p {
+.info-slider p {
     text-align: justify;
 }
 
 .info-bar .btn-info, .btn-info--activate {
-    margin: 0 5px;
+    margin: 10px 5px 30px 0;
 }

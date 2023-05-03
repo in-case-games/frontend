@@ -20,9 +20,7 @@ class Info extends React.Component {
                 </Helmet>
                 <ItemRoulette/>
                 <div className="container-small">
-                    <div className="info">
-                        <InfoSlider/>
-                    </div>
+                    <InfoSlider/>
                 </div>
              </div>
         );
