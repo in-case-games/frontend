@@ -1,0 +1,15 @@
+.info {
+    margin-top: 30px;
+}
+
+.info h1 {
+    text-align: center;
+}
+
+.info p {
+    text-align: justify;
+}
+
+.info-bar .btn-info, .btn-info--activate {
+    margin: 0 5px;
+}

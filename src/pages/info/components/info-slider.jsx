@@ -1,5 +1,6 @@
 import { React, useState, useEffect } from "react";
 import { UserAgreement, PrivacyPolicy, CookiePolicy } from "./";
+import {Info as InfoButton} from "../../../components/сommon/button";
 import { useParams } from "react-router-dom";
 
 const InfoSlider = () => {
@@ -7,10 +8,16 @@ const InfoSlider = () => {
     const infos = {
         "privacy-policy": <PrivacyPolicy/>,
         "cookie-policy": <CookiePolicy/>,
-        "user-agreement": <UserAgreement/>
+        "default": <UserAgreement/>
     }
     const [info, setInfo] = useState(params.id);
-    const onClick = () => setInfo(params.id);
+
+    const isActive = (name) => {
+        return(
+            info === name || 
+            (infos[info] === undefined && name === "default")
+        );
+    };
 
     useEffect(() => {
         setInfo(params.id);
@@ -18,7 +25,23 @@ const InfoSlider = () => {
 
     return(
         <div className="info-slider">
-            <div className="btn-info" onClick={onClick}></div>
+            <div className="info-bar">
+                <InfoButton 
+                    isActive={isActive("privacy-policy")}
+                    name="Конфинденциальность"
+                    link="/info/privacy-policy"
+                />
+                <InfoButton 
+                    isActive={isActive("cookie-policy")}
+                    name="Куки"
+                    link="/info/cookie-policy"
+                />
+                <InfoButton
+                    isActive={isActive("default")} 
+                    name="Соглашение"
+                    link="/info/user-agreement"
+                />
+            </div>
             {
                 infos[info] ? infos[info] : <UserAgreement/> 
             }

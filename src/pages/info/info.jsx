@@ -1,7 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import { ItemRoulette } from "../../components";
-import "./info.module.css";
+import "./info.css";
 import {InfoSlider} from "./components";
 
 class Info extends React.Component {
