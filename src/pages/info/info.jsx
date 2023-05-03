@@ -4,7 +4,7 @@ import { ItemRoulette } from "../../components";
 import "./info.module.css";
 import {InfoSlider} from "./components";
 
-class InfoSite extends React.Component {
+class Info extends React.Component {
     title = "InCase - ";
 
     constructor(props) {
@@ -29,4 +29,4 @@ class InfoSite extends React.Component {
     }
 }
 
-export default InfoSite;
+export default Info;
