@@ -1,16 +1,19 @@
 import React from "react"
 import classes from "./group.module.css"
 import {ListLunge} from "../../assets/images/icon";
+import MinSlider from "../slider/min-slider";
 
-const Group = (props) => {
+const Group = ({items, name, type = "block"}) => {
     const [showItems, setShowItems] = React.useState(true);
     const onClick = () => setShowItems(!showItems);
-
-    let items = props.items;
 
     if (items.length === 0)
     {
         items = <p className={classes.empty_text}>Пусто</p>
+    }
+
+    else if (type === "slider"){
+        items = <MinSlider items={items}/>
     }
 
 
@@ -18,7 +21,7 @@ const Group = (props) => {
         <div className={classes.group}>
             <div className={classes.group_title}>
                 <div className={classes.group_wrapper}>
-                    <div>{props.name}</div>
+                    <div>{name}</div>
                     <img alt="" href="#" src={ListLunge} onClick={onClick}></img>
                 </div>
                 <div className={classes.group_delimiter}>

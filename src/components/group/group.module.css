@@ -70,8 +70,10 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: left;
+    align-items: center;
     margin: 0 -30px;
     padding: 0 40px;
+
 }
 
 .empty_text {

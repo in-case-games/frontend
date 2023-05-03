@@ -30,7 +30,14 @@ let reviewsTemplate = [
         username: "ХУЕК",
         date: "11.11.2091",
         content: "ОМГ 0МГ ХРЮ ХРЮ"
-    }
+    },
+    {
+        id: 5,
+        img: "https://sun9-28.userapi.com/impg/QgaUIX7vEBlTnB5mT_3VwCqOYVwwwUwgTId-cw/Kdyz7Zhl5XM.jpg?size=2160x2160&quality=96&sign=8e727b359a465c045c88d852cc292e36&type=album",
+        username: "ХУЕК",
+        date: "11.11.2091",
+        content: "ОМГ 0МГ ХРЮ ХРЮ"
+    },
 ]
 
 const ReviewSlider = () => {
@@ -40,7 +47,7 @@ const ReviewSlider = () => {
     })
 
     return(
-        <Group name="Отзывы" items={reviews}/>
+        <Group name="Отзывы" items={reviews} type="slider"/>
     )
 }
 

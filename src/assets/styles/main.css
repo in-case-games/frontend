@@ -82,6 +82,7 @@ html {
 	background: var(--background_page_color);
 	border-bottom: 1px solid #303030;
 	position: fixed;
+	z-index: 10;
 }
 
 .header-wrapper {

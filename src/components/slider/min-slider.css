@@ -1,0 +1,49 @@
+@import url("/src/assets/styles/colors.css");
+
+.arrow-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    background: var(--main-color);left: 0;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.arrow {
+    width: 10px;
+    height: 10px;
+    border-top: 4px solid #000;
+    border-right: 4px solid #000;
+}
+
+.arrow-left {
+    transform: rotate(-135deg);
+    margin-left: 5px;
+}
+
+.arrow-right {
+    transform: rotate(45deg);
+    margin-right: 5px;
+}
+
+.min_slider_content {
+    width: inherit;
+    font-size: 20px;
+    font-family: 'Play';
+    font-weight: normal;
+    display: -webkit-inline-box;
+    overflow: hidden;
+    flex-wrap: nowrap;
+    justify-content: left;
+    transition: 0.5s;
+}
+
+.min_slider {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin-bottom: 100px;
+}
