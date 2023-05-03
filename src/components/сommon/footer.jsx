@@ -42,7 +42,7 @@ class Footer extends React.Component {
                                 <img className="info-flag" alt="" src={FlagRUS}></img>
                                 <div>RU</div>
                                 <img alt="" src={ListLunge}></img>
-                                <div className="small-info">InCase.net @2023</div>
+                                <div className="small-info">InCase.games @2023</div>
                             </div>
                         </div>
                         <div className="site-statistics">

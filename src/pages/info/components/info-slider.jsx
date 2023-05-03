@@ -26,6 +26,11 @@ const InfoSlider = () => {
     return(
         <div className="info-slider">
             <div className="info-bar">
+                <InfoButton
+                    isActive={isActive("default")} 
+                    name="Соглашение"
+                    link="/info/user-agreement"
+                />
                 <InfoButton 
                     isActive={isActive("privacy-policy")}
                     name="Конфинденциальность"
@@ -35,11 +40,6 @@ const InfoSlider = () => {
                     isActive={isActive("cookie-policy")}
                     name="Куки"
                     link="/info/cookie-policy"
-                />
-                <InfoButton
-                    isActive={isActive("default")} 
-                    name="Соглашение"
-                    link="/info/user-agreement"
                 />
             </div>
             {

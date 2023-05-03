@@ -34,7 +34,7 @@ button {
 }
 
 .btn-info:hover {
-    border-bottom: 2px solid #F8B415;
+    border: 2px solid #F8B415;
     color: #F8B415;
 }
 
