@@ -1,6 +1,7 @@
 :root {
     --main-color: #F8B415;
     --sub-color: #E89420;
+    --main-link-color: #00dd07; 
     --main-background-color: #1E1E1E;
     --main-gradient: linear-gradient(180deg, rgba(255,230,101,1) 0%, rgba(244,125,39,1) 100%);
     --background_modal-window: #1A1A1D;

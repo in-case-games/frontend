@@ -9,6 +9,12 @@
     flex-direction: column;
     text-align: center;
     padding: 10px;
+    justify-content: center;
+}
+
+.agree_eta button {
+    font-size: 14px;
+    color: var(--main-link-color);
 }
 
 .sign_in_window_content {
@@ -127,14 +133,6 @@
 
     border: 2px solid var(--main-color);
     color: #adb5bd;
-}
-
-.logo_title {
-    flex: 0 0 auto;
-    font-size: 50px;
-    font-weight: 900;
-    font-family: 'Megrim';
-    font-weight: bold;
 }
 
 
