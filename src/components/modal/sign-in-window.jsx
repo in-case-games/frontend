@@ -1,31 +1,23 @@
 import React from "react"
 import classes from "./modal.module.css"
-import {ManLogoNoBg} from "../../assets/images/additional";
-import { DocumentLink } from "../сommon/button";
+import { LogoMen } from "../../assets/images/icon"
 
-const SignInWindow = () => {
+const SignInWindow = (props) => {
     return(
-        <div className={classes.sign_in_window}>
-            <div className={classes.sign_in_window_content}>
-                <img alt="" src={ManLogoNoBg}/>
-                <form className={classes.sign_in_window_content__form}>
-                    <p>Регистрация</p>
-                    <input className={classes.input_form} placeholder="Имя аккаунта"/>
-                    <input className={classes.input_form} placeholder="E-mail" type="email"/>
+        <div className={classes.sign_up_window}>
+            <div className={classes.sign_up_window_content}>
+                <form className={classes.sign_up_window_content__form}>
+                    <p>Вход</p>
+                    <input className={classes.input_form} placeholder="Имя аккаунта/Email"/>
                     <input className={classes.input_form} placeholder="Пароль" type="password"/>
-                    <div className={classes.checkbox_section}>
-                        <input type="checkbox" value="Admin" name="agree-eta" className={classes.checkbox_form}/>
-                        <label className={classes.agree_eta} htmlFor="agree-eta">
-                            {<DocumentLink text="Я согласен с условиями пользовательского соглашения" link="/info/user-agreement"/>}
-                        </label>
-                    </div>
                     <button className={classes.btn_main}>
                         <div>Отправить</div>
                     </button>
-                    <button className={classes.btn_secondary}>
-                        <div>Войти в аккаунт</div>
-                    </button>
+                    <div className={classes.btn_secondary} onClick={() => props.clickSignIn(false)}>
+                        <div>Нет аккаунта?</div>
+                    </div>
                 </form>
+                <img alt="" href="/#" src={LogoMen}/>
             </div>
         </div>
     )

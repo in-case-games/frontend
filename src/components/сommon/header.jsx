@@ -11,9 +11,16 @@ import {
 } from "../../assets/images/icon";
 import Modal from "../modal/modal";
 import SignInWindow from "../modal/sign-in-window";
+import SignUpWindow from "../modal/sign-up-window";
 
 const Header = () => {
-    const [modalActive, setModalActive] = useState(false)
+    const [signUpActive, setSignUpActive] = useState(false);
+    const [signInActive, setSignInActive] = useState(false);
+
+    const exhcangeModal = (signin) => {
+        setSignUpActive(!signin);
+        setSignInActive(signin);
+    };
 
     return (
         <header className="header">
@@ -51,7 +58,7 @@ const Header = () => {
                     </div>
 
                     <div className="header-userbar">
-                        <button className="btn btn-default" onClick={() => setModalActive(true)}>
+                        <button className="btn btn-default" onClick={() => setSignInActive(true)}>
                             <img alt="" src={Key}/>
                             <div>Вход</div>
                         </button>
@@ -60,7 +67,8 @@ const Header = () => {
                 </div>
             </div>
 
-            <Modal active={modalActive} setActive={setModalActive} content={<SignInWindow/>}/>
+            <Modal active={signUpActive} setActive={setSignUpActive} content={<SignUpWindow clickSignIn={exhcangeModal}/>}/>
+            <Modal active={signInActive} setActive={setSignInActive} content={<SignInWindow clickSignIn={exhcangeModal}/>}/>
         </header>
     );
 }

@@ -1,6 +1,6 @@
 @import url("/src/assets/styles/colors.css");
 
-.sign_in_window {
+.sign_in_window, .sign_up_window {
     width: 55vw;
     height: 50vh;
     background: var(--background_modal-window);
@@ -10,6 +10,10 @@
     text-align: center;
     padding: 10px;
     justify-content: center;
+}
+
+.sign_up_window {
+    width: 35vw;
 }
 
 .agree_eta button {
@@ -23,6 +27,17 @@
     align-items: flex-start;
     justify-content: space-around;
 }
+.sign_up_window_content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sign_up_window_content_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 .sign_in_window_content__form {
     display: flex;
@@ -31,10 +46,10 @@
     align-items: center;
 }
 
-.sign_in_window_content__form p {
+.sign_in_window_content__form p, .sign_up_window_content__form p {
     font-size: 42px;
     font-weight: 600;
-    font-family: Nunito;
+    font-family: 'Nunito';
     margin: 3px;
 }
 
@@ -111,7 +126,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 10px;
+    margin: 10px auto;
 }
 
 .btn_secondary {
@@ -120,6 +135,7 @@
     width: 200px;
     cursor: pointer;
 
+    margin: 10px auto;
     transition: background 400ms ease-out;
 
     font-family: 'Play';
