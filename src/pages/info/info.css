@@ -1,4 +1,5 @@
 .info-slider {
+    font-family: 'Nunito';
     width: 100%;
 }
 
@@ -13,6 +14,21 @@
 
 .info-slider p {
     text-align: justify;
+}
+
+.info-text .sub-items {
+    padding: 0 0 10px 20px;
+    margin: 0;
+}
+
+.info-text .document-link {
+    color: var(--main-color);
+    font-size: 16px;
+}
+
+.sub-items h5 {
+    font-size: 14px;
+    margin-bottom: 0;
 }
 
 .info-bar .btn-info, .btn-info--activate {
