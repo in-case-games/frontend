@@ -36,7 +36,7 @@ instance.interceptors.response.use(
         originalConfig._retry = true;
 
         try {
-          const rs = await instance.get("/authentication/refresh?" + TokenService.getRefreshToken());
+          const rs = await instance.get("/authentication/refresh?refreshToken=" + TokenService.getRefreshToken());
 
           const { accessToken } = rs.data;
           TokenService.updateAccessToken(accessToken);
