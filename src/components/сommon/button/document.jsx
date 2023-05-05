@@ -5,8 +5,8 @@ import { animateScroll as scroll } from "react-scroll";
 const DocumentLink = (props) => {
     const navigate = useNavigate();
     const handleClick = () => {
-        scroll.scrollToTop();
         navigate(props.link);
+        scroll.scrollToTop();
     };
     return(
         <button className="document-link" onClick={handleClick}>
