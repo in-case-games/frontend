@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const Game = (props) => {
     const navigate = useNavigate();
     const handleClick = () => {
-        navigate(props.link);
+        navigate(props.game.link);
     };
     return(
         <div className={classes.game} onClick={handleClick}>
