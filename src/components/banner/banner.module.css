@@ -10,6 +10,7 @@
     justify-content: center;
     min-height: var(--dev-banner-height);
     background: var(--background_banner);
+    margin-bottom: 40px;
 }
 
 .banner_content {
