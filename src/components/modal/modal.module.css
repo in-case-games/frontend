@@ -116,6 +116,7 @@
 
     transition: background 400ms ease-out;
     background: var(--main-color);
+    color: var(--background_modal-window);
     background-size:1px 80px;
 
     font-family: 'Play';

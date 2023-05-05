@@ -25,9 +25,9 @@ const SignUpWindow = (props) => {
                             {<DocumentLink text="Подтверждаю, что мне есть 18 лет" link="/info/user-agreement"/>}
                         </label>
                     </div>
-                    <button className={classes.btn_main}>
-                        <div>Отправить</div>
-                    </button>
+                    <div className={classes.btn_main}>
+                        Отправить
+                    </div>
                     <div className={classes.btn_secondary} onClick={() => props.clickSignIn(true)}>
                         <div>Войти в аккаунт</div>
                     </div>
