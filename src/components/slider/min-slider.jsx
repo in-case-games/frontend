@@ -2,8 +2,9 @@ import React, {useState} from "react"
 import classes from "./min-slider.module.css"
 import "./min-slider.css"
 
-const MinSlider = ({items, speed = 150}) => {
+const MinSlider = ({items, speed = 250}) => {
     const [slide, setSlide] = useState(0);
+    const [counter, setCounter] = useState(0);
 
 
     return (
@@ -14,7 +15,12 @@ const MinSlider = ({items, speed = 150}) => {
             </div>
             <div className={classes.min_slider_buttons}>
                 <button className="arrow-button"
-                        onClick={() => setSlide((slide + speed) <= 0 ? slide + speed: slide)}
+                        onClick={() =>
+                            {
+                                setCounter(counter > 0? counter - 1: counter);
+                                setSlide((slide + speed) <= 0 ? slide + speed: slide);
+                            }
+                        }
                         >
                     <div className="arrow arrow-left">
 
@@ -22,10 +28,12 @@ const MinSlider = ({items, speed = 150}) => {
                 </button>
                 <button className="arrow-button"
                         onClick={() => {
-                            let itemsWidth = document.getElementsByClassName('min_slider')[0].clientWidth;
-                            let itemWidth = itemsWidth / (items.length);
-                            console.log(itemsWidth);
-                            setSlide((slide - speed) > (-1*itemsWidth) ? slide - speed: slide)
+                            let items = document.getElementsByClassName('min_slider')[0];
+                            let itemWidth = items.children[0].children[0].offsetWidth;
+                            let itemsCount = items.children[0].childElementCount - Math.floor((items.offsetWidth / itemWidth)) - counter;
+                            setCounter(itemsCount > 0? counter + 1: counter);
+                            setSlide(itemsCount > 0 ? slide - speed: slide)
+
                         }}>
                     <div className="arrow arrow-right">
 
