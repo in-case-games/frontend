@@ -69,8 +69,8 @@
     font-weight: normal;
     display: flex;
     flex-wrap: wrap;
-    justify-content: left;
-    align-items: center;
+    justify-content: center;
+    align-items: flex-end;
     margin: 0 -30px;
     padding: 0 40px;
 
