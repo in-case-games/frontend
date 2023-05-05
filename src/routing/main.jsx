@@ -2,6 +2,7 @@ import React from "react";
 import {Routes, Route} from "react-router-dom";
 import { Home as HomePage } from "../pages/home";
 import { NotFound as NotFoundPage } from "../pages/errors";
+import { Game as GamePage } from "../pages/game";
 import InfoRouting from "./info";
 
 
@@ -10,6 +11,7 @@ class Main extends React.Component {
         return (
         <Routes>
             <Route path="/info/*" element={<InfoRouting/>}/>
+            <Route path="/game/:id" element={<GamePage title="Страница с кейсами"/>}/>
             <Route path="/" element={<HomePage title="Главная"/>}/>
             <Route path="*" element={<NotFoundPage title="Страница не найдена"/>}/>
         </Routes>

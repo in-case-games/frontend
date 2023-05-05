@@ -1,0 +1,1 @@
+export {default as GameGroup} from "./game-group";

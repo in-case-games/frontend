@@ -1,76 +1,28 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import { ItemRoulette, BoxGroup, Banner } from "../../components";
-import SearchBar from "../../components/search-bar/search-bar";
+import { ItemRoulette, Banner } from "../../components";
 import ReviewSlider from "../../components/review/review-slider";
+import {GameGroup} from "../../components/game";
 
 class Home extends React.Component {
     title = "InCase - ";
-    boxesOne = [
-        {
-            id: "asdasdasdasd",
-            name: "Box11",
-            cost: 99990,
-            image: "https://sun9-58.userapi.com/impg/HKQg3Yipy_kyu6RepvfbdY39ejojg9EXWx5PJA/9GsfzFIvG3A.jpg?size=400x298&quality=96&sign=3b78a73f905d8057e155f0f8bed7bc6c&type=album"
-        },
-        {
-            id: "asda1231sdasdasd",
-            name: "Box12",
-            cost: 110,
-            image: "https://sun9-58.userapi.com/impg/HKQg3Yipy_kyu6RepvfbdY39ejojg9EXWx5PJA/9GsfzFIvG3A.jpg?size=400x298&quality=96&sign=3b78a73f905d8057e155f0f8bed7bc6c&type=album"
-        },
-        {
-            id: "asdasda12312sdasd",
-            name: "Box13",
-            cost: 10,
-            image: "https://sun9-58.userapi.com/impg/HKQg3Yipy_kyu6RepvfbdY39ejojg9EXWx5PJA/9GsfzFIvG3A.jpg?size=400x298&quality=96&sign=3b78a73f905d8057e155f0f8bed7bc6c&type=album"
-        },
-        {
-            id: "asdasdasd12312asd",
-            name: "Box14",
-            cost: 11230,
-            image: "https://sun9-58.userapi.com/impg/HKQg3Yipy_kyu6RepvfbdY39ejojg9EXWx5PJA/9GsfzFIvG3A.jpg?size=400x298&quality=96&sign=3b78a73f905d8057e155f0f8bed7bc6c&type=album"
-        },
-        {
-            id: "123123asdasdasdasd",
-            name: "Box15",
-            cost: 1,
-            image: "https://sun9-58.userapi.com/impg/HKQg3Yipy_kyu6RepvfbdY39ejojg9EXWx5PJA/9GsfzFIvG3A.jpg?size=400x298&quality=96&sign=3b78a73f905d8057e155f0f8bed7bc6c&type=album"
-        },
-    ];
-    boxesTwo = [
-        {
-            id: "asda3123124sdasdasd",
-            name: "Box21",
-            cost: 690,
-            image: "https://sun9-58.userapi.com/impg/HKQg3Yipy_kyu6RepvfbdY39ejojg9EXWx5PJA/9GsfzFIvG3A.jpg?size=400x298&quality=96&sign=3b78a73f905d8057e155f0f8bed7bc6c&type=album"
-        },
-        {
-            id: "asdasdas512512dasd",
-            name: "Box22",
-            cost: 310,
-            image: "https://sun9-58.userapi.com/impg/HKQg3Yipy_kyu6RepvfbdY39ejojg9EXWx5PJA/9GsfzFIvG3A.jpg?size=400x298&quality=96&sign=3b78a73f905d8057e155f0f8bed7bc6c&type=album"
-        },
-        {
-            id: "asda512512sdasdasd",
-            name: "Box23",
-            cost: 160,
-            image: "https://sun9-58.userapi.com/impg/HKQg3Yipy_kyu6RepvfbdY39ejojg9EXWx5PJA/9GsfzFIvG3A.jpg?size=400x298&quality=96&sign=3b78a73f905d8057e155f0f8bed7bc6c&type=album"
-        },
-    ];
-    boxesThird = [
-        {
-            id: "asda12312546sdasdasd",
-            name: "Box33",
-            cost: 19,
-            image: "https://sun9-58.userapi.com/impg/HKQg3Yipy_kyu6RepvfbdY39ejojg9EXWx5PJA/9GsfzFIvG3A.jpg?size=400x298&quality=96&sign=3b78a73f905d8057e155f0f8bed7bc6c&type=album"
-        },
-    ];
 
     constructor(props) {
         super(props);
         this.title = this.title + props.title;
     }
+    games = [
+        {
+            id: 1,
+            image: "https://sun2.ufanet-orenburg.userapi.com/impg/-xrrsqVMW0nTUS8jfmjAEzLcYZZaZZUVpyuv0Q/ZpFxNdEgt78.jpg?size=1500x1500&quality=96&sign=1f81f0b5eca48360a3e45a37568ff190&type=album",
+            link: "/game/csgo"
+        },
+        {
+            id: 2,
+            image: "https://sun9-east.userapi.com/sun9-27/impg/Uhjnmc41AAJlPnhfxYuoAQ1vCEbQtEnFtqUdog/r8YAmQsbilE.jpg?size=2560x1440&quality=96&sign=65db0daf033c2b766acef2d3941b69dc&type=album",
+            link: "/game/dota2"
+        }
+    ];
 
     render() {
         return (
@@ -81,10 +33,7 @@ class Home extends React.Component {
                 <ItemRoulette/>
                 <Banner/>
                 <div className="container-small">
-                    <SearchBar/>
-                    <BoxGroup name="Пушечные кейсы кс го" boxes={this.boxesOne}/>
-                    <BoxGroup name="Экхтеме бархот за рубль" boxes={this.boxesTwo}/>
-                    <BoxGroup name="Ну тьи панял?:" boxes={this.boxesThird}/>
+                    <GameGroup games={this.games} name="Лучший дроп в этих играх"/>
                     <ReviewSlider name="Отзывы"/>
                 </div>
             </div>

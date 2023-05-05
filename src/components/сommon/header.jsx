@@ -18,13 +18,13 @@ const Header = () => {
         {
             id:1,
             text:"CSGO",
-            link:"/",
+            link:"/game/csgo",
             icon:Key
         },
         {
             id:2,
             text:"Dota 2",
-            link:"/",
+            link:"/game/dota2",
             icon:Key
         },
         {
