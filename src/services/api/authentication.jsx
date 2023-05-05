@@ -25,7 +25,7 @@ class Authentication {
     }
 
     async register(login, email, password) {
-        return await api.post("/auth/signup", {
+        return await api.post("/authentication/signup", {
             id:"3fa85f64-5717-4562-b3fc-2c963f66afa6",
             login: login,
             email: email,
