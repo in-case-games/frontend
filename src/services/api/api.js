@@ -4,7 +4,6 @@ import TokenService from "../token";
 const AUTH_API_URL = "https://localhost:7142/api";
 
 const instance = axios.create({
-  baseURL: AUTH_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -30,13 +29,12 @@ instance.interceptors.response.use(
   async (err) => {
     const originalConfig = err.config;
 
-    if (err.response) { //originalConfig.url !== "/auth/signin" &&
-      // Access Token was expired
-      if (err.response.status === 401 && !originalConfig._retry) {
+    if (err.response) { 
+      if ((err.response.status === 401 || err.response.data.error.code === "1") && !originalConfig._retry) {
         originalConfig._retry = true;
 
         try {
-          const rs = await instance.get("/authentication/refresh?refreshToken=" + TokenService.getRefreshToken());
+          const rs = await instance.get(AUTH_API_URL + "/authentication/refresh?refreshToken=" + TokenService.getRefreshToken());
 
           const { accessToken } = rs.data;
           TokenService.updateAccessToken(accessToken);
