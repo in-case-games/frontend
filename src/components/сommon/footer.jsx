@@ -2,12 +2,11 @@ import React from "react";
 import { Anchor as AnchorButton, DocumentLink } from "./button";
 import { 
     Telegram, VK, YouTube, 
-    FlagRUS, ListLunge, Account,
-    Star, Box, Cart, 
-    InCoin, Radar, Visa,
+    FlagRUS, ListLunge, Visa,
     Mastercard, World, Qiwi,
     Crypto, Peoples, Project, FAQ
 } from "../../assets/images/icon";
+import { Statistic } from "../statistic";
 
 class Footer extends React.Component {
     render() {
@@ -46,42 +45,7 @@ class Footer extends React.Component {
                             </div>
                         </div>
                         <div className="site-statistics">
-                            <div className="statistics">
-                                <div className="statistics-wrapper">
-                                    <div className="statistic">
-                                        <img alt="" src={Account}></img>
-                                        <div className="statistic-counter">100000000</div>
-                                        <div className="statistic-sub">аккаунтов</div>
-                                    </div>
-                                    <div className="statistic">
-                                        <img alt="" src={Star}></img>
-                                        <div className="statistic-counter">100000000</div>
-                                        <div className="statistic-sub">отзывов</div>
-                                    </div>
-                                    <div className="statistic">
-                                        <img alt="" src={Box}></img>
-                                        <div className="statistic-counter">100000000</div>
-                                        <div className="statistic-sub">кейсов</div>
-                                    </div>
-                                </div>
-                                <div className="statistics-wrapper">
-                                    <div className="statistic">
-                                        <img alt="" src={Cart}></img>
-                                        <div className="statistic-counter">100000000</div>
-                                        <div className="statistic-sub">предметов</div>
-                                    </div>
-                                    <div className="statistic">
-                                        <img alt="" src={InCoin}></img>
-                                        <div className="statistic-counter">100000000</div>
-                                        <div className="statistic-sub">инкоинов</div>
-                                    </div>
-                                    <div className="statistic">
-                                        <img alt="" src={Radar}></img>
-                                        <div className="statistic-counter">100000000</div>
-                                        <div className="statistic-sub">онлайн</div>
-                                    </div>
-                                </div>
-                            </div>
+                            <Statistic />
                             <div className="types-payment">
                                 <img alt="" src={Visa}></img>
                                 <img alt="" src={Mastercard}></img>
