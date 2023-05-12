@@ -7,6 +7,7 @@ const ItemRoulette = () => {
     const apiUser = new User();
 
     const[itemList, setItemList] = useState([]);
+    const[isFirstStart, setFirstStart] = useState(true);
 
     useEffect(() => {
         const interval = setInterval(async () => {
@@ -14,11 +15,12 @@ const ItemRoulette = () => {
               const response = await apiUser.getLast100Openings();
               const responseSliced = response.slice(0, 20);
               const resultArray = responseSliced.map(history => <BigItem imgSrc={history.item.imageUri} itemName={history.item.name} color={history.item.rarity.name} key={history.id}/>);
+              setFirstStart(false);
               setItemList(resultArray);
           } 
           catch (err) {
           }
-        }, 5000);
+        }, (isFirstStart ? 1 : 5000));
   
         return () => {
           clearInterval(interval);

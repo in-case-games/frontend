@@ -4,6 +4,7 @@ import { SiteStatistics } from "../../services/api";
 const Statistic = () => {
     const statisticsApi = new SiteStatistics();
 
+    const [isStartStats, setIsStartStats] = useState(true);
     const [review, setReviews] = useState(0);
     const [account, setAccount] = useState(0);
     const [box, setBox] = useState(0);
@@ -20,10 +21,11 @@ const Statistic = () => {
             setBox(response.lootBoxes);
             setItem(response.withdrawnItems);
             setIncoin(response.withdrawnFunds);
+            setIsStartStats(false);
         } 
         catch (err) {
         }
-      }, 5000);
+      }, (isStartStats ? 1 : 5000));
 
       return () => {
         clearInterval(interval);
