@@ -1,6 +1,6 @@
 @import url("/src/assets/styles/colors.css");
 
-.sign_in_window, .sign_up_window {
+.sign_in_window, .sign_up_window, .send_email_window {
     width: 55vw;
     height: 50vh;
     background: var(--background_modal-window);
@@ -12,8 +12,21 @@
     justify-content: center;
 }
 
-.sign_up_window {
+.sign_in_window {
     width: 35vw;
+}
+
+.send_email_window {
+    height: 400px;
+    width: 400px;
+}
+
+.send_email_window_content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 100%;
 }
 
 .agree_eta button {
@@ -21,29 +34,48 @@
     color: var(--main-link-color);
 }
 
-.sign_in_window_content {
+.sign_up_window_content {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-around;
 }
-.sign_up_window_content {
+.sign_in_window_content {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.sign_up_window_content_form {
+.sign_in_window_content_form {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.sign_in_window_content__form {
+.sign_up_window_content__form {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
+}
+
+.error_message {
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    color: red;
+}
+
+.sub_message {
+    padding: 0;
+    margin: 0;
+    font-size: 18px;
+    font-family: 'Megrim';
+    padding: 0 20px;
+}
+
+.sub_message h1 {
+    text-align: center;
 }
 
 .sign_in_window_content__form p, .sign_up_window_content__form p {

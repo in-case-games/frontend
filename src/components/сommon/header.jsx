@@ -12,6 +12,7 @@ import {
 import Modal from "../modal/modal";
 import SignInWindow from "../modal/sign-in-window";
 import SignUpWindow from "../modal/sign-up-window";
+import EmailSendWindow from "../modal/email-send-window";
 
 const Header = () => {
     const games = [
@@ -64,6 +65,14 @@ const Header = () => {
     ]
     const [signUpActive, setSignUpActive] = useState(false);
     const [signInActive, setSignInActive] = useState(false);
+    const [sendEmailActive, setSendEmailActive] = useState(false);
+
+    const active = {
+        "signin": () => setSignInActive(true),
+        "signup": () => setSignUpActive(true),
+        "email": () => setSendEmailActive(true),
+        "close": () => setSignInActive(false)
+    }
 
     const [listActive, setListActive] = useState("empty");
 
@@ -71,14 +80,17 @@ const Header = () => {
         return name === listActive;
     };
 
-    const exhcangeModal = (signin) => {
-        setSignUpActive(!signin);
-        setSignInActive(signin);
+    const exhcangeModal = (modal) => {
+        setSignUpActive(false);
+        setSignInActive(false);
+        setSendEmailActive(false);
+
+        active[modal]();
     };
 
-    const openSignInModal = (signin) => {
+    const openSignInModal = () => {
         setListActive("empty");
-        signin ? setSignInActive(true) : setSignUpActive(true);
+        setSignInActive(true);
     }
 
     return (
@@ -133,8 +145,9 @@ const Header = () => {
                 </div>
             </div>
 
-            <Modal active={signUpActive} setActive={setSignUpActive} content={<SignUpWindow clickSignIn={exhcangeModal}/>}/>
-            <Modal active={signInActive} setActive={setSignInActive} content={<SignInWindow clickSignIn={exhcangeModal}/>}/>
+            <Modal active={signUpActive} clickChange={exhcangeModal} content={<SignUpWindow clickChange={exhcangeModal}/>}/>
+            <Modal active={signInActive} clickChange={exhcangeModal} content={<SignInWindow clickChange={exhcangeModal}/>}/>
+            <Modal active={sendEmailActive} clickChange={exhcangeModal} content={<EmailSendWindow clickChange={exhcangeModal}/>}/>
         </header>
     );
 }
