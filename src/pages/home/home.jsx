@@ -1,8 +1,9 @@
-import React from "react";
-import { Helmet } from "react-helmet";
-import { ItemRoulette, Banner } from "../../components";
-import ReviewSlider from "../../components/review/review-slider";
-import {GameGroup} from "../../components/game";
+import React from "react"
+import { Helmet } from "react-helmet"
+import { CSGO, Dota2 } from "../../assets/images/additional"
+import { Banner, ItemRoulette } from "../../components"
+import { GameGroup } from "../../components/game"
+import ReviewSlider from "../../components/review/review-slider"
 
 class Home extends React.Component {
     title = "InCase - ";
@@ -14,12 +15,14 @@ class Home extends React.Component {
     games = [
         {
             id: 1,
-            image: "https://sun2.ufanet-orenburg.userapi.com/impg/-xrrsqVMW0nTUS8jfmjAEzLcYZZaZZUVpyuv0Q/ZpFxNdEgt78.jpg?size=1500x1500&quality=96&sign=1f81f0b5eca48360a3e45a37568ff190&type=album",
+            name: "csgo",
+            image: CSGO,
             link: "/game/csgo"
         },
         {
             id: 2,
-            image: "https://sun9-east.userapi.com/sun9-27/impg/Uhjnmc41AAJlPnhfxYuoAQ1vCEbQtEnFtqUdog/r8YAmQsbilE.jpg?size=2560x1440&quality=96&sign=65db0daf033c2b766acef2d3941b69dc&type=album",
+            name: "dota2",
+            image: Dota2,
             link: "/game/dota2"
         }
     ];

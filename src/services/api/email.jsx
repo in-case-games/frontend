@@ -1,11 +1,11 @@
-import api from "./api";
-import TokenService from "../token";
+import TokenService from "../token"
+import api from "./api"
 
-const EMAIL_API_URL = "https://localhost:7099/api";
+const EMAIL_API_URL = "https://localhost:5000/api/";
 
 class Email {
     async checkSignIn(token) {
-        const response = await api.get(EMAIL_API_URL + "/email/confirm/account?token=" + token);
+        const response = await api.get(EMAIL_API_URL + "authentication/confirm/account?token=" + token);
 
         if (response.data.data.accessToken) {
             TokenService.setUser(response.data.data);

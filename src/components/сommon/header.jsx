@@ -1,18 +1,20 @@
-import React, {useState} from "react";
+import React, { useState } from "react"
+import { animateScroll as scroll } from "react-scroll"
+import {
+    ListLunge as ListLungeButton,
+    Logo as LogoButton
+} from "./button"
 
 import {
-    Logo as LogoButton,
-    ListLunge as ListLungeButton
-} from "./button";
-
-import {
-    Banner, Games, IndicatorGreen,
-    Info, Key, ListLunge, LootBox, FlagRUS
-} from "../../assets/images/icon";
-import Modal from "../modal/modal";
-import SignInWindow from "../modal/sign-in-window";
-import SignUpWindow from "../modal/sign-up-window";
-import EmailSendWindow from "../modal/email-send-window";
+    Banner,
+    FlagRUS,
+    Games, IndicatorGreen,
+    Info, Key, ListLunge, LootBox
+} from "../../assets/images/icon"
+import EmailSendWindow from "../modal/email-send-window"
+import Modal from "../modal/modal"
+import SignInWindow from "../modal/sign-in-window"
+import SignUpWindow from "../modal/sign-up-window"
 
 const Header = () => {
     const games = [
@@ -80,7 +82,7 @@ const Header = () => {
         return name === listActive;
     };
 
-    const exhcangeModal = (modal) => {
+    const exchangeModal = (modal) => {
         setSignUpActive(false);
         setSignInActive(false);
         setSendEmailActive(false);
@@ -105,7 +107,9 @@ const Header = () => {
                         </div>
                     </div>
                     <div className="header-navbar">
-                        <LogoButton/>
+                        <div onClick={() => scroll.scrollToTop()}>
+                            <LogoButton/>
+                        </div>
                         <nav className="navbar">
                             <div className="navbar-route" onClick={() => setListActive(listActive === "games" ? "empty" : "games")}>
                                 <img alt="" src={Games}></img>
@@ -145,9 +149,9 @@ const Header = () => {
                 </div>
             </div>
 
-            <Modal active={signUpActive} clickChange={exhcangeModal} content={<SignUpWindow clickChange={exhcangeModal}/>}/>
-            <Modal active={signInActive} clickChange={exhcangeModal} content={<SignInWindow clickChange={exhcangeModal}/>}/>
-            <Modal active={sendEmailActive} clickChange={exhcangeModal} content={<EmailSendWindow clickChange={exhcangeModal}/>}/>
+            <Modal active={signUpActive} clickChange={exchangeModal} content={<SignUpWindow clickChange={exchangeModal}/>}/>
+            <Modal active={signInActive} clickChange={exchangeModal} content={<SignInWindow clickChange={exchangeModal}/>}/>
+            <Modal active={sendEmailActive} clickChange={exchangeModal} content={<EmailSendWindow clickChange={exchangeModal}/>}/>
         </header>
     );
 }

@@ -1,9 +1,8 @@
-import React from "react";
-import Game from "./game";
-import Group from "../group/group";
+import React from "react"
+import Group from "../group/group"
+import Game from "./game"
 
 const GameGroup = (props) => {
-
     const games = props.games?.map((game) => <Game game={game} key={game.id}/>);
 
     return(

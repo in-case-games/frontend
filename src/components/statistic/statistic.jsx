@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Account, Star, Box, Cart, InCoin, Radar } from "../../assets/images/icon";
-import { SiteStatistics } from "../../services/api";
+import React, { useEffect, useState } from "react"
+import { Account, Box, Cart, InCoin, Radar, Star } from "../../assets/images/icon"
+import { SiteStatistics } from "../../services/api"
 const Statistic = () => {
     const statisticsApi = new SiteStatistics();
 
@@ -9,8 +9,8 @@ const Statistic = () => {
     const [account, setAccount] = useState(0);
     const [box, setBox] = useState(0);
     const [item, setItem] = useState(0);
-    const [incoin, setIncoin] = useState(0);
-    const [online, setOnline] = useState(0);
+    const [inCoin, setInCoin] = useState(0);
+    const [online] = useState(0);
 
     useEffect(() => {
       const interval = setInterval(async () => {
@@ -20,7 +20,7 @@ const Statistic = () => {
             setAccount(response.users);
             setBox(response.lootBoxes);
             setItem(response.withdrawnItems);
-            setIncoin(response.withdrawnFunds);
+            setInCoin(response.withdrawnFunds);
             setIsStartStats(false);
         } 
         catch (err) {
@@ -59,7 +59,7 @@ const Statistic = () => {
                 </div>
                 <div className="statistic">
                     <img alt="" src={InCoin}></img>
-                    <div className="statistic-counter">{incoin}</div>
+                    <div className="statistic-counter">{inCoin}</div>
                     <div className="statistic-sub">инкоинов</div>
                 </div>
                 <div className="statistic">

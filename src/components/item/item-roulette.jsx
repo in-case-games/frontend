@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react"
+import { Item, User } from "../../services/api"
+import BigItem from "./big-item"
 import classes from './item.module.css'
-import BigItem from "./big-item";
-import { User } from "../../services/api"
 
 const ItemRoulette = () => {
     const apiUser = new User();
+    const apiItem = new Item();
 
     const[itemList, setItemList] = useState([]);
     const[isStartItemList, setIsStartItemList] = useState(true);
@@ -12,11 +13,20 @@ const ItemRoulette = () => {
     useEffect(() => {
         const interval = setInterval(async () => {
           try {
-              const response = await apiUser.getLast100Openings();
-              const responseSliced = response.slice(0, 20);
-              const resultArray = responseSliced.map(history => <BigItem imgSrc={history.item.imageUri} itemName={history.item.name} color={history.item.rarity.name} key={history.id}/>);
+              const roulette = await apiUser
+              .getRouletteOpenings();
+              const items = await apiItem
+              .getItemsByHistory(roulette);
+              const result = items.map(history =>
+              <BigItem 
+              imgSrc={history.item.imageUri}
+              itemName={history.item.name}
+              color={history.item.rarity}
+              key={history.id}
+              />);
+
               setIsStartItemList(false);
-              setItemList(resultArray);
+              setItemList(result);
           } 
           catch (err) {
           }

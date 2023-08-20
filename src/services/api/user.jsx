@@ -1,10 +1,10 @@
-import api from "./api";
+import api from "./api"
 
-const RESOURCES_API_URL = "https://localhost:7102/api";
+const RESOURCES_API_URL = "https://localhost:5000/api/";
 
 class User {
-    async getLast100Openings() {
-        const response = await api.get(RESOURCES_API_URL + "/user/history/openings/100");
+    async getRouletteOpenings() {
+        const response = await api.get(RESOURCES_API_URL + "user/history/opening/roulette");
 
         return response.data.data;
     }

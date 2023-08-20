@@ -1,7 +1,7 @@
-import axios from "axios";
-import TokenService from "../token";
+import axios from "axios"
+import TokenService from "../token"
 
-const AUTH_API_URL = "https://localhost:7142/api";
+const AUTH_API_URL = "https://localhost:5000/api/";
 
 const instance = axios.create({
   headers: {
@@ -34,7 +34,7 @@ instance.interceptors.response.use(
         originalConfig._retry = true;
 
         try {
-          const rs = await instance.get(AUTH_API_URL + "/authentication/refresh?refreshToken=" + TokenService.getRefreshToken());
+          const rs = await instance.get(AUTH_API_URL + "authentication/refresh?refreshToken=" + TokenService.getRefreshToken());
 
           const { accessToken } = rs.data;
           TokenService.updateAccessToken(accessToken);

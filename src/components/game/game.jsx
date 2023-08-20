@@ -1,7 +1,6 @@
-import React from "react";
-import classes from "./game.module.css";
-import { useNavigate } from "react-router-dom";
-
+import React from "react"
+import { useNavigate } from "react-router-dom"
+import classes from "./game.module.css"
 const Game = (props) => {
     const navigate = useNavigate();
     const handleClick = () => {
