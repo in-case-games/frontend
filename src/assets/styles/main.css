@@ -120,6 +120,16 @@ html {
 	flex: 0 0 auto;
 }
 
+.balance {
+		flex: 0 0 auto;
+		display: flex;
+		align-items: center;
+}
+
+.balance-amount {
+		margin-right: 10px;
+}
+
 .navbar {
 	flex: 0 0 auto;
 	display: flex;

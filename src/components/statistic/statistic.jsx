@@ -25,7 +25,7 @@ const Statistic = () => {
         catch (err) {
             setIsStartStats(false);
         }
-      }, (isStartStats ? 1000 : 5000));
+      }, (isStartStats ? 1 : 5000));
 
       return () => {
         clearInterval(interval);

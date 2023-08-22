@@ -1,73 +1,33 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { animateScroll as scroll } from "react-scroll"
 import {
-    ListLunge as ListLungeButton,
-    Logo as LogoButton
-} from "./button"
-
-import {
-    Banner,
-    FlagRUS,
+    Banner, FlagRUS,
     Games, IndicatorGreen,
-    Info, Key, ListLunge, LootBox
+    Info, ListLunge, LootBox
 } from "../../assets/images/icon"
-import EmailSendWindow from "../modal/email-send-window"
-import Modal from "../modal/modal"
-import SignInWindow from "../modal/sign-in-window"
-import SignUpWindow from "../modal/sign-up-window"
+import { User } from '../../services/api'
+import TokenService from '../../services/token'
+import {
+    EmailSendWindow, Modal,
+    SignInWindow, SignUpWindow
+} from "../modal"
+import {
+    AuthButton,
+    ListLunge as ListLungeButton,
+    Logo as LogoButton,
+    SignIn as SignInButton
+} from './button'
+import Constants from './constants'
 
-const Header = (props) => {
-    const games = [
-        {
-            id:1,
-            text:"CSGO",
-            link:"/game/csgo",
-            icon:Key
-        },
-        {
-            id:2,
-            text:"Dota 2",
-            link:"/game/dota2",
-            icon:Key
-        },
-        {
-            id:3,
-            text:"Скоро",
-            link:"/",
-            icon:Key
-        },
-    ];
-    const infos = [
-        {
-            id:1,
-            text:"FAQ",
-            link:"/",
-            icon:Key
-        },
-        {
-            id:2,
-            text:"Инфо",
-            link:"/info",
-            icon:Key
-        }
-    ]
-    const langs = [
-        {
-            id:1,
-            text:"RU",
-            link:"/",
-            icon:Key
-        },
-        {
-            id:2,
-            text:"ENG",
-            link:"/",
-            icon:Key
-        }
-    ]
+const Header = () => {
+    const userApi = new User();
+    const [isStart, setIsStart] = useState(true);
+    const [isAuth, setIsAuth] = useState(null);
+
     const [signUpActive, setSignUpActive] = useState(false);
     const [signInActive, setSignInActive] = useState(false);
     const [sendEmailActive, setSendEmailActive] = useState(false);
+    const [user, setUser] = useState(null);
 
     const active = {
         "signin": () => setSignInActive(true),
@@ -78,9 +38,7 @@ const Header = (props) => {
 
     const [listActive, setListActive] = useState("empty");
 
-    const isActive = (name) => {
-        return name === listActive;
-    };
+    const isActive = (name) => name === listActive;
 
     const exchangeModal = (modal) => {
         setSignUpActive(false);
@@ -94,6 +52,41 @@ const Header = (props) => {
         setListActive("empty");
         setSignInActive(true);
     }
+
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            try {	
+                if(TokenService.getAccessToken()) {
+                    const responseUser = await userApi.get();
+                    const responseBalance = await userApi.getBalance();
+                    let balance = responseBalance;
+
+                    if(responseBalance >= 10000000) 
+                        balance = `${balance/1000000}M`;
+
+                    const user = {
+                        img: `img/${responseUser.id}`,
+                        balance: balance
+                    };
+
+                    setUser(user);
+                    setIsAuth(true);
+                    exchangeModal("close");
+                }
+                else 
+                    setIsAuth(false);
+                    setIsStart(false);
+            } 
+            catch (err) {
+                setIsAuth(false);
+                setIsStart(false);
+            }
+        }, (isStart ? 100 : 1000));
+
+        return () => {
+            clearInterval(interval);
+        };
+    });
 
     return (
         <header className="header">
@@ -115,7 +108,9 @@ const Header = (props) => {
                                 <img alt="" src={Games}></img>
                                 <p className="route-text">Игры</p>
                                 <img alt="" src={ListLunge}></img>
-                                <ListLungeButton isActive={isActive("games")} items={games}/>
+                                <ListLungeButton 
+                                isActive={isActive("games")} 
+                                items={Constants.games}/>
                             </div>
                             <div className="navbar-route">
                                 <img alt="" src={Banner}></img>
@@ -129,21 +124,29 @@ const Header = (props) => {
                                 <img alt="" src={Info}></img>
                                 <p className="route-text">Инфо</p>
                                 <img alt="" src={ListLunge}></img>
-                                <ListLungeButton isActive={isActive("infos")} items={infos}/>
+                                <ListLungeButton 
+                                isActive={isActive("infos")} 
+                                items={Constants.infos}/>
                             </div>
                         </nav>
                     </div>
 
                     <div className="header-userbar">
-                        <button className="btn btn-default" onClick={() => openSignInModal(true)}>
-                            <img alt="" src={Key}/>
-                            <div>Вход</div>
-                        </button>
+                        {
+                            isAuth ? 
+                            <AuthButton user={user}/> : null
+                        }
+                        {
+                            isAuth === false ?
+                            <SignInButton click={() => openSignInModal(true)}/> : null
+                        }
                         <div className="btn-lang" onClick={() => setListActive(listActive === "langs" ? "empty" : "langs")}>
                             <img alt="" src={FlagRUS}></img>
                             <div>RU</div>
                             <img alt="" src={ListLunge}></img>
-                            <ListLungeButton isActive={isActive("langs")} items={langs}/>
+                            <ListLungeButton 
+                            isActive={isActive("langs")} 
+                            items={Constants.langs}/>
                         </div>
                     </div>
                 </div>

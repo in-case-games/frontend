@@ -8,6 +8,8 @@
     --color_coin_cost_box: #622F00;
     --background_cost_box_color: 180deg, rgba(255,230,101,1) 0%, rgba(254,115,36,1) 67%;
     --color_border_info: #FFE665;
+    --color_border_balance: #00FF82;
+    --color_font_balance: #00FF82;
     --background_list_lunge_hover: #FFE665;
     --background_list_lunge: #F8B415;
     --border_item_lunge_color: #303030;
@@ -22,6 +24,19 @@ button {
     padding: 8px 10px;
     width: 200px;
     cursor: pointer;
+}
+
+.btn-balance {
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'Play';
+    font-weight: 500;
+    border: 2px solid var(--color_border_balance);
+    color: var(--color_font_balance);
+    padding: 8px 20px;
+    width: 170px;
 }
 
 .btn-info {

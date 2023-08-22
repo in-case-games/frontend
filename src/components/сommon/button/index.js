@@ -1,7 +1,8 @@
-export {default as Logo} from "./logo";
-export {default as SignIn} from "./sign-in";
-export {default as Anchor} from "./anchor";
-export {default as CostBox} from "./cost-box";
-export {default as DocumentLink} from "./document";
-export {default as Info} from "./info-button";
-export {default as ListLunge} from "./list-lunge";
+export { default as Anchor } from "./anchor"
+export { default as AuthButton } from "./auth-button"
+export { default as CostBox } from "./cost-box"
+export { default as DocumentLink } from "./document"
+export { default as Info } from "./info-button"
+export { default as ListLunge } from "./list-lunge"
+export { default as Logo } from "./logo"
+export { default as SignIn } from "./sign-in"

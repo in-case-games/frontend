@@ -31,7 +31,7 @@ const ItemRoulette = () => {
           catch (err) {
               setIsStartItemList(false);
           }
-        }, (isStartItemList ? 100 : 5000));
+        }, (isStartItemList ? 1 : 5000));
   
         return () => {
           clearInterval(interval);
