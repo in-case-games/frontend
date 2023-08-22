@@ -39,18 +39,18 @@ const SignUpWindow = (props) => {
                 <form className={classes.sign_up_window_content__form}>
                     <p>Регистрация</p>
                     <div className={classes.error_message}>{errorMessage}</div>
-                    <input className={classes.input_form} value={login} onInput={e => setLogin(e.target.value)} placeholder="Имя аккаунта"/>
-                    <input className={classes.input_form} value={email} onInput={e => setEmail(e.target.value)} placeholder="E-mail" type="email"/>
-                    <input className={classes.input_form} value={password} onInput={e => setPassword(e.target.value)} placeholder="Пароль" type="password"/>
+                    <input className={classes.input_form} value={login} onInput={e => setLogin(e.target.value)} placeholder="Имя аккаунта" name="name-account"/>
+                    <input className={classes.input_form} value={email} onInput={e => setEmail(e.target.value)} placeholder="E-mail" type="email" name="email-account"/>
+                    <input className={classes.input_form} value={password} onInput={e => setPassword(e.target.value)} placeholder="Пароль" type="password" name="password-account"/>
                     <div className={classes.checkbox_section}>
-                        <input type="checkbox" className={classes.checkbox_form} onChange={() => setIsAgree(!isAgree)}/>
-                        <label className={classes.agree_eta} htmlFor="agree-eta">
+                        <input type="checkbox" className={classes.checkbox_form} onChange={() => setIsAgree(!isAgree)} name="agree-policy"/>
+                        <label className={classes.agree_eta}>
                             {<DocumentLink text="Я согласен с условиями пользовательского соглашения" link="/info/user-agreement"/>}
                         </label>
                     </div>
                     <div className={classes.checkbox_section}>
-                        <input type="checkbox" className={classes.checkbox_form} onChange={() => setIs18Age(!is18Age)}/>
-                        <label className={classes.agree_eta} htmlFor="agree-eta">
+                        <input type="checkbox" className={classes.checkbox_form} onChange={() => setIs18Age(!is18Age)} name="agree-policy-18"/>
+                        <label className={classes.agree_eta}>
                             {<DocumentLink text="Подтверждаю, что мне есть 18 лет" link="/info/user-agreement"/>}
                         </label>
                     </div>

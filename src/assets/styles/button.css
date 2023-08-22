@@ -37,6 +37,8 @@ button {
     color: var(--color_font_balance);
     padding: 8px 20px;
     width: 170px;
+    height: 20px;
+    margin-right: 20px;
 }
 
 .btn-info {

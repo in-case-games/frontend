@@ -72,7 +72,7 @@ const Header = () => {
                     setUser(user);
                     setIsAuth(true);
 
-                    if(paymentActive === false)
+                    if(sendEmailActive === true)
                         exchangeModal("close");
                 }
                 else 

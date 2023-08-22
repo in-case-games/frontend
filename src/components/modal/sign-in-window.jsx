@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import classes from "./modal.module.css";
-import { LogoMen } from "../../assets/images/icon";
-import Authentication from "../../services/api/authentication";
+import React, { useState } from "react"
+import { LogoMen } from "../../assets/images/icon"
+import Authentication from "../../services/api/authentication"
+import classes from "./modal.module.css"
 
 const SignInWindow = (props) => {
     const authApi = new Authentication();
@@ -26,8 +26,8 @@ const SignInWindow = (props) => {
                 <form className={classes.sign_in_window_content__form}>
                     <p>Вход</p>
                     <div className={classes.error_message}>{errorMessage}</div>
-                    <input className={classes.input_form} placeholder="Имя аккаунта/Email" value={login} onInput={e => setLogin(e.target.value)}/>
-                    <input className={classes.input_form} placeholder="Пароль" type="password" value={password} onInput={e => setPassword(e.target.value)}/>
+                    <input className={classes.input_form} placeholder="Имя аккаунта/Email" value={login} onInput={e => setLogin(e.target.value)} name="account-email"/>
+                    <input className={classes.input_form} placeholder="Пароль" type="password" value={password} onInput={e => setPassword(e.target.value)} name="account-password"/>
                     <div className={classes.btn_main} onClick={sendLogin}>
                         Отправить
                     </div>

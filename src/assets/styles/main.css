@@ -120,6 +120,20 @@ html {
 	flex: 0 0 auto;
 }
 
+.userbar-auth {
+		display: flex;
+    align-items: center;
+}
+
+.userbar-logo {
+		background-repeat: no-repeat;
+		background-position: 50%;
+		border-radius: 50%;
+		width: 65px;
+		height: 65px;
+		cursor: pointer;
+}
+
 .balance {
 		flex: 0 0 auto;
 		display: flex;
