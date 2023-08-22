@@ -3,14 +3,13 @@ import { Account, Box, Cart, InCoin, Radar, Star } from "../../assets/images/ico
 import { SiteStatistics } from "../../services/api"
 const Statistic = () => {
     const statisticsApi = new SiteStatistics();
-
-    const [isStartStats, setIsStartStats] = useState(true);
     const [review, setReviews] = useState(0);
     const [account, setAccount] = useState(0);
     const [box, setBox] = useState(0);
     const [item, setItem] = useState(0);
     const [inCoin, setInCoin] = useState(0);
     const [online] = useState(0);
+    const [isStartStats, setIsStartStats] = useState(true);
 
     useEffect(() => {
       const interval = setInterval(async () => {
@@ -24,8 +23,9 @@ const Statistic = () => {
             setIsStartStats(false);
         } 
         catch (err) {
+            setIsStartStats(false);
         }
-      }, (isStartStats ? 1 : 5000));
+      }, (isStartStats ? 1000 : 5000));
 
       return () => {
         clearInterval(interval);

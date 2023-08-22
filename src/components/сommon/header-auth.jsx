@@ -11,12 +11,8 @@ import {
     Games, IndicatorGreen,
     Info, Key, ListLunge, LootBox
 } from "../../assets/images/icon"
-import EmailSendWindow from "../modal/email-send-window"
-import Modal from "../modal/modal"
-import SignInWindow from "../modal/sign-in-window"
-import SignUpWindow from "../modal/sign-up-window"
 
-const Header = (props) => {
+const HeaderAuthorization = (props) => {
     const games = [
         {
             id:1,
@@ -65,35 +61,12 @@ const Header = (props) => {
             icon:Key
         }
     ]
-    const [signUpActive, setSignUpActive] = useState(false);
-    const [signInActive, setSignInActive] = useState(false);
-    const [sendEmailActive, setSendEmailActive] = useState(false);
-
-    const active = {
-        "signin": () => setSignInActive(true),
-        "signup": () => setSignUpActive(true),
-        "email": () => setSendEmailActive(true),
-        "close": () => setSignInActive(false)
-    }
 
     const [listActive, setListActive] = useState("empty");
 
     const isActive = (name) => {
         return name === listActive;
     };
-
-    const exchangeModal = (modal) => {
-        setSignUpActive(false);
-        setSignInActive(false);
-        setSendEmailActive(false);
-
-        active[modal]();
-    };
-
-    const openSignInModal = () => {
-        setListActive("empty");
-        setSignInActive(true);
-    }
 
     return (
         <header className="header">
@@ -135,10 +108,7 @@ const Header = (props) => {
                     </div>
 
                     <div className="header-userbar">
-                        <button className="btn btn-default" onClick={() => openSignInModal(true)}>
-                            <img alt="" src={Key}/>
-                            <div>Вход</div>
-                        </button>
+                        <div></div>
                         <div className="btn-lang" onClick={() => setListActive(listActive === "langs" ? "empty" : "langs")}>
                             <img alt="" src={FlagRUS}></img>
                             <div>RU</div>
@@ -148,12 +118,8 @@ const Header = (props) => {
                     </div>
                 </div>
             </div>
-
-            <Modal active={signUpActive} clickChange={exchangeModal} content={<SignUpWindow clickChange={exchangeModal}/>}/>
-            <Modal active={signInActive} clickChange={exchangeModal} content={<SignInWindow clickChange={exchangeModal}/>}/>
-            <Modal active={sendEmailActive} clickChange={exchangeModal} content={<EmailSendWindow clickChange={exchangeModal}/>}/>
         </header>
     );
 }
 
-export default Header;
+export default HeaderAuthorization;

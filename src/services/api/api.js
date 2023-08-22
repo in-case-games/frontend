@@ -28,19 +28,23 @@ instance.interceptors.response.use(
   },
   async (err) => {
     const originalConfig = err.config;
-
     if (err.response) { 
-      if ((err.response.status === 401 || err.response.data.error.code === "1") && !originalConfig._retry) {
+      if ((err.response.status === 401 || err.response.data.code === "1") && !originalConfig._retry) {
         originalConfig._retry = true;
 
         try {
-          const rs = await instance.get(AUTH_API_URL + "authentication/refresh?refreshToken=" + TokenService.getRefreshToken());
+          const rs = await instance.get(AUTH_API_URL + "authentication/refresh?token=" + TokenService.getRefreshToken());
 
-          const { accessToken } = rs.data;
-          TokenService.updateAccessToken(accessToken);
+          if(rs.status === 401 || rs.data.code === "1") {
+              TokenService.removeUser();
+          }
+          else if(rs.status === 200) {
+              TokenService.setUser(rs.data.data);
+          }
 
           return instance(originalConfig);
         } catch (_error) {
+          TokenService.removeUser();
           return Promise.reject(_error);
         }
       }

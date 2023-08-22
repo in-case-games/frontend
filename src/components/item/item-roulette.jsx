@@ -24,13 +24,14 @@ const ItemRoulette = () => {
               color={history.item.rarity}
               key={history.id}
               />);
-
-              setIsStartItemList(false);
+              
               setItemList(result);
+              setIsStartItemList(false);
           } 
           catch (err) {
+              setIsStartItemList(false);
           }
-        }, (isStartItemList ? 1 : 5000));
+        }, (isStartItemList ? 100 : 5000));
   
         return () => {
           clearInterval(interval);

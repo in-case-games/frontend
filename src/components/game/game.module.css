@@ -11,7 +11,7 @@
     cursor: pointer;
     width: 200px;
     flex-wrap: wrap;
-    padding: 20px 30px;
+    margin: 20px 30px;
     align-items: center;
 }
 

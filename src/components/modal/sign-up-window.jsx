@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
+import { ManLogoNoBg } from "../../assets/images/additional"
+import Authentication from "../../services/api/authentication"
+import { DocumentLink } from "../сommon/button"
 import classes from "./modal.module.css"
-import {ManLogoNoBg} from "../../assets/images/additional";
-import { DocumentLink } from "../сommon/button";
-import Authentication from "../../services/api/authentication";
 
 const SignUpWindow = (props) => {
     const authApi = new Authentication();
@@ -43,13 +43,13 @@ const SignUpWindow = (props) => {
                     <input className={classes.input_form} value={email} onInput={e => setEmail(e.target.value)} placeholder="E-mail" type="email"/>
                     <input className={classes.input_form} value={password} onInput={e => setPassword(e.target.value)} placeholder="Пароль" type="password"/>
                     <div className={classes.checkbox_section}>
-                        <input type="checkbox" value="Admin" name="agree-eta" className={classes.checkbox_form} onChange={() => setIsAgree(!isAgree)}/>
+                        <input type="checkbox" className={classes.checkbox_form} onChange={() => setIsAgree(!isAgree)}/>
                         <label className={classes.agree_eta} htmlFor="agree-eta">
                             {<DocumentLink text="Я согласен с условиями пользовательского соглашения" link="/info/user-agreement"/>}
                         </label>
                     </div>
                     <div className={classes.checkbox_section}>
-                        <input type="checkbox" value="Admin" name="agree-eta" className={classes.checkbox_form} onChange={() => setIs18Age(!is18Age)}/>
+                        <input type="checkbox" className={classes.checkbox_form} onChange={() => setIs18Age(!is18Age)}/>
                         <label className={classes.agree_eta} htmlFor="agree-eta">
                             {<DocumentLink text="Подтверждаю, что мне есть 18 лет" link="/info/user-agreement"/>}
                         </label>
