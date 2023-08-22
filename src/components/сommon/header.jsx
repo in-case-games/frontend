@@ -9,6 +9,7 @@ import { User } from '../../services/api'
 import TokenService from '../../services/token'
 import {
     EmailSendWindow, Modal,
+    PaymentWindow,
     SignInWindow, SignUpWindow
 } from "../modal"
 import {
@@ -27,12 +28,14 @@ const Header = () => {
     const [signUpActive, setSignUpActive] = useState(false);
     const [signInActive, setSignInActive] = useState(false);
     const [sendEmailActive, setSendEmailActive] = useState(false);
+    const [paymentActive, setPaymentActive] = useState(false);
     const [user, setUser] = useState(null);
 
     const active = {
         "signin": () => setSignInActive(true),
         "signup": () => setSignUpActive(true),
         "email": () => setSendEmailActive(true),
+        "payment": () => setPaymentActive(true),
         "close": () => setSignInActive(false)
     }
 
@@ -41,17 +44,14 @@ const Header = () => {
     const isActive = (name) => name === listActive;
 
     const exchangeModal = (modal) => {
+        setListActive("empty");
         setSignUpActive(false);
         setSignInActive(false);
         setSendEmailActive(false);
+        setPaymentActive(false);
 
         active[modal]();
     };
-
-    const openSignInModal = () => {
-        setListActive("empty");
-        setSignInActive(true);
-    }
 
     useEffect(() => {
         const interval = setInterval(async () => {
@@ -71,7 +71,9 @@ const Header = () => {
 
                     setUser(user);
                     setIsAuth(true);
-                    exchangeModal("close");
+
+                    if(paymentActive === false)
+                        exchangeModal("close");
                 }
                 else 
                     setIsAuth(false);
@@ -134,11 +136,11 @@ const Header = () => {
                     <div className="header-userbar">
                         {
                             isAuth ? 
-                            <AuthButton user={user}/> : null
+                            <AuthButton user={user} click={exchangeModal}/> : null
                         }
                         {
                             isAuth === false ?
-                            <SignInButton click={() => openSignInModal(true)}/> : null
+                            <SignInButton click={exchangeModal}/> : null
                         }
                         <div className="btn-lang" onClick={() => setListActive(listActive === "langs" ? "empty" : "langs")}>
                             <img alt="" src={FlagRUS}></img>
@@ -155,6 +157,7 @@ const Header = () => {
             <Modal active={signUpActive} clickChange={exchangeModal} content={<SignUpWindow clickChange={exchangeModal}/>}/>
             <Modal active={signInActive} clickChange={exchangeModal} content={<SignInWindow clickChange={exchangeModal}/>}/>
             <Modal active={sendEmailActive} clickChange={exchangeModal} content={<EmailSendWindow clickChange={exchangeModal}/>}/>
+            <Modal active={paymentActive} clickChange={exchangeModal} content={<PaymentWindow clickChange={exchangeModal}/>}/>
         </header>
     );
 }

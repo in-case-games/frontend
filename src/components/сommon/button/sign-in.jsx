@@ -4,7 +4,7 @@ import { Key } from "../../../assets/images/icon"
 
 const SignIn = (props) => {
     return (
-        <button className="btn btn-default" onClick={props.click}>
+        <button className="btn btn-default" onClick={() => props.click("signin")}>
             <img alt="" src={Key}/>
             <div>Вход</div>
         </button>
