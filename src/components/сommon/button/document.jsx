@@ -5,9 +5,13 @@ import { animateScroll as scroll } from "react-scroll"
 const DocumentLink = (props) => {
     const navigate = useNavigate();
     const handleClick = () => {
+        if(window.location.href === `http://localhost:3000${props.link}`) 
+            scroll.scrollToTop();
+        else 
+            window.scrollTo(0, 0);
+        
         navigate(props.link);
-        scroll.scrollToTop();
-    };
+    }
     return(
         <button className="document-link" onClick={handleClick}>
             {props.text}

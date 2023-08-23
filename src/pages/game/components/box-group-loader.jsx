@@ -8,7 +8,19 @@ const BoxGroupLoader = (props) => {
 		const boxGroupApi = new BoxGroupApi();
 		const [groups, setGroups] = useState([]);
 		const [isStartBoxGroup, setIsStartBoxGroup] = useState(true);
-
+		const [startUrl, setStartUrl] = useState(window.location.href);
+		
+		useEffect(() => {
+				const interval = setInterval(() => {
+					if(startUrl !== window.location.href) {
+						setStartUrl(window.location.href);
+						setIsStartBoxGroup(true);
+					}
+				}, 100);
+				return () => {
+					clearInterval(interval);
+				};
+		})
 		useEffect(() => {
       const interval = setInterval(async () => {
         try {

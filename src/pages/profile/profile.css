@@ -1,0 +1,19 @@
+.profile {
+	height: 100%;
+	width: 100%;
+}
+
+.user-panel {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	padding: 50px 0;
+}
+
+.panel-bar {
+	flex: 0 0 auto;
+}
+
+.panel-content {
+	flex: 1 0 auto;
+}

@@ -1,10 +1,16 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { LogoMen } from "../../../assets/images/icon";
+import React from "react"
+import { useNavigate } from "react-router-dom"
+import { animateScroll as scroll } from 'react-scroll'
+import { LogoMen } from "../../../assets/images/icon"
 
 const Logo = () => {
     const navigate = useNavigate();
     const handleClick = () => {
+        if(window.location.href === `http://localhost:3000/`) 
+            scroll.scrollToTop();
+        else 
+            window.scrollTo(0, 0);
+        
         navigate("/");
     };
     return(

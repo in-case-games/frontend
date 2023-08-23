@@ -13,6 +13,10 @@
     --background_list_lunge_hover: #FFE665;
     --background_list_lunge: #F8B415;
     --border_item_lunge_color: #303030;
+    --color_border_profile: #3B3B42;
+    --color_exit: #BE0809;
+    --background_active_profile: #F8B415;
+    --color_active_profile: #1A1A1D;
 }
 
 button {
@@ -51,6 +55,64 @@ button {
 
     font-size: 16px;
     font-family: 'Nunito';
+}
+
+.btn-profile-header {
+    font-family: 'Play';
+    font-size: 18px;
+    border: 1px solid var(--color_border_profile);
+    border-left: 0px;
+    border-radius: 0px 8px 8px 0px;
+    text-align: center;
+    padding: 10px 0;
+    width: 250px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.btn-profile-header--active {
+    font-family: 'Play';
+    font-size: 18px;
+    border: 1px solid var(--color_border_profile);
+    border-left: 0px;
+    border-radius: 0px 8px 8px 0px;
+    text-align: center;
+    padding: 10px 0;
+    width: 250px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    color: var(--color_active_profile);
+    background-color: var(--background_active_profile);
+}
+
+.btn-profile {
+    font-family: 'Play';
+    font-size: 18px;
+    border: 1px solid var(--color_border_profile);
+    border-left: 0px;
+    border-radius: 0px 8px 8px 0px;
+    text-align: center;
+    padding: 20px 0;
+    width: 250px;
+}
+
+.btn-profile--active {
+    font-family: 'Play';
+    font-size: 18px;
+    border: 1px solid var(--color_border_profile);
+    border-left: 0px;
+    border-radius: 0px 8px 8px 0px;
+    text-align: center;
+    padding: 20px 0;
+    width: 250px;
+    color: var(--color_active_profile);
+    background-color: var(--background_active_profile);
+}
+
+.btn-profile:last-child {
+    color: var(--color_exit);
 }
 
 .btn-info:hover {
