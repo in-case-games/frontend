@@ -22,9 +22,8 @@ import Constants from './constants'
 
 const Header = () => {
     const userApi = new User();
-    const [isStart, setIsStart] = useState(true);
+    const [isDate, setIsDate] = useState(null);
     const [isAuth, setIsAuth] = useState(null);
-
     const [signUpActive, setSignUpActive] = useState(false);
     const [signInActive, setSignInActive] = useState(false);
     const [sendEmailActive, setSendEmailActive] = useState(false);
@@ -53,6 +52,21 @@ const Header = () => {
         active[modal]();
     };
 
+    const secondsBeforeRefresh = () => {
+        if(isDate === null) return 100;
+
+        const expiryToken = new Date(isDate).getTime() + 300000;
+        const dateNow = new Date().getTime();
+
+        return expiryToken <= dateNow ? 1000 : expiryToken - dateNow;
+    };
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            setIsAuth(TokenService.getAccessToken() !== undefined && user !== null);
+        }, 100);
+
+        return () => clearInterval(interval);
+    });
     useEffect(() => {
         const interval = setInterval(async () => {
             try {	
@@ -60,34 +74,24 @@ const Header = () => {
                     const responseUser = await userApi.get();
                     const responseBalance = await userApi.getBalance();
                     let balance = responseBalance;
-
-                    if(responseBalance >= 10000000) 
-                        balance = `${balance/1000000}M`;
-
                     const user = {
                         img: `img/${responseUser.id}`,
                         balance: balance
                     };
 
+                    if(responseBalance >= 10000000) balance = `${balance/1000000}M`;
+                    if(sendEmailActive === true) exchangeModal("close");
+
                     setUser(user);
-                    setIsAuth(true);
-
-                    if(sendEmailActive === true)
-                        exchangeModal("close");
                 }
-                else 
-                    setIsAuth(false);
-                    setIsStart(false);
             } 
-            catch (err) {
-                setIsAuth(false);
-                setIsStart(false);
+            catch (err) {}
+            finally { 
+                setIsDate(TokenService.getExpiresAccessToken()); 
             }
-        }, (isStart ? 100 : 1000));
+        }, (secondsBeforeRefresh()));
 
-        return () => {
-            clearInterval(interval);
-        };
+        return () => clearInterval(interval);
     });
 
     return (

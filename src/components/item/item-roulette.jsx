@@ -19,10 +19,10 @@ const ItemRoulette = () => {
               .getItemsByHistory(roulette);
               const result = items.map(history =>
               <BigItem 
-              imgSrc={history.item.imageUri}
-              itemName={history.item.name}
-              color={history.item.rarity}
-              key={history.id}
+                imgSrc={history.item.imageUri}
+                itemName={history.item.name}
+                color={history.item.rarity}
+                key={history.id}
               />);
               
               setItemList(result);

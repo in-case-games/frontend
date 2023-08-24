@@ -25,32 +25,33 @@ const BoxGroupLoader = (props) => {
       const interval = setInterval(async () => {
         try {
             const response = await boxGroupApi.getGroups(id);
-						let groups = new Map();
+						let groups = {};
 
 						for(let i = 0; i < response.length; i++) {
-								if(groups.has(response[i].group.name)) {
-										const temp = groups.get(response[i].group.name);
-										groups.set(temp.push(response[i].box));
+								if(groups[response[i].group.name] !== undefined) {
+										let temp = groups[response[i].group.name];
+										temp.push(response[i].box);
+										groups[response[i].group.name] = temp;
 								}
 								else {
-										const temp = [];
-										groups.set(temp.push(response[i].box));
+										let temp = [];
+										temp.push(response[i].box);
+										groups[response[i].group.name] = temp;
 								}
 						}
-						setGroups(groups.map(([key, value]) => <BoxGroup name={key} boxes={value}/>));
-						setIsStartBoxGroup(false);
+						const keys = Object.keys(groups);
+						setGroups(keys.map(key => <BoxGroup name={key} boxes={groups[key]} key={key}/>));
         } 
-        catch (err) {
+        catch (err) {}
+				finally {
 					setIsStartBoxGroup(false);
-        }
+				}
       }, (isStartBoxGroup ? 100 : 30000));
 
-      return () => {
-        clearInterval(interval);
-      };
+      return () => clearInterval(interval);
     });
 		
-		return(groups.length < 1 ? <div>{groups}</div> : null);
+		return(groups.length > 0 ? <div>{groups}</div> : null);
 };
 
 export default BoxGroupLoader;

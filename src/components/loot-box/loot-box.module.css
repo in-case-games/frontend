@@ -3,6 +3,8 @@
     --color_border_box_delimiter: #313138;
     --color_border_box_delimiter--hover: #F8B415;
     --background_cost_box_color: 180deg, rgba(255,230,101,1) 100%, rgba(254,115,36,1) 100%;
+    --background_color_locked_cost: #998888;
+    --color_locked_cost: #622F00;
 }
 
 .lootbox {
@@ -26,7 +28,42 @@
     background-position:40px;
 }
 
+.lootbox_locked {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    width: 200px;
+    flex-wrap: wrap;
+    padding: 20px 30px;
+    align-items: center;
+    color: var(--background_color_locked_cost);
+}
+
+.lootbox_locked:hover .box_delimiter {
+    border-color: var(--background_color_locked_cost);
+    -webkit-transition: border-color 400ms linear;
+    -ms-transition: border-color 400ms linear;
+    transition: border-color 400ms linear;
+}
+
+.lootbox_locked:hover .btn_cost_box button {
+    background-position:40px;
+}
+
+.lootbox_locked .box_name{
+    color: var(--background_color_locked_cost);
+}
+
+.lootbox_locked .btn_cost_box button{
+    background: var(--background_color_locked_cost);
+    color: var(--color_locked_cost);
+}
+
 .lootbox img {
+    width: 200px;
+}
+
+.lootbox_locked img {
     width: 200px;
 }
 

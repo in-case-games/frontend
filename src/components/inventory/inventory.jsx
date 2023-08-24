@@ -13,16 +13,14 @@ const Inventory = (props) => {
 				try {
 						const inventory = await userApi.getInventory();
 						setInventories(inventory);
-						setIsStart(false);
 				} 
-				catch (err) {
+				catch (err) { }
+				finally {
 						setIsStart(false);
 				}
-			}, (isStart ? 100 : 1000));
+			}, (isStart ? 100 : 10000));
 
-			return () => {
-				clearInterval(interval);
-			};
+			return () => clearInterval(interval);
 		});
 
 		return(

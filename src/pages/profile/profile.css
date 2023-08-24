@@ -16,4 +16,42 @@
 
 .panel-content {
 	flex: 1 0 auto;
+	padding: 0 40px;
+}
+
+.inventory-header {
+	display: flex;
+	flex-direction: column;
+}
+
+.inventory-delimiter {
+	border: 1px solid #F8B415;
+	margin-top: 5px;
+}
+
+.inventory-tittle {
+	display: flex;
+	align-items: baseline;
+	padding: 0 20px;
+	justify-content: space-between;
+}
+
+.inventory-group {
+	display: flex;
+	padding: 0 20px;
+	align-items: center;
+}
+
+.inventory-group .btn-withdraw{
+	margin-right: 20px;
+}
+
+.inventory-group .btn-filter {
+	margin-top: 3px;
+}
+
+.inventory-name {
+	font-family: 'Play';
+	font-size: 30px;
+	margin-right: 20px;
 }

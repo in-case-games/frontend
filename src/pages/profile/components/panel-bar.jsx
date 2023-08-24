@@ -1,10 +1,18 @@
 import React from 'react'
+import { delete_cookie } from 'sfcookies'
 import {
 	ProfileBar as BarButton,
 	ProfileHeaderBar as HeaderBarButton
 } from "../../../components/сommon/button"
+import TokenService from '../../../services/token'
 
 const PanelBar = (props) => {
+		const handleClick = () => {
+				TokenService.clearUser();
+				delete_cookie("user-balance");
+				delete_cookie("user-id");
+				delete_cookie("user-login");
+		};
 		return(
 				<div className='panel-bar'>
 						<div className='user-bar'>
@@ -31,7 +39,7 @@ const PanelBar = (props) => {
 								text="Промокоды" 
 								click={() => props.exchange("promo-code")}
 								active={props.active === "promo-code"}/>
-								<BarButton text="Выйти"/>
+								<BarButton click={() => handleClick()} text="Выйти"/>
 						</div>
 				</div>
 		);

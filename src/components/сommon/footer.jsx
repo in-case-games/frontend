@@ -1,12 +1,18 @@
-import React from "react";
-import { Anchor as AnchorButton, DocumentLink } from "./button";
-import { 
-    Telegram, VK, YouTube, 
-    FlagRUS, ListLunge, Visa,
-    Mastercard, World, Qiwi,
-    Crypto, Peoples, Project, FAQ
-} from "../../assets/images/icon";
-import { Statistic } from "../statistic";
+import React from "react"
+import {
+    Crypto,
+    FAQ,
+    FlagRUS, ListLunge,
+    Mastercard,
+    Peoples, Project,
+    Qiwi,
+    Telegram, VK,
+    Visa,
+    World,
+    YouTube
+} from "../../assets/images/icon"
+import { Statistic } from "../statistic"
+import { Anchor as AnchorButton, DocumentLink } from "./button"
 
 class Footer extends React.Component {
     render() {
@@ -71,17 +77,9 @@ class Footer extends React.Component {
                             </div>
                             <div className="info-additional">
                                 Все права принадлежат их правообладателям.
-                                Сайт не аффилирован 
-                                <br/> 
-                                и не одобрен компаниями разработчиков игр. Genshin Impact, 
-                                <br/>
-                                Counter-Strike: Global Offensive, Dota 2.
+                                Сайт не аффилирован и не одобрен компаниями разработчиков игр. Counter-Strike: Global Offensive, Dota 2.
                                 <br/><br/>
-                                All rights belong to their copyright holders. The site is not affiliated
-                                <br/>
-                                 with or approved by the games developers Genshin Impact,
-                                 <br/> 
-                                 Counter-Strike: Global Offensive, Dota 2.
+                                All rights belong to their copyright holders. The site is not affiliated with or approved by the games developers. Counter-Strike: Global Offensive, Dota 2.
                             </div>
                         </div>
                     </div>

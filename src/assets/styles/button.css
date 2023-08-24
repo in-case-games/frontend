@@ -7,6 +7,12 @@
     --color_font_cost_box: #622F00;
     --color_coin_cost_box: #622F00;
     --background_cost_box_color: 180deg, rgba(255,230,101,1) 0%, rgba(254,115,36,1) 67%;
+    --background_withdraw_color: 180deg, rgba(255,230,101,1) 0%, rgba(254,115,36,1) 100%;
+    --background_withdraw_color_start: rgba(255, 230, 101,1);
+    --background_withdraw_color_end: rgba(254,115,36,1);
+    --background_sell_color: 180deg, rgba(236,138,138,1) 0%, rgba(245,62,62,1) 100%;
+    --background_sell_color_start: rgba(236, 138, 138,1);
+    --background_sell_color_end: rgba(245,62,62,1);
     --color_border_info: #FFE665;
     --color_border_balance: #00FF82;
     --color_font_balance: #00FF82;
@@ -17,6 +23,7 @@
     --color_exit: #BE0809;
     --background_active_profile: #F8B415;
     --color_active_profile: #1A1A1D;
+    --color_filter_text: #E36060;
 }
 
 button {
@@ -96,6 +103,56 @@ button {
     text-align: center;
     padding: 20px 0;
     width: 250px;
+}
+
+.btn-filter {
+    cursor: pointer;
+}
+
+.btn-withdraw {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    font-family: 'Play';
+    height: 41px;
+    font-weight: 500;
+    font-size: 19px;
+    cursor: pointer;
+    background-color: linear-gradient(var(--background_withdraw_color));
+    background: var(--background_withdraw_color);
+	background: -moz-linear-gradient(var(--background_withdraw_color));
+	background: -webkit-linear-gradient(var(--background_withdraw_color));
+	background: linear-gradient(var(--background_withdraw_color));
+	filter: progid:DXImageTransform.Microsoft.gradient(
+		startColorstr=var(--background_withdraw_color_start), 
+		endColorstr=var(--background_withdraw_color_end),
+		GradientType=1);
+}
+
+.btn-sell {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    font-family: 'Play';
+    height: 41px;
+    font-weight: 500;
+    font-size: 19px;
+    cursor: pointer;
+    background-color: linear-gradient(var(--background_sell_color));
+    background: var(--background_withdraw_color);
+	background: -moz-linear-gradient(var(--background_sell_color));
+	background: -webkit-linear-gradient(var(--background_sell_color));
+	background: linear-gradient(var(--background_sell_color));
+	filter: progid:DXImageTransform.Microsoft.gradient(
+		startColorstr=var(--background_sell_color_start), 
+		endColorstr=var(--background_sell_color_end),
+		GradientType=1);
+}
+
+.filter-text {
+    color: var(--color_filter_text);
+    margin: 0;
+    padding: 0;
 }
 
 .btn-profile--active {
