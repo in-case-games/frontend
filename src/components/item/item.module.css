@@ -13,6 +13,7 @@
     margin: 10px;
     align-items: center;
     text-align: center;
+    justify-content: space-between;
     border-radius: 15px;
     font-size: 11px;
     color: #FFF;
@@ -26,7 +27,7 @@
 }
 
 .big_item img{
-    max-width: 50px;
+    max-width: 100px;
 }
 
 .item_roulette {
@@ -35,4 +36,12 @@
     flex-direction: row;
     overflow: hidden;
     justify-content: left;
+}
+
+.item_name {
+    margin: 0;
+}
+
+.item_date {
+    margin: 0;
 }

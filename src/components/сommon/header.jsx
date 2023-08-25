@@ -28,7 +28,7 @@ const Header = () => {
     const [signInActive, setSignInActive] = useState(false);
     const [sendEmailActive, setSendEmailActive] = useState(false);
     const [paymentActive, setPaymentActive] = useState(false);
-    const [user, setUser] = useState(null);
+    let [user, setUser] = useState(null);
 
     const active = {
         "signin": () => setSignInActive(true),
@@ -62,7 +62,28 @@ const Header = () => {
     };
     useEffect(() => {
         const interval = setInterval(async () => {
-            setIsAuth(TokenService.getAccessToken() !== undefined && user !== null);
+            if(TokenService.getAccessToken() !== undefined) {
+                let responseBalance = await userApi.getBalance();
+
+                responseBalance = responseBalance >= 10000000 ? 
+                    `${responseBalance/1000000}M` : 
+                    responseBalance;
+
+                let temp = {
+                    img: user?.img ?? "null",
+                    balance: Math.ceil(responseBalance)
+                };
+
+                setUser(temp);
+            }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    });
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            if(TokenService.getAccessToken() !== undefined && user === null) setIsAuth(null);
+            else setIsAuth(TokenService.getAccessToken() !== undefined);
         }, 100);
 
         return () => clearInterval(interval);
@@ -72,24 +93,22 @@ const Header = () => {
             try {	
                 if(TokenService.getAccessToken()) {
                     const responseUser = await userApi.get();
-                    const responseBalance = await userApi.getBalance();
-                    let balance = responseBalance;
-                    const user = {
-                        img: `img/${responseUser.id}`,
-                        balance: balance
-                    };
 
-                    if(responseBalance >= 10000000) balance = `${balance/1000000}M`;
                     if(sendEmailActive === true) exchangeModal("close");
 
-                    setUser(user);
+                    const temp = {
+                        img: `img/${responseUser.id}`,
+                        balance: user?.balance ?? 0
+                    };
+
+                    setUser(temp);
                 }
             } 
             catch (err) {}
             finally { 
                 setIsDate(TokenService.getExpiresAccessToken()); 
             }
-        }, (secondsBeforeRefresh()));
+        }, secondsBeforeRefresh());
 
         return () => clearInterval(interval);
     });
@@ -139,7 +158,7 @@ const Header = () => {
 
                     <div className="header-userbar">
                         {
-                            isAuth ? 
+                            isAuth === true ? 
                             <AuthButton user={user} click={exchangeModal}/> : null
                         }
                         {

@@ -13,7 +13,7 @@ const LootBox = (props) => {
             <img alt="" href="#" src={props.box.image ? "" : Box}></img>
             <div className={classes.box_name}>{props.box.name}</div>
             <div className={classes.btn_cost_box}>
-                <CostBox cost={props.box.cost}/>
+                <CostBox cost={Math.ceil(props.box.cost)}/>
             </div>
             <div className={classes.box_delimiter}></div>
         </div>

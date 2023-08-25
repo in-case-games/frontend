@@ -12,7 +12,7 @@ const instance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     const token = TokenService.getAccessToken();
-    if (token) {
+    if (token !== undefined) {
       config.headers["Authorization"] = 'Bearer ' + token;
     }
     return config;

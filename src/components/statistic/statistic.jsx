@@ -14,18 +14,16 @@ const Statistic = () => {
     useEffect(() => {
       const interval = setInterval(async () => {
         try {
+            setIsStartStats(false);
             const response = await statisticsApi.get();
             setReviews(response.reviews);
             setAccount(response.users);
             setBox(response.lootBoxes);
             setItem(response.withdrawnItems);
             setInCoin(response.withdrawnFunds);
-            setIsStartStats(false);
         } 
-        catch (err) {
-            setIsStartStats(false);
-        }
-      }, (isStartStats ? 1 : 5000));
+        catch (err) {}
+      }, (isStartStats ? 100 : 5000));
 
       return () => {
         clearInterval(interval);

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Inventory from '../../../components/inventory/inventory'
+import { Inventory } from '../../../components/inventory'
 import { Filter, Sell, Withdraw } from "../../../components/сommon/button"
 
 const InventoryContent = () => {

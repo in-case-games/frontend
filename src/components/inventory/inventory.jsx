@@ -11,14 +11,12 @@ const Inventory = (props) => {
 		useEffect(() => {
 			const interval = setInterval(async () => {
 				try {
+						setIsStart(false);
 						const inventory = await userApi.getInventory();
 						setInventories(inventory);
 				} 
 				catch (err) { }
-				finally {
-						setIsStart(false);
-				}
-			}, (isStart ? 100 : 10000));
+			}, (isStart ? 1 : 10000));
 
 			return () => clearInterval(interval);
 		});

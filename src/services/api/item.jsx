@@ -13,18 +13,20 @@ class Item {
 			const result = [];
 
 			for(let i = 0; i < history.length; i++) {
-					const response = await api.get(RESOURCES_API_URL + "game/item/" + history[i].itemId);
+					const response = await api.get(RESOURCES_API_URL + "game/item/id/" + history[i].itemId);
 					const data = response.data.data;
 
 					const temp = {
-							id: history.id,
-							date: history.date,
-							boxId: history.boxId,
-							gameId: history.gameId,
+							id: history[i].id,
+							date: history[i].date,
+							boxId: history[i].boxId,
+							gameId: history[i].gameId,
 							item: {
+									id: history[i].itemId,
+									img: `../history[i].boxId`,
 									name: data.name,
 									rarity: data.rarity,
-									cost: data.cost
+									cost: Math.ceil(data.cost)
 							}
 					}
 

@@ -13,25 +13,26 @@ const ItemRoulette = () => {
     useEffect(() => {
         const interval = setInterval(async () => {
           try {
+              setIsStartItemList(false);
               const roulette = await apiUser
               .getRouletteOpenings();
               const items = await apiItem
               .getItemsByHistory(roulette);
               const result = items.map(history =>
               <BigItem 
-                imgSrc={history.item.imageUri}
-                itemName={history.item.name}
+                img={history.item.img}
+                name={history.item.name}
                 color={history.item.rarity}
+                date={history.date}
                 key={history.id}
               />);
               
               setItemList(result);
-              setIsStartItemList(false);
           } 
           catch (err) {
               setIsStartItemList(false);
           }
-        }, (isStartItemList ? 1 : 5000));
+        }, (isStartItemList ? 100 : 5000));
   
         return () => {
           clearInterval(interval);
