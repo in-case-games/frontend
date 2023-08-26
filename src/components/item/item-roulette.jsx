@@ -46,4 +46,4 @@ const ItemRoulette = () => {
     )
 }
 
-export default ItemRoulette;
+export default React.memo(ItemRoulette);

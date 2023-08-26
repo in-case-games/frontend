@@ -9,6 +9,32 @@ class Item {
         return response.data.data;
     }
 
+		async getItemsByInventory(inventories) {
+			const result = [];
+
+			for(let i = 0; i < inventories.length; i++) {
+					const response = await api.get(RESOURCES_API_URL + "game/item/id/" + inventories[i].itemId);
+					const data = response.data.data;
+
+					const temp = {
+							id: inventories[i].id,
+							date: inventories[i].date,
+							cost: inventories[i].fixedCost,
+							item: {
+									id: data.id,
+									img: `../data.id`,
+									name: data.name,
+									rarity: data.rarity,
+									cost: Math.ceil(data.cost)
+							}
+					}
+
+					result.push(temp);
+			}
+
+			return result;
+		}
+
 		async getItemsByHistory(history) {
 			const result = [];
 

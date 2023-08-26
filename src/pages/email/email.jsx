@@ -1,6 +1,6 @@
-import React from "react";
-import {Helmet} from "react-helmet";
-import { ResponseHandler } from "./components";
+import React from "react"
+import { Helmet } from "react-helmet"
+import { ResponseHandler } from "./components"
 
 class Email extends React.Component {
     title = "InCase - ";
@@ -11,7 +11,7 @@ class Email extends React.Component {
     }
     render() {
         return (
-            <div className="main">
+            <div className='email'>
                 <Helmet>
                     <title>{this.title}</title>
                 </Helmet>

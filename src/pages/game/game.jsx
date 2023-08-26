@@ -1,6 +1,6 @@
 import React from "react"
 import { Helmet } from "react-helmet"
-import { Banner, ItemRoulette } from "../../components"
+import { Banner } from "../../components"
 import ReviewSlider from "../../components/review/review-slider"
 import SearchBar from "../../components/search-bar/search-bar"
 import { BoxGroupLoader } from './components'
@@ -15,11 +15,10 @@ class Game extends React.Component {
 
     render() {
         return (
-            <div className="main">
+            <div className="game">
                 <Helmet>
                     <title>{this.gameId}</title>
                 </Helmet>
-                <ItemRoulette/>
                 <Banner/>
                 <div className="container-small">
                     <SearchBar/>

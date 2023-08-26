@@ -1,5 +1,5 @@
-import React from "react";
-import {Helmet} from "react-helmet";
+import React from "react"
+import { Helmet } from "react-helmet"
 import classes from './error.module.css'
 
 class NotFound extends React.Component {
@@ -11,7 +11,7 @@ class NotFound extends React.Component {
     }
     render() {
         return (
-            <div className="main">
+            <div className="not-found">
                 <Helmet>
                     <title>{this.title}</title>
                 </Helmet>

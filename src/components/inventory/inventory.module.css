@@ -1,0 +1,52 @@
+.item_img img {
+	width: 100px;
+	margin-right: 10px;
+}
+
+.item_info {
+	color: white;
+}
+
+.info_name {
+	font-family: 'Megrim';
+	text-align: start;
+	font-size: 18px;
+}
+
+.info_date {
+	font-family: 'Megrim';
+	font-size: 12px;
+	text-align: start;
+}
+
+.info_cost {
+	display: flex;
+	align-items: flex-end;
+	font-family: 'Play';
+	text-align: start;
+}
+
+.info_cost img {
+	height: 20px;
+}
+
+.item_info p {
+	margin: 0;
+}
+
+.inventory_item {
+	display: flex;
+	align-items: center;
+	width: 250px;
+	border-radius: 15px;
+	padding: 20px 5px 5px 5px;
+	margin: 0 10px;
+	cursor: pointer;
+}
+
+.inventory {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	margin: 0 -10px;
+}

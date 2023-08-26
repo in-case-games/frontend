@@ -1,8 +1,7 @@
-import React from "react";
-import { Helmet } from "react-helmet";
-import { ItemRoulette } from "../../components";
-import "./info.css";
-import {InfoSlider} from "./components";
+import React from "react"
+import { Helmet } from "react-helmet"
+import { InfoSlider } from "./components"
+import "./info.css"
 
 class Info extends React.Component {
     title = "InCase - ";
@@ -14,11 +13,10 @@ class Info extends React.Component {
 
     render() {
         return (
-             <div className="main">
+             <div className="info">
                 <Helmet>
                     <title>{this.title}</title>
                 </Helmet>
-                <ItemRoulette/>
                 <div className="container-small">
                     <InfoSlider/>
                 </div>

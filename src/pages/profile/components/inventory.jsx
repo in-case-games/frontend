@@ -3,7 +3,7 @@ import { Inventory } from '../../../components/inventory'
 import { Filter, Sell, Withdraw } from "../../../components/сommon/button"
 
 const InventoryContent = () => {
-		const [selectItems, setSelectItems] = useState([]);
+		const [selectItems, setSelectItems] = useState({0: "", items: []});
 		const [filter, setFilter] = useState("simple");
 		const types = {
 			"simple": "без фильтра",
@@ -16,7 +16,7 @@ const InventoryContent = () => {
 		};
 		
 		return(
-				<div className='panel-content'>
+				<div className='inventory-content'>
 						<div className="inventory-header">
 								<div className="inventory-tittle">
 										<div className='inventory-group'>
@@ -24,15 +24,19 @@ const InventoryContent = () => {
 												<Filter filter={filter} setFilter={setFilter} types={types}/>
 										</div>
 										<div className='inventory-group'>
-												<Withdraw text={selectItems.length === 0 ? "Вывести всё" : "Вывести"}/>
-												<Sell text={selectItems.length === 0 ? "Продать всё" : "Продать"}/>
+												<Withdraw 
+													text={selectItems.items.length === 0 ? "Вывести всё" : "Вывести"}
+												/>
+												<Sell 
+													text={selectItems.items.length === 0 ? "Продать всё" : "Продать"}
+												/>
 										</div>
 								</div>
 								<div className="inventory-delimiter"></div>
 						</div>
 						<Inventory 
 							selectItems={selectItems} 
-							setSelectItems={(items) => setSelectItems(items)}
+							setSelectItems={setSelectItems}
 							filter={filter}
 						/>
 				</div>
