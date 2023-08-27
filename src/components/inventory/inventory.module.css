@@ -44,6 +44,10 @@
 	cursor: pointer;
 }
 
+.inventory_content {
+	
+}
+
 .inventory {
 	display: flex;
 	flex-wrap: wrap;
