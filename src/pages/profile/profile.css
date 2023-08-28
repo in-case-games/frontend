@@ -41,6 +41,10 @@
 	margin-right: 20px;
 }
 
+.inventory-group .btn-loading {
+	margin-right: 20px;
+}
+
 .inventory-group .btn-filter {
 	margin-top: 5px;
 }

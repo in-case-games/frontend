@@ -1,66 +1,82 @@
 import React, { useEffect, useState } from 'react'
-import { Item as ItemApi } from "../../services/api"
 import User from '../../services/api/user'
 import { CounterSlider } from '../slider'
 import classes from "./inventory.module.css"
-import Item from "./item"
+import LazyLoadedInventory from './lazy-loaded-inventory'
 
 const Inventory = (props) => {
 		const [isStart, setIsStart] = useState(true);
-		const [inventoryFirst, setInventoryFirst] = useState([]);
-		const [inventory, setInventory] = useState([]);
+		const [isClickSlider, setIsClickSlider] = useState(false);
+		const [primaryInventory, setPrimaryInventory] = useState([]);
+		const [loadedInventory, setLoadedInventory] = useState([]);
+		const [showInventory, setShowInventory] = useState(null);
 		const [pages, setPages] = useState(1);
 		const [page, setPage] = useState(1);
+
+		const sliderClick = (number) => {
+				if(isStart && props.isLoading === false && isClickSlider === false) {
+						if(number < 0) setPage(page + number > 1 ? page + number : 1);
+						else if(number > 0) setPage(page + number < pages ? page + number : pages);
+
+						setIsClickSlider(true);
+				}
+		};
+
+		useEffect(() => {
+				const userApi = new User();
+				
+				async function loadInventory(isAllReload) {
+						let primary = primaryInventory;
+
+						if(isAllReload) {
+								primary = await userApi.getInventory();
+								const pages = Math.ceil(primary.length / 20);
 		
-		//TODO добавить круглишек загрузки и вытягивать расширеную информацию по страницам
-		useEffect(() => {
-				//TODO загружать новую информацию
-		}, [page, pages]);
+								setPrimaryInventory(primary);
+								setPages(pages);
+		
+								if(page > pages) setPage(pages);
+						}
 
-		useEffect(() => {
-				const interval = setInterval(async () => {
-						try {
+						LazyLoadedInventory({ 
+							"primaryInventory" : primary, 
+							"loadedInventory": loadedInventory,
+							"page": page > pages ? pages : page,
+							"setLoadedInventory": setLoadedInventory,
+							"selectItems": props.selectItems,
+							"setSelectItems": props.setSelectItems,
+							"setShowInventory": setShowInventory,
+							"isAllReload" : isAllReload
+						});
+				}
+				try {
+						if(isStart && props.isLoading === false && isClickSlider) {
 								setIsStart(false);
-
-								const userApi = new User();
-								const itemApi = new ItemApi();
-
-								let result = await userApi.getInventory();
-
-								setInventoryFirst(result);
-
-								result = await itemApi.getItemsByInventory(result);
-								
-								setInventory(result);
-								setPages(Math.ceil(result.length / 20));
-						} 
-						catch (err) { }
-				}, (isStart ? 1 : 10000));
-
-				return () => clearInterval(interval);
-		}, [isStart, inventory]);
+								setIsClickSlider(false);
+								props.setIsLoading(true);
+								loadInventory(false);
+								props.setIsLoading(false);
+								setIsStart(true);
+						}
+						else if(isStart && props.isLoading) {
+								setIsStart(false);
+								loadInventory(true);
+								setIsStart(true);
+								props.setIsLoading(false);
+						}
+				}
+				catch(err) {}
+		}, [isStart, props, page, pages, loadedInventory, primaryInventory, isClickSlider]);
 
 		return(
 				<div className={classes.inventory_content}>
 						<div className={classes.inventory}>
-								{inventory.map((i) => 
-										<Item 
-											img={i.item.img}
-											name={i.item.name}
-											color={i.item.rarity}
-											date={i.date}
-											cost={i.cost}
-											id={i.id}
-											selectItems={props.selectItems}
-											setSelectItems={props.setSelectItems}
-											key={i.id}
-										/>
-								)}
+								{showInventory}
 						</div>
 						<CounterSlider
 							pages={pages}
 							page={page}
-							setPage={setPage}
+							eventClick={sliderClick}
 						/>
 				</div>
 		);

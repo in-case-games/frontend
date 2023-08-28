@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import { Inventory } from '../../../components/inventory'
-import { Filter, Sell, Withdraw } from "../../../components/сommon/button"
+import { Filter, Loading, Sell, Withdraw } from "../../../components/сommon/button"
 
 const InventoryContent = () => {
 		const [selectItems, setSelectItems] = useState({0: "", items: []});
 		const [filter, setFilter] = useState("simple");
+		const [isLoading, setIsLoading] = useState(true);
+		
 		const types = {
 			"simple": "без фильтра",
 			"price-top": "возрастание цены",
@@ -20,6 +22,7 @@ const InventoryContent = () => {
 						<div className="inventory-header">
 								<div className="inventory-tittle">
 										<div className='inventory-group'>
+												<Loading isLoading={isLoading} setIsLoading={setIsLoading}/>
 										    <div className="inventory-name">Мои предметы: </div>
 												<Filter filter={filter} setFilter={setFilter} types={types}/>
 										</div>
@@ -37,6 +40,8 @@ const InventoryContent = () => {
 						<Inventory 
 							selectItems={selectItems} 
 							setSelectItems={setSelectItems}
+							isLoading={isLoading}
+							setIsLoading={setIsLoading}
 							filter={filter}
 						/>
 				</div>

@@ -10,7 +10,7 @@ const Item = (props) => {
 	const d = new Date(props.date);
 	const date = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
 	d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
-	
+
 	const handleClick = () => {
 			let temp = props.selectItems.items;
 			const index = temp.indexOf(props.id);

@@ -9,10 +9,10 @@ class Item {
         return response.data.data;
     }
 
-		async getItemsByInventory(inventories) {
+		async getItemsByInventory(inventories, startIndex, endIndex) {
 			const result = [];
 
-			for(let i = 0; i < inventories.length; i++) {
+			for(let i = startIndex; i < endIndex; i++) {
 					const response = await api.get(RESOURCES_API_URL + "game/item/id/" + inventories[i].itemId);
 					const data = response.data.data;
 

@@ -12,6 +12,7 @@
     --color_border_info: #FFE665;
     --color_border_balance: #00FF82;
     --color_font_balance: #00FF82;
+    --color_icon_loading: #00FF82;
     --background_list_lunge_hover: #FFE665;
     --background_list_lunge: #F8B415;
     --border_item_lunge_color: #303030;
@@ -46,6 +47,30 @@ button {
     width: 170px;
     height: 20px;
     margin-right: 20px;
+}
+
+.btn-loading {
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.loading
+{
+    display: inline-block;
+    color: var(--color_icon_loading);
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin
+{
+    0%
+    {
+    transform: rotate(0deg);
+    }
+    100%
+    {
+    transform: rotate(360deg);
+    }
 }
 
 .btn-info {
@@ -141,7 +166,6 @@ button {
     background: -moz-linear-gradient(var(--background_sell_color));
 	background: -webkit-linear-gradient(var(--background_sell_color));
 	background: linear-gradient(var(--background_sell_color));
-
     background-size: 1px 60px;
 
     -webkit-transition: background 400ms ease-out;  
