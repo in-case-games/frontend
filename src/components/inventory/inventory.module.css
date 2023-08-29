@@ -36,11 +36,16 @@
 
 .inventory_item {
 	display: flex;
-	align-items: center;
-	width: 250px;
+	width: 260px;
+	height: 100px;
 	border-radius: 15px;
-	padding: 20px 5px 5px 5px;
 	margin: 0 10px;
+}
+
+.item {
+	display: flex;
+	align-items: center;
+	border-radius: 13px 0 0 13px;
 	cursor: pointer;
 }
 
@@ -53,4 +58,43 @@
 	flex-wrap: wrap;
 	justify-content: center;
 	margin: 0 -10px;
+}
+
+.item_buttons {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	height: 100px;
+	border-radius: 0 13px 13px 0;
+	background: rgba(0, 0, 0, 0.3)
+}
+
+.buttons {
+	width: 35px;
+	text-align: center;
+	cursor: pointer;
+	height: 50%;
+}
+
+.buttons:first-child:hover {
+	border-radius: 0 13px 0 0;
+	background: rgba(253, 156, 38, 0.2)
+}
+
+.buttons:last-child:hover {
+	border-radius: 0 0 13px 0;
+	background: rgba(227, 96, 96, 0.2)
+}
+
+.btn_sell {
+		font-size: 28px;
+		color: #E36060;
+		font-family: 'Megrim';
+		margin-top: 10px;
+		font-weight: 1000;
+}
+
+.btn_withdraw {
+		width: 20px;
+		margin-top: 10px;
 }

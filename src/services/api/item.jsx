@@ -10,29 +10,29 @@ class Item {
     }
 
 		async getItemsByInventory(inventories, startIndex, endIndex) {
-			const result = [];
+				const result = [];
 
-			for(let i = startIndex; i < endIndex; i++) {
-					const response = await api.get(RESOURCES_API_URL + "game/item/id/" + inventories[i].itemId);
-					const data = response.data.data;
+				for(let i = startIndex; i < endIndex; i++) {
+						const response = await api.get(RESOURCES_API_URL + "game/item/id/" + inventories[i].itemId);
+						const data = response.data.data;
 
-					const temp = {
-							id: inventories[i].id,
-							date: inventories[i].date,
-							cost: inventories[i].fixedCost,
-							item: {
-									id: data.id,
-									img: `../data.id`,
-									name: data.name,
-									rarity: data.rarity,
-									cost: Math.ceil(data.cost)
-							}
-					}
+						const temp = {
+								id: inventories[i].id,
+								date: inventories[i].date,
+								cost: inventories[i].fixedCost,
+								item: {
+										id: data.id,
+										img: `../data.id`,
+										name: data.name,
+										rarity: data.rarity,
+										cost: Math.ceil(data.cost)
+								}
+						}
 
-					result.push(temp);
-			}
+						result.push(temp);
+				}
 
-			return result;
+				return result;
 		}
 
 		async getItemsByHistory(history) {

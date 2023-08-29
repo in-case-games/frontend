@@ -6,15 +6,14 @@ const InventoryContent = () => {
 		const [selectItems, setSelectItems] = useState({0: "", items: []});
 		const [filter, setFilter] = useState("simple");
 		const [isLoading, setIsLoading] = useState(true);
-		
+
 		const types = {
 			"simple": "без фильтра",
 			"price-top": "возрастание цены",
 			"price-bot": "убывание цены",
-			"name-top": "возрастание названия",
-			"name-bot": "убывание названия",
 			"date-top": "возрастание даты",
 			"date-bot": "убывание даты",
+			"selected": "выбранные"
 		};
 		
 		return(
@@ -22,7 +21,7 @@ const InventoryContent = () => {
 						<div className="inventory-header">
 								<div className="inventory-tittle">
 										<div className='inventory-group'>
-												<Loading isLoading={isLoading} setIsLoading={setIsLoading}/>
+												<Loading isLoading={isLoading} click={() => setIsLoading(true)}/>
 										    <div className="inventory-name">Мои предметы: </div>
 												<Filter filter={filter} setFilter={setFilter} types={types}/>
 										</div>

@@ -58,7 +58,7 @@ button {
 {
     display: inline-block;
     color: var(--color_icon_loading);
-    animation: spin 2s linear infinite;
+    animation: spin 0.12s linear infinite;
 }
 
 @keyframes spin

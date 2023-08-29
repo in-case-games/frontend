@@ -132,6 +132,7 @@ html {
 		width: 65px;
 		height: 65px;
 		cursor: pointer;
+		object-fit: cover;
 }
 
 .profile-logo {
@@ -142,6 +143,7 @@ html {
 		height: 75px;
 		cursor: pointer;
 		margin: 0px 20px;
+		object-fit: cover;
 }
 
 .profile-login {

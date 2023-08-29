@@ -22,26 +22,30 @@ const LazyLoadedInventory = async (props) => {
 				loaded = await itemApi.getItemsByInventory(primary, startIndex, endIndex);
 		if(startIndex > loadedInventory.length - 1) loadedInventory = [...loadedInventory, ...loaded];
 		else Array.prototype.splice.apply(loadedInventory, [0, loaded.length].concat(loaded));
+		
+		try {
+				for(let j = startIndex; j < endIndex; j++) {
+					let i = loadedInventory[j];
 
-		props.setLoadedInventory(loadedInventory);
+					showTemp.push(<Item 
+						img={i.item.img}
+						name={i.item.name}
+						color={i.item.rarity}
+						date={i.date}
+						cost={i.cost}
+						id={i.id}
+						selectItems={props.selectItems}
+						setSelectItems={props.setSelectItems}
+						key={i.id}
+					/>);
+				}
 
-		for(let j = startIndex; j < endIndex; j++) {
-				let i = loadedInventory[j];
-
-				showTemp.push(<Item 
-					img={i.item.img}
-					name={i.item.name}
-					color={i.item.rarity}
-					date={i.date}
-					cost={i.cost}
-					id={i.id}
-					selectItems={props.selectItems}
-					setSelectItems={props.setSelectItems}
-					key={i.id}
-				/>);
+				props.setLoadedInventory(loadedInventory);
+				props.setShowInventory(showTemp);
 		}
-
-		props.setShowInventory(showTemp);
+		catch(err) { 
+			props.backAll(); 
+		}
 }
 
 export default LazyLoadedInventory;
