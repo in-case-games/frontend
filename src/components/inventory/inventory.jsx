@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Item as ItemApi, User } from '../../services/api'
+import { User } from '../../services/api'
 import { Modal, SellWindow, WithdrawWindow } from "../modal"
 import { CounterSlider } from '../slider'
 import classes from "./inventory.module.css"
@@ -34,22 +34,8 @@ const Inventory = (props) => {
 		};
 
 		const sellClick = async (id) => {
-				const itemApi = new ItemApi();
-							
-				try {
-						await itemApi.sellItem(id);
-
-						let arr = props.selectItems.items;
-						const index = arr.indexOf(id);
-
-						if (index > -1) { 
-								arr.splice(index, 1); 
-								props.setSelectItems({...props.selectItems, arr});
-						}
-						
-						props.setIsLoading(true);
-				}
-				catch(err) { console.log(err.response.data.error.message) }
+				props.setSelectItem(id);
+				props.exchangeModal("sell");
 		};
 
 		const withdrawClick = async (id) => {
@@ -143,24 +129,32 @@ const Inventory = (props) => {
 							page={page}
 							eventClick={sliderClick}
 						/>
-						<Modal 
+						{
+								props.isActiveModal("withdraw") ? 
+								<Modal 
                 active={props.isActiveModal("withdraw")} 
                 clickChange={props.exchangeModal} 
                 content={
 									<WithdrawWindow 
 										selectItem={props.selectItem} 
 										selectItems={props.selectItems}
+										primaryInventory={primaryInventory}
 									/>}
-            />
-						<Modal 
+            		/> : null
+						}
+						{
+								props.isActiveModal("sell") ?
+								<Modal 
                 active={props.isActiveModal("sell")} 
                 clickChange={props.exchangeModal} 
                 content={
 									<SellWindow 
 										selectItem={props.selectItem} 
 										selectItems={props.selectItems}
+										primaryInventory={primaryInventory}
 									/>}
-            />
+            		/> : null
+						}
 				</div>
 		);
 };

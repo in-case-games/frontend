@@ -17,11 +17,32 @@
     min-height: 200px;
     background: var(--background_modal-window);
     border-radius: 15px;
-    display: flex;
-    flex-direction: column;
     text-align: center;
     padding: 10px;
+    display: flex;
     justify-content: center;
+}
+
+.sell_tittle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sell_content {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+
+.sell_tittle .tittle {
+    font-family: 'Nunito';
+    font-size: 28px;
+    margin: 0px 10px 0 5px;
+}
+
+.sell_counter {
+    font-family: 'Nunito';
 }
 
 .withdraw_window {
@@ -29,11 +50,32 @@
     min-height: 200px;
     background: var(--background_modal-window);
     border-radius: 15px;
-    display: flex;
-    flex-direction: column;
     text-align: center;
     padding: 10px;
+    display: flex;
     justify-content: center;
+}
+
+.withdraw_tittle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.withdraw_content {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+}
+
+.withdraw_tittle .tittle {
+    font-family: 'Nunito';
+    font-size: 28px;
+    margin: 0px 10px 0 5px;
+}
+
+.withdraw_counter {
+    font-family: 'Nunito';
 }
 
 .sign_in_window {
