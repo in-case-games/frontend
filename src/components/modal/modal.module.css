@@ -12,6 +12,30 @@
     justify-content: center;
 }
 
+.sell_window {
+    min-width: 400px;
+    min-height: 200px;
+    background: var(--background_modal-window);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 10px;
+    justify-content: center;
+}
+
+.withdraw_window {
+    min-width: 400px;
+    min-height: 200px;
+    background: var(--background_modal-window);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 10px;
+    justify-content: center;
+}
+
 .sign_in_window {
     width: 35vw;
 }

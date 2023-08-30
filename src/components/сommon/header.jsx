@@ -179,8 +179,16 @@ const Header = () => {
 
             <Modal active={signUpActive} clickChange={exchangeModal} content={<SignUpWindow clickChange={exchangeModal}/>}/>
             <Modal active={signInActive} clickChange={exchangeModal} content={<SignInWindow clickChange={exchangeModal}/>}/>
-            <Modal active={sendEmailActive} clickChange={exchangeModal} content={<EmailSendWindow clickChange={exchangeModal}/>}/>
-            <Modal active={paymentActive} clickChange={exchangeModal} content={<PaymentWindow clickChange={exchangeModal}/>}/>
+            <Modal 
+                active={sendEmailActive} 
+                clickChange={exchangeModal} 
+                content={<EmailSendWindow/>}
+            />
+            <Modal 
+                active={paymentActive} 
+                clickChange={exchangeModal} 
+                content={<PaymentWindow/>}
+            />
         </header>
     );
 }

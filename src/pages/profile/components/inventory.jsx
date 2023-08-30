@@ -3,9 +3,36 @@ import { Inventory } from '../../../components/inventory'
 import { Filter, Loading, Sell, Withdraw } from "../../../components/сommon/button"
 
 const InventoryContent = () => {
-		const [selectItems, setSelectItems] = useState({0: "", items: []});
 		const [filter, setFilter] = useState("simple");
 		const [isLoading, setIsLoading] = useState(true);
+		const [selectItems, setSelectItems] = useState({0: "", items: []});
+		const [selectItem, setSelectItem] = useState(null);
+		const [withdrawActive, setWithdrawActive] = useState(false);
+		const [sellActive, setSellActive] = useState(false);
+
+		const active = {
+				"sell": () => setSellActive(true),
+				"withdraw": () => setWithdrawActive(true),
+				"close": () => { 
+						setSellActive(false);
+						setWithdrawActive(false); 
+						setSelectItem(null);
+				}
+		}
+
+		const listActive = {
+				"withdraw": () => withdrawActive,
+				"sell": () => sellActive
+		}
+
+		const isActive = (name) => listActive[name]();
+
+		const exchangeModal = (modal) => {
+				setWithdrawActive(false);
+				setSellActive(false);
+
+				active[modal]();
+		};
 
 		const types = {
 			"simple": "без фильтра",
@@ -28,9 +55,11 @@ const InventoryContent = () => {
 										<div className='inventory-group'>
 												<Withdraw 
 													text={selectItems.items.length === 0 ? "Вывести всё" : "Вывести"}
+													click={() => exchangeModal("withdraw")}
 												/>
 												<Sell 
 													text={selectItems.items.length === 0 ? "Продать всё" : "Продать"}
+													click={() => exchangeModal("sell")}
 												/>
 										</div>
 								</div>
@@ -39,9 +68,13 @@ const InventoryContent = () => {
 						<Inventory 
 							selectItems={selectItems} 
 							setSelectItems={setSelectItems}
+							selectItem={selectItem}
+							setSelectItem={setSelectItem}
 							isLoading={isLoading}
 							setIsLoading={setIsLoading}
 							filter={filter}
+							isActiveModal={isActive}
+							exchangeModal={exchangeModal}
 						/>
 				</div>
 		);

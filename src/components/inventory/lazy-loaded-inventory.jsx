@@ -34,8 +34,10 @@ const LazyLoadedInventory = async (props) => {
 						date={i.date}
 						cost={i.cost}
 						id={i.id}
-						selectItems={props.selectItems}
-						setSelectItems={props.setSelectItems}
+						selectItems={props.itemProps.selectItems}
+						setSelectItems={props.itemProps.setSelectItems}
+						sellClick={props.itemProps.sellClick}
+						withdrawClick={props.itemProps.withdrawClick}
 						key={i.id}
 					/>);
 				}

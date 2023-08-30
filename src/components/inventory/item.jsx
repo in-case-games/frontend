@@ -70,10 +70,10 @@ const Item = (props) => {
 						</div>
 				</div>
 				<div className={classes.item_buttons}>
-						<div className={classes.buttons}>
+						<div className={classes.buttons} onClick={() => props.withdrawClick(props.id)}>
 								<img alt="" href="/#" className={classes.btn_withdraw} src={AirPlane}/>
 						</div>
-						<div className={classes.buttons}>
+						<div className={classes.buttons} onClick={() => props.sellClick(props.id)}>
 								<div className={classes.btn_sell}>$</div>
 						</div>
 					</div>

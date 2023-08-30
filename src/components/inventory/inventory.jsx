@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import User from '../../services/api/user'
+import { Item as ItemApi, User } from '../../services/api'
+import { Modal, SellWindow, WithdrawWindow } from "../modal"
 import { CounterSlider } from '../slider'
 import classes from "./inventory.module.css"
 import LazyLoadedInventory from './lazy-loaded-inventory'
@@ -30,6 +31,30 @@ const Inventory = (props) => {
 
 						props.setIsLoading(true);
 				}
+		};
+
+		const sellClick = async (id) => {
+				const itemApi = new ItemApi();
+							
+				try {
+						await itemApi.sellItem(id);
+
+						let arr = props.selectItems.items;
+						const index = arr.indexOf(id);
+
+						if (index > -1) { 
+								arr.splice(index, 1); 
+								props.setSelectItems({...props.selectItems, arr});
+						}
+						
+						props.setIsLoading(true);
+				}
+				catch(err) { console.log(err.response.data.error.message) }
+		};
+
+		const withdrawClick = async (id) => {
+				props.setSelectItem(id);
+				props.exchangeModal("withdraw");
 		};
 
 		useEffect(() => {
@@ -67,8 +92,12 @@ const Inventory = (props) => {
 											"primaryInventory" : primary, 
 											"loadedInventory": loadedInventory,
 											"page": page > pages ? pagesTemp : page,
-											"selectItems": props.selectItems,
-											"setSelectItems": props.setSelectItems,
+											"itemProps": {
+													"selectItems": props.selectItems,
+													"setSelectItems": props.setSelectItems,
+													"sellClick": sellClick,
+													"withdrawClick": withdrawClick
+											},
 											"setLoadedInventory": setLoadedInventory,
 											"setShowInventory": setShowInventory,
 											"backAll": () => setPage(page - 1 < 1 ? 1 : page - 1)
@@ -114,6 +143,24 @@ const Inventory = (props) => {
 							page={page}
 							eventClick={sliderClick}
 						/>
+						<Modal 
+                active={props.isActiveModal("withdraw")} 
+                clickChange={props.exchangeModal} 
+                content={
+									<WithdrawWindow 
+										selectItem={props.selectItem} 
+										selectItems={props.selectItems}
+									/>}
+            />
+						<Modal 
+                active={props.isActiveModal("sell")} 
+                clickChange={props.exchangeModal} 
+                content={
+									<SellWindow 
+										selectItem={props.selectItem} 
+										selectItems={props.selectItems}
+									/>}
+            />
 				</div>
 		);
 };

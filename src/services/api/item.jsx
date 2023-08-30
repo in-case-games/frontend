@@ -3,6 +3,20 @@ import api from "./api"
 const RESOURCES_API_URL = "https://localhost:5000/api/";
 
 class Item {
+		async withdrawItem(id, url) {
+				const body = {
+						"inventoryId": id,
+						"tradeUrl": url
+				} 
+				const response = await api.post(RESOURCES_API_URL + `withdraw`, body);
+
+				return response.data.data;
+		}
+		async sellItem(id) {
+				const response = await api.get(RESOURCES_API_URL + `user/inventory/${id}/sell`);
+
+				return response.data.data;
+		}
     async getItem(id) {
         const response = await api.get(RESOURCES_API_URL + "game/item/" + id);
 
