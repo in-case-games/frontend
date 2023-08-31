@@ -39,7 +39,8 @@ class Item {
 										img: `../data.id`,
 										name: data.name,
 										rarity: data.rarity,
-										cost: Math.ceil(data.cost)
+										cost: Math.ceil(data.cost),
+										game: data.game 
 								}
 						}
 

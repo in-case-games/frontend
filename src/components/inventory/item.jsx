@@ -16,12 +16,12 @@ const Item = (props) => {
 				let temp = props.selectItems.items;
 				const index = temp.indexOf(props.id);
 
-				if(index === -1) {
+				if(index === -1 && props.selectItems.items.length < 20) {
 						temp.push(props.id)
 						const newSelectItems = {...props.selectItems, temp}
 						props.setSelectItems(newSelectItems);
 				}
-				else {
+				else if(index !== -1) {
 						temp.splice(index, 1)
 						const newSelectItems = {...props.selectItems, temp}
 						props.setSelectItems(newSelectItems);

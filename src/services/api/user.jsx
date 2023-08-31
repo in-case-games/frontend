@@ -4,6 +4,16 @@ import api from "./api"
 const RESOURCES_API_URL = "https://localhost:5000/api/";
 
 class User {
+    async getInventoriesByIds(ids) {
+        const result = [];
+
+        for(let i = 0; i < ids.length; i++) {
+            const response = await api.get(RESOURCES_API_URL + `user/inventory/${ids[i]}`);
+            result.push(response.data.data);
+        }
+
+        return result;
+    }
     async getInventory() {
         const response = await api.get(RESOURCES_API_URL + "user/inventory");
 

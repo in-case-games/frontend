@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { bake_cookie, delete_cookie, read_cookie } from 'sfcookies'
 import { LogoMen } from "../../assets/images/icon"
-import Item from '../../services/api/item'
+import { Item, User } from '../../services/api'
 import { Loading } from '../сommon/button'
 import classes from "./modal.module.css"
 
@@ -12,26 +12,34 @@ const WithdrawWindow = (props) => {
     const [steamUrl, setSteamURL] = useState(steamURLCookie);
 
     const [applyCount, setApplyCount] = useState(0);
-    const [allCount, setAllCount] = useState(0);
+    const [items, setItems] = useState([]);
 
     const [isLoading, setIsLoading] = useState(true);
     const [bannedRefresh, setBannedRefresh] = useState(false);
-    const [showSteamURL, setShowSteamURL] = useState(true);
+    const [showSteamURL, setShowSteamURL] = useState(false);
     const [showSendButton, setShowSendButton] = useState(regex.test(steamURLCookie));
+
+    const showUrls = {
+        "dota2": () => setShowSteamURL(true),
+        "csgo": () => setShowSteamURL(true)
+    };
 
     const inputSteamURLClick = (value) => {
         setSteamURL(value);
         setShowSendButton(regex.test(value));
         bake_cookie("user-steam-url",value);
     }
+
     const sendClick = () => {
         const itemApi = new Item();
         const url = read_cookie("user-steam-url");
 
+        //TODO LOGIC Many game check url
+
         if(url.length !== 0) {
             if(regex.test(url)) { 
                 setBannedRefresh(true);
-                setShowSteamURL(false) 
+                setShowSteamURL(false);
             }
             else {
                 delete_cookie("user-steam-url");
@@ -41,14 +49,31 @@ const WithdrawWindow = (props) => {
 
     useEffect(() => {
         const interval = setInterval(async () => {
-            if(allCount === 0 && !bannedRefresh) {
-                if(props.selectItem === null && props.selectItems.items.length === 0) 
-                    setAllCount(props.primaryInventory.length);
-                else if(props.selectItem === null) 
-                    setAllCount(props.selectItems.items.length);
-                else if(props.selectItem !== null) setAllCount(1);
+            if(items.length === 0 && !bannedRefresh) {
+                setBannedRefresh(true);
+                const itemApi = new Item();
+                const userApi = new User();
+                let ids = [];
                 
+                if(props.selectItem === null && props.selectItems.items.length === 0) 
+                    ids = props.primaryInventory.map(i => i.id);
+                else if(props.selectItem === null) 
+                    ids = props.selectItems.items;
+                else if(props.selectItem !== null) 
+                    ids.push(props.selectItem);
+
+                const inventories = await userApi.getInventoriesByIds(ids);
+                
+                const inventoriesAdditional = await itemApi
+                    .getItemsByInventory(inventories, 0, inventories.length);
+
+                inventoriesAdditional.forEach(i => {
+                    showUrls[i.item.game]();
+                });
+
+                setItems(inventoriesAdditional);
                 setIsLoading(false);
+                setBannedRefresh(false);
             }
         }, 10);
 
@@ -63,31 +88,33 @@ const WithdrawWindow = (props) => {
                     <div className={classes.tittle}>Вывод предметов</div>
                 </div>
                 { 
-                    allCount > 0 ? 
-                    <div className={classes.withdraw_counter}>{applyCount + "/" + allCount}</div> : null 
+                    items.length > 0 ? 
+                    <div className={classes.withdraw_counter}>{applyCount + "/" + items.length}</div> : null 
                 }
                 {
-                    allCount > 0 && showSteamURL ?
+                    showSteamURL ?
                     <input 
                         className={classes.input_form} 
                         placeholder="Steam TradeURL" 
                         value={steamUrl} 
                         onInput={e => inputSteamURLClick(e.target.value)} name="trade-url"
-                    /> : null
+                    /> : 
+                    null
                 }
                 {
-                    allCount > 0 && showSendButton ?
+                    showSendButton ?
                     <div className={classes.btn_main} onClick={() => sendClick()}>Вывести</div> :
                     null
                 }
                 {
-                    allCount === 0 ? 
+                    items.length === 0 && !bannedRefresh ? 
                     <div className={classes.description}>Все предметы отправлены :)<br/>Для просмотра статуса, перейдите в историю вывода</div> :
                     null
                 }
                 {
                     showSteamURL ? 
-                    <img className={classes.logo} alt="" href="/#" src={LogoMen}/> : null
+                    <img className={classes.logo} alt="" href="/#" src={LogoMen}/> : 
+                    null
                 }
             </div>
         </div>

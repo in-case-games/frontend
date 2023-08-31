@@ -132,27 +132,27 @@ const Inventory = (props) => {
 						{
 								props.isActiveModal("withdraw") ? 
 								<Modal 
-                active={props.isActiveModal("withdraw")} 
-                clickChange={props.exchangeModal} 
-                content={
-									<WithdrawWindow 
-										selectItem={props.selectItem} 
-										selectItems={props.selectItems}
-										primaryInventory={primaryInventory}
-									/>}
+									active={props.isActiveModal("withdraw")} 
+									clickChange={props.exchangeModal} 
+									content={
+										<WithdrawWindow 
+											selectItem={props.selectItem} 
+											selectItems={props.selectItems}
+											primaryInventory={primaryInventory.slice(0, 20)}
+										/>}
             		/> : null
 						}
 						{
 								props.isActiveModal("sell") ?
 								<Modal 
-                active={props.isActiveModal("sell")} 
-                clickChange={props.exchangeModal} 
-                content={
-									<SellWindow 
-										selectItem={props.selectItem} 
-										selectItems={props.selectItems}
-										primaryInventory={primaryInventory}
-									/>}
+									active={props.isActiveModal("sell")} 
+									clickChange={props.exchangeModal} 
+									content={
+										<SellWindow 
+											selectItem={props.selectItem} 
+											selectItems={props.selectItems}
+											primaryInventory={primaryInventory.slice(0, 20)}
+										/>}
             		/> : null
 						}
 				</div>
