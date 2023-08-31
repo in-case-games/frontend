@@ -48,10 +48,10 @@
 .withdraw_window {
     min-width: 400px;
     min-height: 200px;
+    padding: 20px;
     background: var(--background_modal-window);
     border-radius: 15px;
     text-align: center;
-    padding: 10px;
     display: flex;
     justify-content: center;
 }
@@ -66,6 +66,7 @@
     display: flex;
     justify-content: space-evenly;
     flex-direction: column;
+    align-items: center;
 }
 
 .withdraw_tittle .tittle {
@@ -76,6 +77,21 @@
 
 .withdraw_counter {
     font-family: 'Nunito';
+}
+
+.withdraw_content .description {
+    font-family: 'Nunito';
+    margin: 20px 0;
+}
+
+.withdraw_content .logo {
+    margin-top: 10px;
+    width: 135px;
+}
+
+.withdraw_content .input_form {
+    margin: 20px 0 10px 0;
+    min-width: 300px;
 }
 
 .sign_in_window {
