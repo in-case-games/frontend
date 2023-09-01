@@ -18,7 +18,7 @@ class Item {
 				return response.data.data;
 		}
     async getItem(id) {
-        const response = await api.get(RESOURCES_API_URL + "game/item/" + id);
+        const response = await api.get(RESOURCES_API_URL + "game/item/id/" + id);
 
         return response.data.data;
     }

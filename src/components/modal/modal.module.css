@@ -45,6 +45,11 @@
     font-family: 'Nunito';
 }
 
+.sell_error {
+    color: red;
+    font-size: 14px;
+}
+
 .withdraw_window {
     min-width: 400px;
     min-height: 200px;
@@ -82,6 +87,11 @@
 .withdraw_content .description {
     font-family: 'Nunito';
     margin: 20px 0;
+}
+
+.withdraw_error {
+    color: red;
+    font-size: 14px;
 }
 
 .withdraw_content .logo {

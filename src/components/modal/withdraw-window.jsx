@@ -1,62 +1,173 @@
 import React, { useEffect, useState } from "react"
-import { bake_cookie, delete_cookie, read_cookie } from 'sfcookies'
-import { LogoMen } from "../../assets/images/icon"
+import { bake_cookie, delete_cookie } from 'sfcookies'
 import { Item, User } from '../../services/api'
 import { Loading } from '../сommon/button'
+import Constants from './constants'
 import classes from "./modal.module.css"
 
 const WithdrawWindow = (props) => {
-    const regex = /https:\/\/steamcommunity\.com\/tradeoffer\/new\/\?partner=[0-9]+&token=[A-Za-z0-9]+/i;
-    const steamURLCookie = read_cookie("user-steam-url");
+    const [steamUrl, setSteamURL] = useState(Constants.Cookie["csgo"]());
+    const [error, setError] = useState(null);
 
-    const [steamUrl, setSteamURL] = useState(steamURLCookie);
-
-    const [applyCount, setApplyCount] = useState(0);
-    const [items, setItems] = useState([]);
+    const [withdrawnInventories, setWithdrawnInventories] = useState([]);
+    const [inventories, setInventories] = useState([]);
+    const [exchangedInventories, setExchangedInventories] = useState([]);
+    const [showStatusItem, setShowStatusItem] = useState({
+        color: null,
+        item: null
+    });
 
     const [isLoading, setIsLoading] = useState(true);
     const [bannedRefresh, setBannedRefresh] = useState(false);
     const [showSteamURL, setShowSteamURL] = useState(false);
-    const [showSendButton, setShowSendButton] = useState(regex.test(steamURLCookie));
+    const [showSendButton, setShowSendButton] = useState(false);
 
     const showUrls = {
-        "dota2": () => setShowSteamURL(true),
-        "csgo": () => setShowSteamURL(true)
+        "dota2": (show) => setShowSteamURL(show),
+        "csgo": (show) => setShowSteamURL(show)
+    };
+
+    const isShowInput = {
+        "dota2": showSteamURL,
+        "csgo": showSteamURL
     };
 
     const inputSteamURLClick = (value) => {
         setSteamURL(value);
-        setShowSendButton(regex.test(value));
-        bake_cookie("user-steam-url",value);
+        
+        const regex = Constants.Regex["csgo"];
+
+        if(regex.test(value)) { 
+            setError(null);
+            bake_cookie("user-steam-url", value); 
+        }
+        else delete_cookie("user-steam-url");
     }
 
     const sendClick = () => {
-        const itemApi = new Item();
-        const url = read_cookie("user-steam-url");
+        const games = Object.keys(showUrls)
 
-        //TODO LOGIC Many game check url
+        let error = null;
 
-        if(url.length !== 0) {
-            if(regex.test(url)) { 
-                setBannedRefresh(true);
-                setShowSteamURL(false);
+        games.forEach(g => {
+            if(isShowInput[g] === true) {
+                if(!Constants.isRegexCookie(g)) error = `Проверьте корректность ссылки на обмен`;
             }
-            else {
-                delete_cookie("user-steam-url");
-            }
-        };
+        });
+
+        if(error === null) { 
+            setError(null);
+            setBannedRefresh(true);
+            setIsLoading(true);
+            setShowSendButton(false);
+            withdrawLoader();
+            setIsLoading(false);
+            setBannedRefresh(false);
+        }
+        else setError(error);
     };
+
+    const withdrawLoader = async () => {
+        const itemApi = new Item();
+        let temp = withdrawnInventories;
+
+        for(let i = 0; i < inventories.length; i++) {
+            const inventory = inventories[i];
+            setTimeout(function(){
+                setShowStatusItem(previousInputs => ({...previousInputs, color: "gray" }));
+                setShowStatusItem(previousInputs => ({...previousInputs, item: inventory }));
+            }, 300);
+            
+            try {
+                const index = props.selectItems.items.indexOf(inventory.id);
+                
+                await itemApi.withdrawItem(inventory.id, Constants.Cookie[inventory.item.game]());
+
+                setShowStatusItem(previousInputs => ({...previousInputs, color: "green" }));
+                
+                temp.push(inventory);
+
+                removeSelectItem(index, inventory);
+                setWithdrawnInventories(temp);
+            }
+            catch(err) { 
+                setShowStatusItem(previousInputs => ({...previousInputs, color: "red" }));
+
+                const code = err.response.data.error.code;
+                const inventory = inventories[i];
+                const findExchangedInventory = exchangedInventories.find(ei => ei.id === inventory.id);
+                const tempExchanged = exchangedInventories;
+
+                if(code === 4) {
+                    const index = props.selectItems.items.indexOf(inventory.id);
+
+                    temp.push(inventory);
+                    
+                    removeSelectItem(index, inventory);
+                    setWithdrawnInventories(temp);
+
+                    setError("Внутренняя ошибка, попробуйте еще раз");
+                }
+                else if(code === 5 && findExchangedInventory === undefined) 
+                {
+                    tempExchanged.push(inventory);
+                    setExchangedInventories(tempExchanged);
+                    setError("Есть предметы с нестабильной ценой");
+                }
+                else if(code === 2) {
+                    setError("Подождите и повторите позже, выполняется перевод средств");
+                    break;
+                }
+                else {
+                    setError("Подождите или напишите в тех. поддержку");
+                    break;
+                }
+            };
+        }
+        setTimeout(function(){
+            setShowStatusItem(previousInputs => ({...previousInputs, item: null }));
+        }, 500);
+    };
+
+    const removeSelectItem = (index, inventory) => {
+        if(props.selectItem === inventory.id) props.setSelectItem(null);
+        else if(index > -1) {
+            let tempSelectItems = props.selectItems.items;
+            tempSelectItems.splice(index, 1); 
+            props.setSelectItems({...props.selectItems, ...tempSelectItems});
+        }
+    } 
 
     useEffect(() => {
         const interval = setInterval(async () => {
-            if(items.length === 0 && !bannedRefresh) {
+            if(inventories.length > 0 && !bannedRefresh) {
+                let showSendButton = true && withdrawnInventories.length !== inventories.length;
+
+                inventories.forEach(i => {
+                    const showUrl = !Constants.isRegexCookie(i.item.game);
+                    showSendButton &&= !showUrl;
+
+                    showUrls[i.item.game](showUrl);
+                });
+
+                setShowSendButton(showSendButton);
+            }
+        }, 100);
+
+        return () => clearInterval(interval);
+    });
+
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            if(inventories.length === 0 && !bannedRefresh) {
                 setBannedRefresh(true);
+                setIsLoading(true);
                 const itemApi = new Item();
                 const userApi = new User();
                 let ids = [];
                 
                 if(props.selectItem === null && props.selectItems.items.length === 0) 
-                    ids = props.primaryInventory.map(i => i.id);
+                    ids = props.pullPrimaryInventory().map(i => i.id);
                 else if(props.selectItem === null) 
                     ids = props.selectItems.items;
                 else if(props.selectItem !== null) 
@@ -67,15 +178,11 @@ const WithdrawWindow = (props) => {
                 const inventoriesAdditional = await itemApi
                     .getItemsByInventory(inventories, 0, inventories.length);
 
-                inventoriesAdditional.forEach(i => {
-                    showUrls[i.item.game]();
-                });
-
-                setItems(inventoriesAdditional);
+                setInventories(inventoriesAdditional);
                 setIsLoading(false);
                 setBannedRefresh(false);
             }
-        }, 10);
+        }, 100);
 
         return () => clearInterval(interval);
     });
@@ -88,8 +195,14 @@ const WithdrawWindow = (props) => {
                     <div className={classes.tittle}>Вывод предметов</div>
                 </div>
                 { 
-                    items.length > 0 ? 
-                    <div className={classes.withdraw_counter}>{applyCount + "/" + items.length}</div> : null 
+                    inventories.length > 0 ? 
+                    <div className={classes.withdraw_counter}>
+                        {withdrawnInventories.length + "/" + inventories.length}
+                    </div> : null 
+                }
+                {
+                    error !== null ? 
+                    <div className={classes.withdraw_error}>{error}</div> : null
                 }
                 {
                     showSteamURL ?
@@ -102,18 +215,23 @@ const WithdrawWindow = (props) => {
                     null
                 }
                 {
+                    showStatusItem.item !== null ? 
+                    <div style={{color: `${showStatusItem.color}`}}>
+                        {showStatusItem.item.id}
+                    </div>
+                    : null
+                }
+                {
+                    exchangedInventories.map(i => <div key={i.id}>{i.id}</div>)
+                }
+                {
                     showSendButton ?
                     <div className={classes.btn_main} onClick={() => sendClick()}>Вывести</div> :
                     null
                 }
                 {
-                    items.length === 0 && !bannedRefresh ? 
-                    <div className={classes.description}>Все предметы отправлены :)<br/>Для просмотра статуса, перейдите в историю вывода</div> :
-                    null
-                }
-                {
-                    showSteamURL ? 
-                    <img className={classes.logo} alt="" href="/#" src={LogoMen}/> : 
+                    inventories.length === withdrawnInventories.length && !bannedRefresh && isLoading === false && error === null ? 
+                    <div className={classes.description}>Все предметы отправлены :)<br/>Для просмотра статуса, перейдите в выводы</div> :
                     null
                 }
             </div>

@@ -133,12 +133,26 @@ const Inventory = (props) => {
 								props.isActiveModal("withdraw") ? 
 								<Modal 
 									active={props.isActiveModal("withdraw")} 
-									clickChange={props.exchangeModal} 
+									clickChange={(active) => { 
+										props.exchangeModal(active);
+										props.setIsLoading(true);
+									}} 
 									content={
 										<WithdrawWindow 
 											selectItem={props.selectItem} 
+											setSelectItem={props.setSelectItem}
 											selectItems={props.selectItems}
-											primaryInventory={primaryInventory.slice(0, 20)}
+											setSelectItems={props.setSelectItems}
+											pullPrimaryInventory={() => {
+													let startIndex = (page - 1) * 20;
+													let endIndex = startIndex + 20;
+											
+													if(endIndex > primaryInventory.length) endIndex = primaryInventory.length;
+													if(startIndex > primaryInventory.length) startIndex = endIndex - 20 > 0 ? endIndex - 20 : 0;
+
+													return primaryInventory.slice(startIndex, endIndex)
+												}
+											}
 										/>}
             		/> : null
 						}
@@ -146,12 +160,26 @@ const Inventory = (props) => {
 								props.isActiveModal("sell") ?
 								<Modal 
 									active={props.isActiveModal("sell")} 
-									clickChange={props.exchangeModal} 
+									clickChange={(active) => { 
+										props.exchangeModal(active);
+										props.setIsLoading(true);
+									}} 
 									content={
 										<SellWindow 
 											selectItem={props.selectItem} 
+											setSelectItem={props.setSelectItem}
 											selectItems={props.selectItems}
-											primaryInventory={primaryInventory.slice(0, 20)}
+											setSelectItems={props.setSelectItems}
+											pullPrimaryInventory={() => {
+													let startIndex = (page - 1) * 20;
+													let endIndex = startIndex + 20;
+											
+													if(endIndex > primaryInventory.length) endIndex = primaryInventory.length;
+													if(startIndex > primaryInventory.length) startIndex = endIndex - 20 > 0 ? endIndex - 20 : 0;
+
+													return primaryInventory.slice(startIndex, endIndex)
+												}
+											}
 										/>}
             		/> : null
 						}

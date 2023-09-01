@@ -38,18 +38,16 @@ const Item = (props) => {
 
 		useEffect(() => {
 				const interval = setInterval(() => {
-						if(isStart) {
-								setIsStart(false);
+						setIsStart(false);
 
-								const isSelected = props.selectItems.items.indexOf(props.id) > -1;
-								const color = props.color ?? "white";
-								const borderColor = isSelected ? "green" : itemColors[color];
-								const gradientColor = itemGradients[isSelected ? "green" : color];
-				
-								setBorderColor(borderColor);
-								setGradientColor(gradientColor);
-						}
-				}, 10);
+						const isSelected = props.selectItems.items.indexOf(props.id) > -1;
+						const color = props.color ?? "white";
+						const borderColor = isSelected ? "green" : itemColors[color];
+						const gradientColor = itemGradients[isSelected ? "green" : color];
+		
+						setBorderColor(borderColor);
+						setGradientColor(gradientColor);
+				}, isStart ? 10 : 300);
 
 				return () => clearInterval(interval);
 		});
