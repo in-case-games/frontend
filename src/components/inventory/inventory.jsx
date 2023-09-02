@@ -66,7 +66,7 @@ const Inventory = (props) => {
 												pagesTemp = Math.ceil(primary.length / 20);
 				
 												setPrimaryInventory(primary);
-												setPages(pagesTemp);
+												setPages(pagesTemp === 0 ? 1 : pagesTemp);
 						
 												if(page > pagesTemp) setPage(pages);
 										}

@@ -7,11 +7,11 @@ const SellWindow = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [bannedRefresh, setBannedRefresh] = useState(false);
 
-    const [applyCount, setApplyCount] = useState(0);
-    const [inventories, setInventories] = useState([]);
+    const [inventories, setInventories] = useState({ items: [] });
+    const [remainingInventories, setRemainingInventories] = useState({ items: [] });
 
     const [error, setError] = useState(null);
-    const [showSendButton, setShowSendButton] = useState(applyCount !== inventories.length);
+    const [showSendButton, setShowSendButton] = useState(false);
 
     const sellClick = () => {
         setError(null);
@@ -25,23 +25,28 @@ const SellWindow = (props) => {
 
     const sellLoader = async () => {
         const itemApi = new Item();
-        let temp = applyCount;
+        const temp = inventories.items;
 
-        for(let i = 0; i < inventories.length; i++) {
-            const id = inventories[i];
+        for(let i = 0; i < temp.length; i++) {
+            const id = temp[i].id;
             const index = props.selectItems.items.indexOf(id);
 
             try {
                 await itemApi.sellItem(id);
+
+                temp[i].status = "sold";
+                setInventories(previousInputs => ({...previousInputs, items: temp }));
             }
             catch(err) { 
+                console.log(err);
+                console.log(id);
+                temp[i].status = "cancel";
+                setInventories(previousInputs => ({...previousInputs, items: temp }));
                 setError("Внутренняя ошибка, попробуйте еще раз");
+                break;
             }
             finally {
-                temp += 1;
-                
-                removeSelectItem(index,id);
-                setApplyCount(temp);
+                removeSelectItem(index, id);
             }
         }
     };
@@ -57,8 +62,9 @@ const SellWindow = (props) => {
 
     useEffect(() => {
         const interval = setInterval(async () => {
-            if(inventories.length > 0 && !bannedRefresh) {
-                setShowSendButton(applyCount !== inventories.length);
+            setRemainingInventories({...remainingInventories, items: inventories.items.filter(i => i.status !== "sold")});
+            if(inventories.items.length > 0 && !bannedRefresh) {
+                setShowSendButton(remainingInventories.items.length !== 0);
             }
         }, 100);
 
@@ -67,7 +73,7 @@ const SellWindow = (props) => {
 
     useEffect(() => {
         const interval = setInterval(async () => {
-            if(inventories.length === 0 && !bannedRefresh) {
+            if(inventories.items.length === 0 && !bannedRefresh) {
                 setBannedRefresh(true);
                 setIsLoading(true);
                 let ids = [];
@@ -78,8 +84,12 @@ const SellWindow = (props) => {
                     ids = props.selectItems.items;
                 else if(props.selectItem !== null) 
                     ids.push(props.selectItem);
-
-                setInventories(ids);
+                
+                for(let i = 0; i < ids.length; i++) 
+                    ids[i] = { id: ids[i], status: "wait"};
+                
+                setInventories(previousInputs => 
+                    ({...previousInputs, items: ids }));
                 setIsLoading(false);
                 setBannedRefresh(false);
             }
@@ -95,13 +105,17 @@ const SellWindow = (props) => {
                     <Loading isLoading={isLoading} click={() => {}}/>
                     <div className={classes.tittle}>Продажа предметов</div>
                 </div>
-                <div className={classes.sell_counter}>{applyCount + "/" + inventories.length}</div>
+                {
+                    inventories.items.length > 0 ? 
+                    <div className={classes.sell_counter}>{inventories.items.length - remainingInventories.items.length + "/" + inventories.items.length}</div> :
+                    null
+                }
                 {
                     error !== null ? 
                     <div className={classes.sell_error}>{error}</div> : null
                 }
                 {
-                    applyCount === inventories.length && !bannedRefresh && isLoading === false && error === null ? 
+                    remainingInventories.items.length === 0 && !bannedRefresh && isLoading === false && error === null ? 
                     <div className={classes.description}>Все предметы проданы :)</div> :
                     null
                 }
@@ -109,6 +123,9 @@ const SellWindow = (props) => {
                     showSendButton ? 
                     <div className={classes.btn_main} onClick={() => sellClick()}>Продать</div> :
                     null
+                }
+                {
+                    inventories.items.map(i => <div key={i.id}>{i.id}-{i.status}</div>)
                 }
             </div>
         </div>

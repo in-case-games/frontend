@@ -9,18 +9,13 @@ const WithdrawWindow = (props) => {
     const [steamUrl, setSteamURL] = useState(Constants.Cookie["csgo"]());
     const [error, setError] = useState(null);
 
-    const [withdrawnInventories, setWithdrawnInventories] = useState([]);
-    const [inventories, setInventories] = useState([]);
-    const [exchangedInventories, setExchangedInventories] = useState([]);
-    const [showStatusItem, setShowStatusItem] = useState({
-        color: null,
-        item: null
-    });
+    const [inventories, setInventories] = useState({ items: [] });
 
     const [isLoading, setIsLoading] = useState(true);
     const [bannedRefresh, setBannedRefresh] = useState(false);
     const [showSteamURL, setShowSteamURL] = useState(false);
     const [showSendButton, setShowSendButton] = useState(false);
+    const [remainingInventories, setRemainingInventories] = useState({ items: [] });
 
     const showUrls = {
         "dota2": (show) => setShowSteamURL(show),
@@ -69,34 +64,32 @@ const WithdrawWindow = (props) => {
 
     const withdrawLoader = async () => {
         const itemApi = new Item();
-        let temp = withdrawnInventories;
+        let temp = inventories.items;
 
-        for(let i = 0; i < inventories.length; i++) {
-            const inventory = inventories[i];
-            setTimeout(function(){
-                setShowStatusItem(previousInputs => ({...previousInputs, color: "gray" }));
-                setShowStatusItem(previousInputs => ({...previousInputs, item: inventory }));
-            }, 300);
+        for(let i = 0; i < temp.length; i++) {
+            const inventory = temp[i];
             
             try {
-                const index = props.selectItems.items.indexOf(inventory.id);
+                console.log(inventory);
+                if(inventory.status !== "withdrawn") {
+                    const index = props.selectItems.items.indexOf(inventory.id);
                 
-                await itemApi.withdrawItem(inventory.id, Constants.Cookie[inventory.item.game]());
-
-                setShowStatusItem(previousInputs => ({...previousInputs, color: "green" }));
-                
-                temp.push(inventory);
-
-                removeSelectItem(index, inventory);
-                setWithdrawnInventories(temp);
+                    await itemApi
+                        .withdrawItem(inventory.id, Constants.Cookie[inventory.item.game]());
+    
+                    temp[i].status = "withdrawn";
+    
+                    setInventories(previousInputs => ({...previousInputs, items: temp }));
+                    removeSelectItem(index, inventory);
+                }
             }
             catch(err) { 
-                setShowStatusItem(previousInputs => ({...previousInputs, color: "red" }));
+                temp[i].status = "cancel";
+
+                setInventories(previousInputs => ({...previousInputs, items: temp }));
 
                 const code = err.response.data.error.code;
                 const inventory = inventories[i];
-                const findExchangedInventory = exchangedInventories.find(ei => ei.id === inventory.id);
-                const tempExchanged = exchangedInventories;
 
                 if(code === 4) {
                     const index = props.selectItems.items.indexOf(inventory.id);
@@ -104,14 +97,14 @@ const WithdrawWindow = (props) => {
                     temp.push(inventory);
                     
                     removeSelectItem(index, inventory);
-                    setWithdrawnInventories(temp);
-
+                    
                     setError("Внутренняя ошибка, попробуйте еще раз");
                 }
-                else if(code === 5 && findExchangedInventory === undefined) 
+                else if(code === 5) 
                 {
-                    tempExchanged.push(inventory);
-                    setExchangedInventories(tempExchanged);
+                    temp[i].status = "exchange";
+
+                    setInventories(previousInputs => ({...previousInputs, items: temp }));
                     setError("Есть предметы с нестабильной ценой");
                 }
                 else if(code === 2) {
@@ -124,9 +117,6 @@ const WithdrawWindow = (props) => {
                 }
             };
         }
-        setTimeout(function(){
-            setShowStatusItem(previousInputs => ({...previousInputs, item: null }));
-        }, 500);
     };
 
     const removeSelectItem = (index, inventory) => {
@@ -140,10 +130,12 @@ const WithdrawWindow = (props) => {
 
     useEffect(() => {
         const interval = setInterval(async () => {
-            if(inventories.length > 0 && !bannedRefresh) {
-                let showSendButton = true && withdrawnInventories.length !== inventories.length;
+            setRemainingInventories({...remainingInventories, items: inventories.items.filter(i => i.status !== "withdrawn")});
 
-                inventories.forEach(i => {
+            if(inventories.items.length > 0 && !bannedRefresh) {
+                let showSendButton = true && remainingInventories.items.length > 0;
+
+                inventories.items.forEach(i => {
                     const showUrl = !Constants.isRegexCookie(i.item.game);
                     showSendButton &&= !showUrl;
 
@@ -159,7 +151,7 @@ const WithdrawWindow = (props) => {
 
     useEffect(() => {
         const interval = setInterval(async () => {
-            if(inventories.length === 0 && !bannedRefresh) {
+            if(inventories.items.length === 0 && !bannedRefresh) {
                 setBannedRefresh(true);
                 setIsLoading(true);
                 const itemApi = new Item();
@@ -178,7 +170,11 @@ const WithdrawWindow = (props) => {
                 const inventoriesAdditional = await itemApi
                     .getItemsByInventory(inventories, 0, inventories.length);
 
-                setInventories(inventoriesAdditional);
+                for(let i = 0; i < inventoriesAdditional.length; i++) 
+                    inventoriesAdditional[i].status = "wait";
+                
+                setInventories(previousInputs => 
+                    ({...previousInputs, items: inventoriesAdditional }));
                 setIsLoading(false);
                 setBannedRefresh(false);
             }
@@ -195,9 +191,9 @@ const WithdrawWindow = (props) => {
                     <div className={classes.tittle}>Вывод предметов</div>
                 </div>
                 { 
-                    inventories.length > 0 ? 
+                    inventories.items.length > 0 ? 
                     <div className={classes.withdraw_counter}>
-                        {withdrawnInventories.length + "/" + inventories.length}
+                        {inventories.items.length - remainingInventories.items.length + "/" + inventories.items.length}
                     </div> : null 
                 }
                 {
@@ -215,24 +211,17 @@ const WithdrawWindow = (props) => {
                     null
                 }
                 {
-                    showStatusItem.item !== null ? 
-                    <div style={{color: `${showStatusItem.color}`}}>
-                        {showStatusItem.item.id}
-                    </div>
-                    : null
-                }
-                {
-                    exchangedInventories.map(i => <div key={i.id}>{i.id}</div>)
-                }
-                {
                     showSendButton ?
                     <div className={classes.btn_main} onClick={() => sendClick()}>Вывести</div> :
                     null
                 }
                 {
-                    inventories.length === withdrawnInventories.length && !bannedRefresh && isLoading === false && error === null ? 
+                    remainingInventories.items.length === 0 && !bannedRefresh && isLoading === false && error === null ? 
                     <div className={classes.description}>Все предметы отправлены :)<br/>Для просмотра статуса, перейдите в выводы</div> :
                     null
+                }
+                {
+                    inventories.items.map(i => <div key={i.id}>{i.id}-{i.status}</div>)
                 }
             </div>
         </div>
