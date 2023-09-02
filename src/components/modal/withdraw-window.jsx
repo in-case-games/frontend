@@ -221,7 +221,17 @@ const WithdrawWindow = (props) => {
                     null
                 }
                 {
+                    inventories.items.length > 0 ?
+                    <div className={classes.delimiter_first}></div> :
+                    null
+                }
+                {
                     inventories.items.map(i => <div key={i.id}>{i.id}-{i.status}</div>)
+                }
+                {
+                    inventories.items.length > 0 ?
+                    <div className={classes.delimiter_second}></div> :
+                    null
                 }
             </div>
         </div>

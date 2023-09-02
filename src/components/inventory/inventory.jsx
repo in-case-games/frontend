@@ -68,7 +68,7 @@ const Inventory = (props) => {
 												setPrimaryInventory(primary);
 												setPages(pagesTemp === 0 ? 1 : pagesTemp);
 						
-												if(page > pagesTemp) setPage(pages);
+												if(page > pagesTemp) setPage(pagesTemp);
 										}
 
 										primary.sort(types[props.filter]);
@@ -77,7 +77,7 @@ const Inventory = (props) => {
 											"isAllReload" : isAllReload,
 											"primaryInventory" : primary, 
 											"loadedInventory": loadedInventory,
-											"page": page > pages ? pagesTemp : page,
+											"page": page > pagesTemp ? pagesTemp : page,
 											"itemProps": {
 													"selectItems": props.selectItems,
 													"setSelectItems": props.setSelectItems,

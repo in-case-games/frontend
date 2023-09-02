@@ -20,7 +20,16 @@ const LazyLoadedInventory = async (props) => {
 
 		if(props.isAllReload || startIndex > loadedInventory.length - 1) 
 				loaded = await itemApi.getItemsByInventory(primary, startIndex, endIndex);
+		
 		if(startIndex > loadedInventory.length - 1) loadedInventory = [...loadedInventory, ...loaded];
+		else if(props.isAllReload) {
+				let i = 0;
+
+				for(let j = startIndex; j < endIndex; j++) { 
+						loadedInventory[j] = loaded[i];
+						i++;
+				}
+		}
 		else Array.prototype.splice.apply(loadedInventory, [0, loaded.length].concat(loaded));
 		
 		try {

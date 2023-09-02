@@ -77,7 +77,8 @@ const SellWindow = (props) => {
                 setBannedRefresh(true);
                 setIsLoading(true);
                 let ids = [];
-                
+                let additionalInventories = [];
+
                 if(props.selectItem === null && props.selectItems.items.length === 0) 
                     ids = props.pullPrimaryInventory().map(i => i.id);
                 else if(props.selectItem === null) 
@@ -86,10 +87,10 @@ const SellWindow = (props) => {
                     ids.push(props.selectItem);
                 
                 for(let i = 0; i < ids.length; i++) 
-                    ids[i] = { id: ids[i], status: "wait"};
+                    additionalInventories.push({ id: ids[i], status: "wait"});
                 
                 setInventories(previousInputs => 
-                    ({...previousInputs, items: ids }));
+                    ({...previousInputs, items: additionalInventories }));
                 setIsLoading(false);
                 setBannedRefresh(false);
             }
@@ -125,7 +126,17 @@ const SellWindow = (props) => {
                     null
                 }
                 {
+                    inventories.items.length > 0 ?
+                    <div className={classes.delimiter_first}></div> :
+                    null
+                }
+                {
                     inventories.items.map(i => <div key={i.id}>{i.id}-{i.status}</div>)
+                }
+                {
+                    inventories.items.length > 0 ?
+                    <div className={classes.delimiter_second}></div> :
+                    null
                 }
             </div>
         </div>
