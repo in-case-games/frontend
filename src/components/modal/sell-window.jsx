@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Item } from '../../services/api'
+import { Item, User } from '../../services/api'
 import { Loading } from '../сommon/button'
 import classes from "./modal.module.css"
 
@@ -7,6 +7,7 @@ const SellWindow = (props) => {
     const [isLoading, setIsLoading] = useState(true);
     const [bannedRefresh, setBannedRefresh] = useState(false);
 
+    const [isApply, setIsApply] = useState(false);
     const [inventories, setInventories] = useState({ items: [] });
     const [remainingInventories, setRemainingInventories] = useState({ items: [] });
 
@@ -19,8 +20,6 @@ const SellWindow = (props) => {
         setIsLoading(true);
         setShowSendButton(false);
         sellLoader();
-        setIsLoading(false);
-        setBannedRefresh(false);
     };
 
     const sellLoader = async () => {
@@ -28,14 +27,23 @@ const SellWindow = (props) => {
         const temp = inventories.items;
 
         for(let i = 0; i < temp.length; i++) {
+            if(temp[i].status !== "success") {
+                temp[i].status = "wait";
+                setInventories(previousInputs => ({...previousInputs, items: temp }));
+            }
+        }
+
+        for(let i = 0; i < temp.length; i++) {
             const id = temp[i].id;
             const index = props.selectItems.items.indexOf(id);
 
             try {
-                await itemApi.sellItem(id);
+                if(temp[i].status !== "success") {
+                    await itemApi.sellItem(id);
 
-                temp[i].status = "sold";
-                setInventories(previousInputs => ({...previousInputs, items: temp }));
+                    temp[i].status = "success";
+                    setInventories(previousInputs => ({...previousInputs, items: temp }));
+                }
             }
             catch(err) { 
                 console.log(err);
@@ -49,6 +57,9 @@ const SellWindow = (props) => {
                 removeSelectItem(index, id);
             }
         }
+        
+        setIsLoading(false);
+        setBannedRefresh(false);
     };
 
     const removeSelectItem = (index, id) => {
@@ -62,9 +73,12 @@ const SellWindow = (props) => {
 
     useEffect(() => {
         const interval = setInterval(async () => {
-            setRemainingInventories({...remainingInventories, items: inventories.items.filter(i => i.status !== "sold")});
+            const soldNot = inventories.items.filter(i => i.status !== "success");
+            setRemainingInventories({...remainingInventories, items: soldNot});
+
             if(inventories.items.length > 0 && !bannedRefresh) {
-                setShowSendButton(remainingInventories.items.length !== 0);
+                setIsApply(soldNot.length === 0);
+                setShowSendButton(soldNot.length > 0);
             }
         }, 100);
 
@@ -76,8 +90,10 @@ const SellWindow = (props) => {
             if(inventories.items.length === 0 && !bannedRefresh) {
                 setBannedRefresh(true);
                 setIsLoading(true);
+
+                const itemApi = new Item();
+                const userApi = new User();
                 let ids = [];
-                let additionalInventories = [];
 
                 if(props.selectItem === null && props.selectItems.items.length === 0) 
                     ids = props.pullPrimaryInventory().map(i => i.id);
@@ -86,11 +102,14 @@ const SellWindow = (props) => {
                 else if(props.selectItem !== null) 
                     ids.push(props.selectItem);
                 
-                for(let i = 0; i < ids.length; i++) 
-                    additionalInventories.push({ id: ids[i], status: "wait"});
+                const inventories = await userApi.getInventoriesByIds(ids);
                 
-                setInventories(previousInputs => 
-                    ({...previousInputs, items: additionalInventories }));
+                const inventoriesAdditional = await itemApi
+                    .getItemsByInventory(inventories, 0, inventories.length);
+                
+                inventoriesAdditional.forEach((i) => i.status = "wait");
+                
+                setInventories({ ...inventories, items: inventoriesAdditional });
                 setIsLoading(false);
                 setBannedRefresh(false);
             }
@@ -116,7 +135,7 @@ const SellWindow = (props) => {
                     <div className={classes.sell_error}>{error}</div> : null
                 }
                 {
-                    remainingInventories.items.length === 0 && !bannedRefresh && isLoading === false && error === null ? 
+                    isApply ? 
                     <div className={classes.description}>Все предметы проданы :)</div> :
                     null
                 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Item as ItemApi } from '../../services/api'
-import Item from "./item"
+import InventoryItem from "../item/inventory-item"
 
 const LazyLoadedInventory = async (props) => {
 		const itemApi = new ItemApi();
@@ -36,7 +36,7 @@ const LazyLoadedInventory = async (props) => {
 				for(let j = startIndex; j < endIndex; j++) {
 					let i = loadedInventory[j];
 
-					showTemp.push(<Item 
+					showTemp.push(<InventoryItem 
 						img={i.item.img}
 						name={i.item.name}
 						color={i.item.rarity}

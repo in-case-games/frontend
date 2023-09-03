@@ -66,12 +66,12 @@ const Header = () => {
                 let responseBalance = await userApi.getBalance();
 
                 responseBalance = responseBalance >= 10000000 ? 
-                    `${responseBalance/1000000}M` : 
-                    responseBalance;
+                    `${Math.ceil(responseBalance/1000000)}M` : 
+                    Math.ceil(responseBalance);
 
                 let temp = {
                     img: user?.img ?? "null",
-                    balance: Math.ceil(responseBalance)
+                    balance: responseBalance
                 };
 
                 setUser(temp);

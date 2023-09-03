@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Item as ItemImg } from '../../assets/images/additional'
 import { AirPlane, InCoinWhite } from '../../assets/images/icon'
-import { itemColors, itemGradients } from '../item/item-colors'
-import classes from "./inventory.module.css"
+import classes from "./inventory-item.module.css"
+import { itemColors, itemGradients } from './item-colors'
 
-const Item = (props) => {
+const InventoryItem = (props) => {
 		const [isStart, setIsStart] = useState(true);
 		const [borderColor, setBorderColor] = useState(props.color ? props.color : "white");
 		const [gradientColor, setGradientColor] = useState(itemGradients[props.color ? props.color : "white"]);
@@ -12,6 +12,13 @@ const Item = (props) => {
 		const date = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
 		d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
 
+		const getCost = () => {
+			let temp = Math.round(props.cost);
+			if(temp >= 1000000) temp = `${Math.round(temp / 10) / 100000}M`
+			else if(temp >= 1000) temp = `${Math.round(temp / 10) / 100}K`
+
+			return temp;
+		}
 		const handleClick = () => {
 				let temp = props.selectItems.items;
 				const index = temp.indexOf(props.id);
@@ -59,9 +66,9 @@ const Item = (props) => {
 								<img alt="" href="#" src={ItemImg}/>
 						</div>
 						<div className={classes.item_info}>
-								<p className={classes.info_name}>{props.name}</p>
+								<p className={classes.info_name}>{props.name.length > 20 ? props.name.substring(0, 20) + "..." : props.name}</p>
 								<p className={classes.info_cost}>
-										{Math.round(props.cost)}
+										{getCost()}
 										<img alt="" href="#" src={InCoinWhite}/>
 								</p>
 								<p className={classes.info_date}>{date}</p>
@@ -79,4 +86,4 @@ const Item = (props) => {
 		);
 };
 
-export default React.memo(Item);
+export default React.memo(InventoryItem);

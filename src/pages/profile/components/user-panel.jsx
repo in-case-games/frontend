@@ -20,7 +20,7 @@ const UserPanel = () => {
         catch (err) {
             setShow(false);
         }
-      }, (1));
+      }, (10));
 
       return () => {
         clearInterval(interval);

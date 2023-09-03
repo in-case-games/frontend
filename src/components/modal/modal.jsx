@@ -3,9 +3,9 @@ import "./modal.css"
 
 const Modal = ({active, clickChange, content}) => {
     return(
-        <div className={active ? "modal active": "modal"} onClick={() => clickChange("close")}>
+        <div className={active ? "modal active": "modal"} onMouseDown={() => clickChange("close")}>
             <p className="hidden_text">- Свернуть</p>
-            <div className="modal__content" onClick={e => e.stopPropagation()}>
+            <div className="modal__content" onMouseDown={e => e.stopPropagation()}>
                 {content}
             </div>
         </div>

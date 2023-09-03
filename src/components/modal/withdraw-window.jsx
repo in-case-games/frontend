@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react"
-import { bake_cookie, delete_cookie } from 'sfcookies'
 import { Item, User } from '../../services/api'
 import { Loading } from '../сommon/button'
 import Constants from './constants'
 import classes from "./modal.module.css"
 
 const WithdrawWindow = (props) => {
-    const [steamUrl, setSteamURL] = useState(Constants.Cookie["csgo"]());
+    const [steamUrl, setSteamURL] = useState(Constants
+        .CheckUndefinedNull(Constants.TradeURL["csgo"](), ""));
     const [error, setError] = useState(null);
-
+    const [remainingInventories, setRemainingInventories] = useState({ items: [] });
     const [inventories, setInventories] = useState({ items: [] });
 
     const [isLoading, setIsLoading] = useState(true);
+    const [isApply, setIsApply] = useState(false);
     const [bannedRefresh, setBannedRefresh] = useState(false);
     const [showSteamURL, setShowSteamURL] = useState(false);
     const [showSendButton, setShowSendButton] = useState(false);
-    const [remainingInventories, setRemainingInventories] = useState({ items: [] });
 
     const showUrls = {
         "dota2": (show) => setShowSteamURL(show),
@@ -29,14 +29,11 @@ const WithdrawWindow = (props) => {
 
     const inputSteamURLClick = (value) => {
         setSteamURL(value);
-        
-        const regex = Constants.Regex["csgo"];
 
-        if(regex.test(value)) { 
+        if(Constants.Regex["csgo"].test(value)) { 
             setError(null);
-            bake_cookie("user-steam-url", value); 
+            Constants.UpdateTradeURL["csgo"](value);
         }
-        else delete_cookie("user-steam-url");
     }
 
     const sendClick = () => {
@@ -45,9 +42,8 @@ const WithdrawWindow = (props) => {
         let error = null;
 
         games.forEach(g => {
-            if(isShowInput[g] === true) {
-                if(!Constants.isRegexCookie(g)) error = `Проверьте корректность ссылки на обмен`;
-            }
+            if(isShowInput[g] === true && !Constants.IsRegexTradeURL(g)) 
+                error = `Проверьте корректность ссылки на обмен`;
         });
 
         if(error === null) { 
@@ -56,8 +52,6 @@ const WithdrawWindow = (props) => {
             setIsLoading(true);
             setShowSendButton(false);
             withdrawLoader();
-            setIsLoading(false);
-            setBannedRefresh(false);
         }
         else setError(error);
     };
@@ -67,17 +61,23 @@ const WithdrawWindow = (props) => {
         let temp = inventories.items;
 
         for(let i = 0; i < temp.length; i++) {
+            if(temp[i].status !== "success") {
+                temp[i].status = "wait";
+                setInventories(previousInputs => ({...previousInputs, items: temp }));
+            }
+        }
+
+        for(let i = 0; i < temp.length; i++) {
             const inventory = temp[i];
             
             try {
-                console.log(inventory);
-                if(inventory.status !== "withdrawn") {
+                if(inventory.status !== "success") {
                     const index = props.selectItems.items.indexOf(inventory.id);
                 
                     await itemApi
-                        .withdrawItem(inventory.id, Constants.Cookie[inventory.item.game]());
+                        .withdrawItem(inventory.id, Constants.TradeURL[inventory.item.game]());
     
-                    temp[i].status = "withdrawn";
+                    temp[i].status = "success";
     
                     setInventories(previousInputs => ({...previousInputs, items: temp }));
                     removeSelectItem(index, inventory);
@@ -117,6 +117,8 @@ const WithdrawWindow = (props) => {
                 }
             };
         }
+        setIsLoading(false);
+        setBannedRefresh(false);
     };
 
     const removeSelectItem = (index, inventory) => {
@@ -130,18 +132,20 @@ const WithdrawWindow = (props) => {
 
     useEffect(() => {
         const interval = setInterval(async () => {
-            setRemainingInventories({...remainingInventories, items: inventories.items.filter(i => i.status !== "withdrawn")});
+            const withdrawnNot = inventories.items.filter(i => i.status !== "success");
+            setRemainingInventories({...remainingInventories, items: withdrawnNot});
 
             if(inventories.items.length > 0 && !bannedRefresh) {
-                let showSendButton = true && remainingInventories.items.length > 0;
+                let showSendButton = withdrawnNot.length > 0;
 
                 inventories.items.forEach(i => {
-                    const showUrl = !Constants.isRegexCookie(i.item.game);
+                    const showUrl = !Constants.IsRegexTradeURL(i.item.game);
                     showSendButton &&= !showUrl;
 
                     showUrls[i.item.game](showUrl);
                 });
 
+                setIsApply(withdrawnNot.length === 0);
                 setShowSendButton(showSendButton);
             }
         }, 100);
@@ -154,6 +158,7 @@ const WithdrawWindow = (props) => {
             if(inventories.items.length === 0 && !bannedRefresh) {
                 setBannedRefresh(true);
                 setIsLoading(true);
+
                 const itemApi = new Item();
                 const userApi = new User();
                 let ids = [];
@@ -170,11 +175,10 @@ const WithdrawWindow = (props) => {
                 const inventoriesAdditional = await itemApi
                     .getItemsByInventory(inventories, 0, inventories.length);
 
-                for(let i = 0; i < inventoriesAdditional.length; i++) 
-                    inventoriesAdditional[i].status = "wait";
+                inventoriesAdditional.forEach((i) => i.status = "wait");
                 
-                setInventories(previousInputs => 
-                    ({...previousInputs, items: inventoriesAdditional }));
+                setInventories({ ...inventories, items: inventoriesAdditional });
+
                 setIsLoading(false);
                 setBannedRefresh(false);
             }
@@ -203,6 +207,7 @@ const WithdrawWindow = (props) => {
                 {
                     showSteamURL ?
                     <input 
+                        maxLength={200}
                         className={classes.input_form} 
                         placeholder="Steam TradeURL" 
                         value={steamUrl} 
@@ -216,7 +221,7 @@ const WithdrawWindow = (props) => {
                     null
                 }
                 {
-                    remainingInventories.items.length === 0 && !bannedRefresh && isLoading === false && error === null ? 
+                    isApply ? 
                     <div className={classes.description}>Все предметы отправлены :)<br/>Для просмотра статуса, перейдите в выводы</div> :
                     null
                 }

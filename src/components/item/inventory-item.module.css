@@ -1,0 +1,89 @@
+.item_img img {
+	width: 100px;
+	margin-right: 10px;
+}
+
+.item_info {
+	color: white;
+}
+
+.info_name {
+	font-family: 'Megrim';
+	text-align: start;
+	font-size: 18px;
+}
+
+.info_date {
+	font-family: 'Megrim';
+	font-size: 12px;
+	text-align: start;
+}
+
+.info_cost {
+	display: flex;
+	align-items: flex-end;
+	font-family: 'Play';
+	text-align: start;
+}
+
+.info_cost img {
+	height: 20px;
+}
+
+.item_info p {
+	margin: 0;
+}
+
+.inventory_item {
+	display: flex;
+	width: 260px;
+	height: 100px;
+	border-radius: 15px;
+	margin: 0 10px;
+}
+
+.item {
+	display: flex;
+	align-items: center;
+	border-radius: 13px 0 0 13px;
+	cursor: pointer;
+}
+
+.item_buttons {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
+	height: 100px;
+	border-radius: 0 13px 13px 0;
+	background: rgba(0, 0, 0, 0.3)
+}
+
+.buttons {
+	width: 35px;
+	text-align: center;
+	cursor: pointer;
+	height: 50%;
+}
+
+.buttons:first-child:hover {
+	border-radius: 0 13px 0 0;
+	background: rgba(253, 156, 38, 0.2)
+}
+
+.buttons:last-child:hover {
+	border-radius: 0 0 13px 0;
+	background: rgba(227, 96, 96, 0.2)
+}
+
+.btn_sell {
+		font-size: 28px;
+		color: #E36060;
+		font-family: 'Megrim';
+		margin-top: 10px;
+		font-weight: 1000;
+}
+
+.btn_withdraw {
+		width: 20px;
+		margin-top: 10px;
+}
