@@ -5,6 +5,7 @@ import { Loading } from '../сommon/button'
 import Constants from './constants'
 import classes from "./modal.module.css"
 
+//TODO How game will more 5, then check count trade urls(add overflow-y)
 const WithdrawWindow = (props) => {
     const [steamUrl, setSteamURL] = useState(Constants
         .CheckUndefinedNull(Constants.TradeURL["csgo"](), ""));

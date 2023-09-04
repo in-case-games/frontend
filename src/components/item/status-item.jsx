@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Item as ItemImg } from '../../assets/images/additional'
 import { InCoinWhite } from '../../assets/images/icon'
+import { Loading } from '../сommon/button'
 import Constants from "./constants"
 import { itemColors, itemGradients } from './item-colors'
 import classes from "./status-item.module.css"
 
 const StatusItem = (props) => {
 		const [isStart, setIsStart] = useState(true);
+		const [isLoading, setIsLoading] = useState(false);
 		const [borderColor, setBorderColor] = useState(props.item.rarity);
 		const [gradientColor, setGradientColor] = useState(itemGradients[props.item.rarity]);
 		const [statusColor, setStatusColor] = useState(itemGradients[Constants.StatusAndColor[props.status]]);
@@ -29,6 +31,7 @@ const StatusItem = (props) => {
 					setCursor(props.status === "exchange" ? "pointer" : "default");
 					setBorderColor(borderColor);
 					setGradientColor(gradientColor);
+					setIsLoading(props.status === "loading");
 			}, isStart ? 10 : 300);
 
 			return () => clearInterval(interval);
@@ -57,6 +60,11 @@ const StatusItem = (props) => {
 								</div>
 						</div>
 						<div className={classes.status} style={{background: statusColor, cursor: cursor}}>
+								{
+									isLoading ? 
+										<Loading isLoading={isLoading} click={() => {}}/> : 
+										null
+								}
 						</div>
 				</div>)
 };

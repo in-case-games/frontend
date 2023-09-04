@@ -64,7 +64,7 @@ const Header = () => {
         const interval = setInterval(async () => {
             if(TokenService.getAccessToken() !== undefined) {
                 let responseBalance = await userApi.getBalance();
-
+                
                 responseBalance = responseBalance >= 10000000 ? 
                     `${Math.ceil(responseBalance/1000000)}M` : 
                     Math.ceil(responseBalance);
