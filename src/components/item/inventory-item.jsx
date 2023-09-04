@@ -66,7 +66,7 @@ const InventoryItem = (props) => {
 								<img alt="" href="#" src={ItemImg}/>
 						</div>
 						<div className={classes.item_info}>
-								<p className={classes.info_name}>{props.name.length > 20 ? props.name.substring(0, 20) + "..." : props.name}</p>
+								<p className={classes.info_name}>{props.name.length > 25 ? props.name.substring(0, 25) + "..." : props.name}</p>
 								<p className={classes.info_cost}>
 										{getCost()}
 										<img alt="" href="#" src={InCoinWhite}/>

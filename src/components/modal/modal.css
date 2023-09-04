@@ -18,6 +18,7 @@
     opacity: 1;
     visibility: visible;
     transition-delay: 0s;
+    z-index: 100;
 }
 
 .modal__content {

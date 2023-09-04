@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Item, User } from '../../services/api'
+import StatusItem from '../item/status-item'
 import { Loading } from '../сommon/button'
 import Constants from './constants'
 import classes from "./modal.module.css"
@@ -41,19 +42,22 @@ const WithdrawWindow = (props) => {
 
         let error = null;
 
-        games.forEach(g => {
-            if(isShowInput[g] === true && !Constants.IsRegexTradeURL(g)) 
-                error = `Проверьте корректность ссылки на обмен`;
-        });
+        for(let i = 0; i < games.length; i++) {
+            let game = games[i];
+
+            if(isShowInput[game] === true && !Constants.IsRegexTradeURL(game))  {
+                error = "Проверьте корректность ссылки на обмен";
+                setError(error);
+                break;
+            }
+        }
 
         if(error === null) { 
-            setError(null);
             setBannedRefresh(true);
             setIsLoading(true);
             setShowSendButton(false);
             withdrawLoader();
         }
-        else setError(error);
     };
 
     const withdrawLoader = async () => {
@@ -63,6 +67,7 @@ const WithdrawWindow = (props) => {
         for(let i = 0; i < temp.length; i++) {
             if(temp[i].status !== "success") {
                 temp[i].status = "wait";
+                temp[i].error = null;
                 setInventories(previousInputs => ({...previousInputs, items: temp }));
             }
         }
@@ -72,6 +77,9 @@ const WithdrawWindow = (props) => {
             
             try {
                 if(inventory.status !== "success") {
+                    temp[i].status = "loading";
+                    setInventories(previousInputs => ({...previousInputs, items: temp }));
+
                     const index = props.selectItems.items.indexOf(inventory.id);
                 
                     await itemApi
@@ -84,12 +92,14 @@ const WithdrawWindow = (props) => {
                 }
             }
             catch(err) { 
-                temp[i].status = "cancel";
-
-                setInventories(previousInputs => ({...previousInputs, items: temp }));
-
                 const code = err.response.data.error.code;
-                const inventory = inventories[i];
+
+                temp[i].status = "cancel";
+                temp[i].error = Constants.WithdrawErrors[code] === undefined ? 
+                    "Подождите или напишите в тех. поддержку" : 
+                    Constants.WithdrawErrors[code];
+                
+                setInventories(previousInputs => ({...previousInputs, items: temp }));
 
                 if(code === 4) {
                     const index = props.selectItems.items.indexOf(inventory.id);
@@ -97,24 +107,14 @@ const WithdrawWindow = (props) => {
                     temp.push(inventory);
                     
                     removeSelectItem(index, inventory);
-                    
-                    setError("Внутренняя ошибка, попробуйте еще раз");
                 }
                 else if(code === 5) 
                 {
                     temp[i].status = "exchange";
 
                     setInventories(previousInputs => ({...previousInputs, items: temp }));
-                    setError("Есть предметы с нестабильной ценой");
                 }
-                else if(code === 2) {
-                    setError("Подождите и повторите позже, выполняется перевод средств");
-                    break;
-                }
-                else {
-                    setError("Подождите или напишите в тех. поддержку");
-                    break;
-                }
+                else break;
             };
         }
         setIsLoading(false);
@@ -175,7 +175,10 @@ const WithdrawWindow = (props) => {
                 const inventoriesAdditional = await itemApi
                     .getItemsByInventory(inventories, 0, inventories.length);
 
-                inventoriesAdditional.forEach((i) => i.status = "wait");
+                inventoriesAdditional.forEach((i) => {
+                    i.status = "wait"; 
+                    i.error = null;
+                });
                 
                 setInventories({ ...inventories, items: inventoriesAdditional });
 
@@ -202,7 +205,7 @@ const WithdrawWindow = (props) => {
                 }
                 {
                     error !== null ? 
-                    <div className={classes.withdraw_error}>{error}</div> : null
+                    <div className={classes.sell_error}>{error}</div> : null
                 }
                 {
                     showSteamURL ?
@@ -230,9 +233,18 @@ const WithdrawWindow = (props) => {
                     <div className={classes.delimiter_first}></div> :
                     null
                 }
-                {
-                    inventories.items.map(i => <div key={i.id}>{i.id}-{i.status}</div>)
-                }
+                <div className={classes.withdraw_items} style={inventories.items.length > 3 ? {overflowY: "scroll"} : {overflowY: 'hidden'}}>
+                    {
+                        inventories.items.map(i => 
+                            <StatusItem 
+                                id={i.id} 
+                                item={i.item} 
+                                status={i.status}
+                                error={i.error}
+                                key={i.id}
+                            />)
+                    }
+                </div>
                 {
                     inventories.items.length > 0 ?
                     <div className={classes.delimiter_second}></div> :

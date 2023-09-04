@@ -8,7 +8,9 @@ export const itemGradients = {
     pink: generateGradient("173, 0, 255"),
     violet: generateGradient("255, 0, 199"),
     white: generateGradient("255, 255, 255"),
-    green: generateGradient("0, 255, 30")
+    green: generateGradient("0, 255, 30"),
+    gray: generateGradient("211, 211, 211"),
+    orange: generateGradient("255, 230, 101")
 }
 
 export const itemColors = {
@@ -17,5 +19,8 @@ export const itemColors = {
     red: "#FF0000",
     pink: "#AD00FF",
     violet: "#FF00C7",
-    white: "#FFFFFF"
+    white: "#FFFFFF",
+    gray: "#d3d3d3",
+    orange: "#fe7324",
+    green: "#008000"
 }

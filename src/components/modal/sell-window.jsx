@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Item, User } from '../../services/api'
+import StatusItem from '../item/status-item'
 import { Loading } from '../сommon/button'
 import classes from "./modal.module.css"
 
@@ -10,12 +11,9 @@ const SellWindow = (props) => {
     const [isApply, setIsApply] = useState(false);
     const [inventories, setInventories] = useState({ items: [] });
     const [remainingInventories, setRemainingInventories] = useState({ items: [] });
-
-    const [error, setError] = useState(null);
     const [showSendButton, setShowSendButton] = useState(false);
 
     const sellClick = () => {
-        setError(null);
         setBannedRefresh(true);
         setIsLoading(true);
         setShowSendButton(false);
@@ -29,6 +27,7 @@ const SellWindow = (props) => {
         for(let i = 0; i < temp.length; i++) {
             if(temp[i].status !== "success") {
                 temp[i].status = "wait";
+                temp[i].error = null;
                 setInventories(previousInputs => ({...previousInputs, items: temp }));
             }
         }
@@ -39,6 +38,9 @@ const SellWindow = (props) => {
 
             try {
                 if(temp[i].status !== "success") {
+                    temp[i].status = "loading";
+                    setInventories(previousInputs => ({...previousInputs, items: temp }));
+                    
                     await itemApi.sellItem(id);
 
                     temp[i].status = "success";
@@ -46,11 +48,9 @@ const SellWindow = (props) => {
                 }
             }
             catch(err) { 
-                console.log(err);
-                console.log(id);
                 temp[i].status = "cancel";
+                temp[i].error = "Внутренняя ошибка, попробуйте еще раз";
                 setInventories(previousInputs => ({...previousInputs, items: temp }));
-                setError("Внутренняя ошибка, попробуйте еще раз");
                 break;
             }
             finally {
@@ -107,7 +107,10 @@ const SellWindow = (props) => {
                 const inventoriesAdditional = await itemApi
                     .getItemsByInventory(inventories, 0, inventories.length);
                 
-                inventoriesAdditional.forEach((i) => i.status = "wait");
+                inventoriesAdditional.forEach((i) => {
+                    i.status = "wait"; 
+                    i.error = null;
+                });
                 
                 setInventories({ ...inventories, items: inventoriesAdditional });
                 setIsLoading(false);
@@ -131,10 +134,6 @@ const SellWindow = (props) => {
                     null
                 }
                 {
-                    error !== null ? 
-                    <div className={classes.sell_error}>{error}</div> : null
-                }
-                {
                     isApply ? 
                     <div className={classes.description}>Все предметы проданы :)</div> :
                     null
@@ -149,9 +148,18 @@ const SellWindow = (props) => {
                     <div className={classes.delimiter_first}></div> :
                     null
                 }
-                {
-                    inventories.items.map(i => <div key={i.id}>{i.id}-{i.status}</div>)
-                }
+                <div className={classes.sell_items} style={inventories.items.length > 3 ? {overflowY: "scroll"} : {overflowY: 'hidden'}}>
+                    {
+                        inventories.items.map(i => 
+                            <StatusItem 
+                                id={i.id} 
+                                item={i.item} 
+                                status={i.status}
+                                error={i.error}
+                                key={i.id}
+                            />)
+                    }
+                </div>
                 {
                     inventories.items.length > 0 ?
                     <div className={classes.delimiter_second}></div> :

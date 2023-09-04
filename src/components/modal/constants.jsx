@@ -3,6 +3,12 @@ const Regex = {
 	"dota2": /https:\/\/steamcommunity\.com\/tradeoffer\/new\/\?partner=[0-9]+&token=[A-Za-z0-9]+/i
 }
 
+const WithdrawErrors = {
+		4: "Внутренняя ошибка, повторите попытку позже",
+		5: "Предмет с нестабильной ценой, зайдите в FAQ для ознакомления",
+		2: "Происходит перевод средств, повторите попытку позже"
+}
+
 const TradeURL = {
 	"csgo": () => JSON.parse(localStorage.getItem("trade-urls"))?.steam,
 	"dota2": () => JSON.parse(localStorage.getItem("trade-urls"))?.steam
@@ -37,7 +43,7 @@ const IsRegexTradeURL = (game) => {
 };
 
 const Constants = {
-	Regex, TradeURL, IsRegexTradeURL, UpdateTradeURL, CheckUndefinedNull
+	Regex, TradeURL, IsRegexTradeURL, UpdateTradeURL, CheckUndefinedNull, WithdrawErrors
 };
 
 export default Constants;
