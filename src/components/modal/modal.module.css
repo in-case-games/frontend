@@ -14,7 +14,6 @@
 
 .sell_window {
     min-width: 400px;
-    min-height: 200px;
     max-width: 650px;
     background: var(--background_modal-window);
     border-radius: 15px;
@@ -61,7 +60,6 @@
 
 .withdraw_window {
     min-width: 400px;
-    min-height: 200px;
     max-width: 650px;
     padding: 30px 10px;
     background: var(--background_modal-window);
