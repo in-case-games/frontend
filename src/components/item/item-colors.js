@@ -10,7 +10,7 @@ export const itemGradients = {
     white: generateGradient("255, 255, 255"),
     green: generateGradient("0, 255, 30"),
     gray: generateGradient("211, 211, 211"),
-    orange: generateGradient("255, 230, 101")
+    orange: generateGradient("254, 115, 36")
 }
 
 export const itemColors = {

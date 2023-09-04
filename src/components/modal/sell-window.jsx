@@ -125,7 +125,7 @@ const SellWindow = (props) => {
         <div className={classes.sell_window}>
             <div className={classes.sell_content}>
                 <div className={classes.sell_tittle}>
-                    <Loading isLoading={isLoading} click={() => {}}/>
+                    <Loading isLoading={isLoading} click={() => {}} cursor="default"/>
                     <div className={classes.tittle}>Продажа предметов</div>
                 </div>
                 {
@@ -154,6 +154,7 @@ const SellWindow = (props) => {
                             <StatusItem 
                                 id={i.id} 
                                 item={i.item} 
+                                cost={i.cost}
                                 status={i.status}
                                 error={i.error}
                                 key={i.id}

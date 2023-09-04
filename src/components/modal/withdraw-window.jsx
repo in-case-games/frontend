@@ -195,7 +195,7 @@ const WithdrawWindow = (props) => {
         <div className={classes.withdraw_window}>
             <div className={classes.withdraw_content}>
                 <div className={classes.withdraw_tittle}>
-                    <Loading isLoading={isLoading} click={() => {}}/>
+                    <Loading isLoading={isLoading} click={() => {}} cursor="default"/>
                     <div className={classes.tittle}>Вывод предметов</div>
                 </div>
                 { 
@@ -240,6 +240,7 @@ const WithdrawWindow = (props) => {
                             <StatusItem 
                                 id={i.id} 
                                 item={i.item} 
+                                cost={i.cost}
                                 status={i.status}
                                 error={i.error}
                                 key={i.id}

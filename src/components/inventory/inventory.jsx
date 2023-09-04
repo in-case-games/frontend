@@ -64,9 +64,10 @@ const Inventory = (props) => {
 												primary = await userApi.getInventory();
 
 												pagesTemp = Math.ceil(primary.length / 20);
+												pagesTemp = pagesTemp === 0 ? 1 : pagesTemp
 				
 												setPrimaryInventory(primary);
-												setPages(pagesTemp === 0 ? 1 : pagesTemp);
+												setPages(pagesTemp);
 						
 												if(page > pagesTemp) setPage(pagesTemp);
 										}

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Item as ItemImg } from '../../assets/images/additional'
-import { InCoinWhite } from '../../assets/images/icon'
+import { InCoinWhite, Transfer } from '../../assets/images/icon'
 import { Loading } from '../сommon/button'
 import Constants from "./constants"
 import { itemColors, itemGradients } from './item-colors'
 import classes from "./status-item.module.css"
 
 const StatusItem = (props) => {
-		const [isStart, setIsStart] = useState(true);
 		const [isLoading, setIsLoading] = useState(false);
 		const [borderColor, setBorderColor] = useState(props.item.rarity);
 		const [gradientColor, setGradientColor] = useState(itemGradients[props.item.rarity]);
@@ -20,9 +19,6 @@ const StatusItem = (props) => {
 
 		useEffect(() => {
 			const interval = setInterval(() => {
-					setIsStart(false);
-
-
 					const color = props.item.rarity;
 					const borderColor = itemColors[color];
 					const gradientColor = itemGradients[color];
@@ -32,13 +28,13 @@ const StatusItem = (props) => {
 					setBorderColor(borderColor);
 					setGradientColor(gradientColor);
 					setIsLoading(props.status === "loading");
-			}, isStart ? 10 : 300);
+			}, 10);
 
 			return () => clearInterval(interval);
 	});
 
 		const getCost = () => {
-			let temp = Math.round(props.item.cost);
+			let temp = Math.round(props.cost);
 			if(temp >= 1000000) temp = `${Math.round(temp / 10) / 100000}M`
 			else if(temp >= 1000) temp = `${Math.round(temp / 10) / 100}K`
 
@@ -52,7 +48,7 @@ const StatusItem = (props) => {
 										<img alt="" href="#" src={ItemImg}/>
 								</div>
 								<div className={classes.item_info}>
-										<p className={classes.info_name}>{props.item.name.length > 30 ? props.item.name.substring(0, 30) + "..." : props.item.name}</p>
+										<p className={classes.info_name}>{props.item.name.length > 25 ? props.item.name.substring(0, 25) + "..." : props.item.name}</p>
 										<p className={classes.info_cost}>
 												{getCost()}
 												<img alt="" href="#" src={InCoinWhite}/>
@@ -61,8 +57,23 @@ const StatusItem = (props) => {
 						</div>
 						<div className={classes.status} style={{background: statusColor, cursor: cursor}}>
 								{
-									isLoading ? 
-										<Loading isLoading={isLoading} click={() => {}}/> : 
+									isLoading || props.status === "wait" ? 
+										<Loading isLoading={isLoading} click={() => {}} cursor="default"/> : 
+										null
+								}
+								{
+									props.status === "exchange" ? 
+										<img src={Transfer} alt="" className={classes.transfer_img}/> : 
+										null
+								}
+								{
+									props.status === "success" ? 
+										<div className={classes.success}>✔</div> : 
+										null
+								}
+								{
+									props.status === "cancel" ? 
+										<div className={classes.cancel}>✖</div> : 
 										null
 								}
 						</div>

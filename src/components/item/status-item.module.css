@@ -50,7 +50,23 @@
 	height: 100px;
 	width: 35px;
 	border-radius: 0 13px 13px 0;
+	color: black;
 }
+
+.success {
+	font-size: 28px;
+	color: #25ff00;
+}
+
+.cancel {
+	font-size: 28px;
+	color: #ff0000;
+}
+
+.transfer_img {
+	height: 35px;
+}
+
 .item {
 	display: flex;
 	align-items: center;

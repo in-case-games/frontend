@@ -14,15 +14,16 @@ const LazyLoadedInventory = async (props) => {
 		let endIndex = startIndex + 20;
 
 		if(endIndex > primary.length) endIndex = primary.length;
-		if(startIndex > primary.length) startIndex = endIndex - 20 > 0 ? endIndex - 20 : 0;
+		if(startIndex > primary.length) startIndex = endIndex - 20 >= 0 ? endIndex - 20 : 0;
+		if(startIndex < 0) startIndex = 0;
 
 		let loaded = [];
 
-		if(props.isAllReload || startIndex > loadedInventory.length - 1) 
+		if(primary.length >= endIndex && (props.isAllReload || startIndex > loadedInventory.length - 1)) 
 				loaded = await itemApi.getItemsByInventory(primary, startIndex, endIndex);
 		
 		if(startIndex > loadedInventory.length - 1) loadedInventory = [...loadedInventory, ...loaded];
-		else if(props.isAllReload) {
+		else if(props.isAllReload && endIndex <= loadedInventory.length) {
 				let i = 0;
 
 				for(let j = startIndex; j < endIndex; j++) { 

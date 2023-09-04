@@ -19,7 +19,7 @@ const Loading = (props) => {
 		};
 
 		return(
-			<div className={ props.isLoading ? 'btn-loading loading' : 'btn-loading' } onClick={() => handleClick()}>↻</div>
+			<div className={ props.isLoading ? 'btn-loading loading' : 'btn-loading' } onClick={() => handleClick()} style={{cursor:props.cursor !== undefined ? props.cursor : "pointer" }}>↻</div>
 		);
 };
 
