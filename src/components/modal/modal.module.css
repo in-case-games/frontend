@@ -58,6 +58,63 @@
     font-size: 14px;
 }
 
+.exchange_window {
+    min-width: 400px;
+    width: 100%;
+    background: var(--background_modal-window);
+    border-radius: 15px;
+    text-align: center;
+    padding: 30px 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.exchange_content {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
+}
+
+.exchange_counters {
+    font-size: 20px;
+    font-family: 'Nunito';
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.exchange_counters .counter_items {
+    border: 2px solid #F8B415;
+    margin-right: 5px;
+    padding: 10px 20px;
+    color: white;
+}
+
+.exchange_counters .counter_costs {
+    border: 2px solid #F8B415;
+    padding: 10px 20px;
+    color: white;
+}
+
+.exchange_content .delimiter {
+    border: 1px solid #F8B415;
+    margin: 5px 0;
+    width: 100%;
+}
+
+.exchange_tittle {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+}
+
+.exchange_tittle .tittle {
+    font-family: 'Nunito';
+    font-size: 28px;
+    margin: 0px 10px 0 5px;
+}
+
 .withdraw_window {
     min-width: 400px;
     max-width: 650px;

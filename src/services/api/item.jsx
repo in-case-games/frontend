@@ -23,6 +23,12 @@ class Item {
         return response.data.data;
     }
 
+		async getItems() {
+				const response = await api.get(RESOURCES_API_URL + "game/item");
+
+				return response.data.data;
+		}
+
 		async getItemsByInventory(inventories, startIndex, endIndex) {
 				const result = [];
 

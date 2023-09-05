@@ -80,7 +80,7 @@ const SellWindow = (props) => {
                 setIsApply(soldNot.length === 0);
                 setShowSendButton(soldNot.length > 0);
             }
-        }, 100);
+        }, 10);
 
         return () => clearInterval(interval);
     });
@@ -155,6 +155,7 @@ const SellWindow = (props) => {
                                 id={i.id} 
                                 item={i.item} 
                                 cost={i.cost}
+                                isLoading={isLoading}
                                 status={i.status}
                                 error={i.error}
                                 key={i.id}

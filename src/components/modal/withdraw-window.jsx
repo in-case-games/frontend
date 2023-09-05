@@ -242,6 +242,8 @@ const WithdrawWindow = (props) => {
                                 item={i.item} 
                                 cost={i.cost}
                                 status={i.status}
+                                isLoading={isLoading}
+                                exchangeItem={props.setExchangeItem}
                                 error={i.error}
                                 key={i.id}
                             />)

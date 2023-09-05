@@ -1,4 +1,5 @@
 export { default as EmailSendWindow } from "./email-send-window"
+export { default as ExchangeWindow } from "./exchange-window"
 export { default as Modal } from "./modal"
 export { default as PaymentWindow } from "./payment-window"
 export { default as SellWindow } from "./sell-window"

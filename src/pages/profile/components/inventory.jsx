@@ -9,20 +9,24 @@ const InventoryContent = () => {
 		const [selectItem, setSelectItem] = useState(null);
 		const [withdrawActive, setWithdrawActive] = useState(false);
 		const [sellActive, setSellActive] = useState(false);
+		const [exchangeActive, setExchangeActive] = useState(false);
 
 		const active = {
 				"sell": () => setSellActive(true),
 				"withdraw": () => setWithdrawActive(true),
+				"exchange": () => setExchangeActive(true),
 				"close": () => { 
 						setSellActive(false);
 						setWithdrawActive(false); 
+						setExchangeActive(false);
 						setSelectItem(null);
 				}
 		}
 
 		const listActive = {
 				"withdraw": () => withdrawActive,
-				"sell": () => sellActive
+				"sell": () => sellActive,
+				"exchange": () => exchangeActive
 		}
 
 		const isActive = (name) => listActive[name]();
@@ -30,6 +34,7 @@ const InventoryContent = () => {
 		const exchangeModal = (modal) => {
 				setWithdrawActive(false);
 				setSellActive(false);
+				setExchangeActive(false);
 
 				active[modal]();
 		};

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { User } from '../../services/api'
-import { Modal, SellWindow, WithdrawWindow } from "../modal"
+import { ExchangeWindow, Modal, SellWindow, WithdrawWindow } from "../modal"
 import { CounterSlider } from '../slider'
 import classes from "./inventory.module.css"
 import LazyLoadedInventory from './lazy-loaded-inventory'
@@ -19,6 +19,7 @@ const Inventory = (props) => {
 		const [primaryInventory, setPrimaryInventory] = useState([]);
 		const [loadedInventory, setLoadedInventory] = useState([]);
 		const [showInventory, setShowInventory] = useState(null);
+		const [exchangeItem, setExchangeItem] = useState(null);
 		const [pages, setPages] = useState(1);
 		const [page, setPage] = useState(1);
 
@@ -130,6 +131,24 @@ const Inventory = (props) => {
 							page={page}
 							eventClick={sliderClick}
 						/>
+            {
+                props.isActiveModal("exchange") ?
+                <Modal 
+										active={props.isActiveModal("exchange")} 
+										clickChange={() => { 
+											props.exchangeModal("withdraw");
+											props.setIsLoading(true);
+										}} 
+                    content={
+                        <ExchangeWindow 
+                            inventory={exchangeItem}
+														selectItem={props.selectItem} 
+														setSelectItem={props.setSelectItem}
+														selectItems={props.selectItems}
+														setSelectItems={props.setSelectItems}
+                        />}
+                /> : null
+            }
 						{
 								props.isActiveModal("withdraw") ? 
 								<Modal 
@@ -144,6 +163,11 @@ const Inventory = (props) => {
 											setSelectItem={props.setSelectItem}
 											selectItems={props.selectItems}
 											setSelectItems={props.setSelectItems}
+											setExchangeItem={(item) => { 
+													setExchangeItem(item);
+													props.exchangeModal("exchange"); 
+													props.setIsLoading(true);
+											}}
 											pullPrimaryInventory={() => {
 													let startIndex = (page - 1) * 20;
 													let endIndex = startIndex + 20;

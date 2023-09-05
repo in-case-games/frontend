@@ -14,7 +14,13 @@ const StatusItem = (props) => {
 		const [cursor, setCursor] = useState('default');
 
 		const handleClick = () => {
-
+				if(props.status === "exchange") {
+						props.exchangeItem({
+							id: props.id,
+							item: props.item,
+							cost: props.cost
+						});
+				}
 		};
 
 		useEffect(() => {
