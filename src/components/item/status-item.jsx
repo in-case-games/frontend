@@ -37,7 +37,7 @@ const StatusItem = (props) => {
 			}, 10);
 
 			return () => clearInterval(interval);
-	});
+		});
 
 		const getCost = () => {
 			let temp = Math.round(props.cost);

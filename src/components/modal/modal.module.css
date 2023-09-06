@@ -84,17 +84,21 @@
     margin-top: 10px;
 }
 
-.exchange_counters .counter_items {
+.exchange_counters .counter {
     border: 2px solid #F8B415;
-    margin-right: 5px;
+    margin: 0 5px;
     padding: 10px 20px;
     color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
 }
 
-.exchange_counters .counter_costs {
-    border: 2px solid #F8B415;
-    padding: 10px 20px;
-    color: white;
+.counter img {
+    width: 25px;
+    height: 25px;
+    margin-left: 5px;
 }
 
 .exchange_content .delimiter {
