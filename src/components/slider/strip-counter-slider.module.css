@@ -1,0 +1,27 @@
+.strip_counter_slider {
+	height: 100px;
+	width: 35px;
+}
+
+input[type=range][orient=vertical]
+{
+    writing-mode: bt-lr;
+    -webkit-appearance: slider-vertical;
+		background: #2f2f2f;
+    width: 35px;
+		border-radius: 0px;
+    height: 100px;
+		appearance: none;
+		overflow: hidden;
+		outline: none;
+}
+
+input[type=range][orient=vertical]::-webkit-slider-thumb {
+		width: 35px;
+		height: 1px;
+}
+
+input[type=range][orient=vertical]::-moz-range-thumb {
+	width: 35px;
+	height: 1px;
+}

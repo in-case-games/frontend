@@ -250,6 +250,22 @@ button {
     background-color: var(--background_anchor_button);
 }
 
+.status-update-date {
+    height: 100px;
+    width: 15px;
+    border-radius: 0 13px 13px 0;
+    background: #2f2f2f;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+}
+
+.status-update-date .status-strip {
+    height: 100px;
+    width: 15px;
+    border-radius: 0 13px 13px 0;
+}
+
 .btn-anchor .anchor-inside {
     display: block;
     width: 200px;

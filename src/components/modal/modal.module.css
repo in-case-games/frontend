@@ -95,6 +95,11 @@
     width: 100px;
 }
 
+.exchange_content .not_found {
+    font-family: "Nunito";
+    font-size: 20px;
+}
+
 .counter img {
     width: 25px;
     height: 25px;

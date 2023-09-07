@@ -96,22 +96,20 @@ const ExchangeWindow = (props) => {
                 <Loading isLoading={isLoading} click={() => {}} cursor="default"/>
                 <div className={classes.tittle}>Обмен предметов</div>
             </div>
-						{
-								exchangeItems.items.length > 0 ?
-								<div className={classes.btn_main} onClick={() => changeClick()}>Обменять</div> :
-								null
-						}
+						<div className={classes.btn_main} onClick={() => changeClick()}>Обменять</div>
 						<div className={classes.delimiter}></div>
-						<div className={classes.choose_items} style={showItems.length > 3 ? {overflowY: "scroll"} : {overflowY: 'hidden'}}>
-								{showItems.map(i => <ExchangeItem 
-									key={i.id} 
-									item={i} 
-									selectItems={exchangeItems}
-									setSelectItems={setExchangeItems}
-									clickItem={clickItem}
-									setClickItem={setClickItem}/>)
-								}
-						</div>
+						{
+								showItems.length > 0 ?
+								<div className={classes.choose_items} style={showItems.length > 3 ? {overflowY: "scroll"} : {overflowY: 'hidden'}}>
+										{showItems.map(i => <ExchangeItem 
+											key={i.id} 
+											item={i} 
+											selectItems={exchangeItems}
+											setSelectItems={setExchangeItems}
+											clickItem={clickItem}
+											setClickItem={setClickItem}/>)}
+								</div> : <div className={classes.not_found}>Предметы не найдены</div>
+						}
 						<div className={classes.delimiter}></div>
 						<div className={classes.exchange_counters}>
 								<div className={classes.counter} style={{background: "green"}}>

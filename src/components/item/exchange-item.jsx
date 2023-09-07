@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Item as ItemImg } from '../../assets/images/additional'
 import { InCoinWhite } from '../../assets/images/icon'
+import StripCounterSlider from '../slider/strip-counter-slider'
+import StatusUpdateDate from '../сommon/button/status-update-date'
 import classes from "./exchange-item.module.css"
 import { itemColors, itemGradients } from './item-colors'
 
@@ -88,7 +90,10 @@ const ExchangeItem = (props) => {
 								</p>
 						</div>
 				</div>
-				<div className={classes.counter}></div>
+				<div className={classes.buttons}>
+						<StripCounterSlider />
+						<StatusUpdateDate updateDate={props.item.updateDate} secondsUpdate={300}/>
+				</div>
 			</div>
 		);
 };
