@@ -59,8 +59,8 @@
 }
 
 .exchange_window {
-    min-width: 400px;
-    width: 100%;
+    width: 800px;
+    height: 400px;
     background: var(--background_modal-window);
     border-radius: 15px;
     text-align: center;
@@ -71,6 +71,7 @@
 
 .exchange_content {
     display: flex;
+    width: 800px;
     justify-content: space-evenly;
     flex-direction: column;
     align-items: center;
@@ -109,7 +110,12 @@
 .exchange_content .delimiter {
     border: 1px solid #F8B415;
     margin: 5px 0;
-    width: 100%;
+    width: 80%;
+}
+
+.exchange_content .items {
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .exchange_tittle {

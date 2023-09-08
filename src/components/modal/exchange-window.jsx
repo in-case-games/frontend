@@ -98,9 +98,15 @@ const ExchangeWindow = (props) => {
             </div>
 						<div className={classes.btn_main} onClick={() => changeClick()}>Обменять</div>
 						<div className={classes.delimiter}></div>
+						<input 
+							maxLength={50}
+							className={classes.input_form} 
+							placeholder="Название предмета" 
+							name="name-item"
+						/>
 						{
 								showItems.length > 0 ?
-								<div className={classes.choose_items} style={showItems.length > 3 ? {overflowY: "scroll"} : {overflowY: 'hidden'}}>
+								<div className={classes.items} style={showItems.length > 3 ? {overflowY: "scroll"} : {overflowY: 'hidden'}}>
 										{showItems.map(i => <ExchangeItem 
 											key={i.id} 
 											item={i} 
