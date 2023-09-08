@@ -1,27 +1,43 @@
 .strip_counter_slider {
 	height: 100px;
-	width: 35px;
+	width: 36px;
+	position: relative;
 }
 
-input[type=range][orient=vertical]
+#strip_slider
 {
-    writing-mode: bt-lr;
-    -webkit-appearance: slider-vertical;
-		background: #2f2f2f;
-    width: 35px;
-		border-radius: 0px;
-    height: 100px;
-		appearance: none;
-		overflow: hidden;
-		outline: none;
+	writing-mode: bt-lr;
+	appearance: none;
+	-webkit-appearance: none;
+	background: #2f2f2f;
+	width: 100px;
+	position: absolute;
+	bottom: 32px;
+	height: 36px;
+	right: -32px;
+	overflow: hidden;
+	outline: none;
+	-webkit-transform: rotate(270deg);
 }
 
-input[type=range][orient=vertical]::-webkit-slider-thumb {
-		width: 35px;
-		height: 1px;
+#strip_slider::-webkit-slider-thumb {
+	appearance: none;
+	-webkit-appearance: none;
+	background: white;
+	box-shadow: -100px 0 0 100px rgb(97, 97, 97);
+	cursor: pointer;
+	border: 0;
+	width: 5px;
+	height: 36px;
 }
 
-input[type=range][orient=vertical]::-moz-range-thumb {
-	width: 35px;
-	height: 1px;
+#strip_slider::-moz-range-thumb {
+	appearance: none;
+	-webkit-appearance: none;
+	background: white;
+	box-shadow: -100px 0 0 100px rgb(97, 97, 97);
+	cursor: pointer;
+	border: 0;
+	width: 5px;
+	height: 36px;
 }

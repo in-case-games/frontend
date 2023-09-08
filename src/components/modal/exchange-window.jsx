@@ -28,7 +28,7 @@ const ExchangeWindow = (props) => {
 
 		const getCountItems = () => {
 				let count = 0;
-
+				
 				exchangeItems.items.forEach(i => count += i.count);
 
 				return count;

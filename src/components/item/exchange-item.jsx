@@ -30,7 +30,7 @@ const ExchangeItem = (props) => {
 
 					setBorderColor(borderColor);
 					setGradientColor(gradientColor);
-			}, isStart ? 10 : 300);
+			}, isStart ? 10 : 100);
 
 			return () => clearInterval(interval);
 		});
@@ -38,12 +38,45 @@ const ExchangeItem = (props) => {
 		const getCountItems = () => {
 			let count = 0;
 
-			props.selectItems.items.forEach((i) => {
-				count += i.count;
-			});
+			props.selectItems.items.forEach((i) => count += i.count);
 
 			return count;
 		};
+
+		const clickRange = (value) => {
+				let temp = props.selectItems.items;
+
+				const item = temp.find(i => i.id === props.item.id);
+				const index = temp.indexOf(item);
+				let num = Number(value);
+
+				if(num > 10) num = 10;
+				else if(num <= 0) num = 0;
+
+				if(item === undefined && getCountItems() <= 10 - num) {
+						temp.push({
+							id: props.item.id,
+							cost: props.item.cost,
+							count: num
+						})
+				}
+				else if(item !== undefined && num === 0) temp.splice(index, 1);
+				else if(item !== undefined && getCountItems() <= 10 - (num - temp[index].count)) 
+						temp[index].count = num;
+				
+				props.setSelectItems({...props.selectItems, temp});
+				props.setClickItem(true);
+		};
+
+		const getCountItem = () => {
+				let temp = props.selectItems.items;
+
+				const item = temp.find(i => i.id === props.item.id);
+				const index = temp.indexOf(item);
+
+				if(item === undefined) return 0
+				else return temp[index].count;
+		}
 
 		const handleClick = () => {
 				let temp = props.selectItems.items;
@@ -61,8 +94,8 @@ const ExchangeItem = (props) => {
 				else if(item !== undefined) {
 						const index = temp.indexOf(item);
 
-						temp.splice(index, 1)
-						const newSelectItems = {...props.selectItems, temp}
+						temp.splice(index, 1);
+						const newSelectItems = {...props.selectItems, temp};
 						props.setSelectItems(newSelectItems);
 				}
 
@@ -91,7 +124,7 @@ const ExchangeItem = (props) => {
 						</div>
 				</div>
 				<div className={classes.buttons}>
-						<StripCounterSlider />
+						<StripCounterSlider value={() => getCountItem()} change={clickRange}/>
 						<StatusUpdateDate updateDate={props.item.updateDate} secondsUpdate={300}/>
 				</div>
 			</div>
