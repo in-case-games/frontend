@@ -166,25 +166,30 @@ const WithdrawWindow = (props) => {
                 
                 if(props.selectItem === null && props.selectItems.items.length === 0) 
                     ids = props.pullPrimaryInventory().map(i => i.id);
-                else if(props.selectItem === null) 
+                else if(props.selectItem === null && props.selectItems.items.length > 0) 
                     ids = props.selectItems.items;
                 else if(props.selectItem !== null) 
                     ids.push(props.selectItem);
+                try {
+                    const inventories = await userApi.getInventoriesByIds(ids);
 
-                const inventories = await userApi.getInventoriesByIds(ids);
-                
-                const inventoriesAdditional = await itemApi
-                    .getItemsByInventory(inventories, 0, inventories.length);
-
-                inventoriesAdditional.forEach((i) => {
-                    i.status = "wait"; 
-                    i.error = null;
-                });
-                
-                setInventories({ ...inventories, items: inventoriesAdditional });
-
-                setIsLoading(false);
-                setBannedRefresh(false);
+                    const inventoriesAdditional = await itemApi
+                        .getItemsByInventory(inventories, 0, inventories.length);
+    
+                    inventoriesAdditional.forEach((i) => {
+                        i.status = "wait"; 
+                        i.error = null;
+                    });
+                    
+                    setInventories({ ...inventories, items: inventoriesAdditional });
+                }
+                catch(err) { 
+                    
+                }
+                finally {
+                    setIsLoading(false);
+                    setBannedRefresh(false);
+                }
             }
         }, 100);
 

@@ -9,13 +9,68 @@ const ExchangeWindow = (props) => {
 		const [isLoading, setIsLoading] = useState(true);
 		const [clickItem, setClickItem] = useState(false);
 		const [bannedRefresh, setBannedRefresh] = useState(false);
-		const [exchangeItems, setExchangeItems] = useState({ items: []});
+
 		const [allowedCost, setAllowedCost] = useState(Math.floor(props.inventory.cost));
+		const [filter, setFilter] = useState("");
+
+		const [exchangeItems, setExchangeItems] = useState({ items: []});
 		const [primaryItems, setPrimaryItems] = useState([]);
 		const [showItems, setShowItems] = useState([]);
 
-		const changeClick = () => {
+		const changeClick = async () => {
+				if(allowedCost >= 0) {
+						const itemApi = new Item();
+
+						const index = props.selectItems.items.indexOf(props.inventory.id);
+						
+						removeSelectItem(index);
+
+						if(exchangeItems.items.length === 0) {
+								await itemApi.sellItem(props.inventory.id);
+								props.closeWindow();
+						}
+						else {
+
+						}
+				}
 		};
+
+		const removeSelectItem = (index) => {
+				if(props.selectItem === props.inventory.id) props.setSelectItem(null);
+				else if(index > -1) {
+						let tempSelectItems = props.selectItems.items;
+						tempSelectItems.splice(index, 1); 
+						props.setSelectItems({...props.selectItems, ...tempSelectItems});
+				}
+		} 
+
+		const inputFilter = (value) => {
+				if(!isLoading && !bannedRefresh && !clickItem) {
+						const show = [];
+						const ids = [];
+		
+						exchangeItems.items.forEach(i => ids.push(i.id));
+
+						if(value === "") {
+							for(let i = 0; i < primaryItems.length; i++) {
+								const item = primaryItems[i];
+		
+								if(item.cost <= allowedCost || ids.indexOf(item.id) > -1) show.push(item);
+							}
+						}
+						else {
+							for(let i = 0; i < primaryItems.length; i++) {
+								const item = primaryItems[i];
+								const name = item.name.toLowerCase();
+				
+								if(name.startsWith(value.toLowerCase())) show.push(item);
+							}
+						}
+		
+						setFilter(value);
+						setShowItems(show);
+				}
+		}
 
 		const changeCost = (cost, rounding = (c) => Math.floor(c)) => {
 				let temp = rounding(cost);
@@ -63,10 +118,20 @@ const ExchangeWindow = (props) => {
 										ids.push(i.id);
 								});
 									
-								for(let i = 0; i < primary.length; i++) {
+								if(filter === "") {
+									for(let i = 0; i < primary.length; i++) {
 										const item = primary[i];
 				
 										if(item.cost <= cost || ids.indexOf(item.id) > -1) show.push(item);
+									}
+								}
+								else {
+									for(let i = 0; i < primary.length; i++) {
+										const item = primary[i];
+										const name = item.name.toLowerCase();
+				
+										if(name.startsWith(filter.toLowerCase())) show.push(item);
+									}
 								}
 
 								setAllowedCost(cost);
@@ -99,10 +164,12 @@ const ExchangeWindow = (props) => {
 						<div className={classes.btn_main} onClick={() => changeClick()}>Обменять</div>
 						<div className={classes.delimiter}></div>
 						<input 
-							maxLength={50}
-							className={classes.input_form} 
-							placeholder="Название предмета" 
-							name="name-item"
+								maxLength={50}
+								className={classes.input_form} 
+								placeholder="Название предмета" 
+								value={filter} 
+								onInput={e => inputFilter(e.target.value)}
+								name="name-item"
 						/>
 						{
 								showItems.length > 0 ?
@@ -110,6 +177,7 @@ const ExchangeWindow = (props) => {
 										{showItems.map(i => <ExchangeItem 
 											key={i.id} 
 											item={i} 
+											allowedCost={allowedCost}
 											selectItems={exchangeItems}
 											setSelectItems={setExchangeItems}
 											clickItem={clickItem}

@@ -146,6 +146,10 @@ const Inventory = (props) => {
 														setSelectItem={props.setSelectItem}
 														selectItems={props.selectItems}
 														setSelectItems={props.setSelectItems}
+														closeWindow={() => { 
+															props.exchangeModal("withdraw");
+															props.setIsLoading(true);
+														}}
                         />}
                 /> : null
             }
@@ -178,6 +182,10 @@ const Inventory = (props) => {
 													return primaryInventory.slice(startIndex, endIndex)
 												}
 											}
+											closeWindow={() => { 
+												props.exchangeModal("close");
+												props.setIsLoading(true);
+											}}
 										/>}
             		/> : null
 						}
@@ -205,6 +213,10 @@ const Inventory = (props) => {
 													return primaryInventory.slice(startIndex, endIndex)
 												}
 											}
+											closeWindow={() => { 
+												props.exchangeModal("close");
+												props.setIsLoading(true);
+											}}
 										/>}
             		/> : null
 						}

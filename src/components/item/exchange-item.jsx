@@ -24,7 +24,7 @@ const ExchangeItem = (props) => {
 					setIsStart(false);
 					let temp = props.selectItems.items;
 					const isSelected = temp.find(i => i.id === props.item.id) !== undefined;
-					const color = props.item.rarity ?? "white";
+					const color = props.item.cost <= props.allowedCost ? props.item.rarity : "gray";
 					const borderColor = isSelected ? "green" : itemColors[color];
 					const gradientColor = itemGradients[isSelected ? "green" : color];
 
@@ -100,7 +100,7 @@ const ExchangeItem = (props) => {
 				}
 
 				const isSelected = temp.find(i => i.id === props.item.id) !== undefined;
-				const color = props.item.rarity ?? "white";
+				const color = props.item.cost <= props.allowedCost ? props.item.rarity : "gray";
 				const borderColor = isSelected ? "green" : itemColors[color];
 				const gradientColor = itemGradients[isSelected ? "green" : color];
 
