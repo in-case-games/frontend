@@ -95,7 +95,7 @@ const WithdrawWindow = (props) => {
             catch(err) { 
                 const code = err.response.data.error.code;
 
-                temp[i].status = "exchange";
+                temp[i].status = "cancel";
                 temp[i].error = Constants.WithdrawErrors[code] === undefined ? 
                     "Подождите или напишите в тех. поддержку" : 
                     Constants.WithdrawErrors[code];

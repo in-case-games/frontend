@@ -25,13 +25,10 @@ const ExchangeWindow = (props) => {
 						
 						removeSelectItem(index);
 
-						if(exchangeItems.items.length === 0) {
-								await itemApi.sellItem(props.inventory.id);
-								props.closeWindow();
-						}
-						else {
+						if(exchangeItems.items.length === 0) await itemApi.sellItem(props.inventory.id);
+						else await itemApi.exchangeItems(props.inventory.id, exchangeItems.items);
 
-						}
+						props.closeWindow();
 				}
 		};
 
