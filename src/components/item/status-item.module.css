@@ -52,6 +52,25 @@
 	width: 35px;
 	border-radius: 0 13px 13px 0;
 	color: black;
+	cursor: pointer;
+}
+
+.status:hover .error {
+	visibility: visible;
+	transition: all 400ms ease-out;
+	opacity: 1;
+}
+
+.error {
+	opacity: 0;
+	visibility: hidden;
+	position: absolute;
+	width: 200px;
+  color: #F8B415;
+	background: rgb(85, 85, 85);
+	padding: 20px 0;
+	border-radius: 10px;
+	transition: all 400ms ease-out;
 }
 
 .success {

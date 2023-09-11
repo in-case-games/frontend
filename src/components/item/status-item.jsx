@@ -68,6 +68,12 @@ const StatusItem = (props) => {
 										null
 								}
 								{
+									props.error !== null ? 
+										<div className={classes.error}>
+											{props.error}
+										</div> : null
+								}
+								{
 									props.status === "exchange" ? 
 										<img src={Transfer} alt="" className={classes.transfer_img}/> : 
 										null

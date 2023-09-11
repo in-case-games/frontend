@@ -50,14 +50,14 @@ const InventoryContent = () => {
 		
 		return(
 				<div className='inventory-content'>
-						<div className="inventory-header">
-								<div className="inventory-tittle">
-										<div className='inventory-group'>
+						<div className="profile-header">
+								<div className="profile-tittle">
+										<div className='profile-group'>
 												<Loading isLoading={isLoading} click={() => setIsLoading(true)}/>
-										    <div className="inventory-name">Мои предметы: </div>
+										    <div className="profile-name">Мои предметы: </div>
 												<Filter filter={filter} setFilter={setFilter} types={types}/>
 										</div>
-										<div className='inventory-group'>
+										<div className='profile-group'>
 												<Withdraw 
 													text={selectItems.items.length === 0 ? "Вывести всё" : "Вывести"}
 													click={() => exchangeModal("withdraw")}
@@ -68,7 +68,7 @@ const InventoryContent = () => {
 												/>
 										</div>
 								</div>
-								<div className="inventory-delimiter"></div>
+								<div className="profile-delimiter"></div>
 						</div>
 						<Inventory 
 							selectItems={selectItems} 

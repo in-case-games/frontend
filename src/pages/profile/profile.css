@@ -12,44 +12,46 @@
 
 .panel-content {
 	padding: 0 40px;
+	width: 100%;
 }
 
-.inventory-header {
+.profile-header {
 	display: flex;
 	flex-direction: column;
 }
 
-.inventory-delimiter {
+.profile-delimiter {
 	border: 1px solid #F8B415;
 	margin-top: 5px;
+	width: 100%;
 }
 
-.inventory-tittle {
+.profile-tittle {
 	display: flex;
 	align-items: baseline;
 	padding: 0 20px;
 	justify-content: space-between;
 }
 
-.inventory-group {
+.profile-group {
 	display: flex;
 	padding: 0 20px;
 	align-items: center;
 }
 
-.inventory-group .btn-withdraw{
+.profile-group .btn-withdraw{
 	margin-right: 20px;
 }
 
-.inventory-group .btn-loading {
+.profile-group .btn-loading {
 	margin-right: 20px;
 }
 
-.inventory-group .btn-filter {
+.profile-group .btn-filter {
 	margin-top: 5px;
 }
 
-.inventory-name {
+.profile-name {
 	font-family: 'Play';
 	font-size: 30px;
 	margin-right: 20px;

@@ -8,10 +8,6 @@ const UserPanel = () => {
 		const [content, setContent] = useState("profile");
 		const [show, setShow] = useState(null);
 
-		const exchange = (content) => {
-				setContent(content);
-		};
-
 		useEffect(() => {
       const interval = setInterval(async () => {
         try {
@@ -32,7 +28,7 @@ const UserPanel = () => {
 
 				return(show ?
 					<div className='user-panel'>
-							<PanelBar exchange={exchange} active={content}/>
+							<PanelBar exchange={(content) => setContent(content)} active={content}/>
 							<PanelContent active={content}/>
 					</div> : 
 					<div>Вы не авторизованы</div>);

@@ -139,6 +139,7 @@
     text-align: center;
     display: flex;
     justify-content: center;
+    position: relative;
 }
 
 .withdraw_items {
