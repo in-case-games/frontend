@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { read_cookie } from 'sfcookies'
 import TokenService from '../../../services/token'
 import PanelBar from './panel-bar'
 import PanelContent from './panel-content'
@@ -11,7 +10,7 @@ const UserPanel = () => {
 		useEffect(() => {
       const interval = setInterval(async () => {
         try {
-            setShow(read_cookie("user-id").length !== 0 && TokenService.getExpiresAccessToken());
+            setShow(TokenService.getExpiresAccessToken());
         } 
         catch (err) {
             setShow(false);

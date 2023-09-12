@@ -30,10 +30,7 @@ class User {
     async get() {
         const response = await api.get(RESOURCES_API_URL + "user");
         const user = response.data.data;
-
-        bake_cookie("user-id", user.id);
-        bake_cookie("user-login", user.login);
-
+        
         return user;
     }
     async getRouletteOpenings() {

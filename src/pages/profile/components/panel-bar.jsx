@@ -10,8 +10,6 @@ const PanelBar = (props) => {
 		const handleClick = () => {
 				TokenService.clearUser();
 				delete_cookie("user-balance");
-				delete_cookie("user-id");
-				delete_cookie("user-login");
 		};
 		return(
 				<div className='panel-bar'>

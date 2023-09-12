@@ -11,9 +11,9 @@ const PanelContent = (props) => {
 							null
 						}
 						{
-								props.active === "inventory" ? 
-								<InventoryContent/> : 
-								null
+							props.active === "inventory" ? 
+							<InventoryContent/> : 
+							null
 						}
 				</div>
 		);

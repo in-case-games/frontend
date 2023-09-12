@@ -1,0 +1,59 @@
+.profile_setting {
+}
+.setting_line {
+	display: flex;
+	border: 1px #292827 solid;
+  padding: 20px 0;
+}
+.setting_line:hover {
+	background: rgb(54, 54, 59, 0.2);
+}
+.setting_img {
+	position: relative;
+	display: inline-block;
+}
+.user_logo {
+	background-repeat: no-repeat;
+	background-position: 50%;
+	border-radius: 50%;
+	width: 120px;
+	height: 120px;
+	cursor: pointer;
+	margin: 0px 20px;
+	object-fit: cover;
+	-webkit-filter: grayscale(0%);
+	filter: grayscale(0%);
+	transition: all 0.3s ease-out;
+}
+
+.setting_line:hover .user_logo{
+	-webkit-filter: grayscale(100%);
+	filter: grayscale(100%);
+	background: gray;
+	transition: all 0.3s ease-out;
+}
+
+.setting_line:hover .load_icon{
+	opacity: 1;
+	visibility: visible;
+	transition: all 0.3s ease-out;
+}
+
+.load_icon {
+	transition: all 0.3s ease-out;
+	opacity: 0;
+	visibility: hidden;
+	position: absolute;
+	cursor: pointer;
+	left: 63px;
+	top: 40px;
+	height: 35px;
+	width: 35px;
+	background: gray;
+	border-radius: 50%;
+}
+
+.setting_data {
+	display: flex;
+	flex-direction: column;
+}
