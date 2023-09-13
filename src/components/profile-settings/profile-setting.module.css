@@ -124,3 +124,7 @@
 	transition: all 0.3s ease-out;
 	cursor: pointer;
 }
+
+.input_data {
+	margin: 5px 0;
+}
