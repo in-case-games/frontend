@@ -13,6 +13,7 @@ const ProfileContent = (props) => {
 		const [loadImageActive, setLoadImageActive] = useState(false);
 		const [password, setPassword] = useState("");
 		const [controllerConfirmEmail, setControllerConfirmEmail] = useState(null);
+		const [passwordError, setPasswordError] = useState(false);
 
 		const controllersConfirmEmail = {
 			"email": async () => await emailApi.sendChangeEmail(password),
@@ -68,6 +69,7 @@ const ProfileContent = (props) => {
 													placeholder="Пароль" 
 													value={password} 
 													type='password'
+													style={{borderColor: passwordError ? "red" : "#F8B415"}}
 													onInput={e => setPassword(e.target.value)}
 													name="password"
 												/>
@@ -80,7 +82,8 @@ const ProfileContent = (props) => {
 															exchangeModal("email");
 														}
 														catch(err) {
-															
+															console.log(err);
+															setPasswordError(true);
 														}
 													}}
 												/>
@@ -91,6 +94,7 @@ const ProfileContent = (props) => {
 													onClick={_ => {
 														setPassword(null);
 														setControllerConfirmEmail(null);
+														setPasswordError(false);
 													}}
 												/>
 										</div> : null

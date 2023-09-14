@@ -6,22 +6,20 @@ import TokenService from '../../../services/token'
 import classes from "./handler.module.css"
 
 //TODO Loading
-const PasswordHandler = () => {
+const LoginHandler = () => {
 		const emailApi = new Email();
 		
     const [searchParams] = useSearchParams();
-		const [password, setPassword] = useState("");
-		const [confirmPassword, setConfirmPassword] = useState("");
+		const [login, setLogin] = useState("");
 		const [errorMessage, setErrorMessage] = useState("");
 
-		const sendPassword = async () => {
+		const sendLogin = async () => {
 				const token = searchParams.get("token");
 
 				if(!token) setErrorMessage("Токен не валидный, повторите все еще раз");
-				else if(password !== confirmPassword) setErrorMessage("Пароли не сходятся");
-				else if(password) {
+				else if(login) {
 					try {
-							await emailApi.sendConfirmPassword(password, token);
+							await emailApi.sendConfirmLogin(login, token);
 							TokenService.removeUser();
 							delete_cookie("user-balance");
 					}
@@ -34,29 +32,19 @@ const PasswordHandler = () => {
 
     return(
         <div className={classes.handler}>
-						<h1>Подтвердите новый пароль</h1>
+						<h1>Подтвердите новый логин</h1>
 						<div className={classes.error_message}>{errorMessage}</div>
 						<input 
 								maxLength={50}
 								className={classes.input_form} 
-								placeholder="Новый пароль" 
-								value={password} 
-								type='password'
-								onInput={e => setPassword(e.target.value)}
-								name="password"
+								placeholder="Новый логин" 
+								value={login} 
+								onInput={e => setLogin(e.target.value)}
+								name="login"
 						/>
-						<input 
-								maxLength={50}
-								className={classes.input_form} 
-								placeholder="Еще раз пароль" 
-								value={confirmPassword} 
-								type='password'
-								onInput={e => setConfirmPassword(e.target.value)}
-								name="password"
-						/>
-						<div className={classes.btn_main} onClick={() => sendPassword()}>Отправить</div>
+						<div className={classes.btn_main} onClick={() => sendLogin()}>Отправить</div>
         </div>
     );
 }
 
-export default PasswordHandler;
+export default LoginHandler;

@@ -8,7 +8,7 @@ import TokenService from '../../../services/token'
 
 const PanelBar = (props) => {
 		const handleClick = () => {
-				TokenService.clearUser();
+				TokenService.removeUser();
 				delete_cookie("user-balance");
 		};
 		return(

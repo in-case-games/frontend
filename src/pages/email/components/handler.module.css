@@ -33,7 +33,7 @@
 	margin: 10px auto;
 }
 
-.password_handler { 
+.handler { 
 	display: flex;
 	flex-direction: column;
 	align-items: center;

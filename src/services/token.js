@@ -7,7 +7,6 @@ const getRefreshToken = () => {
 const getTokenClaims = (token) => jwtDecode(token);
 const getRefreshClaims = () => getTokenClaims(getRefreshToken());
 const getAccessClaims = () => getTokenClaims(getAccessToken());
-const clearUser = () => localStorage.removeItem("user");
   
 const getAccessToken = () => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -57,7 +56,6 @@ const TokenService = {
     getAccessClaims,
     getRefreshClaims,
     updateAccessToken,
-    clearUser,
     getUser,
     setUser,
     removeUser,

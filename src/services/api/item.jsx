@@ -13,7 +13,13 @@ class Item {
 				return response.data.data;
 		}
 		async exchangeItems(id, body) {
-			const response = await api.post(RESOURCES_API_URL + `exchange/${id}`, body);
+			const response = await api.post(
+				RESOURCES_API_URL + `user/inventory/exchange`, 
+				{
+					inventoryId: id,
+					items: body
+				}
+			);
 
 			return response.data.data;
 		}

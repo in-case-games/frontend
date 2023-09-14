@@ -10,7 +10,7 @@ class Email extends React.Component {
                 <Helmet>
                     <title>{this.title}</title>
                 </Helmet>
-                <this.props.handler/>
+                {this.props.handler}
             </div>
         );
     }
