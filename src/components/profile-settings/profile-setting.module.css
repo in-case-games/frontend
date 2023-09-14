@@ -1,12 +1,25 @@
 .profile_setting {
 }
+.setting_main {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
 .setting_line {
 	display: flex;
 	border: 1px #292827 solid;
   padding: 20px 0;
+	flex-wrap: wrap;
+	justify-content: space-between;
 }
 .setting_line:hover {
 	background: rgb(54, 54, 59, 0.2);
+}
+.setting_bar {
+	display: flex;
+	flex-direction: column;
+  align-items: flex-end;
+	justify-content: flex-end;
 }
 .setting_img {
 	position: relative;
@@ -45,6 +58,18 @@
 	transition: all 0.3s ease-out;
 }
 
+.setting_bar {
+	opacity: 0;
+	visibility: hidden;
+	transition: all 0.3s ease-out;
+}
+
+.setting_line:hover .setting_bar {
+	opacity: 1;
+	visibility: visible;
+	transition: all 0.3s ease-out;
+}
+
 .setting_line:hover .setting_data .input .input_send {
 	opacity: 1;
 	visibility: visible;
@@ -76,22 +101,13 @@
 	font-family: 'Play';
 }
 
-.input, .data {
-	display: flex;
-	align-items: center;
+.data_tittle {
+	margin-bottom: 2px;
 }
 
-.input input {
-	padding: 10px 20px;
-	min-width: 120px;
-	height: 25px;
-	font-size: 16px;
-	font-family: Nunito;
-	color: var(--main-color);
-	border: 2px solid var(--main-color);
-	border-radius: 8px;
-	background: none;
-	outline: none;
+.data {
+	display: flex;
+	align-items: center;
 }
 
 .data_edit {
@@ -127,4 +143,7 @@
 
 .input_data {
 	margin: 5px 0;
+	display: flex;
+  justify-content: flex-start;
+	align-items: center;
 }

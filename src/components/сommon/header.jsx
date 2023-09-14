@@ -8,7 +8,9 @@ import {
 import { User } from '../../services/api'
 import TokenService from '../../services/token'
 import {
-    EmailSendWindow, Modal,
+    EmailSendWindow,
+    ForgotPasswordWindow,
+    Modal,
     PaymentWindow,
     SignInWindow, SignUpWindow
 } from "../modal"
@@ -28,6 +30,7 @@ const Header = () => {
     const [signInActive, setSignInActive] = useState(false);
     const [sendEmailActive, setSendEmailActive] = useState(false);
     const [paymentActive, setPaymentActive] = useState(false);
+    const [forgotActive, setForgotActive] = useState(false);
     let [user, setUser] = useState(null);
 
     const active = {
@@ -35,6 +38,7 @@ const Header = () => {
         "signup": () => setSignUpActive(true),
         "email": () => setSendEmailActive(true),
         "payment": () => setPaymentActive(true),
+        "forgot": () => setForgotActive(true),
         "close": () => setSignInActive(false)
     }
 
@@ -48,6 +52,7 @@ const Header = () => {
         setSignInActive(false);
         setSendEmailActive(false);
         setPaymentActive(false);
+        setForgotActive(false);
 
         active[modal]();
     };
@@ -177,8 +182,19 @@ const Header = () => {
                 </div>
             </div>
 
-            <Modal active={signUpActive} clickChange={exchangeModal} content={<SignUpWindow clickChange={exchangeModal}/>}/>
-            <Modal active={signInActive} clickChange={exchangeModal} content={<SignInWindow clickChange={exchangeModal}/>}/>
+            <Modal 
+                active={signUpActive} 
+                clickChange={exchangeModal} 
+                content={<SignUpWindow clickChange={exchangeModal}/>}/>
+            <Modal 
+                active={signInActive} 
+                clickChange={exchangeModal} 
+                content={<SignInWindow clickChange={exchangeModal}/>}/>
+            <Modal 
+                active={forgotActive} 
+                clickChange={exchangeModal} 
+                content={<ForgotPasswordWindow clickChange={exchangeModal}/>}
+            />
             <Modal 
                 active={sendEmailActive} 
                 clickChange={exchangeModal} 

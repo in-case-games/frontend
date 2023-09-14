@@ -34,6 +34,7 @@ const SignInWindow = (props) => {
                     <div className={classes.btn_secondary} onClick={() => props.clickChange("signup")}>
                         <div>Нет аккаунта?</div>
                     </div>
+                    <div className={classes.forgot_password} onClick={() => props.clickChange("forgot")}>Забыли пароль?</div>
                 </form>
                 <img alt="" href="/#" src={LogoMen}/>
             </div>
