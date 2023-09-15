@@ -408,3 +408,61 @@ html {
 	text-align: right;
 	font-size: 13px;
 }
+
+.loading-big img{
+	height: 120px;
+	margin-top: 10px;
+	animation: loading-fill 2.5s linear;
+	animation-iteration-count: infinite;
+}
+
+@keyframes loading-fill{
+	100%,0%{
+		-webkit-filter: grayscale(0%);
+		filter: grayscale(0%);
+	}
+	8%{
+		-webkit-filter: grayscale(35%);
+		filter: grayscale(35%);
+	}
+	16%{
+		-webkit-filter: grayscale(40%);
+		filter: grayscale(40%);
+	}
+	25%{
+		-webkit-filter: grayscale(55%);
+		filter: grayscale(55%);
+	}
+	33%{
+		-webkit-filter: grayscale(70%);
+		filter: grayscale(70%);
+	}
+	41%{
+		-webkit-filter: grayscale(85%);
+		filter: grayscale(85%);
+	}
+	50%{
+		-webkit-filter: grayscale(100%);
+		filter: grayscale(100%);
+	}
+	58%{
+		-webkit-filter: grayscale(85%);
+		filter: grayscale(85%);
+	}
+	66%{
+		-webkit-filter: grayscale(70%);
+		filter: grayscale(70%);
+	}
+	75%{
+		-webkit-filter: grayscale(55%);
+		filter: grayscale(55%);
+	}
+	83%{
+		-webkit-filter: grayscale(40%);
+		filter: grayscale(40%);
+	}
+	91%{
+		-webkit-filter: grayscale(20%);
+		filter: grayscale(20%);
+	}
+}

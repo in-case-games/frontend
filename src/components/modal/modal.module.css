@@ -1,67 +1,70 @@
 @import url("/src/assets/styles/colors.css");
 
-.sign_in_window, .sign_up_window, .send_email_window {
-    width: 55vw;
-    height: 50vh;
-    background: var(--background_modal-window);
-    border-radius: 15px;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-    padding: 10px;
-    justify-content: center;
-}
-
-.load_img_window {
-    min-width: 400px;
-    max-width: 650px;
-    background: var(--background_modal-window);
-    border-radius: 15px;
-    text-align: center;
-    padding: 30px 10px;
-    display: flex;
-    justify-content: center;
-}
-
-.load_img_content{
+.load_img_content, .forgot_password_content, 
+.sell_content, .exchange_content,
+.withdraw_content {
     display: flex;
     justify-content: space-evenly;
     flex-direction: column;
     align-items: center;
 }
 
-.forgot_password_window {
+.sign_up_window, .send_email_window, 
+.sign_in_window, .forgot_password_window, 
+.load_img_window, .sell_window,
+.exchange_window, .withdraw_window {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    background: var(--background_modal-window);
+    border-radius: 15px;
+    padding: 40px;
+}
+
+.sign_up_window {
+    max-width: 900px;
+}
+
+.send_email_window {
+    max-width: 300px;
+}
+
+.sign_in_window {
+    max-width: 400px;
+}
+
+.forgot_password_window, .load_img_window {
     max-width: 500px;
-    background: var(--background_modal-window);
-    border-radius: 15px;
-    text-align: center;
-    padding: 10px 40px;
-    display: flex;
-    justify-content: center;
-}
-
-.forgot_password_content{
-    display: flex;
-    justify-content: space-evenly;
-    flex-direction: column;
-    align-items: center;
-}
-
-.forgot_password_content .tittle {
-    font-size: 24px;
-    margin: 0;
-    padding: 5px 0;
 }
 
 .sell_window {
     min-width: 400px;
     max-width: 650px;
-    background: var(--background_modal-window);
-    border-radius: 15px;
-    text-align: center;
     padding: 30px 10px;
-    display: flex;
-    justify-content: center;
+}
+
+.exchange_window {
+    width: 800px;
+    height: 400px;
+    padding: 30px 10px;
+}
+
+.withdraw_window {
+    min-width: 400px;
+    max-width: 650px;
+    padding: 30px 10px;
+    position: relative;
+}
+
+.exchange_content {
+    width: 800px;
+}
+
+.tittle {
+    font-size: 42px;
+    margin: 0;
+    padding: 5px 0;
+    font-family: "Play";
 }
 
 .sell_items {
@@ -74,13 +77,6 @@
 .sell_tittle {
     display: flex;
     justify-content: center;
-    align-items: center;
-}
-
-.sell_content {
-    display: flex;
-    justify-content: space-evenly;
-    flex-direction: column;
     align-items: center;
 }
 
@@ -97,25 +93,6 @@
 .sell_error {
     color: red;
     font-size: 14px;
-}
-
-.exchange_window {
-    width: 800px;
-    height: 400px;
-    background: var(--background_modal-window);
-    border-radius: 15px;
-    text-align: center;
-    padding: 30px 10px;
-    display: flex;
-    justify-content: center;
-}
-
-.exchange_content {
-    display: flex;
-    width: 800px;
-    justify-content: space-evenly;
-    flex-direction: column;
-    align-items: center;
 }
 
 .exchange_counters {
@@ -171,18 +148,6 @@
     margin: 0px 10px 0 5px;
 }
 
-.withdraw_window {
-    min-width: 400px;
-    max-width: 650px;
-    padding: 30px 10px;
-    background: var(--background_modal-window);
-    border-radius: 15px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    position: relative;
-}
-
 .withdraw_items {
     display: flex;
     flex-wrap: wrap;
@@ -193,13 +158,6 @@
 .withdraw_tittle {
     display: flex;
     justify-content: center;
-    align-items: center;
-}
-
-.withdraw_content {
-    display: flex;
-    justify-content: space-evenly;
-    flex-direction: column;
     align-items: center;
 }
 
@@ -226,7 +184,7 @@
 .delimiter_first {
     border: 1px solid #F8B415;
     width: 70%;
-    margin: 0 0 15px 0;
+    margin: 15px 0 15px 0;
 }
 
 .delimiter_second {
@@ -243,15 +201,6 @@
 .withdraw_content .input_form {
     margin: 20px 0 10px 0;
     min-width: 300px;
-}
-
-.sign_in_window {
-    width: 35vw;
-}
-
-.send_email_window {
-    height: 400px;
-    width: 400px;
 }
 
 .send_email_window_content {
@@ -304,7 +253,7 @@
     margin: 0;
     font-size: 18px;
     font-family: 'Megrim';
-    padding: 0 20px;
+    padding: 10px 0px;
 }
 
 .sub_message h1 {
@@ -320,7 +269,7 @@
 
 .input_form {
     padding: 10px 20px;
-    min-width: 23vw;
+    min-width: 300px;
     font-size: 16px;
     font-family: Nunito;
     margin: 5px;
@@ -384,6 +333,7 @@
     padding: 8px 10px;
     width: 250px;
     cursor: pointer;
+    margin-top: 5px;
 
     transition: background 400ms ease-out;
     background: var(--main-color);
@@ -398,7 +348,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 10px auto;
 }
 
 .btn_secondary {

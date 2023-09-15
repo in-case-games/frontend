@@ -1,3 +1,4 @@
+export { default as AccountDeleteHandler } from "./account-delete-handler"
 export { default as EmailHandler } from "./email-handler"
 export { default as LoginHandler } from "./login-handler"
 export { default as PasswordHandler } from "./password-handler"

@@ -42,6 +42,9 @@ const ForgotPasswordWindow = (props) => {
 								/>
 								<p>Можете заполнить любое поле, какое помните. Мы проверим существует ли такой аккаунт</p>
 								<div className={classes.btn_main} onClick={() => sendForgot()}>Отправить</div>
+								<div 
+									className={classes.btn_secondary} 
+									onClick={_ => props.clickChange("signin")}>Вспомнили?</div>
             </div>
         </div>
     )

@@ -59,15 +59,17 @@ class Email {
         return response.data.data;
     }
 
-    async sendDeleteAccount(password, token) {
+    async sendDeleteAccount(password) {
         const user = TokenService.getUser();
 
         const response = await api.delete(
-            EMAIL_API_URL + "authentication/sending/account/" + password, 
-            {
-                login: user.name,
-                email: user.email
-            });
+            EMAIL_API_URL + "authentication/sending/account/" + password, {
+                data: {
+                    login: user.name,
+                    email: user.email
+                }
+            }
+            );
             
         return response.data.data;
     }

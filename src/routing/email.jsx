@@ -2,6 +2,7 @@ import React from "react"
 import { Route, Routes } from "react-router-dom"
 import { Email as EmailPage } from "../pages/email"
 import {
+    AccountDeleteHandler,
     EmailHandler,
     LoginHandler,
     PasswordHandler,
@@ -15,6 +16,8 @@ class EmailRouting extends React.Component {
             <Routes>
                 <Route path="confirm/account" 
                     element={<EmailPage handler={<SignInHandler/>}/>}/>
+                <Route path="confirm/delete" 
+                    element={<EmailPage handler={<AccountDeleteHandler/>}/>}/>
                 <Route path="confirm/update/login" 
                     element={<EmailPage handler={<LoginHandler/>}/>}/>
                 <Route path="confirm/update/email" 
