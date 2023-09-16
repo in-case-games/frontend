@@ -123,6 +123,12 @@
 	cursor: pointer;
 }
 
+.game_profile {
+	display: flex;
+	flex-wrap: wrap;
+	padding: 0 40px;
+}
+
 .input_tittle {
 	font-size: 18px;
 	margin-right: 5px;

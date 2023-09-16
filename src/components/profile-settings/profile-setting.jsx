@@ -1,13 +1,27 @@
 import React, { useEffect, useState } from 'react'
-import { UserLogo } from '../../assets/images/additional'
+import { CSGO, Dota2, UserLogo } from '../../assets/images/additional'
 import { BookUser, CrossBlack, Download, Email, Pen } from '../../assets/images/icon'
 import TokenService from "../../services/token"
+import { GameProfile } from '../game'
 import { MiniRetractable } from '../сommon/button'
 import InputData from './components/input-data'
 import classes from "./profile-setting.module.css"
 
 const ProfileSetting = (props) => {
 		const [user, setUser] = useState(TokenService.getUser());
+
+		const games = [
+			{
+					id: 1,
+					name: "csgo",
+					image: CSGO
+			},
+			{
+					id: 2,
+					name: "dota2",
+					image: Dota2
+			}
+		];
 
 		useEffect(() => {
 			const interval = setInterval(async () => {
@@ -70,6 +84,9 @@ const ProfileSetting = (props) => {
 							</div>
 					</div>
 					<div className={classes.setting_line}>
+							<div className={classes.game_profile}>
+									{ games?.map(game => <GameProfile game={game} key={game.id}/>) }
+							</div>
 					</div>
 			</div>
 		);
