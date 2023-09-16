@@ -13,11 +13,18 @@ class Item {
 				return response.data.data;
 		}
 		async exchangeItems(id, body) {
+			const temp = [];
+			
+			body.forEach(e => temp.push({
+				itemId: e.id,
+				count: e.count
+			}));
+
 			const response = await api.put(
 				RESOURCES_API_URL + `user/inventory/exchange`, 
 				{
 					inventoryId: id,
-					items: body
+					items: temp
 				}
 			);
 

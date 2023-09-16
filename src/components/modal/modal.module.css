@@ -56,6 +56,81 @@
     position: relative;
 }
 
+.load_img_window {
+    min-width: 300px;
+    min-height: 300px;
+}
+
+.dropzone_file {
+    border: 2px gray dashed;
+    border-radius: 10px;
+    padding: 40px;
+    background: rgb(173, 181, 189, 0.1);
+    cursor: pointer;
+    position: relative;
+}
+
+.send_button {
+    width: 200px;
+    border: 1px gray solid;
+    padding: 10px 20px;
+    color: gray;
+    border-radius: 10px;
+}
+
+.send_button__active {
+    width: 200px;
+    border: 1px #F8B415 solid;
+    padding: 10px 20px;
+    color: #F8B415;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.dropzone_file__hover {
+    border: 2px gray dashed;
+    border-radius: 10px;
+    padding: 40px;
+    background: rgb(173, 181, 189, 0.15);
+    cursor: pointer;
+    position: relative;
+}
+
+.dropzone_file__hover img {
+    width: 240px;
+}
+
+.dropzone_file img {
+    width: 240px;
+}
+
+.dropzone_message p b {
+    color: rgb(184, 184, 184);
+    font-family: 'Megrim';
+    font-size: 20px;
+}
+
+.dropzone_message p {
+    color: rgb(184, 184, 184);
+    font-family: 'Play';
+    font-size: 18px;
+}
+
+#drag_file_element {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 1rem;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+  }
+
+.input_file {
+    border: 1px solid gray;
+}
+
 .exchange_content {
     width: 800px;
 }
