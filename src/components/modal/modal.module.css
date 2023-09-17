@@ -2,17 +2,34 @@
 
 .load_img_content, .forgot_password_content, 
 .sell_content, .exchange_content,
-.withdraw_content {
+.withdraw_content, .trade_url_change_content,
+.send_email_content, .sign_in_content,
+.sign_up_content, .sign_up_content .items {
     display: flex;
     justify-content: space-evenly;
     flex-direction: column;
     align-items: center;
 }
 
+.exchange_content {
+    width: 800px;
+}
+
+.sign_up_content {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+.sign_up_content .items{
+    justify-content: space-around;
+}
+
 .sign_up_window, .send_email_window, 
 .sign_in_window, .forgot_password_window, 
 .load_img_window, .sell_window,
-.exchange_window, .withdraw_window {
+.exchange_window, .withdraw_window,
+.trade_url_change_window {
     display: flex;
     justify-content: center;
     text-align: center;
@@ -29,7 +46,7 @@
     max-width: 300px;
 }
 
-.sign_in_window {
+.sign_in_window, .trade_url_change_window {
     max-width: 400px;
 }
 
@@ -37,22 +54,22 @@
     max-width: 500px;
 }
 
+.sell_window, .withdraw_window, .exchange_window {
+    padding: 30px 10px;
+}
 .sell_window {
     min-width: 400px;
     max-width: 650px;
-    padding: 30px 10px;
 }
 
 .exchange_window {
-    width: 800px;
-    height: 400px;
-    padding: 30px 10px;
+    min-width: 800px;
+    min-height: 400px;
 }
 
 .withdraw_window {
     min-width: 400px;
     max-width: 650px;
-    padding: 30px 10px;
     position: relative;
 }
 
@@ -129,10 +146,6 @@
 
 .input_file {
     border: 1px solid gray;
-}
-
-.exchange_content {
-    width: 800px;
 }
 
 .tittle {
@@ -278,42 +291,9 @@
     min-width: 300px;
 }
 
-.send_email_window_content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-    height: 100%;
-}
-
 .agree_eta button {
     font-size: 14px;
     color: var(--main-link-color);
-}
-
-.sign_up_window_content {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-around;
-}
-.sign_in_window_content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.sign_in_window_content_form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.sign_up_window_content__form {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
 }
 
 .error_message {
@@ -331,11 +311,18 @@
     padding: 10px 0px;
 }
 
+.notify_message {
+    color: green;
+    font-family: "Poiret One";
+    font-size: 15px;
+    cursor: pointer;
+}
+
 .sub_message h1 {
     text-align: center;
 }
 
-.sign_in_window_content__form p, .sign_up_window_content__form p {
+.sing_up_content .items p {
     font-size: 42px;
     font-weight: 600;
     font-family: 'Nunito';

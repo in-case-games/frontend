@@ -21,7 +21,7 @@ const SignInWindow = (props) => {
 
     return(
         <div className={classes.sign_in_window}>
-            <div className={classes.sign_in_window_content}>
+            <div className={classes.sign_in_content}>
                 <p className={classes.tittle}>Вход</p>
                 <div className={classes.error_message}>{errorMessage}</div>
                 <input className={classes.input_form} placeholder="Имя аккаунта/Email" value={login} onInput={e => setLogin(e.target.value)} name="account-email"/>

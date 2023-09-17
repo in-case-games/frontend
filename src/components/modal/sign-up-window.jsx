@@ -34,9 +34,9 @@ const SignUpWindow = (props) => {
 
     return(
         <div className={classes.sign_up_window}>
-            <div className={classes.sign_up_window_content}>
+            <div className={classes.sign_up_content}>
                 <img alt="" src={ManLogoNoBg}/>
-                <form className={classes.sign_up_window_content__form}>
+                <div className={classes.items}>
                     <p>Регистрация</p>
                     <div className={classes.error_message}>{errorMessage}</div>
                     <input className={classes.input_form} value={login} onInput={e => setLogin(e.target.value)} placeholder="Имя аккаунта" name="name-account"/>
@@ -60,7 +60,7 @@ const SignUpWindow = (props) => {
                     <div className={classes.btn_secondary} onClick={() => props.clickChange("signin")}>
                         <div>Войти в аккаунт</div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     )

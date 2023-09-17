@@ -7,7 +7,7 @@ const EmailSendWindow = (props) => {
 
     return(
         <div className={classes.send_email_window}>
-            <div className={classes.send_email_window_content}>
+            <div className={classes.send_email_content}>
                 <div className={classes.tittle}>InCase</div>
                 <div className={classes.sub_message}>
                     Вам на почту отправлено сообщение. Зайдите и проверьте, возможно письмо попало в спам

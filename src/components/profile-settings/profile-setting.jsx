@@ -3,22 +3,28 @@ import { CSGO, Dota2, UserLogo } from '../../assets/images/additional'
 import { BookUser, CrossBlack, Download, Email, Pen } from '../../assets/images/icon'
 import TokenService from "../../services/token"
 import { GameProfile } from '../game'
+import { Modal, TradeUrlChangeWindow } from "../modal"
 import { MiniRetractable } from '../сommon/button'
 import InputData from './components/input-data'
 import classes from "./profile-setting.module.css"
 
 const ProfileSetting = (props) => {
 		const [user, setUser] = useState(TokenService.getUser());
+		const [game, setGame] = useState(null);
 
 		const games = [
 			{
 					id: 1,
 					name: "csgo",
+					nameTrade: "Ссылка на обмен",
+					urlGetTrade: "https://steamcommunity.com/id/yt_ferbray/tradeoffers/privacy",
 					image: CSGO
 			},
 			{
 					id: 2,
 					name: "dota2",
+					nameTrade: "Ссылка на обмен",
+					urlGetTrade: "https://steamcommunity.com/id/yt_ferbray/tradeoffers/privacy",
 					image: Dota2
 			}
 		];
@@ -85,9 +91,23 @@ const ProfileSetting = (props) => {
 					</div>
 					<div className={classes.setting_line}>
 							<div className={classes.game_profile}>
-									{ games?.map(game => <GameProfile game={game} key={game.id}/>) }
+									{ 
+										games?.map(game => 
+										<GameProfile game={game} key={game.id} click={() => setGame(game)}/>) 
+									}
 							</div>
 					</div>
+					<Modal 
+              active={game} 
+              clickChange={() => setGame(null)} 
+              content={
+								<TradeUrlChangeWindow 
+									name={game?.name}
+									nameTrade={game?.nameTrade}
+									urlGetTrade={game?.urlGetTrade}
+								/>
+							}
+					/>
 			</div>
 		);
 };
