@@ -50,6 +50,9 @@ const ProfileSetting = (props) => {
 		
 		return(
 			<div className={classes.profile_setting}>
+					<div className={classes.line_tittle}>
+						Основные данные
+					</div>
 					<div className={classes.setting_line}>
 							<div className={classes.setting_main}>
 									<div className={classes.setting_img} onMouseDown={() => props.exchangeModal("load-image")}>
@@ -88,6 +91,9 @@ const ProfileSetting = (props) => {
 										click={_ => props.setControllerConfirmEmail("account_delete")}
 									/>
 							</div>
+					</div>
+					<div className={classes.line_tittle}>
+						Нажмите на игру, чтобы изменить ссылку на обмен
 					</div>
 					<div className={classes.setting_line}>
 							<div className={classes.game_profile}>

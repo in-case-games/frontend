@@ -312,7 +312,7 @@
 }
 
 .notify_message {
-    color: green;
+    color: gray;
     font-family: "Poiret One";
     font-size: 15px;
     cursor: pointer;

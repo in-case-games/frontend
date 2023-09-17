@@ -123,6 +123,13 @@
 	cursor: pointer;
 }
 
+.line_tittle {
+	color: gray;
+	font-size: 14px;
+	font-family: "Nunito";
+	margin-top: 5px;
+}
+
 .game_profile {
 	display: flex;
 	flex-wrap: wrap;

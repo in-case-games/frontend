@@ -7,8 +7,15 @@ const TradeUrlChangeWindow = (props) => {
 		const [tradeUrl, setTradeUrl] = useState(Constants
 			.CheckUndefinedNull(Constants.TradeURL[props.name ?? "csgo"](), ""));
 		const [error, setError] = useState(false);
+		const [apply, setApply] = useState(false);
 		const navigate = useNavigate();
 
+		const getBorderColor = () => {
+			if(error) return "red";
+			else if(apply) return "green";
+			else return "#F8B415";
+		}
+		
 		//TODO Redirect support
 		const handleClick = () => {
 			if(props.urlGetTrade) window.location.replace(props.urlGetTrade);
@@ -21,10 +28,13 @@ const TradeUrlChangeWindow = (props) => {
 
         if(Constants.Regex[props.name].test(value)) {
 						setError(false);
-						console.log(props.name);
+						setApply(true);
 						Constants.UpdateTradeURL[props.name](value);
 				}
-				else setError(true);
+				else {
+					setError(true);
+					setApply(false);
+				}
     }
 
 		return(
@@ -32,7 +42,7 @@ const TradeUrlChangeWindow = (props) => {
 					<div className={classes.trade_url_change_content}>
 							<div className={classes.tittle}>Ссылка на обмен</div>
 							<input 
-								style={{borderColor: error ? "red" : "#F8B415"}}
+								style={{borderColor: getBorderColor(), color: getBorderColor()}}
 								maxLength={200}
 								className={classes.input_form} 
 								placeholder={props.nameTrade}
