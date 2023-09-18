@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react"
 import { useParams } from 'react-router-dom'
 import { BoxGroup } from "../../../components"
-import { BoxGroup as BoxGroupApi } from '../../../services/api'
+import { Box as BoxApi } from '../../../services/api'
 
 const BoxGroupLoader = (props) => {
 		let { id } = useParams();
-		const boxGroupApi = new BoxGroupApi();
+		const boxApi = new BoxApi();
 		const [groups, setGroups] = useState([]);
 		const [isStartBoxGroup, setIsStartBoxGroup] = useState(true);
 		const [startUrl, setStartUrl] = useState(window.location.href);
@@ -24,7 +24,7 @@ const BoxGroupLoader = (props) => {
 		useEffect(() => {
       const interval = setInterval(async () => {
         try {
-            const response = await boxGroupApi.getGroups(id);
+            const response = await boxApi.getGroups(id);
 						let groups = {};
 
 						for(let i = 0; i < response.length; i++) {

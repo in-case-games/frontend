@@ -1,0 +1,10 @@
+.openings_history_content {
+	padding-top: 10px;
+}
+
+.openings_history {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	margin: 0 -10px;
+}

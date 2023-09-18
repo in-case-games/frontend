@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import Constants from './constants'
 import classes from "./modal.module.css"
 
@@ -8,20 +7,12 @@ const TradeUrlChangeWindow = (props) => {
 			.CheckUndefinedNull(Constants.TradeURL[props.name ?? "csgo"](), ""));
 		const [error, setError] = useState(false);
 		const [apply, setApply] = useState(false);
-		const navigate = useNavigate();
 
 		const getBorderColor = () => {
 			if(error) return "red";
 			else if(apply) return "green";
 			else return "#F8B415";
 		}
-		
-		//TODO Redirect support
-		const handleClick = () => {
-			if(props.urlGetTrade) window.location.replace(props.urlGetTrade);
-			else navigate("/#");
-		};
-			
 
 		const inputTradeUrl = (value) => {
         setTradeUrl(value);
@@ -51,13 +42,17 @@ const TradeUrlChangeWindow = (props) => {
 								name="name-item"
 							/>
 							<div className={classes.delimiter}></div>
-							<div className={classes.notify_message} onClick={() => handleClick()}>
-								{
-									props.urlGetTrade ? 
-									"Здесь можно взять ссылку - КЛИК" : 
-									"Обратитесь в тех. поддержку, если не знаете, где взять ссылку на обмен"
-								}
-							</div>
+							<a className={classes.notify_message} 
+								target='_blank' 
+								rel="noopener noreferrer" 
+								href={props.urlGetTrade ? props.urlGetTrade : "/#"}
+							>
+									{
+										props.urlGetTrade ? 
+										"Здесь можно взять ссылку - КЛИК" : 
+										"Обратитесь в тех. поддержку, если не знаете, где взять ссылку на обмен"
+									}
+							</a>
 					</div>
 			</div>
 		);
