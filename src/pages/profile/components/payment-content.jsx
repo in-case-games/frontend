@@ -11,7 +11,7 @@ const PaymentContent = (props) => {
 				<div className="profile-tittle">
 					<div className='profile-group'>
 						<Loading isLoading={isLoading} click={() => setIsLoading(true)} />
-						<div className="profile-name">История открытия кейсов:</div>
+						<div className="profile-name">История пополнения счета:</div>
 					</div>
 				</div>
 				<div className="profile-delimiter"></div>

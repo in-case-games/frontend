@@ -5,7 +5,7 @@
 .withdrawn_items_history {
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: flex-start;
+	justify-content: center;
 	margin: 0 -10px;
 }
 
@@ -13,7 +13,7 @@
 	display: flex;
 	align-items: center;
 	height: 100px;
-	width: 300px;
+	width: 400px;
 	margin: 5px;
 }
 
@@ -21,6 +21,7 @@
 	display: flex;
 	background: rgb(0, 0, 0, 0.18);
   border-radius: 15px 0 0 15px;
+	width: 100%;
 }
 
 .history_btn {
@@ -57,6 +58,12 @@
 .info_cost {
 	display: flex;
 	font-weight: 800;
+	margin-left: 10px;
+}
+
+.info_main {
+	display: flex;
+	align-items: center;
 }
 
 .info_date, .info_invoice_id {

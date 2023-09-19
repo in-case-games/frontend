@@ -222,6 +222,7 @@
 .exchange_content .items {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .exchange_tittle {
