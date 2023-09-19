@@ -18,9 +18,7 @@ const LazyLoadedHistory = async (props) => {
 
 	if (primary.length >= endIndex && (props.isAllReload || startIndex > loadedPayments.length - 1)) {
 		for (let i = startIndex; i < endIndex; i++) {
-			const temp = primary[i]
 			//TODO Parse can back money
-			temp.isBackMoney = false
 			loaded.push(primary[i])
 		}
 	}

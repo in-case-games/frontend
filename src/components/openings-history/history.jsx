@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Box, Item } from '../../assets/images/additional'
+import { InCoinOrange } from '../../assets/images/icon'
 import { itemGradients } from '../item/item-colors'
 import classes from "./history.module.css"
 
@@ -22,7 +23,12 @@ const History = (props) => {
 			<div className={classes.history_tittle}>{date}</div>
 			<div className={classes.history_content}>
 				<div className={classes.history_box}>
-					<img className={classes.box_img} alt="" src={Box}></img>
+					<a className={classes.box_img} target='_blank' rel="noopener noreferrer" href={`/box/${props.box.id}`}>
+						<img
+							alt=""
+							src={Box}
+						/>
+					</a>
 					<div className={classes.box_content}>
 						<p>Кейс:</p>
 						<div className={classes.info}>
@@ -33,7 +39,10 @@ const History = (props) => {
 										props.box.name
 								}
 							</p>
-							<p>{handleCost(props.box.cost)}</p>
+							<p className={classes.info_cost}>
+								{handleCost(props.box.cost)}
+								<img alt="" src={InCoinOrange} />
+							</p>
 						</div>
 						<p className={classes.game}>
 							{props.item.game}
@@ -52,7 +61,10 @@ const History = (props) => {
 										props.item.name
 								}
 							</p>
-							<p>{handleCost(props.item.cost)}</p>
+							<p className={classes.info_cost}>
+								{handleCost(props.item.cost)}
+								<img alt="" src={InCoinOrange} />
+							</p>
 						</div>
 						<p className={classes.game}>
 							{props.item.game}
@@ -61,11 +73,13 @@ const History = (props) => {
 					<img
 						className={classes.item_img}
 						alt="" src={Item}
-						style={{ background: gradientColor }}></img>
+						style={{ background: gradientColor }}
+						onClick={() => console.log("Окошко с предметом")}
+					/>
 				</div>
 			</div>
 		</div>
 	)
 }
 
-export default History
+export default React.memo(History)

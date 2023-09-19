@@ -15,11 +15,11 @@ const PaymentContent = (props) => {
 					</div>
 				</div>
 				<div className="profile-delimiter"></div>
-				<PaymentsHistory
-					isLoading={isLoading}
-					setIsLoading={setIsLoading}
-				/>
 			</div>
+			<PaymentsHistory
+				isLoading={isLoading}
+				setIsLoading={setIsLoading}
+			/>
 		</div>
 	)
 }

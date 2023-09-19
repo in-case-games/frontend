@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react'
 import { User } from '../../services/api'
 import { CounterSlider } from '../slider'
 import LazyLoadedHistory from './lazy-loaded-history'
-import classes from "./payments-history.module.css"
+import classes from "./withdrawn-items-history.module.css"
 
-const PaymentsHistory = (props) => {
+const WithdrawnItemsHistory = (props) => {
 	const [pages, setPages] = useState(1)
 	const [page, setPage] = useState(1)
 
-	const [primaryPayments, setPrimaryPayments] = useState([])
-	const [loadedPayments, setLoadedPayments] = useState([])
-	const [showPayments, setShowPayments] = useState(null)
+	const [primaryItems, setPrimaryItems] = useState([])
+	const [loadedItems, setLoadedItems] = useState([])
+	const [showItems, setShowItems] = useState(null)
 
 	const [isClickSlider, setIsClickSlider] = useState(false)
 
@@ -38,36 +38,17 @@ const PaymentsHistory = (props) => {
 			try {
 				const userApi = new User()
 
-				async function loadPayments(isAllReload) {
-					let primary = primaryPayments
+				async function loadItems(isAllReload) {
+					let primary = primaryItems
 					let pagesTemp = pages
 
 					if (isAllReload) {
-						primary = await userApi.getPayments()
-
-						//TODO Remove string bot one ONE one
-
-						primary = [{
-							id: "96666d82-73d9-40ca-a2ea-82f6b4b2e77a",
-							invoiceId: "",
-							date: "2023-09-16T07:42:07.410081Z",
-							currency: "RUB",
-							isBackMoney: true,
-							amount: 162,
-						},
-						{
-							id: "56666d82-73d9-40ca-a2ea-82f6b4b2e77a",
-							invoiceId: "",
-							date: "2022-09-16T07:42:07.410081Z",
-							currency: "RUB",
-							isBackMoney: false,
-							amount: 552,
-						}]
+						primary = await userApi.getWithdrawnItems100Last()
 
 						pagesTemp = Math.ceil(primary.length / 20)
 						pagesTemp = pagesTemp === 0 ? 1 : pagesTemp
 
-						setPrimaryPayments(primary)
+						setPrimaryItems(primary)
 						setPages(pagesTemp)
 
 						if (page > pagesTemp) setPage(pagesTemp)
@@ -75,23 +56,23 @@ const PaymentsHistory = (props) => {
 
 					LazyLoadedHistory({
 						"isAllReload": isAllReload,
-						"primaryPayments": primary,
-						"loadedPayments": loadedPayments,
+						"primaryItems": primary,
+						"loadedItems": loadedItems,
 						"page": page > pagesTemp ? pagesTemp : page,
-						"setLoadedPayments": setLoadedPayments,
-						"setShowPayments": setShowPayments,
+						"setLoadedItems": setLoadedItems,
+						"setShowItems": setShowItems,
 						"backAll": () => setPage(page - 1 < 1 ? 1 : page - 1)
 					})
 				}
 
 				if (props.isLoading && isClickSlider) {
-					loadPayments(false)
+					loadItems(false)
 
 					props.setIsLoading(false)
 					setIsClickSlider(false)
 				}
 				else if (props.isLoading && !isClickSlider) {
-					loadPayments(true)
+					loadItems(true)
 
 					props.setIsLoading(false)
 				}
@@ -103,17 +84,16 @@ const PaymentsHistory = (props) => {
 	})
 
 	return (
-		<div className={classes.payments_history_content}>
-			<div className={classes.payments_history}>
-				{showPayments}
+		<div className={classes.withdrawn_items_history_content}>
+			<div className={classes.withdrawn_items_history}>
+				{showItems}
 			</div>
 			<CounterSlider
 				page={page}
 				pages={pages}
 				eventClick={sliderClick}
 			/>
-		</div>
-	)
+		</div>)
 }
 
-export default PaymentsHistory
+export default WithdrawnItemsHistory

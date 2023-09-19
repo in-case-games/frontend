@@ -3,6 +3,7 @@ import BoxContent from './box-content'
 import InventoryContent from "./inventory-content"
 import PaymentContent from './payment-content'
 import ProfileContent from './profile-content'
+import WithdrawnContent from './withdrawn-content'
 
 const PanelContent = (props) => {
 	return (
@@ -25,6 +26,11 @@ const PanelContent = (props) => {
 			{
 				props.active === "payment" ?
 					<PaymentContent /> :
+					null
+			}
+			{
+				props.active === "withdrawn" ?
+					<WithdrawnContent /> :
 					null
 			}
 		</div>

@@ -1,22 +1,22 @@
 import React, { useState } from 'react'
-import { OpeningsHistory } from '../../../components/openings-history'
+import { WithdrawnItemsHistory } from '../../../components/withdrawn-items-history'
 import { Loading } from '../../../components/сommon/button'
 
-const BoxContent = (props) => {
+const WithdrawnContent = () => {
 	const [isLoading, setIsLoading] = useState(true)
 
 	return (
-		<div className='box-content'>
+		<div className='withdrawn-content'>
 			<div className='profile-header'>
 				<div className="profile-tittle">
 					<div className='profile-group'>
 						<Loading isLoading={isLoading} click={() => setIsLoading(true)} />
-						<div className="profile-name">История открытия кейсов:</div>
+						<div className="profile-name">Выведенные предметы:</div>
 					</div>
 				</div>
 				<div className="profile-delimiter"></div>
 			</div>
-			<OpeningsHistory
+			<WithdrawnItemsHistory
 				isLoading={isLoading}
 				setIsLoading={setIsLoading}
 			/>
@@ -24,4 +24,4 @@ const BoxContent = (props) => {
 	)
 }
 
-export default BoxContent
+export default WithdrawnContent

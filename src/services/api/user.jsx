@@ -48,6 +48,16 @@ class User {
 
         return response.data.data
     }
+    async getWithdrawnItems100Last() {
+        const response = await api.get(RESOURCES_API_URL + "user/history/withdraw/100/last")
+
+        return response.data.data
+    }
+    async transferWithdrawnItemInInventory(id) {
+        const response = await api.get(RESOURCES_API_URL + `user/history/withdraw/${id}/transfer`)
+
+        return response.data.data
+    }
 }
 
 export default User

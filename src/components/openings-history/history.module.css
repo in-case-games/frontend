@@ -43,6 +43,7 @@
 	background-color: rgb(256, 256, 256, 0.08);
 	border-radius: 15px 0 0 15px;
 	object-fit: cover;
+	cursor: pointer;
 }
 
 .history_item img {
@@ -51,6 +52,7 @@
 	overflow: hidden;
 	object-fit: scale-down;
 	border-radius: 0 15px 15px 0;
+	cursor: pointer;
 }
 
 .history_item p, .history_box p {
@@ -69,6 +71,17 @@
 	font-family: 'Nunito';
 	font-weight: 700;
 	font-size: 16px;
+}
+
+.info_cost {
+	display: flex;
+}
+
+.info_cost img {
+	width: 20px;
+	height: 20px;
+	margin-left: 2px;
+	background: transparent;
 }
 
 .game {

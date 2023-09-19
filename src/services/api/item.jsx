@@ -47,6 +47,36 @@ class Item {
 		return response.data.data
 	}
 
+	async getItemsByWithdrawnHistory(history, startIndex = 0, endIndex = history.length) {
+		const result = []
+
+		for (let i = startIndex; i < endIndex; i++) {
+			const response = await api.get(RESOURCES_API_URL + "game/item/id/" + history[i].itemId)
+			const data = response.data.data
+
+			const temp = {
+				id: history[i].id,
+				date: history[i].date,
+				fixedCost: history[i].fixedCost,
+				invoiceId: history[i].invoiceId,
+				status: history[i].status,
+				marketId: history[i].marketId,
+				item: {
+					id: history[i].itemId,
+					img: `../history[i].itemId`,
+					name: data.name,
+					rarity: data.rarity,
+					cost: Math.ceil(data.cost),
+					game: data.game
+				}
+			}
+
+			result.push(temp)
+		}
+
+		return result
+	}
+
 	async getItemsByHistory(history, startIndex = 0, endIndex = history.length) {
 		const result = []
 

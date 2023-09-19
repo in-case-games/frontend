@@ -4,25 +4,25 @@ import { animateScroll as scroll } from 'react-scroll'
 import { LogoMen } from "../../../assets/images/icon"
 
 const Logo = () => {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
     const handleClick = () => {
-        if(window.location.href === `http://localhost:3000/`) 
-            scroll.scrollToTop();
-        else 
-            window.scrollTo(0, 0);
-        
-        navigate("/");
-    };
-    return(
-        <div className="navbar-logo" onClick={handleClick}>
+        if (window.location.href === `http://localhost:3000/`)
+            scroll.scrollToTop()
+        else
+            window.scrollTo(0, 0)
+
+        navigate("/")
+    }
+    return (
+        <a className="navbar-logo" onClick={handleClick} href="/#">
             <div className="logo-img">
                 <img alt="" src={LogoMen}></img>
             </div>
             <div className="logo-text">
                 InCase
             </div>
-        </div>
-    );
-};
+        </a>
+    )
+}
 
-export default Logo;
+export default Logo
