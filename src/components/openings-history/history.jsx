@@ -74,7 +74,7 @@ const History = (props) => {
 						className={classes.item_img}
 						alt="" src={Item}
 						style={{ background: gradientColor }}
-						onClick={() => console.log("Окошко с предметом")}
+						onClick={() => props.showItem()}
 					/>
 				</div>
 			</div>

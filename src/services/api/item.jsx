@@ -52,7 +52,10 @@ class Item {
 
 		for (let i = startIndex; i < endIndex; i++) {
 			const response = await api.get(RESOURCES_API_URL + "game/item/id/" + history[i].itemId)
-			const data = response.data.data
+			const item = response.data.data
+
+			item.img = `../history[i].itemId`
+			item.cost = Math.ceil(item.cost)
 
 			const temp = {
 				id: history[i].id,
@@ -61,14 +64,7 @@ class Item {
 				invoiceId: history[i].invoiceId,
 				status: history[i].status,
 				marketId: history[i].marketId,
-				item: {
-					id: history[i].itemId,
-					img: `../history[i].itemId`,
-					name: data.name,
-					rarity: data.rarity,
-					cost: Math.ceil(data.cost),
-					game: data.game
-				}
+				item: item
 			}
 
 			result.push(temp)
@@ -82,20 +78,16 @@ class Item {
 
 		for (let i = startIndex; i < endIndex; i++) {
 			const response = await api.get(RESOURCES_API_URL + "game/item/id/" + history[i].itemId)
-			const data = response.data.data
+			const item = response.data.data
+
+			item.img = `../history[i].itemId`
+			item.cost = Math.ceil(item.cost)
 
 			const temp = {
 				id: history[i].id,
 				date: history[i].date,
 				boxId: history[i].boxId,
-				item: {
-					id: history[i].itemId,
-					img: `../history[i].itemId`,
-					name: data.name,
-					rarity: data.rarity,
-					cost: Math.ceil(data.cost),
-					game: data.game
-				}
+				item: item
 			}
 
 			result.push(temp)
@@ -109,20 +101,16 @@ class Item {
 
 		for (let i = startIndex; i < endIndex; i++) {
 			const response = await api.get(RESOURCES_API_URL + "game/item/id/" + inventories[i].itemId)
-			const data = response.data.data
+			const item = response.data.data
+
+			item.img = `../history[i].itemId`
+			item.cost = Math.ceil(item.cost)
 
 			const temp = {
 				id: inventories[i].id,
 				date: inventories[i].date,
 				cost: inventories[i].fixedCost,
-				item: {
-					id: data.id,
-					img: `../data.id`,
-					name: data.name,
-					rarity: data.rarity,
-					cost: Math.ceil(data.cost),
-					game: data.game
-				}
+				item: item
 			}
 
 			result.push(temp)

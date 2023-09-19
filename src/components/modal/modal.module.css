@@ -4,7 +4,8 @@
 .sell_content, .exchange_content,
 .withdraw_content, .trade_url_change_content,
 .send_email_content, .sign_in_content,
-.sign_up_content, .sign_up_content .items {
+.sign_up_content, .sign_up_content .items,
+.item_content {
     display: flex;
     justify-content: space-evenly;
     flex-direction: column;
@@ -29,7 +30,7 @@
 .sign_in_window, .forgot_password_window, 
 .load_img_window, .sell_window,
 .exchange_window, .withdraw_window,
-.trade_url_change_window {
+.trade_url_change_window, .item_window {
     display: flex;
     justify-content: center;
     text-align: center;
@@ -48,6 +49,10 @@
 
 .sign_in_window, .trade_url_change_window {
     max-width: 400px;
+}
+
+.item_window {
+    width: 600px;
 }
 
 .forgot_password_window, .load_img_window {
@@ -85,6 +90,33 @@
     background: rgb(173, 181, 189, 0.1);
     cursor: pointer;
     position: relative;
+}
+
+.item_info {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.item_header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.item_tittle {
+    font-size: 28px;
+    margin-left: 5px;
+}
+
+.item_img {
+    display: flex;
+}
+
+.item_img img {
+    width: 200px;
+    border-radius: 15px 0 0 15px;
+    padding: 20px;
 }
 
 .send_button {

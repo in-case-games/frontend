@@ -61,7 +61,7 @@ const History = (props) => {
 		<div className={classes.history} onClick={() => console.log("marketId: " + props.marketId)}>
 			<div className={classes.history_content}>
 				<div className={classes.history_item} style={{ background: gradientColor }}>
-					<img alt="" src={Item} onClick={() => console.log("Окошко с предметом")} />
+					<img alt="" src={Item} onClick={() => props.showItem()} />
 				</div>
 				<div className={classes.history_info}>
 					<div className={classes.info_date}>{date}</div>

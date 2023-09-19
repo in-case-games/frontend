@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { User } from '../../services/api'
+import { ItemWindow, Modal } from '../modal'
 import { CounterSlider } from '../slider'
 import LazyLoadedHistory from './lazy-loaded-history'
 import classes from "./withdrawn-items-history.module.css"
@@ -11,6 +12,8 @@ const WithdrawnItemsHistory = (props) => {
 	const [primaryItems, setPrimaryItems] = useState([])
 	const [loadedItems, setLoadedItems] = useState([])
 	const [showItems, setShowItems] = useState(null)
+
+	const [item, setItem] = useState(null)
 
 	const [isClickSlider, setIsClickSlider] = useState(false)
 
@@ -61,6 +64,7 @@ const WithdrawnItemsHistory = (props) => {
 						"page": page > pagesTemp ? pagesTemp : page,
 						"setLoadedItems": setLoadedItems,
 						"setShowItems": setShowItems,
+						"setItem": setItem,
 						"backAll": () => setPage(page - 1 < 1 ? 1 : page - 1)
 					})
 				}
@@ -92,6 +96,13 @@ const WithdrawnItemsHistory = (props) => {
 				page={page}
 				pages={pages}
 				eventClick={sliderClick}
+			/>
+			<Modal
+				active={item}
+				clickChange={() => setItem(null)}
+				content={
+					<ItemWindow item={item} />
+				}
 			/>
 		</div>)
 }

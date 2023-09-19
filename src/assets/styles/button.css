@@ -273,7 +273,7 @@ button {
 }
 
 .status-update-date {
-    height: 100px;
+    height: 100%;
     width: 15px;
     border-radius: 0 13px 13px 0;
     background: #2f2f2f;

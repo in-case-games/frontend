@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { User } from '../../services/api'
+import { ItemWindow, Modal } from '../modal'
 import { CounterSlider } from '../slider'
 import LazyLoadedHistory from './lazy-loaded-history'
 import classes from "./openings-history.module.css"
@@ -11,6 +12,8 @@ const OpeningsHistory = (props) => {
 	const [primaryOpenings, setPrimaryOpenings] = useState([])
 	const [loadedOpenings, setLoadedOpenings] = useState([])
 	const [showOpenings, setShowOpenings] = useState(null)
+
+	const [item, setItem] = useState(null)
 
 	const [isClickSlider, setIsClickSlider] = useState(false)
 
@@ -61,6 +64,7 @@ const OpeningsHistory = (props) => {
 						"page": page > pagesTemp ? pagesTemp : page,
 						"setLoadedOpenings": setLoadedOpenings,
 						"setShowOpenings": setShowOpenings,
+						"setItem": setItem,
 						"backAll": () => setPage(page - 1 < 1 ? 1 : page - 1)
 					})
 				}
@@ -92,6 +96,13 @@ const OpeningsHistory = (props) => {
 				page={page}
 				pages={pages}
 				eventClick={sliderClick}
+			/>
+			<Modal
+				active={item}
+				clickChange={() => setItem(null)}
+				content={
+					<ItemWindow item={item} />
+				}
 			/>
 		</div>)
 }
