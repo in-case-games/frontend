@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Item } from '../../assets/images/additional'
-import { Item as ItemApi } from '../../services/api'
+import { Game, Item as ItemApi } from '../../services/api'
 import TokenService from '../../services/token'
 import { itemGradients } from '../item/item-colors'
 import { InfoLine, StatusUpdateDate } from '../сommon/button'
@@ -8,7 +8,11 @@ import Loading from '../сommon/button/loading'
 import classes from "./modal.module.css"
 
 const ItemWindow = (props) => {
+	const itemApi = new ItemApi()
+	const gameApi = new Game()
+
 	const patternItem = {
+		game: "csgo",
 		type: "none",
 		rarity: "white",
 		quality: "none"
@@ -24,6 +28,7 @@ const ItemWindow = (props) => {
 	const [rarities, setRarities] = useState([])
 	const [types, setTypes] = useState([])
 	const [qualities, setQualities] = useState([])
+	const [games, setGames] = useState([])
 
 	const setValue = (value) => {
 		setIsClickChange(true)
@@ -41,17 +46,16 @@ const ItemWindow = (props) => {
 			if (isLoading) {
 				setUser(TokenService.getUser())
 
-				const itemApi = new ItemApi()
-
 				setItem(props.item?.id ?
 					await itemApi.getItem(props.item?.id) : patternItem)
 
 				setTypes(await itemApi.getTypes())
 				setRarities(await itemApi.getRarities())
 				setQualities(await itemApi.getQualities())
-			}
+				setGames(await gameApi.getGames())
 
-			setIsLoading(false)
+				setIsLoading(false)
+			}
 		}, 100)
 
 		return () => clearInterval(interval)
@@ -59,6 +63,20 @@ const ItemWindow = (props) => {
 
 	const loadImg = () => {
 		if (user.role === "owner") props.openLoadWindow(true)
+	}
+
+	const getImg = () => {
+		if (props.image) return URL.createObjectURL(props.image)
+		try {
+			return URL.createObjectURL(props.item.img)
+		}
+		catch (err) {
+			return Item
+		}
+	}
+
+	const handleSend = () => {
+
 	}
 
 	return (
@@ -73,8 +91,14 @@ const ItemWindow = (props) => {
 					<div className={classes.item_tittle}>Информация по предмету</div>
 				</div>
 				<div className={classes.item_info}>
-					<div className={classes.item_img} onClick={() => loadImg()}>
-						<img alt="" src={Item} style={{ background: gradientColor }} />
+					<div className={classes.item_img} onClick={() => loadImg()} style={{ cursor: user.role === "owner" ? "pointer" : "default" }}>
+						{
+							<img
+								alt=""
+								src={getImg()}
+								style={{ background: gradientColor }}
+							/>
+						}
 						<StatusUpdateDate updateDate={item?.updateDate} secondsUpdate={300} />
 					</div>
 					<div className={classes.delimiter}></div>
@@ -100,6 +124,7 @@ const ItemWindow = (props) => {
 							name="item-game"
 							placeholder="Игра"
 							isReadOnly={user.role !== "owner"}
+							comboBox={games}
 						/>
 						<InfoLine
 							value={item?.hashName}
@@ -142,7 +167,7 @@ const ItemWindow = (props) => {
 					</div>
 					{
 						user.role === "owner" ?
-							<div className={classes.info_btn_send} onClick={() => console.log("Exchange")}>
+							<div className={classes.info_btn_send} onClick={() => handleSend()}>
 								{item?.id ? "Изменить" : "Создать"}
 							</div> : null
 					}

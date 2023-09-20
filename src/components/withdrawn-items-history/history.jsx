@@ -14,7 +14,7 @@ const History = (props) => {
 	const [gradientColor,] = useState(itemGradients[props.item.rarity ? props.item.rarity : "white"])
 
 	const handleCost = (cost) => {
-		let temp = Math.round(cost * 100000)
+		let temp = Math.round(cost)
 		if (temp >= 1000000) temp = `${Math.round(temp / 10) / 100000}M`
 		else if (temp >= 1000) temp = `${Math.round(temp / 10) / 100}K`
 

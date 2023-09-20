@@ -126,11 +126,12 @@
 .item_img {
     display: flex;
     justify-content: center;
-    cursor: pointer;
 }
 
 .item_img img {
     width: 200px;
+    max-width: 400px;
+    max-height: 200px;
     border-radius: 15px 0 0 15px;
     padding: 20px;
 }

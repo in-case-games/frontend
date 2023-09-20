@@ -9,10 +9,10 @@ const LoadImageWindow = (props) => {
                 <LoadDropZone
                     file={props.file}
                     setFile={props.setFile}
-                    sizeMb={1}
-                    height={400}
-                    width={400}
-                    description={"JPG, JPEG, PNG (MAX. 400x400px | 1MB)"}
+                    sizeMb={props.sizeMb}
+                    width={props.width}
+                    height={props.height}
+                    description={props.description}
                 />
                 {
                     props.click ?

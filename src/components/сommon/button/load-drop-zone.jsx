@@ -19,16 +19,36 @@ const LoadDropZone = (props) => {
 		const img = new Image()
 
 		img.onload = function () {
-			if (this.width > props.width || this.height > props.height) {
-				props.setFile()
-				setError(true)
-			}
+			var canvas = document.createElement("canvas")
+			var ctx = canvas.getContext("2d")
+			ctx.drawImage(img, 0, 0)
+			var MAX_WIDTH = 100
+			var MAX_HEIGHT = 50
+			var width = img.width
+			var height = img.height
 
-			URL.revokeObjectURL(this.src)
+			if (width > height) {
+				if (width > MAX_WIDTH) {
+					height *= MAX_WIDTH / width
+					width = MAX_WIDTH
+				}
+			} else {
+				if (height > MAX_HEIGHT) {
+					width *= MAX_HEIGHT / height
+					height = MAX_HEIGHT
+				}
+			}
+			canvas.width = width
+			canvas.height = height
+
+			ctx = canvas.getContext("2d")
+			ctx.drawImage(img, 0, 0, width, height)
+
+			console.log(canvas.toBlob())
+			props.setFile(new File(canvas, "name"))
 		}
 
-		var objectURL = URL.createObjectURL(file)
-		img.src = objectURL
+		img.src = URL.createObjectURL(file)
 
 		if (isValidName && isValidSize) props.setFile(file)
 		else setError(true)
@@ -59,6 +79,17 @@ const LoadDropZone = (props) => {
 			handleSetFile(e.target.files[0])
 	}
 
+	const getImage = () => {
+		if (!props.file) return CloudGray
+		try {
+			return URL.createObjectURL(props.file)
+		}
+		catch (err) {
+			props.setFile()
+			return CloudGray
+		}
+	}
+
 	return (
 		<div className='load-drop-zone'>
 			<label
@@ -66,7 +97,7 @@ const LoadDropZone = (props) => {
 				onDragEnter={handleDrag}
 				style={{ borderColor: getColorBorder() }}
 			>
-				<img alt="" src={CloudGray} />
+				<img id="a" alt="" src={getImage()} />
 				{
 					!props.file ?
 						<div className="drop-zone-message">
