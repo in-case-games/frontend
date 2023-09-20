@@ -1,8 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const StatusUpdateDate = (props) => {
 	const [percent, setPercent] = useState(1)
 	const [color, setColor] = useState("green")
+	const [height, setHeight] = useState(100)
+
+	const stageCanvasRef = useRef(null)
+
+	useEffect(() => {
+		if (stageCanvasRef.current) setHeight(stageCanvasRef.current.offsetHeight)
+	}, [stageCanvasRef])
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -25,8 +32,8 @@ const StatusUpdateDate = (props) => {
 	})
 
 	return (
-		<div className="status-update-date">
-			<div className='status-strip' style={{ height: `${100 * percent}px`, background: color }}>
+		<div className="status-update-date" ref={stageCanvasRef}>
+			<div className='status-strip' style={{ height: `${height * percent}px`, background: color }}>
 			</div>
 		</div>)
 }

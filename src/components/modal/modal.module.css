@@ -83,19 +83,11 @@
     min-height: 300px;
 }
 
-.dropzone_file {
-    border: 2px gray dashed;
-    border-radius: 10px;
-    padding: 40px;
-    background: rgb(173, 181, 189, 0.1);
-    cursor: pointer;
-    position: relative;
-}
-
 .item_info {
     display: flex;
     justify-content: center;
     flex-direction: column;
+    align-items: center;
 }
 
 .item_header {
@@ -109,14 +101,51 @@
     margin-left: 5px;
 }
 
+.item_sub_tittle {
+    font-size: 22px;
+}
+
+.info_btn_send {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    font-family: 'Play';
+    height: 35px;
+    font-weight: 500;
+    font-size: 19px;
+    cursor: pointer;
+    background: linear-gradient(var(--background_withdraw_color));
+    background-size: 1px 60px;
+    transition: background 400ms ease-out;
+    color: black;
+    width: 200px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
 .item_img {
     display: flex;
+    justify-content: center;
+    cursor: pointer;
 }
 
 .item_img img {
     width: 200px;
     border-radius: 15px 0 0 15px;
     padding: 20px;
+}
+
+.info_additional {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.delimiter {
+    border: 1px solid #F8B415;
+    width: 70%;
+    margin: 20px 0;
 }
 
 .send_button {
@@ -134,50 +163,6 @@
     color: #F8B415;
     border-radius: 10px;
     cursor: pointer;
-}
-
-.dropzone_file__hover {
-    border: 2px gray dashed;
-    border-radius: 10px;
-    padding: 40px;
-    background: rgb(173, 181, 189, 0.15);
-    cursor: pointer;
-    position: relative;
-}
-
-.dropzone_file__hover img {
-    width: 240px;
-}
-
-.dropzone_file img {
-    width: 240px;
-}
-
-.dropzone_message p b {
-    color: rgb(184, 184, 184);
-    font-family: 'Megrim';
-    font-size: 20px;
-}
-
-.dropzone_message p {
-    color: rgb(184, 184, 184);
-    font-family: 'Play';
-    font-size: 18px;
-}
-
-#drag_file_element {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 1rem;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
-  }
-
-.input_file {
-    border: 1px solid gray;
 }
 
 .tittle {

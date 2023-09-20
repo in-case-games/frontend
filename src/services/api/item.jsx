@@ -35,6 +35,21 @@ class Item {
 
 		return response.data.data
 	}
+	async getRarities() {
+		const response = await api.get(RESOURCES_API_URL + `game/item/rarities`)
+
+		return response.data.data
+	}
+	async getTypes() {
+		const response = await api.get(RESOURCES_API_URL + `game/item/types`)
+
+		return response.data.data
+	}
+	async getQualities() {
+		const response = await api.get(RESOURCES_API_URL + `game/item/qualities`)
+
+		return response.data.data
+	}
 	async getItem(id) {
 		const response = await api.get(RESOURCES_API_URL + "game/item/id/" + id)
 

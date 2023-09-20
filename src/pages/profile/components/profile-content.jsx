@@ -11,7 +11,10 @@ const ProfileContent = (props) => {
 	const [isLoading, setIsLoading] = useState(true)
 	const [emailActive, setEmailActive] = useState(false)
 	const [loadImageActive, setLoadImageActive] = useState(false)
+
+	const [file, setFile] = useState()
 	const [password, setPassword] = useState("")
+
 	const [controllerConfirmEmail, setControllerConfirmEmail] = useState(null)
 	const [passwordError, setPasswordError] = useState(false)
 
@@ -116,7 +119,15 @@ const ProfileContent = (props) => {
 							exchangeModal(active)
 							setIsLoading(true)
 						}}
-						content={<LoadImageWindow />}
+						content={
+							<LoadImageWindow
+								file={file}
+								setFile={setFile}
+								click={_ => {
+									console.log(file)
+								}}
+							/>
+						}
 					/> : null
 			}
 			{

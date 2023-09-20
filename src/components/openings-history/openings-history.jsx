@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { User } from '../../services/api'
-import { ItemWindow, Modal } from '../modal'
+import { ItemWindow, LoadImageWindow, Modal } from '../modal'
 import { CounterSlider } from '../slider'
 import LazyLoadedHistory from './lazy-loaded-history'
 import classes from "./openings-history.module.css"
@@ -14,8 +14,10 @@ const OpeningsHistory = (props) => {
 	const [showOpenings, setShowOpenings] = useState(null)
 
 	const [item, setItem] = useState(null)
+	const [file, setFile] = useState()
 
 	const [isClickSlider, setIsClickSlider] = useState(false)
+	const [isOpenLoadWindow, setIsOpenLoadWindow] = useState(false)
 
 	const sliderClick = (number) => {
 		if (props.isLoading === false && isClickSlider === false) {
@@ -99,9 +101,27 @@ const OpeningsHistory = (props) => {
 			/>
 			<Modal
 				active={item}
-				clickChange={() => setItem(null)}
+				clickChange={() => {
+					setItem(null)
+					setFile()
+				}}
 				content={
-					<ItemWindow item={item} />
+					<ItemWindow
+						item={item}
+						image={file}
+						resetImage={() => setFile()}
+						openLoadWindow={setIsOpenLoadWindow}
+					/>
+				}
+			/>
+			<Modal
+				active={isOpenLoadWindow}
+				clickChange={_ => setIsOpenLoadWindow(false)}
+				content={
+					<LoadImageWindow
+						file={file}
+						setFile={setFile}
+					/>
 				}
 			/>
 		</div>)

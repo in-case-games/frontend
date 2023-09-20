@@ -190,6 +190,40 @@ html {
 	color: #F8B415;
 }
 
+.info-line {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	width: 100%;
+}
+
+.input-form {
+	padding: 10px 20px;
+	min-width: 250px;
+	font-size: 16px;
+	font-family: Nunito;
+	margin: 5px;
+	color: var(--main-color);
+	border: 2px solid var(--main-color);
+	border-radius: 8px;
+	background: none;
+	outline: none;
+}
+
+.combo-box {
+	padding: 10px 20px;
+  min-width: 294px;
+  font-size: 16px;
+  font-family: Nunito;
+  margin: 5px;
+  color: var(--main-color);
+  border: 2px solid var(--main-color);
+	background: var(--background_modal-window);
+  border-radius: 8px;
+  outline: none;
+	appearance: none;
+}
+
 .navbar-route img {
 	margin: 0px 5px;
 }

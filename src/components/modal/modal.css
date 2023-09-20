@@ -9,15 +9,9 @@
     top: 0;
     left: 0;
     position: fixed;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s, visibility 0s linear 0.3s;
-}
-
-.modal.active {
     opacity: 1;
     visibility: visible;
-    transition-delay: 0s;
+    transition: opacity 0.3s, visibility 0s linear 0.3s;
     z-index: 100;
 }
 
