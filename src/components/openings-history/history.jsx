@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Item } from '../../assets/images/additional'
 import { InCoinOrange } from '../../assets/images/icon'
 import { itemGradients } from '../item/item-colors'
@@ -8,7 +8,15 @@ const History = (props) => {
 	const d = new Date(props.date)
 	const date = ("0" + d.getDate()).slice(-2) + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" +
 		d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2)
-	const [gradientColor,] = useState(itemGradients[props.item.rarity ? props.item.rarity : "white"])
+	const [gradientColor, setGradientColor] = useState(itemGradients[props.item.rarity ? props.item.rarity : "white"])
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setGradientColor(itemGradients[props.item.rarity ? props.item.rarity : "white"])
+		}, 1000)
+
+		return () => clearInterval(interval)
+	})
 
 	const handleCost = (cost) => {
 		let temp = Math.round(cost)

@@ -12,6 +12,7 @@ const ItemWindow = (props) => {
 	const gameApi = new Game()
 
 	const patternItem = {
+		id: null,
 		game: "csgo",
 		type: "none",
 		rarity: "white",
@@ -21,7 +22,10 @@ const ItemWindow = (props) => {
 	const [isLoading, setIsLoading] = useState(true)
 	const [isClickChange, setIsClickChange] = useState(false)
 
-	const [gradientColor,] = useState(itemGradients[props.item?.rarity ? props.item.rarity : "white"])
+	const [endTimeBackOperation, setEndTimeBackOperation] = useState(null)
+	const [operation, setOperation] = useState(null)
+
+	const [gradientColor, setGradientColor] = useState(itemGradients[props.item?.rarity ? props.item.rarity : "white"])
 
 	const [user, setUser] = useState(TokenService.getUser())
 	const [item, setItem] = useState(props.item?.id ? props.item : patternItem)
@@ -34,6 +38,27 @@ const ItemWindow = (props) => {
 		setIsClickChange(true)
 		setItem(value)
 	}
+
+	useEffect(() => {
+		const interval = setInterval(
+			async () => {
+				if (endTimeBackOperation !== null) {
+					let temp = endTimeBackOperation - 1
+					temp = temp >= 0 ? temp : 0
+
+					setEndTimeBackOperation(temp)
+
+					if (temp === 0) {
+						await operations[operation]()
+
+						setOperation(null)
+						setEndTimeBackOperation(null)
+					}
+				}
+			}, 1000)
+
+		return () => clearInterval(interval)
+	})
 
 	useEffect(() => {
 		const interval = setInterval(async () => setIsLoading(!isClickChange), 5000)
@@ -53,6 +78,7 @@ const ItemWindow = (props) => {
 				setRarities(await itemApi.getRarities())
 				setQualities(await itemApi.getQualities())
 				setGames(await gameApi.getGames())
+				setGradientColor(itemGradients[item.rarity])
 
 				setIsLoading(false)
 			}
@@ -65,18 +91,64 @@ const ItemWindow = (props) => {
 		if (user.role === "owner") props.openLoadWindow(true)
 	}
 
-	const getImg = () => {
-		if (props.image) return URL.createObjectURL(props.image)
-		try {
-			return URL.createObjectURL(props.item.img)
+	const getImg = () => !props.image ? Item : props.image
+
+	const handleClick = (isOperationDelete = false) => {
+		if (endTimeBackOperation > 0) {
+			setEndTimeBackOperation(null)
+			setOperation(null)
 		}
-		catch (err) {
-			return Item
+		else if (endTimeBackOperation === null) {
+			setEndTimeBackOperation(5)
+
+			if (isOperationDelete) setOperation("deleteItem")
+			else if (item?.id) setOperation("updateItem")
+			else setOperation("createItem")
 		}
 	}
 
-	const handleSend = () => {
+	const deleteItem = async () => {
+		await itemApi.deleteItem(item.id)
 
+		props.item = patternItem
+		setItem(patternItem)
+		setIsClickChange(false)
+		setIsLoading(true)
+		props.resetImage()
+	}
+
+	const updateItem = async () => {
+		item.image = props.image ? props.image : null
+		item.gameId = games.find(r => r.name === item.game).id
+		item.rarityId = rarities.find(r => r.name === item.rarity).id
+		item.qualityId = qualities.find(q => q.name === item.quality).id
+		item.typeId = types.find(t => t.name === item.type).id
+
+		const response = await itemApi.updateItem(item)
+
+		setItem(response)
+		setIsClickChange(false)
+		setIsLoading(true)
+	}
+
+	const createItem = async () => {
+		item.image = props.image ? props.image : null
+		item.gameId = games.find(r => r.name === item.game).id
+		item.rarityId = rarities.find(r => r.name === item.rarity).id
+		item.qualityId = qualities.find(q => q.name === item.quality).id
+		item.typeId = types.find(t => t.name === item.type).id
+
+		const response = await itemApi.createItem(item)
+
+		setItem(response)
+		setIsClickChange(false)
+		setIsLoading(true)
+	}
+
+	const operations = {
+		"createItem": createItem,
+		"deleteItem": deleteItem,
+		"updateItem": updateItem
 	}
 
 	return (
@@ -167,8 +239,27 @@ const ItemWindow = (props) => {
 					</div>
 					{
 						user.role === "owner" ?
-							<div className={classes.info_btn_send} onClick={() => handleSend()}>
-								{item?.id ? "Изменить" : "Создать"}
+							<div className={classes.info_buttons}>
+								{
+									endTimeBackOperation === null ?
+										<div className={classes.btn_send} onClick={() => handleClick()}>
+											{item?.id ? "Изменить" : "Создать"}
+										</div> : null
+								}
+								{
+									item?.id && endTimeBackOperation === null ?
+										<div className={classes.btn_delete} onClick={() => handleClick(true)}>
+											Удалить
+										</div> : null
+								}
+								{
+									endTimeBackOperation !== null ?
+										<div className={classes.btn_back} onClick={() => handleClick()}>
+											<p>Вернуть</p>
+											<p className={classes.timer}>{endTimeBackOperation}</p>
+										</div>
+										: null
+								}
 							</div> : null
 					}
 				</div>

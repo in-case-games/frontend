@@ -55,7 +55,7 @@ const LazyLoadedHistory = async (props) => {
 				item={i.item}
 				box={i.box}
 				date={i.date}
-				showItem={() => props.setItem({})}
+				showItem={() => props.setItem(i.item)}
 				key={i.id}
 			/>)
 		}

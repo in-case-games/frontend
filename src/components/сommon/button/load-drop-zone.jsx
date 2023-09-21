@@ -4,6 +4,7 @@ import { CloudGray } from '../../../assets/images/icon'
 const LoadDropZone = (props) => {
 	const [dragActive, setDragActive] = useState(false)
 	const [error, setError] = useState(false)
+	const [fileName, setFileName] = useState(null)
 
 	const getColorBorder = () => {
 		if (error) return "red"
@@ -14,46 +15,29 @@ const LoadDropZone = (props) => {
 	const handleSetFile = (file) => {
 		setError(false)
 
-		const isValidName = file.name.match(/\.(jpg|jpeg|png)$/)
+		const isValidName = file.name.match(props.regular)
 		const isValidSize = file.size / 1048576 < props.sizeMb
-		const img = new Image()
 
-		img.onload = function () {
-			var canvas = document.createElement("canvas")
-			var ctx = canvas.getContext("2d")
-			ctx.drawImage(img, 0, 0)
-			var MAX_WIDTH = 100
-			var MAX_HEIGHT = 50
-			var width = img.width
-			var height = img.height
+		const image = new Image()
 
-			if (width > height) {
-				if (width > MAX_WIDTH) {
-					height *= MAX_WIDTH / width
-					width = MAX_WIDTH
-				}
-			} else {
-				if (height > MAX_HEIGHT) {
-					width *= MAX_HEIGHT / height
-					height = MAX_HEIGHT
-				}
-			}
-			canvas.width = width
-			canvas.height = height
+		image.onload = function () {
+			const canvas = document.createElement('canvas')
 
-			ctx = canvas.getContext("2d")
-			ctx.drawImage(img, 0, 0, width, height)
+			canvas.width = props.width
+			canvas.height = props.height
 
-			console.log(canvas.toBlob())
-			props.setFile(new File(canvas, "name"))
+			const context = canvas.getContext('2d', { alpha: true })
+
+			context.drawImage(image, 0, 0, canvas.width, canvas.height)
+
+			setFileName(file.name.substring(0, 19) + (file.name.length > 20 ? "..." : ""))
+			props.setFile(canvas.toDataURL())
+			setError(false)
 		}
 
-		img.src = URL.createObjectURL(file)
-
-		if (isValidName && isValidSize) props.setFile(file)
-		else setError(true)
+		if (!isValidName || !isValidSize) setError(true)
+		else image.src = URL.createObjectURL(file)
 	}
-
 	const handleDrag = (e) => {
 		e.preventDefault()
 		e.stopPropagation()
@@ -79,16 +63,7 @@ const LoadDropZone = (props) => {
 			handleSetFile(e.target.files[0])
 	}
 
-	const getImage = () => {
-		if (!props.file) return CloudGray
-		try {
-			return URL.createObjectURL(props.file)
-		}
-		catch (err) {
-			props.setFile()
-			return CloudGray
-		}
-	}
+	const getImage = () => !props.file ? CloudGray : props.file
 
 	return (
 		<div className='load-drop-zone'>
@@ -97,15 +72,18 @@ const LoadDropZone = (props) => {
 				onDragEnter={handleDrag}
 				style={{ borderColor: getColorBorder() }}
 			>
-				<img id="a" alt="" src={getImage()} />
+				<img alt="" src={getImage()}
+					style={
+						{ height: (props.height > 400) ? 400 : props.height, width: (props.width > 400) ? 400 : props.width }
+					} />
 				{
-					!props.file ?
+					!fileName ?
 						<div className="drop-zone-message">
 							<p><b>Нажмите для загрузки</b><br />или перетащите и отпустите</p>
 							<p>{props.description}</p>
 						</div> :
 						<div className="drop-zone-message">
-							<p>{props.file.name.substring(0, 19) + (props.file.name.length > 20 ? "..." : "")}</p>
+							<p>{fileName}</p>
 						</div>
 				}
 				{
@@ -128,4 +106,4 @@ const LoadDropZone = (props) => {
 	)
 }
 
-export default LoadDropZone
+export default React.memo(LoadDropZone)

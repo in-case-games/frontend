@@ -121,10 +121,11 @@ const OpeningsHistory = (props) => {
 					<LoadImageWindow
 						file={file}
 						setFile={setFile}
-						width={400}
-						height={400}
+						width={200}
+						height={100}
 						sizeMb={1}
-						description={"JPG, JPEG, PNG (MAX. 400x400px | 1MB)"}
+						regular={/\.(png)$/}
+						description={"PNG (MAX. 200x100px | 1MB)"}
 					/>
 				}
 			/>

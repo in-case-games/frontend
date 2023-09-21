@@ -9,6 +9,7 @@
     --background_cost_box_color: 180deg, rgba(255,230,101,1) 0%, rgba(254,115,36,1) 67%;
     --background_withdraw_color: 180deg, rgba(255,230,101,1) 0%, rgba(254,115,36,1) 70%;
     --background_sell_color: 180deg, rgba(236,138,138,1) 0%, rgba(245,62,62,1) 70%;
+    --background_back_color: 180deg, rgba(0, 255, 130, 1) 0%, rgb(0, 122, 63)70%;
     --color_border_info: #FFE665;
     --color_border_balance: #00FF82;
     --color_font_balance: #00FF82;

@@ -133,6 +133,24 @@ class Item {
 
 		return result
 	}
+
+	async createItem(item) {
+		const response = await api.post(RESOURCES_API_URL + "game/item", item)
+
+		return response.data.data
+	}
+
+	async updateItem(item) {
+		const response = await api.put(RESOURCES_API_URL + "game/item", item)
+
+		return response.data.data
+	}
+
+	async deleteItem(item) {
+		const response = await api.delete(RESOURCES_API_URL + "game/item", item)
+
+		return response.data.data
+	}
 }
 
 export default Item

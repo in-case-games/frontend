@@ -126,6 +126,7 @@ const ProfileContent = (props) => {
 								width={400}
 								height={400}
 								sizeMb={1}
+								regular={/\.(jpg|jpeg|png)$/}
 								description={"JPG, JPEG, PNG (MAX. 400x400px | 1MB)"}
 								click={_ => {
 									console.log(file)

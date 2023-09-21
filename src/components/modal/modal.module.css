@@ -105,7 +105,11 @@
     font-size: 22px;
 }
 
-.info_btn_send {
+.info_buttons{
+    display: flex;
+    margin-top: 15px;
+}
+.btn_send {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -120,7 +124,64 @@
     color: black;
     width: 200px;
     border-radius: 5px;
-    margin-top: 15px;
+    margin-right: 5px;
+}
+
+.btn_back {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Nunito';
+    height: 35px;
+    font-weight: 500;
+    font-size: 19px;
+    cursor: pointer;
+    background: linear-gradient(var(--background_back_color));
+    background-size: 1px 60px;
+    transition: background 400ms ease-out;
+    color: black;
+    width: 200px;
+    border-radius: 5px;
+    margin-right: 5px;
+}
+
+.btn_back p {
+    margin: 0;
+}
+
+.btn_back .timer {
+    margin: 2px 0 0 5px;
+}
+
+.btn_send:hover {
+    background-position: 40px;
+}
+
+.btn_back:hover {
+    background-position: 40px;
+}
+
+.btn_delete:hover {
+    background-position: 40px;
+}
+
+
+.btn_delete {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    font-family: 'Play';
+    height: 35px;
+    font-weight: 500;
+    font-size: 19px;
+    cursor: pointer;
+    background: linear-gradient(var(--background_sell_color));
+    background-size: 1px 60px;
+    transition: background 400ms ease-out;
+    color: black;
+    width: 200px;
+    border-radius: 5px;
+    margin-left: 5px;
 }
 
 .item_img {

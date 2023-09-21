@@ -12,6 +12,7 @@ const LoadImageWindow = (props) => {
                     sizeMb={props.sizeMb}
                     width={props.width}
                     height={props.height}
+                    regular={props.regular}
                     description={props.description}
                 />
                 {
