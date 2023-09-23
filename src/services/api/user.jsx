@@ -1,4 +1,6 @@
 import { bake_cookie } from 'sfcookies'
+import { UserLogo } from '../../assets/images/additional'
+import TokenService from '../token'
 import api from "./api"
 
 const RESOURCES_API_URL = "https://localhost:5000/api/"
@@ -8,7 +10,7 @@ class User {
         const result = []
 
         for (let i = 0; i < ids.length; i++) {
-            const response = await api.get(RESOURCES_API_URL + `user/inventory/${ids[i]}`)
+            const response = await api.get(RESOURCES_API_URL + `user/inventory/id/${ids[i]}`)
             result.push(response.data.data)
         }
 
@@ -57,6 +59,24 @@ class User {
         const response = await api.get(RESOURCES_API_URL + `user/history/withdraw/${id}/transfer`)
 
         return response.data.data
+    }
+    async updateImage(image) {
+        const body = {
+            image: image
+        }
+        const response = await api.put(RESOURCES_API_URL + `user/info/image`, body)
+
+        return response.data.data
+    }
+    async getImage() {
+        const user = TokenService.getUser()
+        try {
+            await api.get(`http://localhost:8080/users/${user.id}/${user.id}.png`)
+            return `http://localhost:8080/users/${user.id}/${user.id}.png`
+        }
+        catch (err) {
+            return UserLogo
+        }
     }
 }
 

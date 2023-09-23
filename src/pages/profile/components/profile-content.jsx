@@ -3,7 +3,7 @@ import { AirPlaneBlack, CrossBlack } from '../../../assets/images/icon'
 import { EmailSendWindow, LoadImageWindow, Modal } from '../../../components/modal'
 import { ProfileSetting } from "../../../components/profile-settings"
 import { Loading } from '../../../components/сommon/button'
-import { Email } from '../../../services/api'
+import { Email, User } from '../../../services/api'
 
 const ProfileContent = (props) => {
 	const emailApi = new Email()
@@ -128,8 +128,12 @@ const ProfileContent = (props) => {
 								sizeMb={1}
 								regular={/\.(jpg|jpeg|png)$/}
 								description={"JPG, JPEG, PNG (MAX. 400x400px | 1MB)"}
-								click={_ => {
-									console.log(file)
+								click={async () => {
+									if (file) {
+										const userApi = new User()
+										await userApi.updateImage(file)
+										window.location.reload()
+									}
 								}}
 							/>
 						}
