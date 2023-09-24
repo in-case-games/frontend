@@ -19,8 +19,13 @@ const LazyLoadedInventory = async (props) => {
 
 	let loaded = []
 
-	if (primary.length >= endIndex && (props.isAllReload || startIndex > loadedInventory.length - 1))
+	if (primary.length >= endIndex && (props.isAllReload || startIndex > loadedInventory.length - 1)) {
 		loaded = await itemApi.getItemsByInventory(primary, startIndex, endIndex)
+
+		for (let i = 0; i < loaded.length; i++) {
+			loaded[i].item = await itemApi.pullItemWithImage(loaded[i].item)
+		}
+	}
 
 	if (startIndex > loadedInventory.length - 1) loadedInventory = [...loadedInventory, ...loaded]
 	else if (props.isAllReload && endIndex <= loadedInventory.length) {

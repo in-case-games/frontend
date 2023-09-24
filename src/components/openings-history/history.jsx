@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Item } from '../../assets/images/additional'
 import { InCoinOrange } from '../../assets/images/icon'
 import { itemGradients } from '../item/item-colors'
 import classes from "./history.module.css"
@@ -34,7 +33,7 @@ const History = (props) => {
 					<a className={classes.box_img} target='_blank' rel="noopener noreferrer" href={`/box/${props.box.id}`}>
 						<img
 							alt=""
-							src={Box}
+							src={props.box.img}
 						/>
 					</a>
 					<div className={classes.box_content}>
@@ -80,7 +79,7 @@ const History = (props) => {
 					</div>
 					<img
 						className={classes.item_img}
-						alt="" src={Item}
+						alt="" src={props.item.img}
 						style={{ background: gradientColor }}
 						onClick={() => props.showItem()}
 					/>

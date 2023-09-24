@@ -45,7 +45,7 @@
 }
 
 .profile-group .btn-loading {
-	margin-right: 20px;
+	margin: 0 20px;
 }
 
 .profile-group .btn-filter {
@@ -88,10 +88,21 @@
 	margin-right: 20px;
 }
 
+.profile-back {
+	font-size: 28px;
+	cursor: pointer;
+}
+
 .inventory-content, .box-content, 
 .profile-content, .payment-content,
-.withdrawn-content {
+.withdrawn-content, .admin-item-content {
 	display: flex;
 	flex-direction: column;
   flex-wrap: wrap;
+}
+
+.admin-content {
+	display: flex;
+  flex-wrap: wrap;
+	justify-content: center;
 }

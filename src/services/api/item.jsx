@@ -1,4 +1,6 @@
+import { Item as ItemImage } from '../../assets/images/additional'
 import api from "./api"
+import Game from './game'
 
 const RESOURCES_API_URL = "https://localhost:5000/api/"
 
@@ -62,6 +64,48 @@ class Item {
 		return response.data.data
 	}
 
+	async pullItemWithImage(item) {
+		const gameApi = new Game()
+		const game = await gameApi.getGamesByName(item.game)
+
+		try {
+			await api.get(`http://localhost:8080/game-items/${game.id}/${item.id}/${item.id}.png`)
+			item.img = `http://localhost:8080/game-items/${game.id}/${item.id}/${item.id}.png`
+		}
+		catch (err) {
+			item.img = ItemImage
+		}
+
+		return item
+	}
+
+	async pullItemsWithImages(items, startIndex, endIndex) {
+		const result = []
+		const dictionary = {}
+
+		const gameApi = new Game()
+		const games = await gameApi.getGames()
+
+		games.forEach(g => dictionary[g.name] = g.id)
+
+		for (let i = startIndex; i < endIndex; i++) {
+			const item = items[i]
+			const gameId = dictionary[item.game]
+
+			try {
+				await api.get(`http://localhost:8080/game-items/${gameId}/${item.id}/${item.id}.png`)
+				item.img = `http://localhost:8080/game-items/${gameId}/${item.id}/${item.id}.png`
+			}
+			catch (err) {
+				item.img = ItemImage
+			}
+
+			result.push(item)
+		}
+
+		return result
+	}
+
 	async getItemsByWithdrawnHistory(history, startIndex = 0, endIndex = history.length) {
 		const result = []
 
@@ -69,7 +113,6 @@ class Item {
 			const response = await api.get(RESOURCES_API_URL + "game/item/id/" + history[i].itemId)
 			const item = response.data.data
 
-			item.img = `../history[i].itemId`
 			item.cost = Math.ceil(item.cost)
 
 			const temp = {
@@ -95,7 +138,6 @@ class Item {
 			const response = await api.get(RESOURCES_API_URL + "game/item/id/" + history[i].itemId)
 			const item = response.data.data
 
-			item.img = `../history[i].itemId`
 			item.cost = Math.ceil(item.cost)
 
 			const temp = {
@@ -118,7 +160,6 @@ class Item {
 			const response = await api.get(RESOURCES_API_URL + "game/item/id/" + inventories[i].itemId)
 			const item = response.data.data
 
-			item.img = `../history[i].itemId`
 			item.cost = Math.ceil(item.cost)
 
 			const temp = {

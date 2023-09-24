@@ -1,4 +1,6 @@
 import React from 'react'
+import AdminContent from './admin-content'
+import AdminItemContent from './admin-item-content'
 import BoxContent from './box-content'
 import InventoryContent from "./inventory-content"
 import PaymentContent from './payment-content'
@@ -31,6 +33,16 @@ const PanelContent = (props) => {
 			{
 				props.active === "withdrawn" ?
 					<WithdrawnContent /> :
+					null
+			}
+			{
+				props.active === "admin" ?
+					<AdminContent exchange={props.exchange} /> :
+					null
+			}
+			{
+				props.active === "admin-item" ?
+					<AdminItemContent exchange={props.exchange} /> :
 					null
 			}
 		</div>

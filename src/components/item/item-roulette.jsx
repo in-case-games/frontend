@@ -17,16 +17,20 @@ const ItemRoulette = () => {
 
         const roulette = await apiUser
           .getRouletteOpenings()
-        const items = await apiItem
+        const history = await apiItem
           .getItemsByHistory(roulette)
 
-        const result = items.map(history =>
+        for (let i = 0; i < history.length; i++) {
+          history[i].item = await apiItem.pullItemWithImage(history[i].item)
+        }
+
+        const result = history.map(h =>
           <BigItem
-            img={history.item.img}
-            name={history.item.name}
-            color={history.item.rarity}
-            date={history.date}
-            key={history.id}
+            img={h.item.img}
+            name={h.item.name}
+            color={h.item.rarity}
+            date={h.date}
+            key={h.id}
           />)
 
         setItemList(result)

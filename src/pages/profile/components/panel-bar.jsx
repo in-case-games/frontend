@@ -71,7 +71,7 @@ const PanelBar = (props) => {
 						<BarButton
 							text="Админ панель"
 							click={() => props.exchange("admin")}
-							active={props.active === "admin"}
+							active={props.active.split("-")[0] === "admin"}
 						/> : null
 				}
 				<BarButton click={() => handleClick()} text="Выйти" />

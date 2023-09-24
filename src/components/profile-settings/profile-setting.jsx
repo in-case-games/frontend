@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { CSGO, Dota2 } from '../../assets/images/additional'
+import { CSGO, Dota2, UserLogo } from '../../assets/images/additional'
 import { BookUser, CrossBlack, Download, Email, Pen } from '../../assets/images/icon'
 import { User } from '../../services/api'
 import TokenService from "../../services/token"
@@ -14,7 +14,6 @@ const ProfileSetting = (props) => {
 
 	const [user, setUser] = useState(TokenService.getUser())
 	const [game, setGame] = useState(null)
-	const [img, setImg] = useState("")
 
 	const games = [
 		{
@@ -44,9 +43,10 @@ const ProfileSetting = (props) => {
 	useEffect(() => {
 		const interval = setInterval(async () => {
 			if (props.isLoading) {
-				const logo = await userApi.getImage()
-				setImg(logo)
-				setUser(TokenService.getUser())
+				const temp = TokenService.getUser()
+				temp.img = await userApi.getImage()
+
+				setUser(temp)
 				props.setIsLoading(false)
 			}
 		}, 100)
@@ -62,7 +62,7 @@ const ProfileSetting = (props) => {
 			<div className={classes.setting_line}>
 				<div className={classes.setting_main}>
 					<div className={classes.setting_img} onMouseDown={() => props.exchangeModal("load-image")}>
-						<img className={classes.user_logo} alt="" src={img} />
+						<img className={classes.user_logo} alt="" src={user.img ?? UserLogo} />
 						<img className={classes.load_icon} alt="" src={Download} />
 					</div>
 					<div className={classes.setting_data}>

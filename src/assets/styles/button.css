@@ -412,3 +412,26 @@ button {
     bottom: 0px;
     left: 0px;
 }
+
+.square-panel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #F8B415;
+    width: 200px;
+    height: 200px;
+    font-size: 28px;
+    transition: all 0.3s ease-out;
+    cursor: pointer;
+    margin: 10px;
+}
+
+.square-panel:hover {
+    background: rgb(54, 54, 59, 0.2);
+    transition: all 0.3s ease-out;
+}
+
+.square-panel img {
+    height: 80px;
+}

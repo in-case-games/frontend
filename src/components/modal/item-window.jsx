@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react"
-import { Item } from '../../assets/images/additional'
 import { Game, Item as ItemApi } from '../../services/api'
 import TokenService from '../../services/token'
 import { itemGradients } from '../item/item-colors'
@@ -91,8 +90,6 @@ const ItemWindow = (props) => {
 		if (user.role === "owner") props.openLoadWindow(true)
 	}
 
-	const getImg = () => !props.image ? Item : props.image
-
 	const handleClick = (isOperationDelete = false) => {
 		if (endTimeBackOperation > 0) {
 			setEndTimeBackOperation(null)
@@ -167,7 +164,7 @@ const ItemWindow = (props) => {
 						{
 							<img
 								alt=""
-								src={getImg()}
+								src={props.image ? props.image : props.item.img}
 								style={{ background: gradientColor }}
 							/>
 						}

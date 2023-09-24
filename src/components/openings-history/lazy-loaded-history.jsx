@@ -29,8 +29,8 @@ const LazyLoadedHistory = async (props) => {
 			loaded.push({
 				id: tempItems[i].id,
 				date: tempItems[i].date,
-				item: tempItems[i].item,
-				box: tempBoxes[i].box
+				item: await itemApi.pullItemWithImage(tempItems[i].item),
+				box: await boxApi.pullBoxWithImage(tempBoxes[i].box)
 			})
 		}
 	}
