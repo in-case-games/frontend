@@ -48,6 +48,10 @@
 	margin: 0 20px;
 }
 
+.btn-create-item {
+	color: black;
+}
+
 .profile-group .btn-filter {
 	margin-top: 5px;
 }

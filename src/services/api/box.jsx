@@ -14,10 +14,10 @@ class Box {
     async pullBoxWithImage(box) {
         try {
             await api.get(`http://localhost:8080/loot-boxes/${box.id}/${box.id}.png`)
-            box.img = `http://localhost:8080/loot-boxes/${box.id}/${box.id}.png`
+            box.image = `http://localhost:8080/loot-boxes/${box.id}/${box.id}.png`
         }
         catch (err) {
-            box.img = BoxImage
+            box.image = BoxImage
         }
 
         return box
@@ -35,7 +35,6 @@ class Box {
                 date: history[i].date,
                 box: {
                     id: data.id,
-                    img: `../data.id`,
                     name: data.name,
                     cost: Math.ceil(data.cost),
                     isLocked: data.isLocked

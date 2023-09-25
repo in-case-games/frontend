@@ -1,15 +1,19 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 const StatusUpdateDate = (props) => {
-	const [percent, setPercent] = useState(1)
-	const [color, setColor] = useState("green")
-	const [height, setHeight] = useState(100)
-
 	const stageCanvasRef = useRef(null)
 
+	const [percent, setPercent] = useState(1)
+	const [color, setColor] = useState("green")
+	const [height, setHeight] = useState(null)
+
 	useEffect(() => {
-		if (stageCanvasRef.current) setHeight(stageCanvasRef.current.offsetHeight)
-	}, [stageCanvasRef])
+		const interval = setInterval(() => {
+			setHeight(stageCanvasRef.current.clientHeight)
+		}, 100)
+
+		return () => clearInterval(interval)
+	})
 
 	useEffect(() => {
 		const interval = setInterval(() => {

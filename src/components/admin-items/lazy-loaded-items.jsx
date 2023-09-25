@@ -41,6 +41,7 @@ const LazyLoadedHistory = async (props) => {
 			showTemp.push(<Item
 				id={i.id}
 				item={i}
+				showItem={props.setItem}
 				key={i.id}
 			/>)
 		}

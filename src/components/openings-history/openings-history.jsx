@@ -122,10 +122,10 @@ const OpeningsHistory = (props) => {
 						file={file}
 						setFile={setFile}
 						width={200}
-						height={100}
+						height={200}
 						sizeMb={1}
 						regular={/\.(png)$/}
-						description={"PNG (MAX. 200x100px | 1MB)"}
+						description={"PNG (MAX. 200x200px | 1MB)"}
 					/>
 				}
 			/>

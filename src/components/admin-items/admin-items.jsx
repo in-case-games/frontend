@@ -61,6 +61,7 @@ const AdminItems = (props) => {
 						"page": page > pagesTemp ? pagesTemp : page,
 						"setLoadedItems": setLoadedItems,
 						"setShowItems": setShowItems,
+						"setItem": props.setItem,
 						"backAll": () => setPage(page - 1 < 1 ? 1 : page - 1)
 					})
 				}

@@ -10,7 +10,7 @@ const LootBox = (props) => {
 
     return (
         <div className={name} onClick={() => navigate(`/box/${props.box.id}`)}>
-            <img alt="" href="#" src={props.box.img ?? Box}></img>
+            <img alt="" href="#" src={props.box.image ?? Box}></img>
             <div className={classes.box_name}>{props.box.name}</div>
             <div className={classes.btn_cost_box}>
                 <CostBox cost={Math.ceil(props.box.cost)} />

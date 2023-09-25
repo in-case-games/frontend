@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import { Item } from '../../assets/images/additional'
 import { Game, Item as ItemApi } from '../../services/api'
 import TokenService from '../../services/token'
 import { itemGradients } from '../item/item-colors'
@@ -11,7 +12,6 @@ const ItemWindow = (props) => {
 	const gameApi = new Game()
 
 	const patternItem = {
-		id: null,
 		game: "csgo",
 		type: "none",
 		rarity: "white",
@@ -81,6 +81,7 @@ const ItemWindow = (props) => {
 
 				setIsLoading(false)
 			}
+			setGradientColor(itemGradients[props.item?.rarity ? props.item.rarity : "white"])
 		}, 100)
 
 		return () => clearInterval(interval)
@@ -107,11 +108,11 @@ const ItemWindow = (props) => {
 	const deleteItem = async () => {
 		await itemApi.deleteItem(item.id)
 
-		props.item = patternItem
+		props.setImage(null)
+		props.setItem()
 		setItem(patternItem)
 		setIsClickChange(false)
 		setIsLoading(true)
-		props.resetImage()
 	}
 
 	const updateItem = async () => {
@@ -123,6 +124,10 @@ const ItemWindow = (props) => {
 
 		const response = await itemApi.updateItem(item)
 
+		response.image = props.image || props.item?.image
+
+		props.setImage(null)
+		props.setItem(response)
 		setItem(response)
 		setIsClickChange(false)
 		setIsLoading(true)
@@ -137,6 +142,10 @@ const ItemWindow = (props) => {
 
 		const response = await itemApi.createItem(item)
 
+		response.image = props.image || props.item?.image
+
+		props.setImage(null)
+		props.setItem(response)
 		setItem(response)
 		setIsClickChange(false)
 		setIsLoading(true)
@@ -155,7 +164,7 @@ const ItemWindow = (props) => {
 					<Loading isLoading={isLoading} click={() => {
 						setIsClickChange(false)
 						setIsLoading(true)
-						props.resetImage()
+						props.setImage(null)
 					}} />
 					<div className={classes.item_tittle}>Информация по предмету</div>
 				</div>
@@ -164,7 +173,7 @@ const ItemWindow = (props) => {
 						{
 							<img
 								alt=""
-								src={props.image ? props.image : props.item.img}
+								src={props?.image || props?.item?.image || Item}
 								style={{ background: gradientColor }}
 							/>
 						}
@@ -198,7 +207,7 @@ const ItemWindow = (props) => {
 						<InfoLine
 							value={item?.hashName}
 							setValue={value => setValue({ ...item, hashName: value })}
-							name="item-hashName"
+							name="item-hash-name"
 							placeholder="Хэш имя"
 							isReadOnly={user.role !== "owner"}
 						/>

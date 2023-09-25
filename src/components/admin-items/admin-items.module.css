@@ -1,0 +1,10 @@
+.admin_items_content {
+	padding-top: 10px;
+}
+
+.admin_items {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	margin: 0 -10px;
+}

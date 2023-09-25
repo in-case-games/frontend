@@ -7,6 +7,7 @@ const InfoLine = (props) => {
 			{
 				props.comboBox ?
 					<select className="combo-box"
+						name={props.name}
 						value={props.value}
 						onChange={e => props.setValue(e.target.value)}
 					>

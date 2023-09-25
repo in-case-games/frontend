@@ -13,7 +13,7 @@ const BigItem = (props) => {
 
     return (
         <div className={classes.big_item} style={{ background: gradientColor, borderBottom: `5px solid ${itemColor}` }}>
-            <img src={props.img ?? Item} alt="" />
+            <img src={props.image ?? Item} alt="" />
             <p className={classes.item_name}>{props.name.length > 25 ? props.name.substring(0, 25) + "..." : props.name}</p>
             <p className={classes.item_date}>{date}</p>
         </div>

@@ -70,10 +70,10 @@ class Item {
 
 		try {
 			await api.get(`http://localhost:8080/game-items/${game.id}/${item.id}/${item.id}.png`)
-			item.img = `http://localhost:8080/game-items/${game.id}/${item.id}/${item.id}.png`
+			item.image = `http://localhost:8080/game-items/${game.id}/${item.id}/${item.id}.png`
 		}
 		catch (err) {
-			item.img = ItemImage
+			item.image = ItemImage
 		}
 
 		return item
@@ -94,10 +94,10 @@ class Item {
 
 			try {
 				await api.get(`http://localhost:8080/game-items/${gameId}/${item.id}/${item.id}.png`)
-				item.img = `http://localhost:8080/game-items/${gameId}/${item.id}/${item.id}.png`
+				item.image = `http://localhost:8080/game-items/${gameId}/${item.id}/${item.id}.png`
 			}
 			catch (err) {
-				item.img = ItemImage
+				item.image = ItemImage
 			}
 
 			result.push(item)
@@ -187,8 +187,8 @@ class Item {
 		return response.data.data
 	}
 
-	async deleteItem(item) {
-		const response = await api.delete(RESOURCES_API_URL + "game/item", item)
+	async deleteItem(id) {
+		const response = await api.delete(RESOURCES_API_URL + `game/item/${id}`)
 
 		return response.data.data
 	}

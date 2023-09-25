@@ -43,7 +43,7 @@ const LazyLoadedInventory = async (props) => {
 			let i = loadedInventory[j]
 
 			showTemp.push(<InventoryItem
-				img={i.item.img}
+				image={i.item.image}
 				name={i.item.name}
 				color={i.item.rarity}
 				date={i.date}

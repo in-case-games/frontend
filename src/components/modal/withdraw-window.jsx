@@ -8,243 +8,243 @@ import classes from "./modal.module.css"
 //TODO How game will more 5, then check count trade urls(add overflow-y)
 const WithdrawWindow = (props) => {
     const [steamUrl, setSteamURL] = useState(Constants
-        .CheckUndefinedNull(Constants.TradeURL["csgo"](), ""));
-    const [error, setError] = useState(null);
-    const [remainingInventories, setRemainingInventories] = useState({ items: [] });
-    const [inventories, setInventories] = useState({ items: [] });
+        .CheckUndefinedNull(Constants.TradeURL["csgo"](), ""))
+    const [error, setError] = useState(null)
+    const [remainingInventories, setRemainingInventories] = useState({ items: [] })
+    const [inventories, setInventories] = useState({ items: [] })
 
-    const [isLoading, setIsLoading] = useState(true);
-    const [isApply, setIsApply] = useState(false);
-    const [bannedRefresh, setBannedRefresh] = useState(false);
-    const [showSteamURL, setShowSteamURL] = useState(false);
-    const [showSendButton, setShowSendButton] = useState(false);
+    const [isLoading, setIsLoading] = useState(true)
+    const [isApply, setIsApply] = useState(false)
+    const [bannedRefresh, setBannedRefresh] = useState(false)
+    const [showSteamURL, setShowSteamURL] = useState(false)
+    const [showSendButton, setShowSendButton] = useState(false)
 
     const showUrls = {
         "dota2": (show) => setShowSteamURL(show),
         "csgo": (show) => setShowSteamURL(show)
-    };
+    }
 
     const isShowInput = {
         "dota2": showSteamURL,
         "csgo": showSteamURL
-    };
+    }
 
     const inputSteamURLClick = (value) => {
-        setSteamURL(value);
+        setSteamURL(value)
 
-        if(Constants.Regex["csgo"].test(value)) { 
-            setError(null);
-            Constants.UpdateTradeURL["csgo"](value);
+        if (Constants.Regex["csgo"].test(value)) {
+            setError(null)
+            Constants.UpdateTradeURL["csgo"](value)
         }
     }
 
     const sendClick = () => {
         const games = Object.keys(showUrls)
 
-        let error = null;
+        let error = null
 
-        for(let i = 0; i < games.length; i++) {
-            let game = games[i];
+        for (let i = 0; i < games.length; i++) {
+            let game = games[i]
 
-            if(isShowInput[game] === true && !Constants.IsRegexTradeURL(game))  {
-                error = "Проверьте корректность ссылки на обмен";
-                setError(error);
-                break;
+            if (isShowInput[game] === true && !Constants.IsRegexTradeURL(game)) {
+                error = "Проверьте корректность ссылки на обмен"
+                setError(error)
+                break
             }
         }
 
-        if(error === null) { 
-            setBannedRefresh(true);
-            setIsLoading(true);
-            setShowSendButton(false);
-            withdrawLoader();
+        if (error === null) {
+            setBannedRefresh(true)
+            setIsLoading(true)
+            setShowSendButton(false)
+            withdrawLoader()
         }
-    };
+    }
 
     const withdrawLoader = async () => {
-        const itemApi = new Item();
-        let temp = inventories.items;
+        const itemApi = new Item()
+        let temp = inventories.items
 
-        for(let i = 0; i < temp.length; i++) {
-            if(temp[i].status !== "success") {
-                temp[i].status = "wait";
-                temp[i].error = null;
-                setInventories(previousInputs => ({...previousInputs, items: temp }));
+        for (let i = 0; i < temp.length; i++) {
+            if (temp[i].status !== "success") {
+                temp[i].status = "wait"
+                temp[i].error = null
+                setInventories(previousInputs => ({ ...previousInputs, items: temp }))
             }
         }
 
-        for(let i = 0; i < temp.length; i++) {
-            const inventory = temp[i];
-            
-            try {
-                if(inventory.status !== "success") {
-                    temp[i].status = "loading";
-                    setInventories(previousInputs => ({...previousInputs, items: temp }));
+        for (let i = 0; i < temp.length; i++) {
+            const inventory = temp[i]
 
-                    const index = props.selectItems.items.indexOf(inventory.id);
-                
+            try {
+                if (inventory.status !== "success") {
+                    temp[i].status = "loading"
+                    setInventories(previousInputs => ({ ...previousInputs, items: temp }))
+
+                    const index = props.selectItems.items.indexOf(inventory.id)
+
                     await itemApi
-                        .withdrawItem(inventory.id, Constants.TradeURL[inventory.item.game]());
-    
-                    temp[i].status = "success";
-    
-                    setInventories(previousInputs => ({...previousInputs, items: temp }));
-                    removeSelectItem(index, inventory);
+                        .withdrawItem(inventory.id, Constants.TradeURL[inventory.item.game]())
+
+                    temp[i].status = "success"
+
+                    setInventories(previousInputs => ({ ...previousInputs, items: temp }))
+                    removeSelectItem(index, inventory)
                 }
             }
-            catch(err) { 
-                const code = err.response.data.error.code;
+            catch (err) {
+                const code = err.response.data.error.code
 
-                temp[i].status = "cancel";
-                temp[i].error = Constants.WithdrawErrors[code] === undefined ? 
-                    "Подождите или напишите в тех. поддержку" : 
-                    Constants.WithdrawErrors[code];
-                
-                setInventories(previousInputs => ({...previousInputs, items: temp }));
+                temp[i].status = "cancel"
+                temp[i].error = Constants.WithdrawErrors[code] === undefined ?
+                    "Подождите или напишите в тех. поддержку" :
+                    Constants.WithdrawErrors[code]
 
-                if(code === 4) {
-                    const index = props.selectItems.items.indexOf(inventory.id);
+                setInventories(previousInputs => ({ ...previousInputs, items: temp }))
 
-                    temp.push(inventory);
-                    
-                    removeSelectItem(index, inventory);
+                if (code === 4) {
+                    const index = props.selectItems.items.indexOf(inventory.id)
+
+                    temp.push(inventory)
+
+                    removeSelectItem(index, inventory)
                 }
-                else if(code === 5) 
-                {
-                    temp[i].status = "exchange";
+                else if (code === 5) {
+                    temp[i].status = "exchange"
 
-                    setInventories(previousInputs => ({...previousInputs, items: temp }));
+                    setInventories(previousInputs => ({ ...previousInputs, items: temp }))
                 }
-                else break;
+                else break
             };
         }
-        setIsLoading(false);
-        setBannedRefresh(false);
-    };
+        setIsLoading(false)
+        setBannedRefresh(false)
+    }
 
     const removeSelectItem = (index, inventory) => {
-        if(props.selectItem === inventory.id) props.setSelectItem(null);
-        else if(index > -1) {
-            let tempSelectItems = props.selectItems.items;
-            tempSelectItems.splice(index, 1); 
-            props.setSelectItems({...props.selectItems, ...tempSelectItems});
+        if (props.selectItem === inventory.id) props.setSelectItem(null)
+        else if (index > -1) {
+            let tempSelectItems = props.selectItems.items
+            tempSelectItems.splice(index, 1)
+            props.setSelectItems({ ...props.selectItems, ...tempSelectItems })
         }
-    } 
+    }
 
     useEffect(() => {
         const interval = setInterval(async () => {
-            const withdrawnNot = inventories.items.filter(i => i.status !== "success");
-            setRemainingInventories({...remainingInventories, items: withdrawnNot});
+            const withdrawnNot = inventories.items.filter(i => i.status !== "success")
+            setRemainingInventories({ ...remainingInventories, items: withdrawnNot })
 
-            if(inventories.items.length > 0 && !bannedRefresh) {
-                let showSendButton = withdrawnNot.length > 0;
+            if (inventories.items.length > 0 && !bannedRefresh) {
+                let showSendButton = withdrawnNot.length > 0
 
                 inventories.items.forEach(i => {
-                    const showUrl = !Constants.IsRegexTradeURL(i.item.game);
-                    showSendButton &&= !showUrl;
+                    const showUrl = !Constants.IsRegexTradeURL(i.item.game)
+                    showSendButton &&= !showUrl
 
-                    showUrls[i.item.game](showUrl);
-                });
+                    showUrls[i.item.game](showUrl)
+                })
 
-                setIsApply(withdrawnNot.length === 0);
-                setShowSendButton(showSendButton);
+                setIsApply(withdrawnNot.length === 0)
+                setShowSendButton(showSendButton)
             }
-        }, 100);
+        }, 100)
 
-        return () => clearInterval(interval);
-    });
+        return () => clearInterval(interval)
+    })
 
     useEffect(() => {
         const interval = setInterval(async () => {
-            if(inventories.items.length === 0 && !bannedRefresh) {
-                setBannedRefresh(true);
-                setIsLoading(true);
+            if (inventories.items.length === 0 && !bannedRefresh) {
+                setBannedRefresh(true)
+                setIsLoading(true)
 
-                const itemApi = new Item();
-                const userApi = new User();
-                let ids = [];
-                
-                if(props.selectItem === null && props.selectItems.items.length === 0) 
-                    ids = props.pullPrimaryInventory().map(i => i.id);
-                else if(props.selectItem === null && props.selectItems.items.length > 0) 
-                    ids = props.selectItems.items;
-                else if(props.selectItem !== null) 
-                    ids.push(props.selectItem);
+                const itemApi = new Item()
+                const userApi = new User()
+                let ids = []
+
+                if (props.selectItem === null && props.selectItems.items.length === 0)
+                    ids = props.pullPrimaryInventory().map(i => i.id)
+                else if (props.selectItem === null && props.selectItems.items.length > 0)
+                    ids = props.selectItems.items
+                else if (props.selectItem !== null)
+                    ids.push(props.selectItem)
                 try {
-                    const inventories = await userApi.getInventoriesByIds(ids);
+                    const inventories = await userApi.getInventoriesByIds(ids)
 
                     const inventoriesAdditional = await itemApi
-                        .getItemsByInventory(inventories, 0, inventories.length);
-    
-                    inventoriesAdditional.forEach((i) => {
-                        i.status = "wait"; 
-                        i.error = null;
-                    });
-                    
-                    setInventories({ ...inventories, items: inventoriesAdditional });
+                        .getItemsByInventory(inventories, 0, inventories.length)
+
+                    inventoriesAdditional.forEach(async (i) => {
+                        i.item = await itemApi.pullItemWithImage(i.item)
+                        i.status = "wait"
+                        i.error = null
+                    })
+
+                    setInventories({ ...inventories, items: inventoriesAdditional })
                 }
-                catch(err) { 
-                    
+                catch (err) {
+
                 }
                 finally {
-                    setIsLoading(false);
-                    setBannedRefresh(false);
+                    setIsLoading(false)
+                    setBannedRefresh(false)
                 }
             }
-        }, 100);
+        }, 100)
 
-        return () => clearInterval(interval);
-    });
+        return () => clearInterval(interval)
+    })
 
-    return(
+    return (
         <div className={classes.withdraw_window}>
             <div className={classes.withdraw_content}>
                 <div className={classes.withdraw_tittle}>
-                    <Loading isLoading={isLoading} click={() => {}} cursor="default"/>
+                    <Loading isLoading={isLoading} click={() => { }} cursor="default" />
                     <div className={classes.tittle}>Вывод предметов</div>
                 </div>
-                { 
-                    inventories.items.length > 0 ? 
-                    <div className={classes.withdraw_counter}>
-                        {inventories.items.length - remainingInventories.items.length + "/" + inventories.items.length}
-                    </div> : null 
+                {
+                    inventories.items.length > 0 ?
+                        <div className={classes.withdraw_counter}>
+                            {inventories.items.length - remainingInventories.items.length + "/" + inventories.items.length}
+                        </div> : null
                 }
                 {
-                    error !== null ? 
-                    <div className={classes.sell_error}>{error}</div> : null
+                    error !== null ?
+                        <div className={classes.sell_error}>{error}</div> : null
                 }
                 {
                     showSteamURL ?
-                    <input 
-                        maxLength={200}
-                        className={classes.input_form} 
-                        placeholder="Steam TradeURL" 
-                        value={steamUrl} 
-                        onInput={e => inputSteamURLClick(e.target.value)} name="trade-url"
-                    /> : 
-                    null
+                        <input
+                            maxLength={200}
+                            className={classes.input_form}
+                            placeholder="Steam TradeURL"
+                            value={steamUrl}
+                            onInput={e => inputSteamURLClick(e.target.value)} name="trade-url"
+                        /> :
+                        null
                 }
                 {
                     showSendButton ?
-                    <div className={classes.btn_main} onClick={() => sendClick()}>Вывести</div> :
-                    null
+                        <div className={classes.btn_main} onClick={() => sendClick()}>Вывести</div> :
+                        null
                 }
                 {
-                    isApply ? 
-                    <div className={classes.description}>Все предметы отправлены :)<br/>Для просмотра статуса, перейдите в выводы</div> :
-                    null
+                    isApply ?
+                        <div className={classes.description}>Все предметы отправлены :)<br />Для просмотра статуса, перейдите в выводы</div> :
+                        null
                 }
                 {
                     inventories.items.length > 0 ?
-                    <div className={classes.delimiter_first}></div> :
-                    null
+                        <div className={classes.delimiter_first}></div> :
+                        null
                 }
-                <div className={classes.withdraw_items} style={inventories.items.length > 3 ? {overflowY: "scroll"} : {overflowY: 'hidden'}}>
+                <div className={classes.withdraw_items} style={inventories.items.length > 3 ? { overflowY: "scroll" } : { overflowY: 'hidden' }}>
                     {
-                        inventories.items.map(i => 
-                            <StatusItem 
-                                id={i.id} 
-                                item={i.item} 
+                        inventories.items.map(i =>
+                            <StatusItem
+                                id={i.id}
+                                item={i.item}
                                 cost={i.cost}
                                 status={i.status}
                                 isLoading={isLoading}
@@ -256,12 +256,12 @@ const WithdrawWindow = (props) => {
                 </div>
                 {
                     inventories.items.length > 0 ?
-                    <div className={classes.delimiter_second}></div> :
-                    null
+                        <div className={classes.delimiter_second}></div> :
+                        null
                 }
             </div>
         </div>
     )
 }
 
-export default WithdrawWindow;
+export default WithdrawWindow

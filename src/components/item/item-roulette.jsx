@@ -26,7 +26,7 @@ const ItemRoulette = () => {
 
         const result = history.map(h =>
           <BigItem
-            img={h.item.img}
+            image={h.item.image}
             name={h.item.name}
             color={h.item.rarity}
             date={h.date}

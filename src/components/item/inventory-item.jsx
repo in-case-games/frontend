@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Item } from '../../assets/images/additional'
 import { AirPlane, InCoinWhite } from '../../assets/images/icon'
 import classes from "./inventory-item.module.css"
 import { itemColors, itemGradients } from './item-colors'
@@ -62,7 +63,7 @@ const InventoryItem = (props) => {
 		<div className={classes.inventory_item} style={{ borderBottom: `5px solid ${borderColor}` }}>
 			<div className={classes.item} style={{ background: gradientColor }} onClick={() => handleClick()}>
 				<div className={classes.item_img}>
-					<img alt="" href="#" src={props.img} />
+					<img alt="" href="#" src={props.image ?? Item} />
 				</div>
 				<div className={classes.item_info}>
 					<p className={classes.info_name}>{props.name.length > 25 ? props.name.substring(0, 25) + "..." : props.name}</p>
