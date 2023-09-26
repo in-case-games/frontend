@@ -9,25 +9,25 @@ class Game extends React.Component {
     title = "InCase - ";
 
     constructor(props) {
-        super(props);
-        this.title = this.title + props.title;
+        super(props)
+        this.title = this.title + props.title
     }
 
     render() {
         return (
             <div className="game">
                 <Helmet>
-                    <title>{this.gameId}</title>
+                    <title>{this.title}</title>
                 </Helmet>
-                <Banner/>
+                <Banner />
                 <div className="container-small">
-                    <SearchBar/>
-                    <BoxGroupLoader/>
-                    <ReviewSlider name="Отзывы"/>
+                    <SearchBar />
+                    <BoxGroupLoader />
+                    <ReviewSlider name="Отзывы" />
                 </div>
             </div>
-        );
+        )
     }
 }
 
-export default Game;
+export default Game

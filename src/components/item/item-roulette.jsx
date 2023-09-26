@@ -14,9 +14,21 @@ const ItemRoulette = () => {
     const interval = setInterval(async () => {
       try {
         setIsStartItemList(false)
+        const urlSplit = window.location.href.split("/")
+        let roulette = []
 
-        const roulette = await apiUser
-          .getRouletteOpenings()
+        if (urlSplit.at(-2) === "box") {
+          try {
+            roulette = await apiUser.getRouletteOpeningsByBoxId(urlSplit.at(-1))
+          }
+          catch (err) {
+            roulette = await apiUser.getRouletteOpenings()
+          }
+        }
+        else {
+          roulette = await apiUser.getRouletteOpenings()
+        }
+
         const history = await apiItem
           .getItemsByHistory(roulette)
 
@@ -26,6 +38,8 @@ const ItemRoulette = () => {
 
         const result = history.map(h =>
           <BigItem
+            userId={h.userId}
+            boxId={h.boxId}
             image={h.item.image}
             name={h.item.name}
             color={h.item.rarity}

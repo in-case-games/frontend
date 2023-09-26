@@ -64,6 +64,12 @@ class Item {
 		return response.data.data
 	}
 
+	async getItemsByGame(id) {
+		const response = await api.get(RESOURCES_API_URL + `game/${id}/item`)
+
+		return response.data.data
+	}
+
 	async pullItemWithImage(item) {
 		const gameApi = new Game()
 		const game = await gameApi.getGamesByName(item.game)
@@ -144,6 +150,7 @@ class Item {
 				id: history[i].id,
 				date: history[i].date,
 				boxId: history[i].boxId,
+				userId: history[i].userId,
 				item: item
 			}
 

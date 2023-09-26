@@ -11,6 +11,12 @@ class Box {
         return response.data.data
     }
 
+    async getBox(id) {
+        const response = await api.get(RESOURCES_API_URL + "box/id/" + id)
+
+        return response.data.data
+    }
+
     async pullBoxWithImage(box) {
         try {
             await api.get(`http://localhost:8080/loot-boxes/${box.id}/${box.id}.png`)
@@ -27,8 +33,7 @@ class Box {
         const result = []
 
         for (let i = startIndex; i < endIndex; i++) {
-            const response = await api.get(RESOURCES_API_URL + "box/id/" + history[i].boxId)
-            const data = response.data.data
+            const data = await this.getBox(history[i].boxId)
 
             const temp = {
                 id: history[i].id,

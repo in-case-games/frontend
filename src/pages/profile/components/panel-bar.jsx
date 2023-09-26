@@ -36,7 +36,7 @@ const PanelBar = (props) => {
 		<div className='panel-bar'>
 			<div className='user-bar'>
 				<HeaderBarButton
-					img={user.img ?? UserLogo}
+					image={user.image ?? UserLogo}
 					name={user.name ?? ""}
 					click={() => props.exchange("profile")}
 					active={props.active === "profile"}

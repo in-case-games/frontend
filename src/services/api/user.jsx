@@ -40,6 +40,11 @@ class User {
 
         return response.data.data
     }
+    async getRouletteOpeningsByBoxId(id) {
+        const response = await api.get(RESOURCES_API_URL + `user/history/opening/box/${id}`)
+
+        return response.data.data
+    }
     async getBoxOpenings() {
         const response = await api.get(RESOURCES_API_URL + "user/history/opening")
 
@@ -73,6 +78,16 @@ class User {
         try {
             await api.get(`http://localhost:8080/users/${user.id}/${user.id}.png`)
             return `http://localhost:8080/users/${user.id}/${user.id}.png`
+        }
+        catch (err) {
+            return UserLogo
+        }
+    }
+
+    async getImageById(id) {
+        try {
+            await api.get(`http://localhost:8080/users/${id}/${id}.png`)
+            return `http://localhost:8080/users/${id}/${id}.png`
         }
         catch (err) {
             return UserLogo

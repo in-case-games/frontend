@@ -5,7 +5,7 @@ const ProfileHeaderBar = (props) => {
 
 	return (
 		<div className={className} onClick={props.click}>
-			<img className='profile-logo' alt="" src={props.img} href="#" />
+			<img className='profile-logo' alt="" src={props.image} href="#" />
 			<div className='profile-login'>{props.name}</div>
 		</div>
 	)

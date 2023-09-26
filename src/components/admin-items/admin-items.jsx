@@ -43,7 +43,7 @@ const AdminItems = (props) => {
 					let pagesTemp = pages
 
 					if (isAllReload) {
-						primary = await itemApi.getItems()
+						primary = await itemApi.getItemsByGame(props.getFilterGame().id)
 
 						pagesTemp = Math.ceil(primary.length / 20)
 						pagesTemp = pagesTemp === 0 ? 1 : pagesTemp
@@ -54,9 +54,19 @@ const AdminItems = (props) => {
 						if (page > pagesTemp) setPage(pagesTemp)
 					}
 
+					const primaryTemp = []
+					const filterName = props.getFilterName()
+
+					for (let i = 0; i < primary.length; i++) {
+						const item = primary[i]
+						const name = item.name.toLowerCase()
+
+						if (name.startsWith(filterName.toLowerCase())) primaryTemp.push(item)
+					}
+
 					LazyLoadedItems({
 						"isAllReload": isAllReload,
-						"primaryItems": primary,
+						"primaryItems": primaryTemp,
 						"loadedItems": loadedItems,
 						"page": page > pagesTemp ? pagesTemp : page,
 						"setLoadedItems": setLoadedItems,
