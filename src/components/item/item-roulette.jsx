@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Item, User } from "../../services/api"
+import { MiniProfileWindow, Modal } from '../modal'
 import BigItem from "./big-item"
 import classes from './item.module.css'
 
@@ -7,6 +8,7 @@ const ItemRoulette = () => {
   const apiUser = new User()
   const apiItem = new Item()
 
+  const [miniProfile, setMiniProfile] = useState(null)
   const [itemList, setItemList] = useState([])
   const [isStartItemList, setIsStartItemList] = useState(true)
 
@@ -40,6 +42,7 @@ const ItemRoulette = () => {
           <BigItem
             userId={h.userId}
             boxId={h.boxId}
+            showMiniProfile={() => setMiniProfile(h.userId)}
             image={h.item.image}
             name={h.item.name}
             color={h.item.rarity}
@@ -62,6 +65,16 @@ const ItemRoulette = () => {
   return (
     <div className={classes.item_roulette}>
       {itemList}
+      <Modal
+        active={miniProfile}
+        clickChange={() => setMiniProfile(null)}
+        content={
+          <MiniProfileWindow
+            userId={miniProfile}
+            closeWindow={() => setMiniProfile(null)}
+          />
+        }
+      />
     </div>
   )
 }

@@ -16,6 +16,11 @@ class User {
 
         return result
     }
+    async getUserById(id) {
+        const response = await api.get(RESOURCES_API_URL + `user/id/${id}`)
+
+        return response.data.data
+    }
     async getInventory() {
         const response = await api.get(RESOURCES_API_URL + "user/inventory")
 
@@ -82,6 +87,18 @@ class User {
         catch (err) {
             return UserLogo
         }
+    }
+
+    async getRestrictions() {
+        const response = await api.get(RESOURCES_API_URL + `user/restriction`)
+
+        return response.data.data
+    }
+
+    async getRestrictionsByOwner() {
+        const response = await api.get(RESOURCES_API_URL + `user/restriction/owner`)
+        console.log(response)
+        return response.data.data
     }
 
     async getImageById(id) {

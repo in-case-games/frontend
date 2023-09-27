@@ -24,7 +24,7 @@ const PanelBar = (props) => {
 			setIsStart(false)
 
 			const temp = TokenService.getUser()
-			temp.img = await userApi.getImage()
+			temp.image = await userApi.getImage()
 
 			setUser(temp)
 		}, isStart ? 100 : 10000)
@@ -36,8 +36,8 @@ const PanelBar = (props) => {
 		<div className='panel-bar'>
 			<div className='user-bar'>
 				<HeaderBarButton
-					image={user.image ?? UserLogo}
-					name={user.name ?? ""}
+					image={user?.image ?? UserLogo}
+					name={user?.name ?? ""}
 					click={() => props.exchange("profile")}
 					active={props.active === "profile"}
 				/>

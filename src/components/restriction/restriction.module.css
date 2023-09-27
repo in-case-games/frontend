@@ -1,0 +1,42 @@
+.restriction {
+	margin: 0 20px;
+	width: 300px;
+}
+
+.restriction_content {
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	padding: 20px 10px;
+	background: #c7bfad;
+	color: black;
+	border-radius: 15px;
+}
+
+.restriction_content img {
+	background-repeat: no-repeat;
+	background-position: 50%;
+	border-radius: 50%;
+	width: 65px;
+	height: 65px;
+	cursor: pointer;
+	margin-right: 10px;
+	object-fit: cover;
+}
+
+.restriction_info {
+	display: flex;
+	flex-direction: column;
+	font-size: 15px;
+	font-family: 'Nunito';
+}
+
+.restriction_description {
+	margin: 5px 0;
+}
+.restriction_creation {
+	color: #218655;
+}
+.restriction_expiration {
+	color: #913232;
+}

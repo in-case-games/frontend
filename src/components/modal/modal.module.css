@@ -5,7 +5,8 @@
 .withdraw_content, .trade_url_change_content,
 .send_email_content, .sign_in_content,
 .sign_up_content, .sign_up_content .items,
-.item_content {
+.item_content, .mini_profile_content,
+.mini_profile_load {
     display: flex;
     justify-content: space-evenly;
     flex-direction: column;
@@ -30,7 +31,8 @@
 .sign_in_window, .forgot_password_window, 
 .load_img_window, .sell_window,
 .exchange_window, .withdraw_window,
-.trade_url_change_window, .item_window {
+.trade_url_change_window, .item_window,
+.mini_profile_window {
     display: flex;
     justify-content: center;
     text-align: center;
@@ -39,48 +41,20 @@
     padding: 40px;
 }
 
-.sign_up_window {
-    max-width: 900px;
+.item_window {
+    padding: 20px 10px;
 }
 
 .send_email_window {
     max-width: 300px;
 }
 
-.sign_in_window, .trade_url_change_window {
+.forgot_password_window{
     max-width: 400px;
 }
 
-.item_window {
-    width: 600px;
-}
-
-.forgot_password_window, .load_img_window {
-    max-width: 500px;
-}
-
-.sell_window, .withdraw_window, .exchange_window {
-    padding: 30px 10px;
-}
-.sell_window {
-    min-width: 400px;
-    max-width: 650px;
-}
-
-.exchange_window {
-    min-width: 800px;
-    min-height: 400px;
-}
-
 .withdraw_window {
-    min-width: 400px;
-    max-width: 650px;
     position: relative;
-}
-
-.load_img_window {
-    min-width: 300px;
-    min-height: 300px;
 }
 
 .item_info {
@@ -468,6 +442,63 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.mini_profile_tittle {
+    display: flex;
+    justify-content: space-between;
+}
+
+.mini_profile_info {
+    width: 400px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.mini_profile_main_info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin-left: 20px;
+}
+.mini_profile_name {
+    display: flex;
+    align-items: center;
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+.mini_profile_role {
+    color: #979797;
+}
+.mini_profile_creation {
+    color: #218655;
+}
+.mini_profile_deletion {
+    color: #913232;
+}
+.mini_profile_logo {
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+}
+
+.mini_profile_name img {
+    margin-left: 10px;
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+}
+
+.info_loading {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    max-width: 25px;
 }
 
 .btn_main {

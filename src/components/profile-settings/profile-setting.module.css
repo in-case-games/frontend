@@ -11,6 +11,7 @@
   padding: 20px 0;
 	flex-wrap: wrap;
 	justify-content: space-between;
+	min-height: 50px;
 }
 .setting_line:hover {
 	background: rgb(54, 54, 59, 0.2);
@@ -37,6 +38,34 @@
 	-webkit-filter: grayscale(0%);
 	filter: grayscale(0%);
 	transition: all 0.3s ease-out;
+}
+
+.setting_line_arrow {
+	display: flex;
+	cursor: pointer;
+	width: 30px;
+	animation: up-down 1s linear infinite;
+}
+
+.profile_restrictions {
+	display: flex;
+	align-items: center;
+}
+
+@keyframes up-down
+{
+    0%
+    {
+    	margin-top: 0px;
+    }
+		95%
+    {
+    	margin-top: 10px;
+    }
+    100%
+    {
+			margin-top: 0px;
+    }
 }
 
 .setting_line:hover .user_logo{

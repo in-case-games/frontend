@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react"
-import { useNavigate } from 'react-router-dom'
 import { Box as BoxImage, Item, UserLogo } from '../../assets/images/additional'
 import { Box as BoxApi, User } from '../../services/api'
-import TokenService from '../../services/token'
 import Loading from '../сommon/button/loading'
 import { itemColors, itemGradients } from "./item-colors"
 import classes from './item.module.css'
 
 const BigItem = (props) => {
-    const navigate = useNavigate()
     const [isStart, setIsStart] = useState(true)
     const boxApi = new BoxApi()
     const userApi = new User()
@@ -50,6 +47,20 @@ const BigItem = (props) => {
 
     return (
         <div className={classes.big_item}>
+            {
+                isStart ?
+                    <Loading click={() => { }} isLoading={true} cursor="default" /> :
+                    <div
+                        className={classes.big_item_user}
+                        style={{ background: gradientColor, borderBottom: `5px solid ${itemColor}` }}
+                        onClick={() => props.showMiniProfile()} >
+                        <img
+                            alt=""
+                            src={userLogo}
+                            className={classes.logo_user}
+                        />
+                    </div>
+            }
             <div className={isFlipped ? classes.big_item_inner_flipped : classes.big_item_inner} onClick={() => {
                 setIsClick(true)
                 setIsFlipped(!isFlipped)
@@ -79,24 +90,8 @@ const BigItem = (props) => {
                     }
                 </div>
             </div>
-            {
-                isStart ?
-                    <Loading click={() => { }} isLoading={true} cursor="default" /> :
-                    <img
-                        alt=""
-                        src={userLogo}
-                        className={classes.logo_user}
-                        onClick={() => {
-                            if (TokenService.getUser()?.id === props.userId) {
-                                navigate("/profile")
-                            }
-                            else {
-                                console.log("open window user")
-                            }
-                        }} />
-            }
         </div>
     )
 }
 
-export default BigItem
+export default React.memo(BigItem)
