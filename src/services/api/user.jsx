@@ -46,7 +46,13 @@ class User {
         return response.data.data
     }
     async getRouletteOpeningsByBoxId(id) {
-        const response = await api.get(RESOURCES_API_URL + `user/history/opening/box/${id}`)
+        const response = await api.get(RESOURCES_API_URL +
+            `user/history/opening/roulette/box/${id}`)
+
+        return response.data.data
+    }
+    async getBoxOpeningsByUserId(id) {
+        const response = await api.get(RESOURCES_API_URL + `user/${id}/history/opening`)
 
         return response.data.data
     }
@@ -97,7 +103,7 @@ class User {
 
     async getRestrictionsByOwner() {
         const response = await api.get(RESOURCES_API_URL + `user/restriction/owner`)
-        console.log(response)
+
         return response.data.data
     }
 

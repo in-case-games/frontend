@@ -7,7 +7,12 @@ import {
 import { User } from '../../services/api'
 import TokenService from "../../services/token"
 import { GameProfile } from '../game'
-import { MiniProfileWindow, Modal, TradeUrlChangeWindow } from "../modal"
+import {
+	ItemWindow,
+	LoadImageWindow,
+	MiniProfileWindow, Modal,
+	TradeUrlChangeWindow
+} from "../modal"
 import { Restriction } from '../restriction'
 import { MiniRetractable } from '../сommon/button'
 import Loading from '../сommon/button/loading'
@@ -18,11 +23,16 @@ const ProfileSetting = (props) => {
 	const userApi = new User()
 
 	const [user, setUser] = useState(TokenService.getUser())
+
 	const [game, setGame] = useState(null)
-	const [showGames, setShowGames] = useState(false)
-	const [showRestriction, setShowRestriction] = useState(false)
 	const [restrictions, setRestrictions] = useState(null)
 	const [miniProfile, setMiniProfile] = useState(null)
+	const [item, setItem] = useState(null)
+	const [file, setFile] = useState()
+
+	const [isOpenLoadWindow, setIsOpenLoadWindow] = useState(false)
+	const [showGames, setShowGames] = useState(false)
+	const [showRestriction, setShowRestriction] = useState(false)
 
 	const games = [
 		{
@@ -53,15 +63,17 @@ const ProfileSetting = (props) => {
 		const interval = setInterval(async () => {
 			if ((showRestriction && !restrictions) || (props.isLoading && showRestriction)) {
 				let temp = []
+				const userTemp = TokenService.getUser()
 
-				try {
-					Array.prototype.push.apply(temp, await userApi.getRestrictionsByOwner())
+				if (userTemp.role && userTemp.role !== "user") {
+					try {
+						Array.prototype.push.apply(temp, await userApi.getRestrictionsByOwner())
+					}
+					catch (err) { }
 				}
-				catch (err) { }
+				else Array.prototype.push.apply(temp, await userApi.getRestrictions())
 
-				Array.prototype.push.apply(temp, await userApi.getRestrictions())
-
-				setRestrictions(temp)
+				setRestrictions(temp.slice(0, 20))
 			}
 			if (props.isLoading) {
 				const temp = TokenService.getUser()
@@ -156,7 +168,13 @@ const ProfileSetting = (props) => {
 						<div className={classes.profile_restrictions} style={{ alignItems: restrictions ? 'flex-start' : "center" }}>
 							{
 								restrictions ?
-									restrictions.map(r => <Restriction restriction={r} key={r.id} showMiniProfile={() => setMiniProfile(r.ownerId)} />) :
+									restrictions.map(r =>
+										<Restriction
+											restriction={r}
+											key={r.id}
+											showMiniProfile={() =>
+												setMiniProfile(user.role === "user" ? r.ownerId : r.userId)}
+											isOwnerImage={user.role === "user"} />) :
 									<Loading isLoading={!restrictions} click={() => { }} />
 							}
 						</div> :
@@ -185,7 +203,40 @@ const ProfileSetting = (props) => {
 				content={
 					<MiniProfileWindow
 						userId={miniProfile}
-						closeWindow={() => setMiniProfile(null)}
+						openItemWindow={(item) => setItem(item)}
+						exchangeWindow={(id) => setMiniProfile(id)}
+					/>
+				}
+			/>
+			<Modal
+				active={item}
+				clickChange={() => {
+					setItem(null)
+					setFile()
+				}}
+				content={
+					<ItemWindow
+						item={item}
+						image={file}
+						setImage={setFile}
+						setItem={setItem}
+						resetImage={() => setFile()}
+						openLoadWindow={setIsOpenLoadWindow}
+					/>
+				}
+			/>
+			<Modal
+				active={isOpenLoadWindow}
+				clickChange={_ => setIsOpenLoadWindow(false)}
+				content={
+					<LoadImageWindow
+						file={file}
+						setFile={setFile}
+						width={200}
+						height={200}
+						sizeMb={1}
+						regular={/\.(png)$/}
+						description={"PNG (MAX. 200x200px | 1MB)"}
 					/>
 				}
 			/>

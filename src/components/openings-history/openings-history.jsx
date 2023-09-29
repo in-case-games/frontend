@@ -109,6 +109,8 @@ const OpeningsHistory = (props) => {
 					<ItemWindow
 						item={item}
 						image={file}
+						setImage={setFile}
+						setItem={setItem}
 						resetImage={() => setFile()}
 						openLoadWindow={setIsOpenLoadWindow}
 					/>

@@ -20,6 +20,22 @@
     transition: all 0.3s ease-out;
 }
 
+.small_item {
+    display: flex;
+    align-items: center;
+    height: 70px;
+    max-width: 70px;
+    margin: 3px;
+    cursor: pointer;
+}
+
+.small_item img {
+    height: 50px;
+    max-width: 50px;
+    padding: 10px;
+    border-radius: 15px;
+}
+
 .item img {
     height: 100px;
     max-width: 100px;
@@ -82,7 +98,7 @@
     display: flex;
     align-items: center;
     height: 90px;
-    width: 30px;
+    width: 40px;
     border-radius: 15px 0 0 15px;
     margin-bottom: 10px;
     transition: margin 200ms;
@@ -101,10 +117,11 @@
     width: 30px;
     height: 30px;
     object-fit: cover;
+    margin: 0 5px;
 }
 
 .big_item_inner, .big_item_inner_flipped {
-    width: 150px;
+    width: 120px;
     height: 95px;
     transition: transform 1s, margin 200ms;
     transform-style: preserve-3d;
@@ -130,7 +147,7 @@
     justify-content: center;
     border-radius: 0 15px 15px 0;
     height: 50px;
-    width: 110px;
+    width: 100px;
     padding: 20px 20px 20px 0;
 }
 

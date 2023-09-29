@@ -8,6 +8,23 @@
     --color_locked_cost: #622F00;
 }
 
+.box_small {
+    display: flex;
+    align-items: center;
+    height: 70px;
+    max-width: 70px;
+    margin: 3px;
+    cursor: pointer;
+}
+
+.box_small img {
+    height: 50px;
+    max-width: 50px;
+    padding: 10px;
+    border-radius: 15px;
+    background: rgb(256, 256, 256, 0.08);
+}
+
 .lootbox {
     display: flex;
     flex-direction: column;

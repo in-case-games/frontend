@@ -81,7 +81,7 @@ const Header = () => {
 
                 setUser(temp)
             }
-        }, 1000)
+        }, 5000)
 
         return () => clearInterval(interval)
     })

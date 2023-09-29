@@ -41,6 +41,10 @@
     padding: 40px;
 }
 
+.mini_profile_content, .mini_profile_window {
+    max-width: 450px;
+}
+
 .item_window {
     padding: 20px 10px;
 }
@@ -467,6 +471,54 @@
     align-items: center;
     font-size: 28px;
     margin-bottom: 5px;
+}
+
+.mini_profile_content .delimiter {
+    margin: 20px 0 0 0;
+}
+
+.mini_profile_bar {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+.mini_profile_item:hover, .mini_profile_box:hover, .mini_profile_restriction:hover {
+    background: transparent;
+    transition: all 200ms;
+}
+
+
+.mini_profile_item {
+    background: #313138;
+    height: 24px;
+    cursor: pointer;
+    padding: 8px;
+    border: 1px solid #F8B415;
+    transition: all 200ms;
+}
+
+.mini_profile_items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.mini_profile_box {
+    background: #313138;
+    height: 30px;
+    cursor: pointer;
+    padding: 5px;
+    border: 1px solid #F8B415;
+    transition: all 200ms;
+}
+
+.mini_profile_restriction {
+    background: #313138;
+    height: 30px;
+    cursor: pointer;
+    padding: 5px;
+    border: 1px solid #F8B415;
+    transition: all 200ms;
 }
 
 .mini_profile_role {

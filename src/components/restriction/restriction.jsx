@@ -7,6 +7,7 @@ const Restriction = (props) => {
 	const userApi = new UserApi()
 	const [isStart, setIsStart] = useState(true)
 	const [ownerImage, setOwnerImage] = useState(null)
+	const [isFlipped, setIsFlipped] = useState(false)
 
 	const getDate = (date) => {
 		if (date === null) return "Без даты"
@@ -24,7 +25,9 @@ const Restriction = (props) => {
 			setIsStart(false)
 
 			if (!ownerImage) {
-				setOwnerImage(await userApi.getImageById(props.restriction.ownerId))
+				const id = props.isOwnerImage ? props.restriction.ownerId : props.restriction.userId
+
+				setOwnerImage(await userApi.getImageById(id))
 			}
 		}, isStart ? 100 : 50000)
 
@@ -35,16 +38,20 @@ const Restriction = (props) => {
 
 	return (
 		<div className={classes.restriction}>
-			<div className={classes.restriction_content} style={{ background: getBackground() }}>
-				<img alt="" src={ownerImage ?? UserLogo} onClick={() => props.showMiniProfile()} />
-				<div className={classes.restriction_info}>
+			<div
+				className={classes.restriction_owner}
+				style={{ background: getBackground() }}
+				onClick={() => props.showMiniProfile()} >
+				<img alt="" src={ownerImage ?? UserLogo} />
+			</div>
+			<div
+				className={isFlipped ? classes.restriction_inner_flipped : classes.restriction_inner}
+				onClick={() => setIsFlipped(!isFlipped)}
+			>
+				<div className={classes.restriction__face__front} style={{ background: getBackground() }}>
 					<div className={classes.restriction_type}>
 						Тип:
 						{props.restriction.type.name}
-					</div>
-					<div className={classes.restriction_description}>
-						Описание:
-						{props.restriction.description}
 					</div>
 					<div className={classes.restriction_creation}>
 						Создан:
@@ -55,6 +62,13 @@ const Restriction = (props) => {
 						{
 							new Date(props.restriction.expirationDate) > new Date() ?
 								getDate(props.restriction.expirationDate) : "истёк"
+						}
+					</div>
+				</div>
+				<div className={classes.restriction__face__back} style={{ background: getBackground() }}>
+					<div className={classes.restriction_description}>
+						{
+							props.restriction.description.length > 80 ? props.restriction.description.substring(0, 80) + "..." : props.restriction.description
 						}
 					</div>
 				</div>

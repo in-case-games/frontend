@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Item, User } from "../../services/api"
-import { MiniProfileWindow, Modal } from '../modal'
+import { ItemWindow, LoadImageWindow, MiniProfileWindow, Modal } from '../modal'
 import BigItem from "./big-item"
 import classes from './item.module.css'
 
@@ -12,10 +12,15 @@ const ItemRoulette = () => {
   const [itemList, setItemList] = useState([])
   const [isStartItemList, setIsStartItemList] = useState(true)
 
+  const [item, setItem] = useState(null)
+  const [file, setFile] = useState()
+  const [isOpenLoadWindow, setIsOpenLoadWindow] = useState(false)
+
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
         setIsStartItemList(false)
+
         const urlSplit = window.location.href.split("/")
         let roulette = []
 
@@ -55,7 +60,7 @@ const ItemRoulette = () => {
       catch (err) {
         setIsStartItemList(false)
       }
-    }, (isStartItemList ? 100 : 5000))
+    }, (isStartItemList ? 1000 : 5000))
 
     return () => {
       clearInterval(interval)
@@ -71,7 +76,40 @@ const ItemRoulette = () => {
         content={
           <MiniProfileWindow
             userId={miniProfile}
-            closeWindow={() => setMiniProfile(null)}
+            openItemWindow={(item) => setItem(item)}
+            exchangeWindow={(id) => setMiniProfile(id)}
+          />
+        }
+      />
+      <Modal
+        active={item}
+        clickChange={() => {
+          setItem(null)
+          setFile()
+        }}
+        content={
+          <ItemWindow
+            item={item}
+            image={file}
+            setImage={setFile}
+            setItem={setItem}
+            resetImage={() => setFile()}
+            openLoadWindow={setIsOpenLoadWindow}
+          />
+        }
+      />
+      <Modal
+        active={isOpenLoadWindow}
+        clickChange={_ => setIsOpenLoadWindow(false)}
+        content={
+          <LoadImageWindow
+            file={file}
+            setFile={setFile}
+            width={200}
+            height={200}
+            sizeMb={1}
+            regular={/\.(png)$/}
+            description={"PNG (MAX. 200x200px | 1MB)"}
           />
         }
       />
