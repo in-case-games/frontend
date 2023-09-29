@@ -9,6 +9,7 @@ const InfoLine = (props) => {
 					<select className="combo-box"
 						name={props.name}
 						value={props.value}
+						disabled={props.isReadOnly}
 						onChange={e => props.setValue(e.target.value)}
 					>
 						{

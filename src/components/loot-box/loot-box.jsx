@@ -1,23 +1,34 @@
-import React from "react"
-import { useNavigate } from "react-router-dom"
-import { Box } from '../../assets/images/additional'
-import CostBox from "../сommon/button/cost-box"
+import React from 'react'
+import { Box as BoxImage } from '../../assets/images/additional'
+import { InCoinOrange } from '../../assets/images/icon'
 import classes from "./loot-box.module.css"
 
 const LootBox = (props) => {
-    const name = props.box.isLocked ? classes.lootbox_locked : classes.lootbox
-    const navigate = useNavigate()
+	const handleCost = (cost) => {
+		let temp = Math.round(cost)
+		if (temp >= 1000000) temp = `${Math.round(temp / 10) / 100000}M`
+		else if (temp >= 1000) temp = `${Math.round(temp / 10) / 100}K`
 
-    return (
-        <div className={name} onClick={() => navigate(`/box/${props.box.id}`)}>
-            <img alt="" href="#" src={props.box.image ?? Box}></img>
-            <div className={classes.box_name}>{props.box.name}</div>
-            <div className={classes.btn_cost_box}>
-                <CostBox cost={Math.ceil(props.box.cost)} />
-            </div>
-            <div className={classes.box_delimiter}></div>
-        </div>
-    )
+		return temp
+	}
+
+	return (
+		<div className={classes.box} onClick={() => props.showBox(props.box)}>
+			<img
+				src={props.box?.image ?? BoxImage}
+				alt=""
+				style={{ background: "gray" }}
+			/>
+			<div className={classes.box_info}>
+				<div className={classes.box_name}>{props.box.name}</div>
+				<div className={classes.box_cost}>
+					{handleCost(props.box.cost)}
+					<img alt="" src={InCoinOrange} />
+				</div>
+				<div className={classes.box_game}>{props.box.game}</div>
+			</div>
+		</div>
+	)
 }
 
-export default LootBox
+export default React.memo(LootBox)

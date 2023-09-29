@@ -1,3 +1,4 @@
+export { default as BoxWindow } from "./box-window"
 export { default as EmailSendWindow } from "./email-send-window"
 export { default as ExchangeWindow } from "./exchange-window"
 export { default as ForgotPasswordWindow } from "./forgot-password-window"

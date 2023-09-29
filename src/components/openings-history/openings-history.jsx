@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { User } from '../../services/api'
-import { ItemWindow, LoadImageWindow, Modal } from '../modal'
+import {
+	BoxWindow,
+	ItemWindow, LoadImageWindow,
+	Modal
+} from '../modal'
 import { CounterSlider } from '../slider'
 import LazyLoadedHistory from './lazy-loaded-history'
 import classes from "./openings-history.module.css"
@@ -14,6 +18,7 @@ const OpeningsHistory = (props) => {
 	const [showOpenings, setShowOpenings] = useState(null)
 
 	const [item, setItem] = useState(null)
+	const [box, setBox] = useState(null)
 	const [file, setFile] = useState()
 
 	const [isClickSlider, setIsClickSlider] = useState(false)
@@ -67,6 +72,7 @@ const OpeningsHistory = (props) => {
 						"setLoadedOpenings": setLoadedOpenings,
 						"setShowOpenings": setShowOpenings,
 						"setItem": setItem,
+						"setBox": setBox,
 						"backAll": () => setPage(page - 1 < 1 ? 1 : page - 1)
 					})
 				}
@@ -111,6 +117,23 @@ const OpeningsHistory = (props) => {
 						image={file}
 						setImage={setFile}
 						setItem={setItem}
+						resetImage={() => setFile()}
+						openLoadWindow={setIsOpenLoadWindow}
+					/>
+				}
+			/>
+			<Modal
+				active={box}
+				clickChange={() => {
+					setBox(null)
+					setFile()
+				}}
+				content={
+					<BoxWindow
+						box={box}
+						image={file}
+						setImage={setFile}
+						setBox={setBox}
 						resetImage={() => setFile()}
 						openLoadWindow={setIsOpenLoadWindow}
 					/>

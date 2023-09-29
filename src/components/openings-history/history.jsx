@@ -31,12 +31,12 @@ const History = (props) => {
 			<div className={classes.history_tittle}>{date}</div>
 			<div className={classes.history_content}>
 				<div className={classes.history_box}>
-					<a className={classes.box_img} target='_blank' rel="noopener noreferrer" href={`/box/${props.box.id}`}>
-						<img
-							alt=""
-							src={props.box.image ?? Box}
-						/>
-					</a>
+					<img
+						alt=""
+						src={props.box.image ?? Box}
+						onClick={() => props.showBox()}
+						className={classes.box_img}
+					/>
 					<div className={classes.box_content}>
 						<p>Кейс:</p>
 						<div className={classes.info}>

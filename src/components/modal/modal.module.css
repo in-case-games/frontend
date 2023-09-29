@@ -6,7 +6,7 @@
 .send_email_content, .sign_in_content,
 .sign_up_content, .sign_up_content .items,
 .item_content, .mini_profile_content,
-.mini_profile_load {
+.mini_profile_load, .box_content {
     display: flex;
     justify-content: space-evenly;
     flex-direction: column;
@@ -32,7 +32,7 @@
 .load_img_window, .sell_window,
 .exchange_window, .withdraw_window,
 .trade_url_change_window, .item_window,
-.mini_profile_window {
+.mini_profile_window, .box_window {
     display: flex;
     justify-content: center;
     text-align: center;
@@ -45,7 +45,7 @@
     max-width: 450px;
 }
 
-.item_window {
+.item_window, .box_window {
     padding: 20px 10px;
 }
 
@@ -61,26 +61,38 @@
     position: relative;
 }
 
-.item_info {
+.item_info, .box_info {
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
 }
 
-.item_header {
+.item_header, .box_header {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
 }
 
-.item_tittle {
+.item_tittle, .box_tittle {
     font-size: 28px;
     margin-left: 5px;
 }
 
-.item_sub_tittle {
+.item_sub_tittle, .box_sub_tittle {
     font-size: 22px;
+}
+
+.link_img {
+    display: flex;
+    align-items: center;
+}
+
+.link_img img {
+    margin-left: 10px;
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
 }
 
 .info_buttons{
@@ -165,6 +177,17 @@
 .item_img {
     display: flex;
     justify-content: center;
+}
+
+.box_img {
+    display: flex;
+    justify-content: center;
+}
+
+.box_img img {
+    width: 200px;
+    max-width: 200px;
+    max-height: 200px;
 }
 
 .item_img img {

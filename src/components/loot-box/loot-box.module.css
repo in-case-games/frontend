@@ -8,6 +8,60 @@
     --color_locked_cost: #622F00;
 }
 
+.box {
+    display: flex;
+    background: rgb(0, 0, 0, 0.18);
+    border-radius: 15px;
+    max-width: 350px;
+    margin: 5px 10px;
+    cursor: pointer;
+    transition: all 0.3s ease-out;
+}
+
+.box:hover {
+    background: rgb(0, 0, 0, 0.5);
+    transition: all 0.3s ease-out;
+}
+
+.box img {
+    height: 100px;
+    max-width: 100px;
+    padding: 10px;
+    border-radius: 15px 0 0 15px;
+}
+
+.box_info {
+    display: flex;
+    flex-direction: column;
+    margin: 0 25px;
+    justify-content: center;
+    width: 100%;
+}
+
+.box_name {
+    font-size: 15px;
+    font-family: 'Play';
+}
+
+.box_game {
+    color: #ACACAD;
+    font-size: 15px;
+    font-family: 'Play';
+}
+
+.box_cost {
+    display: flex;
+    align-items: center;
+    font-family: 'Nunito';
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.box_cost img {
+    width: 20px;
+    height: 20px;
+}
+
 .box_small {
     display: flex;
     align-items: center;

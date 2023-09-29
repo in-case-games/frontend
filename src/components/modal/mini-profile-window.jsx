@@ -219,7 +219,7 @@ const MiniProfileWindow = (props) => {
 										historyOpening.map(h =>
 											<LootBoxSmall
 												box={h.box}
-												showBox={() => navigate(`/box/${h.box.id}`)}
+												showBox={() => props.openBoxWindow(h.box)}
 												key={h.id}
 											/>) : null
 								}

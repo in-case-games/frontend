@@ -1,0 +1,10 @@
+.admin_boxes_content {
+	padding-top: 10px;
+}
+
+.admin_boxes {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	margin: 0 -10px;
+}

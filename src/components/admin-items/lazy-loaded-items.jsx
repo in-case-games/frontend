@@ -2,7 +2,7 @@ import React from 'react'
 import { Item as ItemApi } from '../../services/api'
 import { Item } from '../item'
 
-const LazyLoadedHistory = async (props) => {
+const LazyLoadedItems = async (props) => {
 	const itemApi = new ItemApi()
 
 	let showTemp = []
@@ -54,4 +54,4 @@ const LazyLoadedHistory = async (props) => {
 	}
 }
 
-export default LazyLoadedHistory
+export default LazyLoadedItems

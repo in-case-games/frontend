@@ -1,4 +1,5 @@
 import React from 'react'
+import AdminBoxContent from './admin-box-content'
 import AdminContent from './admin-content'
 import AdminItemContent from './admin-item-content'
 import BoxContent from './box-content'
@@ -43,6 +44,11 @@ const PanelContent = (props) => {
 			{
 				props.active === "admin-item" ?
 					<AdminItemContent exchange={props.exchange} /> :
+					null
+			}
+			{
+				props.active === "admin-box" ?
+					<AdminBoxContent exchange={props.exchange} /> :
 					null
 			}
 		</div>

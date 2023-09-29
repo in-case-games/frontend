@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react"
 import { Item, User } from "../../services/api"
-import { ItemWindow, LoadImageWindow, MiniProfileWindow, Modal } from '../modal'
+import {
+  BoxWindow,
+  ItemWindow, LoadImageWindow,
+  MiniProfileWindow,
+  Modal
+} from '../modal'
 import BigItem from "./big-item"
 import classes from './item.module.css'
 
@@ -13,6 +18,7 @@ const ItemRoulette = () => {
   const [isStartItemList, setIsStartItemList] = useState(true)
 
   const [item, setItem] = useState(null)
+  const [box, setBox] = useState(null)
   const [file, setFile] = useState()
   const [isOpenLoadWindow, setIsOpenLoadWindow] = useState(false)
 
@@ -77,6 +83,7 @@ const ItemRoulette = () => {
           <MiniProfileWindow
             userId={miniProfile}
             openItemWindow={(item) => setItem(item)}
+            openBoxWindow={(box) => setBox(box)}
             exchangeWindow={(id) => setMiniProfile(id)}
           />
         }
@@ -93,6 +100,23 @@ const ItemRoulette = () => {
             image={file}
             setImage={setFile}
             setItem={setItem}
+            resetImage={() => setFile()}
+            openLoadWindow={setIsOpenLoadWindow}
+          />
+        }
+      />
+      <Modal
+        active={box}
+        clickChange={() => {
+          setBox(null)
+          setFile()
+        }}
+        content={
+          <BoxWindow
+            box={box}
+            image={file}
+            setImage={setFile}
+            setBox={setBox}
             resetImage={() => setFile()}
             openLoadWindow={setIsOpenLoadWindow}
           />

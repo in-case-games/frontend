@@ -1,13 +1,13 @@
 import React from "react"
 import Group from "../group/group"
-import LootBox from "../loot-box/loot-box"
+import { LootBoxBig } from "../loot-box"
 
 const BoxGroup = (props) => {
-    const boxes = props.boxes?.map((box) => <LootBox box={box} key={box.id}/>);
+    const boxes = props.boxes?.map((box) => <LootBoxBig box={box} key={box.id} />)
 
-    return(
-        <Group name={props.name} items={boxes}/>
-    );
-};
+    return (
+        <Group name={props.name} items={boxes} />
+    )
+}
 
-export default BoxGroup;
+export default BoxGroup

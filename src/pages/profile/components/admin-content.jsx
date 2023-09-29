@@ -15,7 +15,7 @@ const AdminContent = (props) => {
 			/>
 			<SquarePanel
 				img={AccountOrange}
-				click={() => props.exchange("admin-box")}
+				click={() => props.exchange("admin-account")}
 			/>
 			<SquarePanel
 				img={Banner}

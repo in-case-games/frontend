@@ -11,6 +11,12 @@ class Box {
         return response.data.data
     }
 
+    async getBoxesByGame(id) {
+        const response = await api.get(RESOURCES_API_URL + `game/${id}/box`)
+
+        return response.data.data
+    }
+
     async getBox(id) {
         const response = await api.get(RESOURCES_API_URL + "box/id/" + id)
 
@@ -51,6 +57,23 @@ class Box {
         }
 
         return result
+    }
+    async createBox(box) {
+        const response = await api.post(RESOURCES_API_URL + "box", box)
+
+        return response.data.data
+    }
+
+    async updateBox(box) {
+        const response = await api.put(RESOURCES_API_URL + "box", box)
+
+        return response.data.data
+    }
+
+    async deleteBox(id) {
+        const response = await api.delete(RESOURCES_API_URL + `box/${id}`)
+
+        return response.data.data
     }
 }
 

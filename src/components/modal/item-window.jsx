@@ -116,7 +116,7 @@ const ItemWindow = (props) => {
 	}
 
 	const updateItem = async () => {
-		item.image = props.image ? props.image : null
+		item.image = props.image
 		item.gameId = games.find(r => r.name === item.game).id
 		item.rarityId = rarities.find(r => r.name === item.rarity).id
 		item.qualityId = qualities.find(q => q.name === item.quality).id
@@ -134,7 +134,7 @@ const ItemWindow = (props) => {
 	}
 
 	const createItem = async () => {
-		item.image = props.image ? props.image : null
+		item.image = props.image
 		item.gameId = games.find(r => r.name === item.game).id
 		item.rarityId = rarities.find(r => r.name === item.rarity).id
 		item.qualityId = qualities.find(q => q.name === item.quality).id
