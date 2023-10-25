@@ -1,17 +1,16 @@
 import React from "react";
-import {Routes, Route} from "react-router-dom";
-import {Info as InfoPage} from "../pages/info";
+import { Routes, Route } from "react-router-dom";
+import { Info as InfoPage } from "../pages/info";
 
-
-class InfoRouting extends React.Component {
-    render() {
-        return (
-            <Routes>
-                <Route path=":id" element={<InfoPage title="Информация"/>}/>
-                <Route path="*" element={<InfoPage title="Информация"/>}/>
-            </Routes>
-        );
-    }
+class Info extends React.Component {
+  render() {
+    return (
+      <Routes>
+        <Route path=":id" element={<InfoPage />} />
+        <Route path="*" element={<InfoPage />} />
+      </Routes>
+    );
+  }
 }
 
-export default InfoRouting;
+export default Info;

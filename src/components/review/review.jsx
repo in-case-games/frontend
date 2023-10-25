@@ -1,22 +1,40 @@
-import React from "react";
-import classes from "./review.module.css"
+import React, { useState } from "react";
+import { Converter } from "../../helpers/converter";
+import styles from "./review.module";
 
 const Review = (props) => {
-    return (
-        <div className={classes.review}>
-            <div className={classes.review_info}>
-                <div className={classes.review_additional_info}>
-                    <p className={classes.review_name}>{props.username}</p>
-                    <p className={classes.reviewer_date}>{props.date}</p>
-                </div>
-                <img src={props.img}
-                     alt="person"/>
-            </div>
-            <p className={classes.review_content}>
-                {props.content}
-            </p>
-        </div>
-    )
-}
+  const [isFlipped, setIsFlipped] = useState(false);
 
-export default Review;
+  const getColorScore = () => {
+    if (props.score > 3) return "green";
+    else if (props.score === 3) return "#930000";
+    else return "red";
+  };
+
+  return (
+    <div
+      className={isFlipped ? styles.review__flipped : styles.review}
+      onClick={() => setIsFlipped(!isFlipped)}
+    >
+      <div className={styles.review_face__front}>
+        <div className={styles.review_header}>
+          <div className={styles.mini_info}>
+            <div className={styles.name}>{props.name}</div>
+            <div className={styles.date}>
+              {Converter.getMiniDate(props.date)}
+            </div>
+          </div>
+          <img className={styles.image} src={props.image} alt="" />
+        </div>
+        <div className={styles.score} style={{ color: getColorScore() }}>
+          {props.score}
+        </div>
+      </div>
+      <div className={styles.review_face__back}>
+        <div className={styles.inner}>{props.content}</div>
+      </div>
+    </div>
+  );
+};
+
+export default React.memo(Review);

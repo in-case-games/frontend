@@ -1,0 +1,109 @@
+.box_locked,
+.box {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+
+  width: 200px;
+
+  font-family: "Nunito";
+  font-weight: 400;
+  font-size: 20px;
+
+  cursor: pointer;
+
+  margin: 5px;
+
+  .image {
+    width: 200px;
+  }
+
+  .name {
+    margin: 10px 0;
+  }
+
+  .button_cost {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 180px;
+
+    border-radius: 8px;
+
+    color: var(--color-brown__1);
+
+    background: -moz-linear-gradient(var(--gradient-1__0-67));
+    background: -webkit-linear-gradient(var(--gradient-1__0-67));
+    background: linear-gradient(var(--gradient-1__0-67));
+
+    -webkit-transition: background 400ms ease-out;
+    -moz-transition: background 400ms ease-out;
+    -o-transition: background 400ms ease-out;
+    transition: background 400ms ease-out;
+
+    background-size: 1px 70px;
+
+    cursor: pointer;
+
+    padding: 8px 10px;
+    margin: 0;
+
+    svg {
+      color: var(--color_coin_cost_box);
+
+      height: 20px;
+      width: 20px;
+
+      margin-left: 10px;
+    }
+  }
+
+  .delimiter {
+    border: 1px solid var(--color-gray__1);
+    margin-top: 10px;
+    width: 100%;
+    transition: 0.4s border-color;
+  }
+}
+
+.box_locked {
+  color: var(--color-gray__8);
+
+  .button_cost {
+    background: -moz-linear-gradient(var(--gradient-5__0-67));
+    background: -webkit-linear-gradient(var(--gradient-5__0-67));
+    background: linear-gradient(var(--gradient-5__0-67));
+    color: var(--color-gray__6);
+
+    background-size: 1px 70px;
+  }
+
+  &:hover {
+    .delimiter {
+      border-color: var(--color-gray__4);
+      -webkit-transition: border-color 400ms linear;
+      -ms-transition: border-color 400ms linear;
+      transition: border-color 400ms linear;
+    }
+    .button_cost {
+      background-position: 5px;
+    }
+  }
+}
+
+.box {
+  color: var(--color-orange__1);
+  &:hover {
+    .delimiter {
+      border-color: var(--color-orange__1);
+      -webkit-transition: border-color 400ms linear;
+      -ms-transition: border-color 400ms linear;
+      transition: border-color 400ms linear;
+    }
+    .button_cost {
+      background-position: 5px;
+    }
+  }
+}

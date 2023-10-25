@@ -1,32 +1,26 @@
-import React from "react"
-import { Route, Routes } from "react-router-dom"
-import { ItemRoulette } from '../components/item'
-import {
-    Game as GamePage,
-    Home as HomePage,
-    NotFound as NotFoundPage,
-    Profile as ProfilePage
-} from "../pages"
-import EmailRouting from './email'
-import InfoRouting from "./info"
-
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import { NotFound as NotFoundPage } from "../pages/not-found";
+import { Email as EmailRouting } from ".";
+import { Home as HomePage } from "../pages/home";
+import { Game as GamePage } from "../pages/game";
+import { Info as InfoRouting } from ".";
+import { Profile as ProfilePage } from "../pages/profile";
 
 class Main extends React.Component {
-    render() {
-        return (
-        <div className="main">
-            <ItemRoulette/>
-            <Routes>
-                <Route path="/profile/*" element={<ProfilePage title="Профиль"/>}/>
-                <Route path="/email/*" element={<EmailRouting/>}/>
-                <Route path="/info/*" element={<InfoRouting/>}/>
-                <Route path="/game/:id" element={<GamePage title="Страница с кейсами"/>}/>
-                <Route path="/" element={<HomePage title="Главная"/>}/>
-                <Route path="*" element={<NotFoundPage title="Страница не найдена"/>}/>
-            </Routes>
-        </div>
-        );
-    }
+  render() {
+    return (
+      <Routes>
+        <Route path="/profile/:id" element={<ProfilePage />} />
+        <Route path="/profile/*" element={<ProfilePage />} />
+        <Route path="/email/*" element={<EmailRouting />} />
+        <Route path="/info/*" element={<InfoRouting />} />
+        <Route path="/game/:name" element={<GamePage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    );
+  }
 }
 
 export default Main;

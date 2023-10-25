@@ -2,16 +2,20 @@ import React from "react";
 import App from "./App";
 import ReactDOMClient from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import "./assets/styles/zeroing.css";
-import "./assets/styles/fonts.css";
-import "./assets/styles/main.css";
-import "./assets/styles/button.css";
 
+import "./assets/styles/zeroing";
+import "./assets/styles/fonts";
+import "./assets/styles/colors";
+import "./assets/styles/main";
 
-const root = ReactDOMClient.createRoot(document.getElementById("root"));
-
-root.render(
-    <BrowserRouter>
-        <App/>
-    </BrowserRouter>
+ReactDOMClient.createRoot(document.getElementById("root")).render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
 );
+
+const devMode = process.env.NODE_ENV === "development";
+
+if (devMode && module && module.hot) {
+  module.hot.accept();
+}

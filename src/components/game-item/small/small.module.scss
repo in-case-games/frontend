@@ -1,0 +1,19 @@
+.small_item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 70px;
+  width: 80px;
+
+  border-radius: 15px;
+
+  cursor: pointer;
+
+  margin: 3px;
+
+  .image {
+    height: 50px;
+    padding: 10px;
+  }
+}

@@ -1,0 +1,31 @@
+.input {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  width: 100%;
+
+  .sub_tittle {
+    font-size: 14px;
+    flex: 1 1 250px;
+  }
+
+  input {
+    width: 100%;
+    flex: 0 1 auto;
+
+    color: var(--color-orange__1);
+    background: none;
+
+    border: 2px solid var(--color-orange__1);
+    border-radius: 8px;
+
+    font-size: 16px;
+    font-family: Nunito;
+
+    outline: none;
+
+    margin: 5px;
+    padding: 10px 20px;
+  }
+}

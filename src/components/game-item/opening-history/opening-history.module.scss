@@ -1,0 +1,105 @@
+.opening_history {
+  display: flex;
+
+  width: 160px;
+  height: 110px;
+
+  margin: 0 5px;
+
+  align-items: flex-end;
+}
+
+.history_user {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 100px;
+  width: 40px;
+
+  border-radius: 15px 0 0 15px;
+  transition: margin 200ms;
+
+  cursor: pointer;
+
+  &:hover {
+    transition: margin 200ms;
+    margin-bottom: 5px;
+  }
+
+  .image {
+    width: 30px;
+    height: 30px;
+
+    border-radius: 50%;
+    background-position: 50%;
+    background-repeat: no-repeat;
+
+    object-fit: cover;
+  }
+}
+
+.history_inner,
+.history_inner__flipped {
+  position: relative;
+
+  width: 120px;
+  height: 100px;
+
+  transition: transform 1s, margin 200ms;
+  transform-style: preserve-3d;
+
+  margin-bottom: 5px;
+
+  cursor: pointer;
+
+  &:hover {
+    transition: transform 1s, margin 200ms;
+    margin-bottom: 10px;
+  }
+}
+
+.history_inner__flipped,
+.history_box {
+  transform: rotateY(180deg);
+}
+
+.history_item,
+.history_box {
+  position: absolute;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+
+  width: 120px;
+  height: 100%;
+
+  border-radius: 0 15px 15px 0;
+
+  .image {
+    max-height: 50px;
+    max-width: 120px;
+  }
+
+  .name {
+    font-size: 11px;
+    color: #fff;
+    text-decoration: none;
+    font-family: "Nunito", Serif;
+    font-weight: 250;
+  }
+
+  .date {
+    font-size: 11px;
+    color: #fff;
+    text-decoration: none;
+    font-family: "Nunito", Serif;
+    font-weight: 250;
+  }
+}

@@ -1,0 +1,22 @@
+.logo {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  cursor: pointer;
+
+  .logo_img {
+    flex: 0 0 auto;
+  }
+
+  .logo_img img {
+    height: 60px;
+  }
+
+  .logo_text {
+    flex: 0 0 auto;
+    font-size: 36px;
+    font-family: "Megrim";
+    font-weight: bold;
+    color: var(--color-orange__1);
+  }
+}

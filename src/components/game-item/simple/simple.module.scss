@@ -1,0 +1,77 @@
+.item_simple {
+  position: relative;
+  display: flex;
+
+  width: 220px;
+  height: 100px;
+
+  background: var(--color-black__8);
+  border-radius: 15px;
+
+  transition: all 0.3s;
+  cursor: pointer;
+
+  margin: 5px 10px;
+
+  .item_image {
+    height: 80px;
+    max-width: 80px;
+
+    border-radius: 15px 0 0 15px;
+
+    padding: 10px;
+  }
+
+  &:hover {
+    background: var(--color-black__3);
+    transition: all 0.3s;
+  }
+
+  .loading {
+    width: 20px;
+  }
+
+  .info {
+    position: absolute;
+
+    bottom: 5px;
+    right: 5px;
+
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.item_info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+
+  width: 100%;
+
+  font-size: 15px;
+  font-family: "Play";
+
+  margin: 0 10px;
+
+  .name {
+  }
+
+  .game {
+    color: var(--color-gray__7);
+  }
+
+  .cost {
+    display: flex;
+    align-items: center;
+    font-family: "Nunito";
+    font-weight: 700;
+    font-size: 16px;
+
+    .image {
+      width: 20px;
+      height: 20px;
+    }
+  }
+}

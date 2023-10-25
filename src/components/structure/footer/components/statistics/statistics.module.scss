@@ -1,0 +1,35 @@
+.statistics {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+
+  width: 100%;
+
+  .statistics__wrapper {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+
+    margin-bottom: 30px;
+  }
+}
+
+.statistic {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100px;
+
+  .image {
+    height: 32px;
+  }
+
+  .number {
+    font-size: 28px;
+  }
+
+  .tittle {
+    color: var(--color-brown__5);
+  }
+}

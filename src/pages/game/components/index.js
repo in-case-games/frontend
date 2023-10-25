@@ -1,2 +1,1 @@
-export { default as BoxGroupLoader } from "./box-group-loader"
-
+export { default as Loader } from "./loader";

@@ -1,0 +1,29 @@
+.profile {
+  height: 100%;
+  width: 100%;
+
+  .container {
+    max-width: 1720px;
+    height: 100%;
+
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+}
+
+.panel {
+  height: 100%;
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  padding: 50px 0;
+
+  .panel_bar {
+  }
+
+  .panel_content {
+    padding: 0 40px;
+    width: 100%;
+  }
+}
