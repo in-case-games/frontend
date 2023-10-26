@@ -11,3 +11,4 @@ export { TradeUrl } from "./trade-url";
 export { HistoryOpening } from "./history-opening";
 export { Inventory } from "./inventory";
 export { Sell } from "./sell";
+export { Withdraw } from "./withdraw";

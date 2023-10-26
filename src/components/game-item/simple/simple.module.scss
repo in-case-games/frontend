@@ -42,11 +42,63 @@
   }
 }
 
+.item_status {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  height: 100px;
+  min-width: 25px;
+
+  border-radius: 0 13px 13px 0;
+  color: black;
+
+  font-size: 28px;
+
+  cursor: pointer;
+
+  .image {
+    height: 35px;
+  }
+
+  .loading {
+    height: 20px;
+  }
+
+  .error {
+    position: absolute;
+
+    width: 200px;
+
+    left: 10px;
+    opacity: 0;
+    visibility: hidden;
+
+    font-size: 15px;
+    color: black;
+
+    background: var(--color-gray__8);
+    border-radius: 10px;
+
+    transition: all 400ms ease-out;
+
+    padding: 20px 0;
+  }
+
+  &:hover {
+    .error {
+      visibility: visible;
+      transition: all 400ms ease-out;
+      opacity: 1;
+    }
+  }
+}
+
 .item_info {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
 
   width: 100%;
 

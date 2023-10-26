@@ -81,7 +81,7 @@ const Sell = (props) => {
         setIsApply(remaining.length === 0);
         setIsDisplayedButton(remaining.length > 0);
       }
-    }, 10);
+    }, 100);
 
     return () => clearInterval(interval);
   });
@@ -147,7 +147,15 @@ const Sell = (props) => {
           }
         >
           {finishedInventories.items.map((i) => (
-            <Item id={i.id} item={i.item} key={i.id} />
+            <Item
+              id={i.id}
+              item={i.item}
+              isLoading={isLoading}
+              showStatus={true}
+              status={i.status}
+              error={i.error}
+              key={i.id}
+            />
           ))}
         </div>
         {finishedInventories.items.length > 0 ? (

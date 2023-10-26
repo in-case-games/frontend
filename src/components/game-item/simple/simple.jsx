@@ -1,23 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { TemplateItem as ItemImage } from "../../../assets/images/main";
-import { InCoin, Info } from "../../../assets/images/icons";
-import { LoadingHourglass as Loading } from "../../loading";
+import {
+  InCoin,
+  Info,
+  TransferIvory as Transfer,
+} from "../../../assets/images/icons";
+import { LoadingHourglass as Loading, LoadingArrow } from "../../loading";
 import Constants from "../../../constants";
 import { Converter } from "../../../helpers/converter";
 import styles from "./simple.module";
 
 const Simple = (props) => {
-  const [isStart, setIsStart] = useState(true);
   const [gradientColor, setGradientColor] = useState("transparent");
+  const [statusColor, setStatusColor] = useState("transparent");
+  const [statusCursor, setStatusCursor] = useState("default");
 
   useEffect(() => {
-    const interval = setInterval(
-      () => {
-        setIsStart(false);
-        setGradientColor(getGradientColor());
-      },
-      isStart ? 10 : 1000
-    );
+    const interval = setInterval(() => {
+      setGradientColor(getGradientColor());
+
+      if (props.status) {
+        setStatusCursor(props.status === "exchange" ? "pointer" : "default");
+        setStatusColor(
+          Constants.ItemGradients[Constants.StatusAndColor[props.status]]
+        );
+      }
+    }, 10);
 
     return () => clearInterval(interval);
   });
@@ -69,6 +77,30 @@ const Simple = (props) => {
       {props.showInfo ? (
         <div className={styles.info} onClick={clickInfo}>
           <img alt="" src={Info} />
+        </div>
+      ) : null}
+      {props.showStatus ? (
+        <div
+          className={styles.item_status}
+          style={{ background: statusColor, cursor: statusCursor }}
+        >
+          {props.isLoading || props.status === "wait" ? (
+            <div className={styles.loading}>
+              <LoadingArrow
+                isLoading={props.isLoading}
+                setLoading={() => {}}
+                cursor="default"
+              />
+            </div>
+          ) : null}
+          {props.error !== null ? (
+            <div className={styles.error}>{props.error}</div>
+          ) : null}
+          {props.status === "exchange" ? (
+            <img src={Transfer} alt="" className={styles.image} />
+          ) : null}
+          {props.status === "success" ? "✔" : null}
+          {props.status === "cancel" ? "✖" : null}
         </div>
       ) : null}
     </div>

@@ -8,6 +8,7 @@ import {
   Item as ItemWindow,
   LoadImage as LoadImageWindow,
   Sell as SellWindow,
+  Withdraw as WithdrawWindow,
 } from "../../../../components/windows";
 import { LoadingArrow as Loading } from "../../../../components/loading";
 import {
@@ -31,6 +32,7 @@ const Inventory = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isOpenSellWindow, setIsOpenSellWindow] = useState(false);
   const [isOpenLoadWindow, setIsOpenLoadWindow] = useState(false);
+  const [isOpenWithdrawWindow, setIsOpenWithdrawWindow] = useState(false);
 
   const [games, setGames] = useState();
   const [user, setUser] = useState();
@@ -78,7 +80,9 @@ const Inventory = () => {
           showInfo={() => setInventory(inv)}
           select={() => {
             const selected = selectItems?.items;
-            const index = selected.indexOf(inv);
+            const index = selected.indexOf(
+              selected.find((s) => s.id === inv.id)
+            );
 
             if (index === -1 && selected.length < 20) {
               selected.push(inv);
@@ -140,8 +144,13 @@ const Inventory = () => {
     price_bot: (a, b) => b.fixedCost - a.fixedCost,
     date_top: (a, b) => new Date(a.date) - new Date(b.date),
     date_bot: (a, b) => new Date(b.date) - new Date(a.date),
-    selected: (a, b) =>
-      selectItems.items.indexOf(b.id) - selectItems.items.indexOf(a.id),
+    selected: (a, b) => {
+      const select = selectItems.items;
+      const bi = select.find((i) => i.id === b.id);
+      const ai = select.find((i) => i.id === a.id);
+
+      return select.indexOf(bi) - select.indexOf(ai);
+    },
   };
 
   return (
@@ -167,7 +176,10 @@ const Inventory = () => {
           />
         </div>
         <div className={styles.buttons}>
-          <div className={styles.button_withdraw}>
+          <div
+            className={styles.button_withdraw}
+            onClick={() => setIsOpenWithdrawWindow(true)}
+          >
             <img alt="" src={Airplane} className={styles.image} />
             <div className={styles.text}>
               {selectItems.items.length !== 0 ? "Вывести" : "Вывести всё"}
@@ -196,6 +208,34 @@ const Inventory = () => {
           loadPrimary={userApi.getInventory}
         />
       </div>
+      <ModalLayout
+        isActive={isOpenSellWindow}
+        close={() => {
+          setSelectItems((prev) => ({ ...prev, items: [] }));
+          setIsOpenSellWindow(false);
+          setIsLoading(true);
+        }}
+      >
+        <SellWindow
+          loadedItems={loadedItems}
+          selectItems={selectItems}
+          setSelectItems={setSelectItems}
+        />
+      </ModalLayout>
+      <ModalLayout
+        isActive={isOpenWithdrawWindow}
+        close={() => {
+          setSelectItems((prev) => ({ ...prev, items: [] }));
+          setIsOpenWithdrawWindow(false);
+          setIsLoading(true);
+        }}
+      >
+        <WithdrawWindow
+          loadedItems={loadedItems}
+          selectItems={selectItems}
+          setSelectItems={setSelectItems}
+        />
+      </ModalLayout>
       <ModalLayout isActive={inventory} close={() => setInventory(null)}>
         <InventoryWindow
           inventory={inventory}
@@ -219,20 +259,6 @@ const Inventory = () => {
           setImage={setImage}
           setItem={setItem}
           openLoadWindow={setIsOpenLoadWindow}
-        />
-      </ModalLayout>
-      <ModalLayout
-        isActive={isOpenSellWindow}
-        close={() => {
-          setSelectItems((prev) => ({ ...prev, items: [] }));
-          setIsOpenSellWindow(false);
-          setIsLoading(true);
-        }}
-      >
-        <SellWindow
-          loadedItems={loadedItems}
-          selectItems={selectItems}
-          setSelectItems={setSelectItems}
         />
       </ModalLayout>
       <ModalLayout

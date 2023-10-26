@@ -110,6 +110,20 @@ const ItemColors = {
   green: "#008000",
 };
 
+const StatusAndColor = {
+  cancel: "red",
+  wait: "gray",
+  success: "green",
+  exchange: "orange",
+  loading: "green",
+};
+
+const WithdrawErrors = {
+  4: "Внутренняя ошибка, повторите попытку позже",
+  5: "Предмет с нестабильной ценой, нажмите для обмена",
+  2: "Происходит перевод средств, повторите попытку позже",
+};
+
 const Constants = {
   Langs,
   Infos,
@@ -118,6 +132,8 @@ const Constants = {
   ItemColors,
   TemplateItem,
   TemplateBox,
+  StatusAndColor,
+  WithdrawErrors,
 };
 
 export default Constants;
