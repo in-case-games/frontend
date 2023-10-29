@@ -77,12 +77,13 @@ const Exchange = (props) => {
           item = await itemApi.pushImage(primary[i]);
           const lowerName = item.name.toLowerCase();
           const isStartsWith = lowerName.startsWith(lowerSearch);
-          const isAllowed =
-            item.cost <= allowedCost || ids.indexOf(item.id) > -1;
+          const isAllowed = item.cost <= cost || ids.indexOf(item.id) > -1;
 
-          if (isAllowed || (lowerSearch !== "" && isStartsWith)) {
+          if (
+            (lowerSearch !== "" && isStartsWith) ||
+            (isAllowed && lowerSearch === "")
+          )
             show.push(item);
-          }
         }
 
         setAllowedCost(cost);
@@ -102,8 +103,9 @@ const Exchange = (props) => {
 
   const click = async () => {
     if (allowedCost >= 0) {
-      const index = props.selectItems.items.indexOf(props.inventory.id);
-
+      const index = props.selectItems.items.findIndex(
+        (s) => s.id === props.inventory.id
+      );
       removeSelectItem(index);
 
       if (selectItems.items.length === 0)
@@ -114,7 +116,7 @@ const Exchange = (props) => {
           selectItems.items
         );
 
-      props.closeWindow();
+      props.close();
     }
   };
 
@@ -131,9 +133,11 @@ const Exchange = (props) => {
         const isStartsWith = lowerName.startsWith(lowerValue);
         const isAllowed = i.cost <= allowedCost || ids.indexOf(i.id) > -1;
 
-        if (isAllowed || (lowerValue !== "" && isStartsWith)) {
+        if (
+          (lowerValue !== "" && isStartsWith) ||
+          (isAllowed && lowerValue === "")
+        )
           show.push(i);
-        }
       });
 
       setSearch(value);
@@ -144,16 +148,45 @@ const Exchange = (props) => {
   const getCountItem = (item) => {
     let items = selectItems.items;
 
-    const index = items.indexOf(items.find((i) => i.id === item.id));
+    const index = items.findIndex((i) => i.id === item.id);
 
     return index > -1 ? items[index].count : 0;
+  };
+
+  const getCountItems = () => {
+    let count = 0;
+
+    selectItems.items.forEach((i) => (count += i.count));
+
+    return count;
+  };
+
+  const onChangeRange = (value, inv) => {
+    const selected = selectItems.items;
+    const item = selected.find((i) => i.id === inv.id);
+    const index = selected.indexOf(item);
+
+    value = Number(value);
+
+    if (value > 10) value = 10;
+    else if (value <= 0) value = 0;
+
+    if (!item && getCountItems() <= 10 - value) {
+      inv.count = value;
+      selected.push(inv);
+    } else if (item && value === 0) selected.splice(index, 1);
+    else if (item && getCountItems() <= 10 - (value - selected[index].count))
+      selected[index].count = value;
+
+    setSelectItems((prev) => ({ ...prev, selected }));
+    setIsClickItem(true);
   };
 
   const removeSelectItem = (index) => {
     if (index > -1) {
       let selected = props.selectItems.items;
       selected.splice(index, 1);
-      props.setSelectItems((prev) => ({ ...prev, ...selected }));
+      props.setSelectItems((prev) => ({ ...prev, items: selected }));
     }
   };
 
@@ -192,21 +225,25 @@ const Exchange = (props) => {
               <Item
                 id={i.id}
                 item={i}
+                isShowUpdate={true}
+                isClickItem={isClickItem}
                 selectItems={selectItems}
                 setSelectItems={setSelectItems}
                 select={() => {
                   const selected = selectItems.items;
-                  const index = selected.indexOf(i);
+                  const index = selected.findIndex((s) => s.id === i.id);
 
-                  if (index === -1) {
+                  if (index === -1 && getCountItems() < 10) {
                     i.count = i.count || 1;
                     selected.push(i);
                   } else selected.splice(index, 1);
 
-                  console.log(selected);
-
                   setSelectItems({ ...selectItems, items: selected });
                   setIsClickItem(true);
+                }}
+                sliderStripProps={{
+                  value: () => getCountItem(i),
+                  onChange: (v) => onChangeRange(v, i),
                 }}
                 key={i.id}
               />
@@ -222,9 +259,7 @@ const Exchange = (props) => {
         <div className={styles.delimiter}></div>
         <div className={styles.exchange_counters}>
           <div className={styles.counter} style={{ background: "green" }}>
-            <div className={styles.counter_tittle}>
-              {10 - selectItems.items.length}
-            </div>
+            <div className={styles.counter_tittle}>{10 - getCountItems()}</div>
             <img src={Gun} alt="" />
           </div>
           {

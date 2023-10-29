@@ -9,6 +9,7 @@ import { LoadingHourglass as Loading, LoadingArrow } from "../../loading";
 import Constants from "../../../constants";
 import { Converter } from "../../../helpers/converter";
 import styles from "./simple.module";
+import { StripCounterSlider } from "../../common/inputs";
 
 const Simple = (props) => {
   const [gradientColor, setGradientColor] = useState("transparent");
@@ -25,7 +26,7 @@ const Simple = (props) => {
           Constants.ItemGradients[Constants.StatusAndColor[props.status]]
         );
       }
-    }, 10);
+    }, 50);
 
     return () => clearInterval(interval);
   });
@@ -47,12 +48,10 @@ const Simple = (props) => {
   const clickItem = () => {
     if (props.showItem) props.showItem(props.item);
     else if (props.selectItems?.items) props.select();
-
-    setGradientColor(getGradientColor());
   };
 
   return (
-    <div className={styles.item_simple} onClick={clickItem}>
+    <div className={styles.item_simple} onMouseDown={clickItem}>
       <img
         alt=""
         src={props.item?.image ?? ItemImage}
@@ -72,6 +71,17 @@ const Simple = (props) => {
       {props.isShowUpdate ? (
         <div className={styles.loading}>
           <Loading updateDate={props.item?.updateDate} rate={300} />
+        </div>
+      ) : null}
+      {props.sliderStripProps ? (
+        <div className={styles.slider_strip}>
+          <StripCounterSlider
+            min={props.sliderStripProps?.min}
+            max={props.sliderStripProps?.max}
+            step={props.sliderStripProps?.step}
+            value={props.sliderStripProps.value}
+            onChange={props.sliderStripProps.onChange}
+          />
         </div>
       ) : null}
       {props.showInfo ? (

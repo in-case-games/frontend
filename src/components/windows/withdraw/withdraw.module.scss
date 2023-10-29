@@ -6,6 +6,8 @@
   border-radius: 15px;
   background: var(--color-black__2);
 
+  min-width: 310px;
+
   padding: 40px;
 }
 
@@ -83,5 +85,11 @@
     font-size: 28px;
 
     margin: 0px 10px 0 5px;
+  }
+}
+
+@media (max-width: 400px) {
+  .withdraw {
+    padding: 10px;
   }
 }

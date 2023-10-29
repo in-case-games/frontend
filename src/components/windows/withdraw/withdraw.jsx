@@ -135,7 +135,7 @@ const Withdraw = (props) => {
     if (index > -1) {
       let selected = props.selectItems.items;
       selected.splice(index, 1);
-      props.setSelectItems((prev) => ({ ...prev, ...selected }));
+      props.setSelectItems((prev) => ({ ...prev, items: selected }));
     }
   };
 

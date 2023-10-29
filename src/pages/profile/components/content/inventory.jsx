@@ -82,9 +82,7 @@ const Inventory = () => {
           showInfo={() => setInventory(inv)}
           select={() => {
             const selected = selectItems?.items;
-            const index = selected.indexOf(
-              selected.find((s) => s.id === inv.id)
-            );
+            const index = selected.findIndex((s) => s.id === inv.id);
 
             if (index === -1 && selected.length < 20) {
               selected.push(inv);
@@ -226,12 +224,12 @@ const Inventory = () => {
       <ModalLayout
         isActive={isOpenWithdrawWindow}
         close={() => {
-          setSelectItems((prev) => ({ ...prev, items: [] }));
           setIsOpenWithdrawWindow(false);
           setIsLoading(true);
         }}
       >
         <WithdrawWindow
+          isLoading={isLoading}
           loadedItems={loadedItems}
           selectItems={selectItems}
           setSelectItems={setSelectItems}
@@ -246,10 +244,11 @@ const Inventory = () => {
         }}
       >
         <ExchangeWindow
+          games={games}
           inventory={exchangeItem}
           selectItems={selectItems}
           setSelectItems={setSelectItems}
-          closeWindow={() => {
+          close={() => {
             setExchangeItem();
             setIsLoading(true);
           }}

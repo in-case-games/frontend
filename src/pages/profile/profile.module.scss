@@ -27,3 +27,17 @@
     width: 100%;
   }
 }
+
+@media (max-width: 725px) {
+  .profile {
+    .container {
+      padding: 0;
+    }
+  }
+
+  .panel {
+    .panel_content {
+      padding: 0 10px;
+    }
+  }
+}

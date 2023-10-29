@@ -88,6 +88,7 @@
 
 .buttons {
   display: flex;
+  flex-wrap: wrap;
 
   .button_withdraw,
   .button_sell {
@@ -146,6 +147,63 @@
     -moz-transition: background 400ms ease-out;
     -o-transition: background 400ms ease-out;
     transition: background 400ms ease-out;
+  }
+}
+
+@media (max-width: 1393px) {
+  .profile_tittle {
+    justify-content: space-between;
+    padding: 0;
+
+    .tittle {
+      padding: 0;
+    }
+
+    .buttons .button_withdraw,
+    .buttons .button_sell {
+      margin: 0 10px;
+    }
+  }
+}
+
+@media (max-width: 1273px) {
+  .profile_tittle {
+    .filter {
+      order: 1;
+    }
+  }
+}
+
+@media (max-width: 999px) {
+  .profile_tittle {
+    .filter {
+      margin-left: -5px;
+    }
+    .buttons {
+      margin: 10px 0;
+
+      .button_withdraw {
+        margin: 0 5px 0 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 650px) {
+  .profile_tittle {
+    justify-content: center;
+    .buttons {
+      margin: 10px 0;
+      justify-content: center;
+
+      .button_withdraw {
+        margin: 5px 0;
+      }
+
+      .button_sell {
+        margin: 5px 0;
+      }
+    }
   }
 }
 

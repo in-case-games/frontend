@@ -46,12 +46,14 @@ class Item {
       })
     );
 
+    const request = {
+      inventoryId: inventoryId,
+      items: temp,
+    };
+
     const response = await api.put(
       RESOURCES_API_URL + `user/inventory/exchange`,
-      {
-        inventoryId: inventoryId,
-        items: items,
-      }
+      request
     );
 
     return response.data.data;
