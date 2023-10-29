@@ -1,0 +1,36 @@
+.combo_box {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  width: 100%;
+
+  cursor: pointer;
+
+  .sub_tittle {
+    flex: 1 1 250px;
+    font-size: 14px;
+  }
+
+  select {
+    flex: 0 1 auto;
+
+    width: 100%;
+
+    color: var(--color-orange__1);
+    background: var(--color-black__2);
+
+    border: 2px solid var(--color-orange__1);
+    border-radius: 8px;
+
+    font-size: 16px;
+    font-family: Nunito;
+
+    outline: none;
+    appearance: none;
+    cursor: pointer;
+
+    margin: 5px;
+    padding: 10px 20px;
+  }
+}

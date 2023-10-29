@@ -1,0 +1,35 @@
+.button_info,
+.button_info__active {
+  text-align: center;
+
+  width: 200px;
+
+  border-radius: 8px;
+
+  transition: all 200ms;
+
+  font-size: 16px;
+  font-family: "Nunito";
+
+  cursor: pointer;
+
+  padding: 8px 10px;
+}
+
+.button_info {
+  border: 2px solid var(--color-yellow__1);
+  color: var(--color-yellow__1);
+
+  &:hover {
+    border: 2px solid var(--color-orange__1);
+    color: var(--color-orange__1);
+
+    transition: all 200ms;
+  }
+}
+
+.button_info__active {
+  border-radius: 0px;
+  border-bottom: 2px solid var(--color-orange__1);
+  color: var(--color-orange__1);
+}

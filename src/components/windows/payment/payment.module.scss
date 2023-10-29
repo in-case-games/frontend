@@ -1,0 +1,25 @@
+.payment {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  background: var(--color-black__2);
+  border-radius: 15px;
+  padding: 40px;
+}
+
+.payment_content {
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  align-items: center;
+}
+
+.payment_header {
+  display: flex;
+  align-items: center;
+
+  .payment_tittle {
+    font-size: 28px;
+    margin-left: 5px;
+  }
+}

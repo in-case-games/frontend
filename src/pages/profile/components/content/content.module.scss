@@ -1,0 +1,220 @@
+.observed_profile {
+  width: 100%;
+  max-width: 1080px;
+}
+
+.inventory {
+  .profile_tittle {
+    align-items: center;
+
+    .filter {
+      flex: 0 0 auto;
+    }
+  }
+}
+
+.inventory,
+.observer_profile,
+.observed_profile {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .delimiter {
+    border: 1px solid var(--color-orange__1);
+    margin-top: 5px;
+    width: 100%;
+  }
+}
+
+.profile_tittle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  padding: 0 20px;
+
+  .tittle {
+    display: flex;
+    padding: 0 20px;
+    align-items: center;
+
+    .name {
+      font-family: "Play";
+      margin-right: 20px;
+    }
+
+    .loading {
+      margin-right: 15px;
+    }
+  }
+}
+
+.profile_controller {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .password {
+    max-width: 400px;
+  }
+
+  img {
+    width: 18px;
+    height: 18px;
+    border-radius: 8px;
+    transition: all 0.3s ease-out;
+
+    cursor: pointer;
+
+    padding: 9px;
+    margin-left: 5px;
+  }
+
+  .send {
+    background: var(--color-orange__1);
+  }
+
+  .cancel {
+    background: red;
+  }
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+
+  .button_withdraw,
+  .button_sell {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    height: 25px;
+    width: 150px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    margin: 0 20px;
+    padding: 8px 10px;
+
+    &:hover {
+      background-position: 60px;
+    }
+
+    .image {
+      height: 20px;
+      width: 20px;
+    }
+
+    .text {
+      font-family: "Play";
+      font-weight: 500;
+      font-size: 18px;
+
+      color: black;
+    }
+  }
+  .button_withdraw {
+    background: -moz-linear-gradient(var(--gradient-1__0-70));
+    background: -webkit-linear-gradient(var(--gradient-1__0-70));
+    background: linear-gradient(var(--gradient-1__0-70));
+
+    background-size: 1px 50px;
+
+    -webkit-transition: background 400ms ease-out;
+    -moz-transition: background 400ms ease-out;
+    -o-transition: background 400ms ease-out;
+    transition: background 400ms ease-out;
+  }
+
+  .button_sell {
+    background: -moz-linear-gradient(var(--gradient-2__0-70));
+    background: -webkit-linear-gradient(var(--gradient-2__0-70));
+    background: linear-gradient(var(--gradient-2__0-70));
+
+    background-size: 1px 50px;
+
+    -webkit-transition: background 400ms ease-out;
+    -moz-transition: background 400ms ease-out;
+    -o-transition: background 400ms ease-out;
+    transition: background 400ms ease-out;
+  }
+}
+
+@media (max-width: 1393px) {
+  .profile_tittle {
+    justify-content: space-between;
+    padding: 0;
+
+    .tittle {
+      padding: 0;
+    }
+
+    .buttons .button_withdraw,
+    .buttons .button_sell {
+      margin: 0 10px;
+    }
+  }
+}
+
+@media (max-width: 1273px) {
+  .profile_tittle {
+    .filter {
+      order: 1;
+    }
+  }
+}
+
+@media (max-width: 999px) {
+  .profile_tittle {
+    .filter {
+      margin-left: -5px;
+    }
+    .buttons {
+      margin: 10px 0;
+
+      .button_withdraw {
+        margin: 0 5px 0 0;
+      }
+    }
+  }
+}
+
+@media (max-width: 650px) {
+  .profile_tittle {
+    justify-content: center;
+    .buttons {
+      margin: 10px 0;
+      justify-content: center;
+
+      .button_withdraw {
+        margin: 5px 0;
+      }
+
+      .button_sell {
+        margin: 5px 0;
+      }
+    }
+  }
+}
+
+@media (min-width: 570px) {
+  .tittle .name {
+    font-size: 30px;
+  }
+}
+
+@media (max-width: 570px) {
+  .tittle .name {
+    font-size: 20px;
+  }
+}

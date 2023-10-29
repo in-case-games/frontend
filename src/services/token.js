@@ -1,0 +1,57 @@
+import jwtDecode from "jwt-decode";
+
+const getUser = () => JSON.parse(localStorage.getItem("user"));
+const setUser = (user) => {
+  const decodeAccess = jwtDecode(user.accessToken);
+
+  user.email = jwtDecode(user.refreshToken)[
+    "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
+  ];
+  user.id =
+    decodeAccess[
+      "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+    ];
+  user.role =
+    decodeAccess[
+      "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+    ];
+  user.name =
+    decodeAccess["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+
+  localStorage.setItem("user", JSON.stringify(user));
+};
+const removeUser = () => localStorage.removeItem("user");
+
+const getAccessClaims = () => jwtDecode(getAccessToken());
+const getRefreshClaims = () => jwtDecode(getRefreshToken());
+
+const getAccessToken = () =>
+  JSON.parse(localStorage.getItem("user"))?.accessToken;
+const updateAccessToken = (token) => {
+  let user = JSON.parse(localStorage.getItem("user"));
+
+  user.accessToken = token;
+  localStorage.setItem("user", JSON.stringify(user));
+};
+const getRefreshToken = () =>
+  JSON.parse(localStorage.getItem("user"))?.refreshToken;
+
+const getExpiresAccessToken = () =>
+  JSON.parse(localStorage.getItem("user"))?.expiresAccess;
+const getExpiresRefreshToken = () =>
+  JSON.parse(localStorage.getItem("user"))?.expiresRefresh;
+
+const TokenService = {
+  getRefreshToken,
+  getAccessToken,
+  getExpiresAccessToken,
+  getExpiresRefreshToken,
+  getAccessClaims,
+  getRefreshClaims,
+  updateAccessToken,
+  getUser,
+  setUser,
+  removeUser,
+};
+
+export default TokenService;

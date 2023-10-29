@@ -1,0 +1,42 @@
+.trade_url {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+
+  border-radius: 15px;
+  background: var(--color-black__2);
+
+  padding: 40px;
+
+  min-width: 300px;
+}
+
+.trade_url_content {
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  align-items: center;
+
+  .tittle {
+    font-size: 42px;
+    font-family: "Play";
+
+    margin: 0;
+    padding: 5px 0;
+  }
+  .input {
+  }
+  .delimiter {
+    width: 70%;
+
+    border: 1px solid var(--color-orange__1);
+
+    margin: 20px 0;
+  }
+  .support {
+    color: var(--color-gray__7);
+    font-family: "Poiret One";
+    font-size: 15px;
+    cursor: pointer;
+  }
+}

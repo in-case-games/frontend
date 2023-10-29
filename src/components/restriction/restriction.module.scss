@@ -1,0 +1,112 @@
+.restriction {
+  display: flex;
+  align-items: flex-end;
+
+  width: 300px;
+  height: 130px;
+
+  color: black;
+  font-size: 15px;
+  font-family: "Nunito";
+
+  margin: 0 20px;
+}
+
+.restriction_inner__flipped,
+.restriction_description {
+  transform: rotateY(180deg);
+}
+
+.restriction_user {
+  display: flex;
+  align-items: center;
+
+  height: 110px;
+  width: 85px;
+
+  border-radius: 15px 0 0 15px;
+  transition: margin 200ms;
+
+  cursor: pointer;
+
+  margin-bottom: 10px;
+
+  &:hover {
+    transition: margin 200ms;
+    margin-bottom: 20px;
+  }
+
+  .image {
+    width: 65px;
+    height: 65px;
+
+    background-repeat: no-repeat;
+    background-position: 50%;
+    border-radius: 50%;
+
+    object-fit: cover;
+    cursor: pointer;
+
+    margin: 0 10px;
+  }
+}
+
+.restriction_inner,
+.restriction_inner__flipped {
+  position: relative;
+
+  width: 235px;
+  height: 110px;
+
+  transition: transform 1s, margin 200ms;
+  transform-style: preserve-3d;
+
+  cursor: pointer;
+
+  margin-bottom: 10px;
+
+  &:hover {
+    transition: transform 1s, margin 200ms;
+    margin-bottom: 20px;
+  }
+}
+
+.restriction_info,
+.restriction_description {
+  position: absolute;
+
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: center;
+  justify-content: center;
+
+  height: 110px;
+  width: 215px;
+
+  border-radius: 0 15px 15px 0;
+
+  .type,
+  .creation,
+  .expiration {
+    max-width: 215px;
+  }
+
+  .creation {
+    color: #218655;
+  }
+
+  .expiration {
+    color: #913232;
+  }
+
+  .description {
+    margin: 5px 0;
+    text-align: start;
+    max-width: 215px;
+  }
+}

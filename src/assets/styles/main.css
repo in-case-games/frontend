@@ -1,0 +1,46 @@
+html {
+  background-color: var(--color-black__2);
+  color: var(--color-orange__1);
+  font-family: "Play";
+  overflow-x: hidden;
+  user-select: none;
+}
+
+main {
+  margin-top: 80px;
+  flex: 1 0 auto;
+}
+
+header footer {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 1150px) {
+  main {
+    margin-top: 120px;
+  }
+}
+
+@media (max-width: 890px) {
+  main {
+    margin-top: 180px;
+  }
+}
+
+@media (max-width: 550px) {
+  main {
+    margin-top: 200px;
+  }
+}
+
+@media (max-width: 500px) {
+  main {
+    margin-top: 240px;
+  }
+}
+
+@media (max-width: 420px) {
+  main {
+    margin-top: 280px;
+  }
+}
