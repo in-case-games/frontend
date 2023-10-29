@@ -1,3 +1,5 @@
+import Constants from "../constants";
+
 const template = {
   steam: "",
 };
@@ -14,6 +16,13 @@ const UpdateUrlByGame = {
 
 const GetUrls = () => JSON.parse(localStorage.getItem("trade-urls"));
 
+const IsValidTradeUrlByGame = (game) => {
+  const url = GetUrlByGame[game]();
+  const regex = Constants.Games.find((g) => g.name === game).regexTrade;
+
+  return url && regex.test(url);
+};
+
 const wrapperUpdateUrls = (action) => {
   let urls = GetUrls();
 
@@ -24,8 +33,9 @@ const wrapperUpdateUrls = (action) => {
 
 const TradeUrlService = {
   GetUrls,
-  UpdateUrlByGame,
+  IsValidTradeUrlByGame,
   GetUrlByGame,
+  UpdateUrlByGame,
 };
 
 export default TradeUrlService;

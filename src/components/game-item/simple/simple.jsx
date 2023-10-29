@@ -84,10 +84,10 @@ const Simple = (props) => {
           className={styles.item_status}
           style={{ background: statusColor, cursor: statusCursor }}
         >
-          {props.isLoading || props.status === "wait" ? (
+          {props.status === "loading" || props.status === "wait" ? (
             <div className={styles.loading}>
               <LoadingArrow
-                isLoading={props.isLoading}
+                isLoading={props.status === "loading"}
                 setLoading={() => {}}
                 cursor="default"
               />

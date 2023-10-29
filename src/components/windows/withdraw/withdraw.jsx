@@ -6,30 +6,22 @@ import Constants from "../../../constants";
 import TradeUrlService from "../../../services/trade-url";
 import styles from "./withdraw.module";
 
-//TODO How game will more 5, then check count trade urls(add overflow-y)
 const Withdraw = (props) => {
   const itemApi = new ItemApi();
 
   const [error, setError] = useState(null);
+
+  const [finishedInventories, setFinishedInventories] = useState({ items: [] });
   const [remainingInventories, setRemainingInventories] = useState({
     items: [],
   });
-  const [finishedInventories, setFinishedInventories] = useState({ items: [] });
 
   const [isLoading, setIsLoading] = useState(true);
   const [isApply, setIsApply] = useState(false);
   const [isBanned, setIsBanned] = useState(false);
-
   const [isDisplayedButton, setIsDisplayedButton] = useState(false);
 
-  const checkValidateTradeUrl = (game) => {
-    const url = TradeUrlService.GetUrlByGame[game]();
-    const regex = Constants.Games.find((g) => g.name === game).regexTrade;
-
-    return url && regex.test(url);
-  };
-
-  const click = () => {
+  const isValidTradeUrls = () => {
     let error = null;
     const checked = [];
 
@@ -37,7 +29,7 @@ const Withdraw = (props) => {
       const game = remainingInventories?.items[i]?.item?.game;
 
       if (checked.indexOf(game) === -1) {
-        const isValid = checkValidateTradeUrl(game);
+        const isValid = TradeUrlService.IsValidTradeUrlByGame(game);
         checked.push(game);
 
         if (!isValid)
@@ -45,33 +37,42 @@ const Withdraw = (props) => {
       }
     }
 
-    if (error === null) {
-      setError(false);
-      setIsDisplayedButton(false);
-      setIsBanned(true);
-      setIsLoading(true);
-      loader();
-    } else {
-      setError(error);
-    }
+    setError(error);
+
+    return error === null;
   };
 
-  const loader = async () => {
-    let items = finishedInventories.items;
-
+  const zeroingOutStatusAndErrorsItems = (items) => {
     for (let i = 0; i < items.length; i++) {
       if (items[i].status !== "success") {
         items[i].status = "wait";
         items[i].error = null;
-        setFinishedInventories((prev) => ({
-          ...prev,
-          items: items,
-        }));
       }
     }
 
+    return items;
+  };
+
+  const click = () => {
+    if (isValidTradeUrls()) {
+      setIsDisplayedButton(false);
+      setIsBanned(true);
+      setIsLoading(true);
+      loader();
+    }
+  };
+
+  const loader = async () => {
+    let items = zeroingOutStatusAndErrorsItems(finishedInventories.items);
+
+    setFinishedInventories((prev) => ({
+      ...prev,
+      items: items,
+    }));
+
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
+      const selected = props.selectItems.items;
 
       try {
         if (item.status !== "success") {
@@ -81,7 +82,7 @@ const Withdraw = (props) => {
             items: items,
           }));
 
-          const index = props.selectItems.items.indexOf(item.id);
+          const index = selected.indexOf(item.id);
 
           await itemApi.withdraw(
             item.id,
@@ -89,15 +90,14 @@ const Withdraw = (props) => {
           );
 
           items[i].status = "success";
-
           setFinishedInventories((prev) => ({
             ...prev,
             items: items,
           }));
+
           removeSelectItem(index, item);
         }
       } catch (err) {
-        console.log(err);
         const code = err.response.data.error.code;
 
         items[i].status = "cancel";
@@ -135,7 +135,7 @@ const Withdraw = (props) => {
     if (index > -1) {
       let selected = props.selectItems.items;
       selected.splice(index, 1);
-      props.setSelectItems({ ...props.selectItems, ...selected });
+      props.setSelectItems((prev) => ({ ...prev, ...selected }));
     }
   };
 
@@ -143,20 +143,14 @@ const Withdraw = (props) => {
     const interval = setInterval(async () => {
       const items = finishedInventories.items;
       const remaining = items.filter((i) => i.status !== "success");
-      setRemainingInventories({ ...remainingInventories, items: remaining });
+      setRemainingInventories((prev) => ({ ...prev, items: remaining }));
 
       if (items.length > 0 && !isBanned) {
         setIsApply(remaining.length === 0);
         setIsDisplayedButton(remaining.length > 0);
       }
-    }, 100);
 
-    return () => clearInterval(interval);
-  });
-
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      if (finishedInventories.items.length === 0 && !isBanned) {
+      if (items.length === 0 && !isBanned) {
         setIsBanned(true);
         setIsLoading(true);
 
@@ -164,12 +158,9 @@ const Withdraw = (props) => {
 
         if (!inv || inv.length === 0) inv = props.loadedItems;
 
-        for (let i = 0; i < inv.length; i++) {
-          inv[i].status = "wait";
-          inv[i].error = null;
-        }
+        inv = zeroingOutStatusAndErrorsItems(inv);
 
-        setFinishedInventories({ ...finishedInventories, items: inv });
+        setFinishedInventories((prev) => ({ ...prev, items: inv }));
         setIsLoading(false);
         setIsBanned(false);
       }
@@ -223,7 +214,9 @@ const Withdraw = (props) => {
             <Item
               id={i.id}
               item={i.item}
-              isLoading={isLoading}
+              showItem={() => {
+                if (i.status === "exchange") props.setExchangeItem(i);
+              }}
               showStatus={true}
               status={i.status}
               error={i.error}

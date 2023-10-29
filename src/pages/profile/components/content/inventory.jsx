@@ -4,6 +4,7 @@ import {
   Modal as ModalLayout,
 } from "../../../../layouts";
 import {
+  Exchange as ExchangeWindow,
   Inventory as InventoryWindow,
   Item as ItemWindow,
   LoadImage as LoadImageWindow,
@@ -37,6 +38,7 @@ const Inventory = () => {
   const [games, setGames] = useState();
   const [user, setUser] = useState();
   const [item, setItem] = useState();
+  const [exchangeItem, setExchangeItem] = useState();
   const [image, setImage] = useState();
   const [inventory, setInventory] = useState();
 
@@ -211,7 +213,6 @@ const Inventory = () => {
       <ModalLayout
         isActive={isOpenSellWindow}
         close={() => {
-          setSelectItems((prev) => ({ ...prev, items: [] }));
           setIsOpenSellWindow(false);
           setIsLoading(true);
         }}
@@ -234,6 +235,24 @@ const Inventory = () => {
           loadedItems={loadedItems}
           selectItems={selectItems}
           setSelectItems={setSelectItems}
+          setExchangeItem={setExchangeItem}
+        />
+      </ModalLayout>
+      <ModalLayout
+        isActive={exchangeItem}
+        close={() => {
+          setExchangeItem();
+          setIsLoading(true);
+        }}
+      >
+        <ExchangeWindow
+          inventory={exchangeItem}
+          selectItems={selectItems}
+          setSelectItems={setSelectItems}
+          closeWindow={() => {
+            setExchangeItem();
+            setIsLoading(true);
+          }}
         />
       </ModalLayout>
       <ModalLayout isActive={inventory} close={() => setInventory(null)}>

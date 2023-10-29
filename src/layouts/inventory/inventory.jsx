@@ -66,20 +66,12 @@ const Inventory = (props) => {
           });
         }
 
-        if (props.isLoading && isClickSlider) {
-          loadInventory(false);
+        if (props.isLoading) {
+          loadInventory(!isClickSlider);
 
           props.setIsLoading(false);
           setIsClickSlider(false);
-        } else if (props.isLoading && !isClickSlider) {
-          loadInventory(true);
-
-          props.setIsLoading(false);
-        } else if (
-          !props.isLoading &&
-          !isClickSlider &&
-          currentFilter !== props.filterName
-        ) {
+        } else if (currentFilter !== props.filterName) {
           setCurrentFilter(props.filterName);
           setPage(1);
           setLoadedInventory([]);

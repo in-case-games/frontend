@@ -19,10 +19,10 @@ const getMiniDate = (date) => {
 const cutString = (string, length) =>
   string.length > length ? string.substring(0, length) + "..." : string;
 
-const cutCost = (cost) => {
-  let r = Math.round(cost);
-  if (r >= 1000000) r = `${Math.round(r / 10) / 100000}M`;
-  else if (r >= 1000) r = `${Math.round(r / 10) / 100}K`;
+const cutCost = (cost, rounding = (c) => Math.round(c)) => {
+  let r = rounding(cost);
+  if (r >= 1000000 || r <= -1000000) r = `${rounding(r / 10) / 100000}M`;
+  else if (r >= 1000 || r <= -1000) r = `${rounding(r / 10) / 100}K`;
 
   return r;
 };
