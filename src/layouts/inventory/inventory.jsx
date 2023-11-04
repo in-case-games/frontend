@@ -4,6 +4,7 @@ import { Counter as Slider } from "../../components/common/sliders";
 import styles from "./inventory.module";
 
 const Inventory = (props) => {
+  const quantityPerPage = props.quantityPerPage ? props.quantityPerPage : 20;
   const [currentFilter, setCurrentFilter] = useState(props.filterName);
 
   const [isClickSlider, setIsClickSlider] = useState(false);
@@ -42,7 +43,7 @@ const Inventory = (props) => {
           if (isAllReload) {
             primary = await props.loadPrimary();
 
-            pages = Math.ceil(primary.length / 20);
+            pages = Math.ceil(primary.length / quantityPerPage);
             pages = pages === 0 ? 1 : pages;
 
             setPrimaryInventory(primary);
@@ -58,6 +59,7 @@ const Inventory = (props) => {
             primary: primary,
             loaded: loadedInventory,
             page: page > pages ? pages : page,
+            quantityPerPage: quantityPerPage,
             setLoaded: setLoadedInventory,
             setShow: setShowInventory,
             additionalLoading: props.additionalLoading,
