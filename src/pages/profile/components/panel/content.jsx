@@ -3,15 +3,16 @@ import styles from "../../profile.module";
 import {
   ObserverProfile as Profile,
   Inventory,
-  HistoryOpening,
+  HistoryOpening as Openings,
+  HistoryPayment as Payments,
 } from "../content";
 
 const Content = (props) => {
   const dictionary = {
     profile: <Profile />,
     inventory: <Inventory />,
-    history_opening: <HistoryOpening />,
-    payment: "Платежка",
+    history_opening: <Openings />,
+    payment: <Payments />,
     withdrawn: "Вывод",
     promo_code: "promo",
     admin: "admin",
