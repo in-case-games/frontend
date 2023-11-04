@@ -51,8 +51,8 @@ const Bar = (props) => {
       />
       <BarButton
         text="Открытые кейсы"
-        click={() => props.exchange("box")}
-        isActive={props.content === "box"}
+        click={() => props.exchange("history_opening")}
+        isActive={props.content === "history_opening"}
       />
       <BarButton
         text="Пополнения"
