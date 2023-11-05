@@ -5,6 +5,7 @@ import {
   Inventory,
   HistoryOpening as Openings,
   HistoryPayment as Payments,
+  HistoryWithdrawn,
 } from "../content";
 
 const Content = (props) => {
@@ -13,7 +14,7 @@ const Content = (props) => {
     inventory: <Inventory />,
     history_opening: <Openings />,
     payment: <Payments />,
-    withdrawn: "Вывод",
+    withdrawn: <HistoryWithdrawn />,
     promo_code: "promo",
     admin: "admin",
     admin_items: "admin-items",
