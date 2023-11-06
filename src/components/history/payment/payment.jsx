@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { LoadingArrow as Loading } from "../../loading";
-import styles from "./payment.module";
 import { Converter } from "../../../helpers/converter";
+import styles from "./payment.module";
 
 const Payment = (props) => {
   const [isLoading, setIsLoading] = useState(false);

@@ -2,8 +2,8 @@ import React from "react";
 import { TemplateUser as UserImage } from "../../../assets/images/main";
 import { Input } from "../../common/inputs";
 import { Converter } from "../../../helpers/converter";
-import styles from "./history-payment.module";
 import { useNavigate } from "react-router-dom";
+import styles from "./history-payment.module";
 
 const HistoryPayment = (props) => {
   const navigate = useNavigate();

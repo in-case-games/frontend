@@ -16,6 +16,7 @@
 .inventory,
 .history_opening,
 .history_payment,
+.history_promocode,
 .observer_profile,
 .observed_profile {
   display: flex;
@@ -90,10 +91,12 @@
 
 .buttons {
   display: flex;
+  align-items: center;
   flex-wrap: wrap;
 
   .button_withdraw,
-  .button_sell {
+  .button_sell,
+  .button_send {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -125,7 +128,8 @@
       color: black;
     }
   }
-  .button_withdraw {
+  .button_withdraw,
+  .button_send {
     background: -moz-linear-gradient(var(--gradient-1__0-70));
     background: -webkit-linear-gradient(var(--gradient-1__0-70));
     background: linear-gradient(var(--gradient-1__0-70));
@@ -162,7 +166,8 @@
     }
 
     .buttons .button_withdraw,
-    .buttons .button_sell {
+    .buttons .button_sell,
+    .buttons .button_send {
       margin: 0 10px;
     }
   }
@@ -202,7 +207,8 @@
         margin: 5px 0;
       }
 
-      .button_sell {
+      .button_sell,
+      .button_send {
         margin: 5px 0;
       }
     }

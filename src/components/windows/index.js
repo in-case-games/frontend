@@ -15,3 +15,4 @@ export { Withdraw } from "./withdraw";
 export { Exchange } from "./exchange";
 export { HistoryPayment } from "./history-payment";
 export { HistoryWithdrawn } from "./history-withdrawn";
+export { HistoryPromocode } from "./history-promocode";
