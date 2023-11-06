@@ -7,7 +7,9 @@ import {
   HistoryPayment as Payments,
   HistoryWithdrawn,
   HistoryPromocode,
+  Admin,
 } from "../content";
+import AdminItems from "../content/admin-items";
 
 const Content = (props) => {
   const dictionary = {
@@ -17,8 +19,8 @@ const Content = (props) => {
     payment: <Payments />,
     withdrawn: <HistoryWithdrawn />,
     promocode: <HistoryPromocode />,
-    admin: "admin",
-    admin_items: "admin-items",
+    admin: <Admin exchange={props.exchange} />,
+    admin_items: <AdminItems exchange={props.exchange} />,
     admin_boxes: "admin-boxes",
     admin_users: "admin-users",
     admin_promocodes: "admin-promocodes",

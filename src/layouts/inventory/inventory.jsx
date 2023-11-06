@@ -40,19 +40,16 @@ const Inventory = (props) => {
           let primary = primaryInventory;
           let pages = pages;
 
-          if (isAllReload) {
-            primary = await props.loadPrimary();
-
-            pages = Math.ceil(primary.length / quantityPerPage);
-            pages = pages === 0 ? 1 : pages;
-
-            setPrimaryInventory(primary);
-            setPages(pages);
-
-            if (page > pages) setPage(pages);
-          }
-
+          if (isAllReload) primary = await props.loadPrimary();
           if (props.filter) primary = props.filter(primary);
+
+          pages = Math.ceil(primary.length / quantityPerPage);
+          pages = pages === 0 ? 1 : pages;
+
+          setPrimaryInventory(primary);
+          setPages(pages);
+
+          if (page > pages) setPage(pages);
 
           await LazyLoading({
             isAllReload: isAllReload,

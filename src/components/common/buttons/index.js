@@ -5,3 +5,4 @@ export { Link } from "./link";
 export { Info } from "./info";
 export { ProfileBar, ProfileHeaderBar } from "./profile-bar";
 export { PullOutProfile } from "./pull-out";
+export { SquarePanel } from "./square-panel";

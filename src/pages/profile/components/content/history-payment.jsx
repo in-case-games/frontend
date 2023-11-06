@@ -18,11 +18,15 @@ const HistoryPayment = () => {
   const [user, setUser] = useState();
 
   const additionalLoading = async (array, start, end) => {
+    const loaded = [];
     const u = user || (await loadedUser());
 
-    for (let i = start; i < end; i++) array[i].user = u;
+    for (let i = start; i < end; i++) {
+      array[i].user = u;
+      loaded.push(array[i]);
+    }
 
-    return array;
+    return loaded;
   };
 
   const createShowByLoaded = (array, start, end) => {
