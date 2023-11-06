@@ -57,7 +57,6 @@ const Withdrawn = (props) => {
   };
 
   const click = async () => {
-    console.log(props.history.id);
     if (props.history.status === "cancel") {
       try {
         await userApi.transferWithdrawn(props.history.id);
@@ -68,7 +67,7 @@ const Withdrawn = (props) => {
   };
 
   return (
-    <div className={styles.history} onClick={props.click}>
+    <div className={styles.history}>
       <div className={styles.history_content}>
         <div
           className={styles.history_item}
@@ -84,7 +83,7 @@ const Withdrawn = (props) => {
             }}
           />
         </div>
-        <div className={styles.history_info}>
+        <div className={styles.history_info} onClick={props.click}>
           <div className={styles.date}>
             {Converter.getMiniDate(props.history.date)}
           </div>

@@ -85,7 +85,7 @@ const Simple = (props) => {
         </div>
       ) : null}
       {props.showInfo ? (
-        <div className={styles.info} onClick={clickInfo}>
+        <div className={styles.info} onMouseDown={clickInfo}>
           <img alt="" src={Info} />
         </div>
       ) : null}
