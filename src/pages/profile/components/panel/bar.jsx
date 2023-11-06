@@ -66,8 +66,8 @@ const Bar = (props) => {
       />
       <BarButton
         text="Промокоды"
-        click={() => props.exchange("promo_code")}
-        isActive={props.content === "promo_code"}
+        click={() => props.exchange("promocode")}
+        isActive={props.content === "promocode"}
       />
       {user && user.role === "owner" ? (
         <BarButton

@@ -16,10 +16,15 @@ const Content = (props) => {
     history_opening: <Openings />,
     payment: <Payments />,
     withdrawn: <HistoryWithdrawn />,
-    promo_code: <HistoryPromocode />,
+    promocode: <HistoryPromocode />,
     admin: "admin",
     admin_items: "admin-items",
-    admin_box: "admin-box",
+    admin_boxes: "admin-boxes",
+    admin_users: "admin-users",
+    admin_promocodes: "admin-promocodes",
+    admin_banners: "admin-banners",
+    admin_groups: "admin-groups",
+    admin_statistics: "admin-statistics",
   };
 
   return (
