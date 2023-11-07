@@ -18,6 +18,7 @@ import { Small as Box } from "../../loot-box";
 import { Restriction } from "../../restriction";
 import { LoadingArrow as Loading } from "../../loading";
 import { Converter } from "../../../helpers/converter";
+import TokenService from "../../../services/token";
 import styles from "./mini-profile.module";
 
 const MiniProfileWindow = (props) => {
@@ -27,6 +28,8 @@ const MiniProfileWindow = (props) => {
   const userApi = new UserApi();
   const itemApi = new ItemApi();
   const boxApi = new BoxApi();
+
+  const observerRole = TokenService?.getUser()?.role || "user";
 
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingItems, setIsLoadingItems] = useState(true);
@@ -54,57 +57,16 @@ const MiniProfileWindow = (props) => {
       if (isAllRefresh) {
         setIsAllRefresh(false);
 
-        const tu = await userApi.getById(props.userId);
+        const user = await userApi.getById(props.userId);
 
-        tu.image = await userApi.getImageByUserId(tu.id);
-        tu.ownerRestrictions = tu.ownerRestrictions.slice(0, 3);
-        tu.restrictions = tu.restrictions.slice(0, 3);
+        user.image = await userApi.getImageByUserId(user.id);
+        user.ownerRestrictions = user.ownerRestrictions.slice(0, 3);
+        user.restrictions = user.restrictions.slice(0, 3);
 
-        if (tu) {
-          const role = tu.additionalInfo.role.name;
-          const rt = role === "user" ? tu.restrictions : tu.ownerRestrictions;
+        await loadRestrictions(user);
+        await loadHistory(user);
 
-          setRestrictions(
-            rt.map((r) => (
-              <Restriction
-                restriction={r}
-                showMiniProfile={() => {
-                  const id = role === "user" ? r.ownerId : r.userId;
-
-                  props.exchangeWindow(id);
-
-                  setHistory(null);
-                  setRestrictions(null);
-                  setIsLoading(true);
-                  setIsAllRefresh(true);
-                }}
-                isOwnerImage={role === "user"}
-                key={r.id}
-              />
-            ))
-          );
-        }
-        if (tu && history && (item || box)) {
-          let t = await userApi.getOpeningsByUserId(props.userId);
-          t = t.slice(0, 15);
-
-          for (let i = 0; i < t.length; i++) {
-            if (box) {
-              t[i].box = await boxApi.pushImage(
-                await boxApi.getById(t[i].boxId)
-              );
-            } else if (item) {
-              t[i].item = await itemApi.getById(t[i].itemId);
-              const game = await gameApi.getByName(t[i].item.game);
-              t[i].item.gameId = game.id;
-              t[i].item = await itemApi.pushImage(t[i].item);
-            }
-          }
-
-          setHistory(t);
-        }
-
-        setUser(tu);
+        setUser(user);
         setIsLoading(false);
         setIsLoadingItems(false);
         setIsStart(false);
@@ -145,6 +107,79 @@ const MiniProfileWindow = (props) => {
     }
 
     setIsLoadingItems(false);
+  };
+
+  const loadHistory = async (user) => {
+    if (user && history && (item || box)) {
+      let t = await userApi.getOpeningsByUserId(props.userId);
+      t = t.slice(0, 15);
+
+      for (let i = 0; i < t.length; i++) {
+        if (box) {
+          t[i].box = await boxApi.pushImage(await boxApi.getById(t[i].boxId));
+        } else if (item) {
+          t[i].item = await itemApi.getById(t[i].itemId);
+          const game = await gameApi.getByName(t[i].item.game);
+          t[i].item.gameId = game.id;
+          t[i].item = await itemApi.pushImage(t[i].item);
+        }
+      }
+
+      setHistory(t);
+    }
+  };
+
+  const loadRestrictions = async (user) => {
+    if (user) {
+      const res = [];
+      const role = user.additionalInfo.role.name;
+      const restrictions =
+        role === "user" ? user.restrictions : user.ownerRestrictions;
+
+      if (observerRole !== "user") {
+        res.push(
+          <Restriction
+            showRestriction={() =>
+              props.openRestrictionWindow({ owner: props.user })
+            }
+            isOwnerImage={false}
+            key="12312"
+          />
+        );
+      }
+
+      for (let i = 0; i < restrictions.length; i++) {
+        let r = restrictions[i];
+
+        //TODO Check before restriction lazy loading
+
+        r.user = await userApi.getById(r.userId);
+        r.owner = await userApi.getById(r.ownerId);
+        r.user.image = await userApi.getImageByUserId(r.userId);
+        r.owner.image = await userApi.getImageByUserId(r.ownerId);
+
+        res.push(
+          <Restriction
+            restriction={r}
+            showRestriction={() => props.openRestrictionWindow(r)}
+            showMiniProfile={() => {
+              const id = role === "user" ? r.ownerId : r.userId;
+
+              props.exchangeWindow(id);
+
+              setHistory(null);
+              setRestrictions(null);
+              setIsLoading(true);
+              setIsAllRefresh(true);
+            }}
+            isOwnerImage={role === "user"}
+            key={r.id}
+          />
+        );
+      }
+
+      setRestrictions(res);
+    }
   };
 
   return (

@@ -25,10 +25,6 @@ const Admin = (props) => {
             click={() => props.exchange("admin_boxes")}
           />
           <SquarePanel
-            image={Account}
-            click={() => props.exchange("admin_users")}
-          />
-          <SquarePanel
             image={ChartUp}
             click={() => props.exchange("admin_statistics")}
           />

@@ -12,6 +12,7 @@ import {
   Item as ItemWindow,
   Box as BoxWindow,
   LoadImage as LoadImageWindow,
+  Restriction as RestrictionWindow,
 } from "../../windows";
 import { Converter } from "../../../helpers/converter";
 
@@ -29,6 +30,7 @@ const OpeningsRoulette = () => {
   const [item, setItem] = useState(null);
   const [box, setBox] = useState(null);
   const [image, setImage] = useState(null);
+  const [restriction, setRestriction] = useState();
 
   const [miniProfile, setMiniProfile] = useState(null);
   const [isOpenLoadWindow, setIsOpenLoadWindow] = useState(false);
@@ -126,9 +128,17 @@ const OpeningsRoulette = () => {
       <ModalLayout isActive={miniProfile} close={() => setMiniProfile(null)}>
         <MiniProfileWindow
           userId={miniProfile}
+          openRestrictionWindow={(r) => setRestriction(r)}
           openItemWindow={(item) => setItem(item)}
           openBoxWindow={(box) => setBox(box)}
           exchangeWindow={(id) => setMiniProfile(id)}
+        />
+      </ModalLayout>
+      <ModalLayout isActive={restriction} close={() => setRestriction()}>
+        <RestrictionWindow
+          restriction={restriction}
+          setRestriction={setRestriction}
+          close={() => setRestriction()}
         />
       </ModalLayout>
       <ModalLayout

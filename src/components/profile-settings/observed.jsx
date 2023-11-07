@@ -20,6 +20,7 @@ import {
   Box as BoxWindow,
   HistoryOpening as HistoryOpeningWindow,
   Inventory as InventoryWindow,
+  Restriction as RestrictionWindow,
 } from "../windows";
 import { Restriction } from "../restriction";
 import { LoadingArrow as Loading } from "../loading";
@@ -42,6 +43,7 @@ const Observed = (props) => {
   const [image, setImage] = useState(null);
   const [historyOpening, setHistoryOpening] = useState(null);
   const [inventory, setInventory] = useState(null);
+  const [restriction, setRestriction] = useState(null);
 
   const [login, setLogin] = useState(props.user.login);
   const [email, setEmail] = useState(props.user.additionalInfo.email);
@@ -75,91 +77,138 @@ const Observed = (props) => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      if (props.isAllReload) {
-        props.setIsAllReload(false);
-        setHistoryOpenings({ id: "", items: null });
-        setInventories(null);
-        setRestrictions(null);
-        setLogin(props.user.login);
-        setEmail(props.user.additionalInfo.email);
-        setRole(props.user.additionalInfo.role.name);
-        setBalance(null);
-      }
-      if (!balance && observerRole !== "user") {
-        const temp = await userApi.getBalanceByUserId(props.user.id);
+      props.setIsAllReload(false);
 
-        if (temp) setBalance(temp);
-      }
+      if (props.isAllReload) resetToGlobalZero();
+      if (!balance && observerRole !== "user") await loadBalance();
       if (!games || games.length === 0) setGames(await gameApi.get());
       if (!roles || roles.length === 0) setRoles(await userApi.getRoles());
       if (
         (showRestriction && !restrictions) ||
         (props.isLoading && showRestriction)
-      ) {
-        props.setIsLoading(false);
-
-        let temp =
-          observedRole !== "user"
-            ? await userApi.getRestrictionsByOwnerId(props.user.id)
-            : await userApi.getRestrictionsByUserId(props.user.id);
-
-        setRestrictions(temp.slice(0, 20));
-      }
+      )
+        await loadRestrictions();
       if (
         (showInventories && !inventories) ||
         (props.isLoading && showInventories)
-      ) {
-        props.setIsLoading(false);
+      )
+        await loadItems();
 
-        let res = await userApi.getInventoryByUserId(props.user.id);
-        res = res.slice(0, 20);
-
-        for (let i = 0; i < res.length; i++) {
-          let temp = res[i];
-
-          temp.item = await itemApi.getById(temp.itemId);
-          temp.item.gameId = games.find((g) => g.name === temp.item.game).id;
-          temp.item = await itemApi.pushImage(temp.item);
-
-          res[i] = temp;
-        }
-
-        setInventories(res);
-      }
-      if (props.isLoading && (showItems || showBoxes)) {
-        props.setIsLoading(false);
-
-        let res = historyOpenings.items ?? [];
-
-        if (res.length === 0) {
-          res = await userApi.getOpeningsByUserId(props.user.id);
-          res = res.slice(0, 12);
-        }
-
-        for (let i = 0; i < res.length; i++) {
-          let temp = res[i];
-
-          if (!temp.box && showBoxes) {
-            temp.box = await boxApi.getById(temp.boxId);
-            temp.box = await boxApi.pushImage(temp.box);
-          }
-          if (!temp.item && showItems) {
-            temp.item = await itemApi.getById(temp.itemId);
-            temp.item.gameId = games.find((g) => g.name === temp.item.game).id;
-            temp.item = await itemApi.pushImage(temp.item);
-          }
-
-          res[i] = temp;
-        }
-
-        setHistoryOpenings({ ...historyOpenings, items: res });
-      }
+      if (props.isLoading && (showItems || showBoxes))
+        await loadHistoryOpenings();
 
       props.setIsLoading(false);
     }, 500);
 
     return () => clearInterval(interval);
   });
+
+  const loadBalance = async () => {
+    const b = await userApi.getBalanceByUserId(props.user.id);
+
+    if (b) setBalance(b);
+  };
+
+  const loadHistoryOpenings = async () => {
+    let res = historyOpenings.items ?? [];
+
+    if (res.length === 0) {
+      res = await userApi.getOpeningsByUserId(props.user.id);
+      res = res.slice(0, 12);
+    }
+
+    for (let i = 0; i < res.length; i++) {
+      let temp = res[i];
+
+      if (!temp.box && showBoxes) {
+        temp.box = await boxApi.getById(temp.boxId);
+        temp.box = await boxApi.pushImage(temp.box);
+      }
+      if (!temp.item && showItems) {
+        temp.item = await itemApi.getById(temp.itemId);
+        temp.item.gameId = games.find((g) => g.name === temp.item.game).id;
+        temp.item = await itemApi.pushImage(temp.item);
+      }
+
+      res[i] = temp;
+    }
+
+    setHistoryOpenings({ ...historyOpenings, items: res });
+  };
+
+  const loadItems = async () => {
+    let res = await userApi.getInventoryByUserId(props.user.id);
+    res = res.slice(0, 20);
+
+    for (let i = 0; i < res.length; i++) {
+      let temp = res[i];
+
+      temp.item = await itemApi.getById(temp.itemId);
+      temp.item.gameId = games.find((g) => g.name === temp.item.game).id;
+      temp.item = await itemApi.pushImage(temp.item);
+
+      res[i] = temp;
+    }
+
+    setInventories(res);
+  };
+
+  const loadRestrictions = async () => {
+    const res = [];
+    const restrictions =
+      observedRole !== "user"
+        ? await userApi.getRestrictionsByOwnerId(props.user.id)
+        : await userApi.getRestrictionsByUserId(props.user.id);
+    const length = restrictions.length > 19 ? 19 : restrictions.length;
+
+    if (observerRole !== "user") {
+      res.push(
+        <Restriction
+          showRestriction={() => setRestriction({ owner: props.user })}
+          isOwnerImage={false}
+          key="12312"
+        />
+      );
+    }
+
+    for (let i = 0; i < length; i++) {
+      let r = restrictions[i];
+
+      //TODO Check before restriction lazy loading
+
+      r.user = await userApi.getById(r.userId);
+      r.owner = await userApi.getById(r.ownerId);
+      r.user.image = await userApi.getImageByUserId(r.userId);
+      r.owner.image = await userApi.getImageByUserId(r.ownerId);
+
+      res.push(
+        <Restriction
+          restriction={r}
+          showRestriction={() => {
+            console.log(r);
+            setRestriction(r);
+          }}
+          showMiniProfile={() =>
+            setMiniProfile(observedRole === "user" ? r.ownerId : r.userId)
+          }
+          isOwnerImage={observedRole === "user"}
+          key={r.id}
+        />
+      );
+    }
+
+    setRestrictions(res);
+  };
+
+  const resetToGlobalZero = () => {
+    setHistoryOpenings({ id: "", items: null });
+    setInventories(null);
+    setRestrictions(null);
+    setLogin(props.user.login);
+    setEmail(props.user.additionalInfo.email);
+    setRole(props.user.additionalInfo.role.name);
+    setBalance(null);
+  };
 
   const changeEmail = async () => {
     try {
@@ -484,20 +533,7 @@ const Observed = (props) => {
               alignItems: "center",
             }}
           >
-            {restrictions ? (
-              restrictions.map((r) => (
-                <Restriction
-                  restriction={r}
-                  showMiniProfile={() =>
-                    setMiniProfile(
-                      observedRole === "user" ? r.ownerId : r.userId
-                    )
-                  }
-                  isOwnerImage={observedRole === "user"}
-                  key={r.id}
-                />
-              ))
-            ) : (
+            {restrictions || (
               <div className={styles.loading}>
                 <Loading isLoading={!restrictions} />
               </div>
@@ -510,6 +546,7 @@ const Observed = (props) => {
       <ModalLayout isActive={miniProfile} close={() => setMiniProfile(null)}>
         <MiniProfileWindow
           userId={miniProfile}
+          openRestrictionWindow={(r) => setRestriction(r)}
           openItemWindow={(item) => setItem(item)}
           openBoxWindow={(box) => setBox(box)}
           exchangeWindow={(id) => setMiniProfile(id)}
@@ -534,6 +571,13 @@ const Observed = (props) => {
             setInventory(null);
             props.setIsAllReload(true);
           }}
+        />
+      </ModalLayout>
+      <ModalLayout isActive={restriction} close={() => setRestriction()}>
+        <RestrictionWindow
+          restriction={restriction}
+          setRestriction={setRestriction}
+          close={() => setRestriction()}
         />
       </ModalLayout>
       <ModalLayout

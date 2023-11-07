@@ -18,6 +18,7 @@ import {
   MiniProfile as MiniProfileWindow,
   TradeUrl as TradeUrlWindow,
   Box as BoxWindow,
+  Restriction as RestrictionWindow,
 } from "../windows";
 import { Restriction } from "../restriction";
 import { PullOutProfile as PullOut } from "../common/buttons";
@@ -29,9 +30,11 @@ import styles from "./profile-settings.module";
 const Observer = (props) => {
   const userApi = new UserApi();
 
+  const role = TokenService?.getUser()?.role || "user";
   const [user, setUser] = useState(TokenService.getUser());
   const [game, setGame] = useState(null);
   const [restrictions, setRestrictions] = useState(null);
+  const [restriction, setRestriction] = useState();
   const [miniProfile, setMiniProfile] = useState(null);
   const [item, setItem] = useState(null);
   const [box, setBox] = useState(null);
@@ -55,32 +58,68 @@ const Observer = (props) => {
       if (
         (showRestriction && !restrictions) ||
         (props.isLoading && showRestriction)
-      ) {
-        let temp = [];
-        const userTemp = TokenService.getUser();
+      )
+        await loadRestrictions();
 
-        if (userTemp.role && userTemp.role !== "user") {
-          Array.prototype.push.apply(
-            temp,
-            await userApi.getRestrictionsByOwner()
-          );
-        } else {
-          Array.prototype.push.apply(temp, await userApi.getRestrictions());
-        }
-
-        setRestrictions(temp.slice(0, 20));
-      }
       if (props.isLoading) {
-        const temp = TokenService.getUser();
-        temp.image = await userApi.getImage();
+        const user = TokenService.getUser();
+        user.login = user.name;
+        user.image = await userApi.getImage();
 
-        setUser(temp);
+        setUser(user);
         props.setIsLoading(false);
       }
     }, 100);
 
     return () => clearInterval(interval);
   });
+
+  const loadRestrictions = async () => {
+    const res = [];
+    const restrictions =
+      role !== "user"
+        ? await userApi.getRestrictionsByOwnerId(user.id)
+        : await userApi.getRestrictionsByUserId(user.id);
+    const length = restrictions.length > 19 ? 19 : restrictions.length;
+
+    if (role !== "user") {
+      res.push(
+        <Restriction
+          showRestriction={() => setRestriction({ owner: user })}
+          isOwnerImage={false}
+          key="12312"
+        />
+      );
+    }
+
+    for (let i = 0; i < length; i++) {
+      let r = restrictions[i];
+
+      //TODO Check before restriction lazy loading
+
+      r.user = await userApi.getById(r.userId);
+      r.owner = await userApi.getById(r.ownerId);
+      r.user.image = await userApi.getImageByUserId(r.userId);
+      r.owner.image = await userApi.getImageByUserId(r.ownerId);
+
+      res.push(
+        <Restriction
+          restriction={r}
+          showRestriction={() => {
+            console.log(r);
+            setRestriction(r);
+          }}
+          showMiniProfile={() =>
+            setMiniProfile(role === "user" ? r.ownerId : r.userId)
+          }
+          isOwnerImage={role === "user"}
+          key={r.id}
+        />
+      );
+    }
+
+    setRestrictions(res);
+  };
 
   return (
     <div className={styles.profile_settings}>
@@ -184,18 +223,7 @@ const Observer = (props) => {
               alignItems: "center",
             }}
           >
-            {restrictions ? (
-              restrictions.map((r) => (
-                <Restriction
-                  restriction={r}
-                  showMiniProfile={() =>
-                    setMiniProfile(user.role === "user" ? r.ownerId : r.userId)
-                  }
-                  isOwnerImage={user.role === "user"}
-                  key={r.id}
-                />
-              ))
-            ) : (
+            {restrictions || (
               <div className={styles.loading}>
                 <Loading isLoading={!restrictions} setIsLoading={() => {}} />
               </div>
@@ -211,9 +239,17 @@ const Observer = (props) => {
       <ModalLayout isActive={miniProfile} close={() => setMiniProfile(null)}>
         <MiniProfileWindow
           userId={miniProfile}
+          openRestrictionWindow={(r) => setRestriction(r)}
           openItemWindow={(item) => setItem(item)}
           openBoxWindow={(box) => setBox(box)}
           exchangeWindow={(id) => setMiniProfile(id)}
+        />
+      </ModalLayout>
+      <ModalLayout isActive={restriction} close={() => setRestriction()}>
+        <RestrictionWindow
+          restriction={restriction}
+          setRestriction={setRestriction}
+          close={() => setRestriction()}
         />
       </ModalLayout>
       <ModalLayout

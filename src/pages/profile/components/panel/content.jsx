@@ -23,7 +23,6 @@ const Content = (props) => {
     admin: <Admin exchange={props.exchange} />,
     admin_items: <AdminItems exchange={props.exchange} />,
     admin_boxes: <AdminBoxes exchange={props.exchange} />,
-    admin_users: "admin-users",
     admin_promocodes: "admin-promocodes",
     admin_banners: "admin-banners",
     admin_groups: "admin-groups",

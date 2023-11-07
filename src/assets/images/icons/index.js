@@ -55,3 +55,4 @@ export { default as ChartUpBlack } from "./chart-up-black.svg";
 export { default as ChartUp } from "./chart-up.svg";
 export { default as HtmlTagBlack } from "./html-tag-black.svg";
 export { default as HtmlTag } from "./html-tag.svg";
+export { default as InfoBlack } from "./info-black.svg";
