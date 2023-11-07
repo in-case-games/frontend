@@ -4,18 +4,21 @@ import {
   Modal as ModalLayout,
 } from "../../../../layouts";
 import {
-  Item as ItemWindow,
+  Box as BoxWindow,
   LoadImage as LoadImageWindow,
 } from "../../../../components/windows";
 import { LoadingArrow as Loading } from "../../../../components/loading";
-import { Game as GameApi, Item as ItemApi } from "../../../../api";
-import { Simple as Item } from "../../../../components/game-item";
+import { Game as GameApi, Box as BoxApi } from "../../../../api";
+import { Simple as Box } from "../../../../components/loot-box";
 import { ComboBox, Input } from "../../../../components/common/inputs";
 import styles from "./content.module";
 
-const AdminItems = (props) => {
-  const itemApi = new ItemApi();
+const AdminBoxes = (props) => {
+  const boxApi = new BoxApi();
   const gameApi = new GameApi();
+
+  const [games, setGames] = useState();
+  const [gamesArray, setGamesArray] = useState();
 
   const [isLoading, setIsLoading] = useState(true);
   const [isStart, setIsStart] = useState(true);
@@ -23,9 +26,7 @@ const AdminItems = (props) => {
 
   const [game, setGame] = useState("csgo");
   const [name, setName] = useState("");
-  const [games, setGames] = useState();
-  const [gamesArray, setGamesArray] = useState();
-  const [item, setItem] = useState();
+  const [box, setBox] = useState();
   const [image, setImage] = useState();
 
   useEffect(() => {
@@ -44,13 +45,11 @@ const AdminItems = (props) => {
 
   const additionalLoading = async (array, start, end) => {
     const loaded = [];
-    const g = games || (await loadedGames());
 
     for (let i = start; i < end; i++) {
-      let item = array[i];
-      item.gameId = g[game];
-      item = await itemApi.pushImage(item);
-      loaded.push(item);
+      let b = array[i];
+      b = await boxApi.pushImage(b);
+      loaded.push(b);
     }
 
     return loaded;
@@ -58,14 +57,14 @@ const AdminItems = (props) => {
 
   const createShowByLoaded = (array, start, end) => {
     let result = [
-      <Item id="1213" item={{}} showItem={() => setItem({})} key="1213" />,
+      <Box id="1213" box={{}} showBox={() => setBox({})} key="1213" />,
     ];
 
     for (let j = start; j < end; j++) {
       const i = array[j];
 
       result.push(
-        <Item id={i.id} item={i} showItem={() => setItem(i)} key={i.id} />
+        <Box id={i.id} box={i} showBox={() => setBox(i)} key={i.id} />
       );
     }
 
@@ -87,7 +86,7 @@ const AdminItems = (props) => {
   };
 
   return (
-    <div className={styles.admin_items}>
+    <div className={styles.admin_boxes}>
       <div className={styles.profile_tittle}>
         <div className={styles.tittle}>
           <div
@@ -102,12 +101,12 @@ const AdminItems = (props) => {
               setLoading={() => setIsLoading(true)}
             />
           </div>
-          <div className={styles.name}>Игровые предметы: </div>
+          <div className={styles.name}>Игровые кейсы: </div>
         </div>
         <div className={styles.input}>
           <Input
-            name="item-name"
-            placeholder="Название предмета"
+            name="box-name"
+            placeholder="Название кейса"
             value={name}
             setValue={setName}
           />
@@ -130,7 +129,7 @@ const AdminItems = (props) => {
           additionalLoading={additionalLoading}
           createShowByLoaded={createShowByLoaded}
           loadPrimary={async () =>
-            games ? await itemApi.getByGameId(games[game]) : []
+            games ? await boxApi.getByGameId(games[game]) : []
           }
           filter={(primary) => {
             let res = primary;
@@ -145,17 +144,17 @@ const AdminItems = (props) => {
         />
       </div>
       <ModalLayout
-        isActive={item}
+        isActive={box}
         close={() => {
-          setItem();
+          setBox();
           setImage();
         }}
       >
-        <ItemWindow
-          item={item}
+        <BoxWindow
+          box={box}
           image={image}
           setImage={setImage}
-          setItem={setItem}
+          setBox={setBox}
           openLoadWindow={setIsOpenLoadWindow}
         />
       </ModalLayout>
@@ -177,4 +176,4 @@ const AdminItems = (props) => {
   );
 };
 
-export default AdminItems;
+export default AdminBoxes;

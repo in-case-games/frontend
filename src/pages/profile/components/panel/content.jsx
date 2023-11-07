@@ -5,11 +5,12 @@ import {
   Inventory,
   HistoryOpening as Openings,
   HistoryPayment as Payments,
-  HistoryWithdrawn,
-  HistoryPromocode,
+  HistoryWithdrawn as Withdrawn,
+  HistoryPromocode as Promocodes,
   Admin,
+  AdminItems,
+  AdminBoxes,
 } from "../content";
-import AdminItems from "../content/admin-items";
 
 const Content = (props) => {
   const dictionary = {
@@ -17,11 +18,11 @@ const Content = (props) => {
     inventory: <Inventory />,
     history_opening: <Openings />,
     payment: <Payments />,
-    withdrawn: <HistoryWithdrawn />,
-    promocode: <HistoryPromocode />,
+    withdrawn: <Withdrawn />,
+    promocode: <Promocodes />,
     admin: <Admin exchange={props.exchange} />,
     admin_items: <AdminItems exchange={props.exchange} />,
-    admin_boxes: "admin-boxes",
+    admin_boxes: <AdminBoxes exchange={props.exchange} />,
     admin_users: "admin-users",
     admin_promocodes: "admin-promocodes",
     admin_banners: "admin-banners",
