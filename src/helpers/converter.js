@@ -16,6 +16,21 @@ const getMiniDate = (date) => {
   return d1;
 };
 
+const getUtcDate = () => {
+  var date = new Date();
+
+  var now_utc = Date.UTC(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds()
+  );
+
+  return now_utc;
+};
+
 const cutString = (string, length) =>
   string.length > length ? string.substring(0, length) + "..." : string;
 
@@ -31,4 +46,5 @@ export const Converter = {
   getMiniDate,
   cutString,
   cutCost,
+  getUtcDate,
 };

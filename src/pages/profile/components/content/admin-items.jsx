@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Inventory as InventoryLayout,
   Modal as ModalLayout,
@@ -18,6 +18,7 @@ const AdminItems = (props) => {
   const gameApi = new GameApi();
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isStart, setIsStart] = useState(true);
   const [isOpenLoadWindow, setIsOpenLoadWindow] = useState(false);
 
   const [game, setGame] = useState("csgo");
@@ -27,6 +28,20 @@ const AdminItems = (props) => {
   const [gamesArray, setGamesArray] = useState();
   const [item, setItem] = useState();
   const [image, setImage] = useState();
+
+  useEffect(() => {
+    const interval = setInterval(
+      async () => {
+        if (isStart) {
+          setIsStart(false);
+          await loadedGames();
+        }
+      },
+      isStart ? 50 : 10000
+    );
+
+    return () => clearInterval(interval);
+  });
 
   const additionalLoading = async (array, start, end) => {
     const loaded = [];
@@ -43,7 +58,9 @@ const AdminItems = (props) => {
   };
 
   const createShowByLoaded = (array, start, end) => {
-    let result = [];
+    let result = [
+      <Item id="1213" item={{}} showItem={() => setItem({})} key="1213" />,
+    ];
 
     for (let j = start; j < end; j++) {
       const i = array[j];
@@ -119,11 +136,11 @@ const AdminItems = (props) => {
           setIsLoading={setIsLoading}
           additionalLoading={additionalLoading}
           createShowByLoaded={createShowByLoaded}
-          loadPrimary={itemApi.get}
+          loadPrimary={async () =>
+            games ? await itemApi.getByGameId(games[game]) : []
+          }
           filter={(primary) => {
             let res = primary;
-
-            res = res?.filter((p) => p.game === game);
 
             if (name !== "")
               res = res?.filter((p) => p.name.toLowerCase().startsWith(name));
@@ -131,7 +148,7 @@ const AdminItems = (props) => {
             return res;
           }}
           filterName={filterName}
-          quantityPerPage={2}
+          quantityPerPage={19}
         />
       </div>
       <ModalLayout

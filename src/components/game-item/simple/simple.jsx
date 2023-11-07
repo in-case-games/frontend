@@ -60,10 +60,10 @@ const Simple = (props) => {
       />
       <div className={styles.item_info}>
         <div className={styles.name}>
-          {Converter.cutString(props.item?.name || "", 12)}
+          {Converter.cutString(props.item?.name || "", 10)}
         </div>
         <div className={styles.cost}>
-          {Converter.cutCost(props.item?.cost)}
+          {props.item?.cost ? Converter.cutCost(props.item?.cost) : "Пустой"}
           <img alt="" src={InCoin} className={styles.image} />
         </div>
         <div className={styles.game}>{props.item?.game}</div>
