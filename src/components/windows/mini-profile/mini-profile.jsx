@@ -136,11 +136,15 @@ const MiniProfileWindow = (props) => {
       const restrictions =
         role === "user" ? user.restrictions : user.ownerRestrictions;
 
+      const owner = TokenService.getUser();
+      owner.login = owner.name;
+      owner.image = await userApi.getImage();
+
       if (observerRole !== "user") {
         res.push(
           <Restriction
             showRestriction={() =>
-              props.openRestrictionWindow({ owner: props.user })
+              props.openRestrictionWindow({ owner: owner })
             }
             isOwnerImage={false}
             key="12312"
