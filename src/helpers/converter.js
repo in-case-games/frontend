@@ -31,6 +31,8 @@ const getUtcDate = () => {
   return now_utc;
 };
 
+const getDateIso = (date) => date.slice(0, 16);
+
 const cutString = (string, length) =>
   string.length > length ? string.substring(0, length) + "..." : string;
 
@@ -47,4 +49,5 @@ export const Converter = {
   cutString,
   cutCost,
   getUtcDate,
+  getDateIso,
 };

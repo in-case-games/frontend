@@ -105,10 +105,7 @@ const Observer = (props) => {
       res.push(
         <Restriction
           restriction={r}
-          showRestriction={() => {
-            console.log(r);
-            setRestriction(r);
-          }}
+          showRestriction={() => setRestriction(r)}
           showMiniProfile={() =>
             setMiniProfile(role === "user" ? r.ownerId : r.userId)
           }

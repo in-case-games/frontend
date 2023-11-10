@@ -162,9 +162,13 @@ const Observed = (props) => {
     const length = restrictions.length > 19 ? 19 : restrictions.length;
 
     if (observerRole !== "user") {
+      const owner = TokenService.getUser();
+      owner.login = owner.name;
+      owner.image = await userApi.getImage();
+
       res.push(
         <Restriction
-          showRestriction={() => setRestriction({ owner: props.user })}
+          showRestriction={() => setRestriction({ owner: owner })}
           isOwnerImage={false}
           key="12312"
         />
@@ -184,10 +188,7 @@ const Observed = (props) => {
       res.push(
         <Restriction
           restriction={r}
-          showRestriction={() => {
-            console.log(r);
-            setRestriction(r);
-          }}
+          showRestriction={() => setRestriction(r)}
           showMiniProfile={() =>
             setMiniProfile(observedRole === "user" ? r.ownerId : r.userId)
           }

@@ -18,7 +18,7 @@ const Simple = (props) => {
           {Converter.cutString(props.box?.name || "", 12)}
         </div>
         <div className={styles.cost}>
-          {Converter.cutCost(props.box?.cost)}
+          {props.box?.cost ? Converter.cutCost(props.box?.cost) : "Пустой"}
           <img alt="" src={InCoin} className={styles.image} />
         </div>
         <div className={styles.game}>{props.box?.game}</div>

@@ -66,6 +66,60 @@
     }
   }
 
+  .buttons {
+    display: flex;
+    margin-top: 15px;
+
+    .button_send,
+    .button_delete,
+    .button_back {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+
+      border-radius: 8px;
+
+      font-family: "Play";
+      font-weight: 400;
+      font-size: 20px;
+      font-weight: 400;
+      font-size: 20px;
+
+      cursor: pointer;
+
+      padding: 8px 10px;
+    }
+    .button_send {
+      width: 150px;
+
+      background: var(--color-orange__1);
+      color: var(--color-black__2);
+
+      margin-right: 5px;
+    }
+
+    .button_delete {
+      width: 150px;
+
+      background: var(--color-red__1);
+      color: var(--color-black__2);
+
+      margin-left: 5px;
+    }
+
+    .button_back {
+      width: 200px;
+
+      background: var(--color-green__1);
+      color: var(--color-black__2);
+
+      .timer {
+        margin-left: 5px;
+      }
+    }
+  }
+
   .additional_info {
     display: flex;
     flex-direction: column;
