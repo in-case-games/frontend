@@ -8,3 +8,4 @@ export { default as HistoryPromocode } from "./history-promocode";
 export { default as Admin } from "./admin";
 export { default as AdminItems } from "./admin-items";
 export { default as AdminBoxes } from "./admin-boxes";
+export { default as AdminStatistics } from "./admin-statistics";

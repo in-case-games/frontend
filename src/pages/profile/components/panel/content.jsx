@@ -10,6 +10,7 @@ import {
   Admin,
   AdminItems,
   AdminBoxes,
+  AdminStatistics,
 } from "../content";
 
 const Content = (props) => {
@@ -26,7 +27,7 @@ const Content = (props) => {
     admin_promocodes: "admin-promocodes",
     admin_banners: "admin-banners",
     admin_groups: "admin-groups",
-    admin_statistics: "admin-statistics",
+    admin_statistics: <AdminStatistics />,
   };
 
   return (
