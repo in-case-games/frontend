@@ -30,7 +30,6 @@ import styles from "./profile-settings.module";
 const Observer = (props) => {
   const userApi = new UserApi();
 
-  const role = TokenService?.getUser()?.role || "user";
   const [user, setUser] = useState(TokenService.getUser());
   const [game, setGame] = useState(null);
   const [restrictions, setRestrictions] = useState(null);
@@ -63,8 +62,6 @@ const Observer = (props) => {
 
       if (props.isLoading) {
         const user = TokenService.getUser();
-        user.login = user.name;
-        user.image = await userApi.getImage();
 
         setUser(user);
         props.setIsLoading(false);
@@ -76,40 +73,44 @@ const Observer = (props) => {
 
   const loadRestrictions = async () => {
     const res = [];
-    const restrictions =
-      role !== "user"
-        ? await userApi.getRestrictionsByOwnerId(user.id)
-        : await userApi.getRestrictionsByUserId(user.id);
+    const isUser = (user?.role || "user") === "user";
+    const restrictions = isUser
+      ? await userApi.getRestrictionsByUserId(user.id)
+      : await userApi.getRestrictionsByOwnerId(user.id);
     const length = restrictions.length > 19 ? 19 : restrictions.length;
 
-    if (role !== "user") {
-      res.push(
-        <Restriction
-          showRestriction={() => setRestriction({ owner: user })}
-          isOwnerImage={false}
-          key="12312"
-        />
-      );
-    }
+    if (!isUser)
+      res.push(<Restriction showRestriction={setRestriction} key="91" />);
 
     for (let i = 0; i < length; i++) {
       let r = restrictions[i];
 
-      //TODO Check before restriction lazy loading
+      if (r.userId !== user.id) {
+        let userT = restrictions.find((t) => t.userId === r.userId)?.user;
 
-      r.user = await userApi.getById(r.userId);
-      r.owner = await userApi.getById(r.ownerId);
-      r.user.image = await userApi.getImageByUserId(r.userId);
-      r.owner.image = await userApi.getImageByUserId(r.ownerId);
+        r.user = userT || (await userApi.getById(r.userId));
+        r.user.image =
+          r.user.image || (await userApi.getImageByUserId(r.userId));
+      } else {
+        r.user = user;
+      }
+
+      if (r.ownerId !== user.id) {
+        let ownerT = restrictions.find((t) => t.ownerId === r.ownerId)?.owner;
+
+        r.owner = ownerT || (await userApi.getById(r.ownerId));
+        r.owner.image =
+          r.owner.image || (await userApi.getImageByUserId(r.ownerId));
+      } else {
+        r.owner = user;
+      }
 
       res.push(
         <Restriction
           restriction={r}
-          showRestriction={() => setRestriction(r)}
-          showMiniProfile={() =>
-            setMiniProfile(role === "user" ? r.ownerId : r.userId)
-          }
-          isOwnerImage={role === "user"}
+          isUser={isUser}
+          showRestriction={setRestriction}
+          showMiniProfile={setMiniProfile}
           key={r.id}
         />
       );
@@ -134,7 +135,7 @@ const Observer = (props) => {
             <img className={styles.load_icon} alt="" src={Download} />
           </div>
           <div className={styles.inputs}>
-            <Input name="account-login" isReadOnly={true} value={user.name} />
+            <Input name="account-login" isReadOnly={true} value={user.login} />
             <Input name="account-email" isReadOnly={true} value={user.email} />
             <Input name="account-role" isReadOnly={true} value={user.role} />
           </div>
@@ -246,7 +247,10 @@ const Observer = (props) => {
         <RestrictionWindow
           restriction={restriction}
           setRestriction={setRestriction}
-          close={() => setRestriction()}
+          close={() => {
+            setRestriction();
+            setIsLoading();
+          }}
         />
       </ModalLayout>
       <ModalLayout

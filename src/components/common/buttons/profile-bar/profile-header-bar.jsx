@@ -12,8 +12,12 @@ const ProfileHeaderBar = (props) => {
       }
       onClick={props.click}
     >
-      <img className={styles.image} alt="" src={props.image ?? UserImage} />
-      <div className={styles.name}>{props.name}</div>
+      <img
+        className={styles.image}
+        alt=""
+        src={props.user?.image ?? UserImage}
+      />
+      <div className={styles.name}>{props.user?.login || ""}</div>
     </div>
   );
 };

@@ -10,23 +10,30 @@ import styles from "./restriction.module";
 const Restriction = (props) => {
   const restrictionApi = new RestrictionApi();
   const userApi = new UserApi();
-  const navigate = useNavigate();
   const observerRole = TokenService.getUser()?.role || "user";
+  const navigate = useNavigate();
 
-  const [restriction, setRestriction] = useState(props.restriction || {});
-  const [backOperation, setBackOperation] = useState(null);
-  const [operation, setOperation] = useState(null);
+  const [restriction, setRestriction] = useState();
+  const [backOperation, setBackOperation] = useState();
+  const [operation, setOperation] = useState();
 
-  const [type, setType] = useState(props.restriction?.type?.name || "warn");
+  const [type, setType] = useState();
   const [types, setTypes] = useState();
 
   useEffect(() => {
     const interval = setInterval(async () => {
       if (!types) setTypes(await restrictionApi.getTypes());
-
-      if (!restriction || !restriction?.owner) {
-        setType(props.restriction?.type?.name || "warn");
-        setRestriction(props.restriction || {});
+      if (!type) setType(props.restriction?.type?.name || "warn");
+      if (!restriction) {
+        if (props.restriction && !props.restriction?.owner) {
+          setRestriction({
+            owner: TokenService.getUser(),
+            creationDate: new Date(),
+            expirationDate: new Date(),
+          });
+        } else {
+          setRestriction(props.restriction);
+        }
       }
     }, 100);
 
@@ -35,7 +42,7 @@ const Restriction = (props) => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      if (backOperation !== null) {
+      if (backOperation) {
         let temp = backOperation - 1;
         temp = temp >= 0 ? temp : 0;
 
@@ -55,19 +62,15 @@ const Restriction = (props) => {
 
   const buttonClick = async (isDelete = false) => {
     if (backOperation > 0) {
-      setBackOperation(null);
-      setOperation(null);
-    } else if (backOperation === null) {
+      setBackOperation();
+      setOperation();
+    } else if (!backOperation) {
       try {
         restriction.userId = (
           await userApi.getByLogin(restriction?.user?.login)
         ).id;
-        restriction.expirationDate = new Date(
-          restriction.expirationDate || new Date()
-        );
-        restriction.creationDate = new Date(
-          restriction.creationDate || new Date()
-        );
+        restriction.expirationDate = new Date(restriction.expirationDate);
+        restriction.creationDate = new Date(restriction.creationDate);
 
         if (isDelete) setOperation("delete-restriction");
         else if (restriction?.id) setOperation("update-restriction");
@@ -81,26 +84,30 @@ const Restriction = (props) => {
   const deleteRestriction = async () => {
     await restrictionApi.delete(restriction.id);
 
-    props.setRestriction();
-    setRestriction({});
+    setRestriction();
+    props.close();
   };
 
   const updateRestriction = async () => {
     restriction.typeId = types.find((t) => t.name === type).id;
 
-    await restrictionApi.put(restriction);
+    const res = await restrictionApi.put(restriction);
+    res.owner = restriction.owner;
+    res.user = restriction.user;
 
-    props.setRestriction(restriction);
-    setRestriction(restriction);
+    props.setRestriction(res);
+    setRestriction(res);
   };
 
   const createRestriction = async () => {
     restriction.typeId = types.find((t) => t.name === type).id;
 
-    await restrictionApi.post(restriction);
+    const res = await restrictionApi.post(restriction);
+    res.owner = restriction.owner;
+    res.user = restriction.user;
 
-    props.setRestriction(restriction);
-    setRestriction(restriction);
+    props.setRestriction(res);
+    setRestriction(res);
   };
 
   const operations = {
@@ -120,7 +127,7 @@ const Restriction = (props) => {
             <div className={styles.input}>
               <img
                 alt=""
-                src={restriction.user?.image ?? UserImage}
+                src={restriction?.user?.image ?? UserImage}
                 className={styles.image}
                 onClick={() => {
                   navigate(`/profile/${restriction?.user?.id}`);
@@ -143,7 +150,7 @@ const Restriction = (props) => {
             <div className={styles.input}>
               <img
                 alt=""
-                src={restriction.owner?.image ?? UserImage}
+                src={restriction?.owner?.image ?? UserImage}
                 className={styles.image}
                 onClick={() => {
                   navigate(`/profile/${restriction?.owner?.id}`);
@@ -207,7 +214,7 @@ const Restriction = (props) => {
           <div className={styles.delimiter}></div>
           {observerRole !== "user" ? (
             <div className={styles.buttons}>
-              {backOperation === null ? (
+              {!backOperation ? (
                 <div
                   className={styles.button_send}
                   onClick={async () => await buttonClick()}
@@ -215,7 +222,7 @@ const Restriction = (props) => {
                   {restriction?.id ? "Изменить" : "Создать"}
                 </div>
               ) : null}
-              {restriction?.id && backOperation === null ? (
+              {restriction?.id && !backOperation ? (
                 <div
                   className={styles.button_delete}
                   onClick={async () => await buttonClick(true)}
@@ -223,7 +230,7 @@ const Restriction = (props) => {
                   Удалить
                 </div>
               ) : null}
-              {backOperation !== null ? (
+              {backOperation ? (
                 <div
                   className={styles.button_back}
                   onClick={async () => await buttonClick()}

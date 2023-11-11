@@ -36,7 +36,7 @@ const Observed = (props) => {
   const gameApi = new GameApi();
 
   const observedRole = props.user.additionalInfo.role.name;
-  const observerRole = TokenService?.getUser()?.role || "user";
+  const observer = TokenService.getUser();
 
   const [item, setItem] = useState(null);
   const [box, setBox] = useState(null);
@@ -80,7 +80,8 @@ const Observed = (props) => {
       props.setIsAllReload(false);
 
       if (props.isAllReload) resetToGlobalZero();
-      if (!balance && observerRole !== "user") await loadBalance();
+      if (!balance && (observer?.role || "user") !== "user")
+        await loadBalance();
       if (!games || games.length === 0) setGames(await gameApi.get());
       if (!roles || roles.length === 0) setRoles(await userApi.getRoles());
       if (
@@ -103,11 +104,8 @@ const Observed = (props) => {
     return () => clearInterval(interval);
   });
 
-  const loadBalance = async () => {
-    const b = await userApi.getBalanceByUserId(props.user.id);
-
-    if (b) setBalance(b);
-  };
+  const loadBalance = async () =>
+    setBalance((await userApi.getBalanceByUserId(props.user.id)) || 0);
 
   const loadHistoryOpenings = async () => {
     let res = historyOpenings.items ?? [];
@@ -118,19 +116,19 @@ const Observed = (props) => {
     }
 
     for (let i = 0; i < res.length; i++) {
-      let temp = res[i];
+      let r = res[i];
 
-      if (!temp.box && showBoxes) {
-        temp.box = await boxApi.getById(temp.boxId);
-        temp.box = await boxApi.pushImage(temp.box);
+      if (!r.box && showBoxes) {
+        r.box = await boxApi.getById(r.boxId);
+        r.box = await boxApi.pushImage(r.box);
       }
-      if (!temp.item && showItems) {
-        temp.item = await itemApi.getById(temp.itemId);
-        temp.item.gameId = games.find((g) => g.name === temp.item.game).id;
-        temp.item = await itemApi.pushImage(temp.item);
+      if (!r.item && showItems) {
+        r.item = await itemApi.getById(r.itemId);
+        r.item.gameId = games.find((g) => g.name === r.item.game).id;
+        r.item = await itemApi.pushImage(r.item);
       }
 
-      res[i] = temp;
+      res[i] = r;
     }
 
     setHistoryOpenings({ ...historyOpenings, items: res });
@@ -141,13 +139,13 @@ const Observed = (props) => {
     res = res.slice(0, 20);
 
     for (let i = 0; i < res.length; i++) {
-      let temp = res[i];
+      let r = res[i];
 
-      temp.item = await itemApi.getById(temp.itemId);
-      temp.item.gameId = games.find((g) => g.name === temp.item.game).id;
-      temp.item = await itemApi.pushImage(temp.item);
+      r.item = await itemApi.getById(r.itemId);
+      r.item.gameId = games.find((g) => g.name === r.item.game).id;
+      r.item = await itemApi.pushImage(r.item);
 
-      res[i] = temp;
+      res[i] = r;
     }
 
     setInventories(res);
@@ -155,44 +153,44 @@ const Observed = (props) => {
 
   const loadRestrictions = async () => {
     const res = [];
-    const restrictions =
-      observedRole !== "user"
-        ? await userApi.getRestrictionsByOwnerId(props.user.id)
-        : await userApi.getRestrictionsByUserId(props.user.id);
+    const isUser = observedRole === "user";
+    const restrictions = isUser
+      ? await userApi.getRestrictionsByUserId(props.user.id)
+      : await userApi.getRestrictionsByOwnerId(props.user.id);
     const length = restrictions.length > 19 ? 19 : restrictions.length;
 
-    if (observerRole !== "user") {
-      const owner = TokenService.getUser();
-      owner.login = owner.name;
-      owner.image = await userApi.getImage();
-
-      res.push(
-        <Restriction
-          showRestriction={() => setRestriction({ owner: owner })}
-          isOwnerImage={false}
-          key="12312"
-        />
-      );
-    }
+    if ((observer?.role || "user") !== "user")
+      res.push(<Restriction showRestriction={setRestriction} key="90" />);
 
     for (let i = 0; i < length; i++) {
       let r = restrictions[i];
 
-      //TODO Check before restriction lazy loading
+      if (r.userId !== observer.id) {
+        let userT = restrictions.find((t) => t.userId === r.userId)?.user;
 
-      r.user = await userApi.getById(r.userId);
-      r.owner = await userApi.getById(r.ownerId);
-      r.user.image = await userApi.getImageByUserId(r.userId);
-      r.owner.image = await userApi.getImageByUserId(r.ownerId);
+        r.user = userT || (await userApi.getById(r.userId));
+        r.user.image =
+          r.user.image || (await userApi.getImageByUserId(r.userId));
+      } else {
+        r.user = observer;
+      }
+
+      if (r.ownerId !== observer.id) {
+        let ownerT = restrictions.find((t) => t.ownerId === r.ownerId)?.owner;
+
+        r.owner = ownerT || (await userApi.getById(r.ownerId));
+        r.owner.image =
+          r.owner.image || (await userApi.getImageByUserId(r.ownerId));
+      } else {
+        r.owner = observer;
+      }
 
       res.push(
         <Restriction
           restriction={r}
-          showRestriction={() => setRestriction(r)}
-          showMiniProfile={() =>
-            setMiniProfile(observedRole === "user" ? r.ownerId : r.userId)
-          }
-          isOwnerImage={observedRole === "user"}
+          isUser={isUser}
+          showRestriction={setRestriction}
+          showMiniProfile={setMiniProfile}
           key={r.id}
         />
       );
@@ -276,7 +274,7 @@ const Observed = (props) => {
             className={styles.profile_image}
             onMouseDown={() =>
               props.showLoadImage(
-                observerRole === "owner" || observerRole === "admin"
+                observer?.role === "owner" || observer?.role === "admin"
               )
             }
           >
@@ -291,7 +289,7 @@ const Observed = (props) => {
               src={Download}
               style={{
                 visibility:
-                  observerRole === "owner" || observerRole === "admin"
+                  observer?.role === "owner" || observer?.role === "admin"
                     ? "visible"
                     : "hidden",
               }}
@@ -301,13 +299,13 @@ const Observed = (props) => {
             <div className={styles.input}>
               <Input
                 name="account-login"
-                isReadOnly={observerRole !== "owner"}
+                isReadOnly={observer?.role !== "owner"}
                 value={login}
                 setValue={setLogin}
                 isApply={isApplyLogin}
                 isError={isErrorLogin}
               />
-              {observerRole === "owner" ? (
+              {observer?.role === "owner" ? (
                 <img
                   alt=""
                   src={AirplaneBlack}
@@ -316,11 +314,11 @@ const Observed = (props) => {
                 />
               ) : null}
             </div>
-            {observerRole === "owner" ? (
+            {observer?.role === "owner" ? (
               <div className={styles.input}>
                 <Input
                   name="account-balance"
-                  isReadOnly={observerRole !== "owner"}
+                  isReadOnly={observer?.role !== "owner"}
                   value={balance ?? 0}
                   setValue={setBalance}
                   isApply={isApplyBalance}
@@ -334,11 +332,11 @@ const Observed = (props) => {
                 />
               </div>
             ) : null}
-            {observerRole === "owner" ? (
+            {observer?.role === "owner" ? (
               <div className={styles.input}>
                 <Input
                   name="account-email"
-                  isReadOnly={observerRole !== "owner"}
+                  isReadOnly={observer?.role !== "owner"}
                   value={email}
                   placeholder="Email"
                   setValue={setEmail}
@@ -356,14 +354,14 @@ const Observed = (props) => {
             <div className={styles.input}>
               <ComboBox
                 name="account-role"
-                isReadOnly={observerRole !== "owner"}
+                isReadOnly={observer?.role !== "owner"}
                 value={role}
                 values={roles}
                 setValue={setRole}
                 isApply={isApplyRole}
                 isError={isErrorRole}
               />
-              {observerRole === "owner" ? (
+              {observer?.role === "owner" ? (
                 <img
                   alt=""
                   src={AirplaneBlack}
@@ -578,7 +576,10 @@ const Observed = (props) => {
         <RestrictionWindow
           restriction={restriction}
           setRestriction={setRestriction}
-          close={() => setRestriction()}
+          close={() => {
+            setRestriction();
+            props.setIsAllReload(true);
+          }}
         />
       </ModalLayout>
       <ModalLayout

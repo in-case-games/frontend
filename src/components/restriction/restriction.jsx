@@ -8,15 +8,21 @@ const Restriction = (props) => {
   const [isFlipped, setIsFlipped] = useState(false);
 
   const getBackground = () =>
-    !props.restriction?.expirationDate ||
-    new Date(props.restriction.expirationDate) <= new Date()
+    new Date(props.restriction?.expirationDate || 0) <= new Date()
       ? "#c7bfad"
       : "#F8B415";
 
   const clickInfo = (e) => {
     e.stopPropagation();
 
-    if (props.showRestriction) props.showRestriction(props.restriction);
+    if (props.showRestriction) props.showRestriction(props.restriction || {});
+  };
+
+  const showProfile = () => {
+    if (props.showMiniProfile)
+      props.showMiniProfile(
+        props.isUser ? props.restriction.ownerId : props.restriction.userId
+      );
   };
 
   return (
@@ -24,15 +30,13 @@ const Restriction = (props) => {
       <div
         className={styles.restriction_user}
         style={{ background: getBackground() }}
-        onClick={() => {
-          if (props.showMiniProfile) props.showMiniProfile();
-        }}
+        onClick={showProfile}
       >
         <img
           className={styles.image}
           alt=""
           src={
-            props.isOwnerImage
+            props.isUser
               ? props.restriction?.owner?.image ?? UserLogo
               : props.restriction?.user?.image ?? UserLogo
           }
@@ -61,8 +65,8 @@ const Restriction = (props) => {
             </div>
             <div className={styles.expiration}>
               Истечет:
-              {new Date(props.restriction.expirationDate) > new Date()
-                ? Converter.getMiniDate(props.restriction.expirationDate)
+              {new Date(props.restriction?.expirationDate) > new Date()
+                ? Converter.getMiniDate(props.restriction?.expirationDate)
                 : "истёк"}
             </div>
             <div className={styles.info} onClick={clickInfo}>
@@ -86,7 +90,7 @@ const Restriction = (props) => {
         >
           <div className={styles.description}>
             {props.restriction?.description
-              ? Converter.cutString(props.restriction.description, 80)
+              ? Converter.cutString(props.restriction?.description, 80)
               : "Пусто"}
           </div>
           <div className={styles.info} onClick={clickInfo}>
