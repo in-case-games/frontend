@@ -13,6 +13,32 @@
   }
 }
 
+.statistics {
+  .profile_tittle {
+    .delay {
+      display: flex;
+      flex: 0.1 1 auto;
+    }
+  }
+  .inner {
+    display: flex;
+    align-items: center;
+
+    .chart {
+      .tittle {
+        font-family: "Play";
+        padding: 20px 0 10px 0;
+        font-size: 24px;
+        text-align: center;
+      }
+      .inner {
+        width: 800px;
+        height: 400px;
+      }
+    }
+  }
+}
+
 .admin {
   display: flex;
   justify-content: center;

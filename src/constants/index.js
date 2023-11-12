@@ -124,6 +124,34 @@ const WithdrawErrors = {
   2: "Происходит перевод средств, повторите попытку позже",
 };
 
+const CommonTimeDelays = [
+  { id: 1, name: 1 },
+  { id: 2, name: 2 },
+  { id: 3, name: 3 },
+  { id: 4, name: 4 },
+  { id: 5, name: 5 },
+  { id: 6, name: 6 },
+  { id: 7, name: 10 },
+  { id: 8, name: 12 },
+  { id: 9, name: 15 },
+  { id: 10, name: 20 },
+  { id: 11, name: 30 },
+  { id: 12, name: 60 },
+];
+const CountDots = [
+  { id: 1, name: 10 },
+  { id: 2, name: 20 },
+  { id: 3, name: 30 },
+  { id: 4, name: 40 },
+  { id: 5, name: 50 },
+  { id: 6, name: 60 },
+];
+const CommonTypeTimeDelays = [
+  { id: 1, name: "seconds" },
+  { id: 60, name: "minutes" },
+  { id: 3600, name: "hours" },
+];
+
 const Constants = {
   Langs,
   Infos,
@@ -134,6 +162,9 @@ const Constants = {
   TemplateBox,
   StatusAndColor,
   WithdrawErrors,
+  CommonTimeDelays,
+  CommonTypeTimeDelays,
+  CountDots,
 };
 
 export default Constants;
