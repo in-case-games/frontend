@@ -1,0 +1,27 @@
+.chart {
+  .inner {
+    width: 800px;
+    height: 400px;
+  }
+}
+
+.chart_tittle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 0 0px 0;
+
+  .tittle {
+    font-family: "Play";
+    font-size: 24px;
+    text-align: center;
+  }
+
+  .dots {
+  }
+
+  .delay {
+    display: flex;
+    flex: 0.1 1 auto;
+  }
+}

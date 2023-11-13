@@ -6,14 +6,7 @@ import Constants from "../constants";
 Chart.register(CategoryScale);
 Chart.register(...registerables);
 
-const getCommonStatistics = (
-  statistics,
-  delay = 1,
-  typeDelay = "seconds",
-  dots = 20
-) => {
-  statistics = cutStatistics(statistics, delay, typeDelay, dots);
-
+const renderCommonChart = (statistics) => {
   const labels = [];
   const users = [];
   const lootBoxes = [];
@@ -25,7 +18,7 @@ const getCommonStatistics = (
   const returnedFunds = [];
 
   statistics.forEach((s) => {
-    labels.push(Converter.getMiniDate(s.date.toLocaleString()));
+    labels.push(s.date);
     users.push(s.users);
     lootBoxes.push(s.lootBoxes);
     reviews.push(s.reviews);
@@ -54,7 +47,7 @@ const getCommonStatistics = (
 };
 
 //todo date.start - date.max in per
-const cutStatistics = (
+const getChunkedStatistics = (
   statistics,
   delay = 1,
   typeDelay = "seconds",
@@ -63,7 +56,7 @@ const cutStatistics = (
   const chunk =
     delay * Constants.CommonTypeTimeDelays.find((t) => t.name === typeDelay).id;
 
-  const temp = statistics.slice(chunk * -1 * dots);
+  const temp = JSON.parse(JSON.stringify(statistics.slice(chunk * -1 * dots)));
 
   const chunked = temp.reduce((resultArray, item, index) => {
     const chunkIndex = Math.floor(index / chunk);
@@ -78,7 +71,7 @@ const cutStatistics = (
   const result = [];
 
   for (var i = 0; i < chunked.length; i++) {
-    const perArray = chunked[i];
+    const perArray = JSON.parse(JSON.stringify(chunked[i]));
     let per = perArray[0];
     const keys = Object.keys(per);
 
@@ -86,7 +79,13 @@ const cutStatistics = (
       per = sumObjectsByKey(per, perArray[j]);
     }
 
-    per.date = Converter.getMiniDate(perArray[0].date.toLocaleString());
+    const startDate = Converter.getMiniTime(chunked[i][0].date);
+    const endDate = Converter.getMiniTime(
+      chunked[i][chunked[i].length - 1].date
+    );
+
+    if (startDate !== endDate) per.date = startDate + " - " + endDate;
+    else per.date = startDate;
 
     for (var j = 0; j < keys.length; j++) {
       if (keys[j] !== "date")
@@ -99,14 +98,13 @@ const cutStatistics = (
   return result;
 };
 
-function sumObjectsByKey(...objs) {
-  return objs.reduce((a, b) => {
+const sumObjectsByKey = (...objs) =>
+  objs.reduce((a, b) => {
     for (let k in b) {
       if (b.hasOwnProperty(k)) a[k] = (a[k] || 0) + b[k];
     }
     return a;
   }, {});
-}
 
 const getBaseDataset = (label, data, color) => ({
   label: label,
@@ -117,7 +115,8 @@ const getBaseDataset = (label, data, color) => ({
 });
 
 const StatisticsService = {
-  getCommonStatistics,
+  renderCommonChart,
+  getChunkedStatistics,
 };
 
 export default StatisticsService;

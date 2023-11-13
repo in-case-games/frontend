@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { LoadingArrow as Loading } from "../../../../components/loading";
 import { Site as SiteApi } from "../../../../api";
-import StatisticsService from "../../../../services/statistics";
-import { ComboBox } from "../../../../components/common/inputs";
+import { AdminCommon as ChartCommon } from "../../../../components/common/charts";
 import styles from "./content.module";
-import Constants from "../../../../constants";
 
 const AdminStatistics = () => {
   const siteApi = new SiteApi();
 
   const [isLoading, setIsLoading] = useState(true);
   const [statistics, setStatistics] = useState([]);
-
-  const [typeDelay, setTypeDelay] = useState("seconds");
-  const [delay, setDelay] = useState(6);
-  const [dots, setDots] = useState(20);
-
-  const [chart, setChart] = useState();
 
   useEffect(() => {
     const interval = setInterval(() => setIsLoading(true), 1000);
@@ -32,16 +24,9 @@ const AdminStatistics = () => {
         );
         stat.date = new Date();
         statistics.push(stat);
+        const stats = statistics.slice(-3600);
 
-        setChart(
-          StatisticsService.getCommonStatistics(
-            statistics,
-            delay,
-            typeDelay,
-            dots
-          )
-        );
-        setStatistics(statistics);
+        setStatistics(stats);
         setIsLoading(false);
       }
     }, 100);
@@ -61,36 +46,10 @@ const AdminStatistics = () => {
           </div>
           <div className={styles.name}>Статистика: </div>
         </div>
-        <div className={styles.dots}>
-          <ComboBox
-            name="dots"
-            subTittle="Точек"
-            value={dots}
-            values={Constants.CountDots}
-            setValue={setDots}
-          />
-        </div>
-        <div className={styles.delay}>
-          <ComboBox
-            name="delay"
-            value={delay}
-            values={Constants.CommonTimeDelays}
-            setValue={setDelay}
-          />
-          <ComboBox
-            name="type-delay"
-            value={typeDelay}
-            values={Constants.CommonTypeTimeDelays}
-            setValue={setTypeDelay}
-          />
-        </div>
       </div>
       <div className={styles.delimiter}></div>
       <div className={styles.inner}>
-        <div className={styles.chart}>
-          <div className={styles.tittle}>Основная статистика</div>
-          <div className={styles.inner}>{chart}</div>
-        </div>
+        <ChartCommon isLoading={isLoading} statistics={statistics} />
       </div>
     </div>
   );

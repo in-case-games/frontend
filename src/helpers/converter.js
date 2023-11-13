@@ -18,6 +18,20 @@ const getMiniDate = (date) => {
   return d1;
 };
 
+const getMiniTime = (date) => {
+  if (date === null) return "Без даты";
+
+  var d = new Date(date);
+  var d1 =
+    ("0" + d.getHours()).slice(-2) +
+    ":" +
+    ("0" + d.getMinutes()).slice(-2) +
+    ":" +
+    ("0" + d.getSeconds()).slice(-2);
+
+  return d1;
+};
+
 const getUtcDate = () => {
   var date = new Date();
 
@@ -48,6 +62,7 @@ const cutCost = (cost, rounding = (c) => Math.round(c)) => {
 
 export const Converter = {
   getMiniDate,
+  getMiniTime,
   cutString,
   cutCost,
   getUtcDate,

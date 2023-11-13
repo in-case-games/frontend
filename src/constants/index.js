@@ -149,7 +149,6 @@ const CountDots = [
 const CommonTypeTimeDelays = [
   { id: 1, name: "seconds" },
   { id: 60, name: "minutes" },
-  { id: 3600, name: "hours" },
 ];
 
 const Constants = {
