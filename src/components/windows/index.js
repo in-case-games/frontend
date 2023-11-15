@@ -18,3 +18,4 @@ export { HistoryWithdrawn } from "./history-withdrawn";
 export { HistoryPromocode } from "./history-promocode";
 export { Restriction } from "./restriction";
 export { BoxGroup } from "./box-group";
+export { Boxes } from "./boxes";

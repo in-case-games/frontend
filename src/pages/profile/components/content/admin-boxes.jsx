@@ -135,7 +135,9 @@ const AdminBoxes = (props) => {
             let res = primary;
 
             if (name !== "")
-              res = res?.filter((p) => p.name.toLowerCase().startsWith(name));
+              res = res?.filter((p) =>
+                p.name.toLowerCase().startsWith(name.toLowerCase())
+              );
 
             return res;
           }}

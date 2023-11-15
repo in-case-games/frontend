@@ -3,7 +3,10 @@ import {
   Modal as ModalLayout,
   Inventory as InventoryLayout,
 } from "../../../../layouts";
-import { BoxGroup as BoxGroupWindow } from "../../../../components/windows";
+import {
+  BoxGroup as BoxGroupWindow,
+  Boxes as BoxesWindow,
+} from "../../../../components/windows";
 import { LoadingArrow as Loading } from "../../../../components/loading";
 import { BoxGroup as BoxGroupApi } from "../../../../api";
 import { BoxGroup } from "../../../../components/box-group";
@@ -13,7 +16,9 @@ const AdminGroups = () => {
   const boxGroupApi = new BoxGroupApi();
 
   const [isLoading, setIsLoading] = useState(true);
+  const [gameId, setGameId] = useState(false);
   const [group, setGroup] = useState();
+  const [selectBoxes, setSelectBoxes] = useState({ id: "", boxes: [] });
 
   const additionalLoading = async (array, start, end) => {
     const loaded = [];
@@ -67,14 +72,35 @@ const AdminGroups = () => {
         isActive={group}
         close={() => {
           setGroup();
+          setSelectBoxes({ id: "", boxes: [] });
           setIsLoading(true);
         }}
       >
         <BoxGroupWindow
           group={group}
           setGroup={setGroup}
+          setSelectBoxes={setSelectBoxes}
+          setShowBoxesWindow={setGameId}
           close={() => {
             setGroup();
+            setSelectBoxes({ id: "", boxes: [] });
+            setIsLoading(true);
+          }}
+        />
+      </ModalLayout>
+      <ModalLayout
+        isActive={gameId}
+        close={() => {
+          setGameId();
+          setIsLoading(true);
+        }}
+      >
+        <BoxesWindow
+          gameId={gameId}
+          selectBoxes={selectBoxes}
+          setSelectBoxes={setSelectBoxes}
+          close={() => {
+            setGameId();
             setIsLoading(true);
           }}
         />

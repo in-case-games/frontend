@@ -24,19 +24,21 @@ const BoxGroup = (props) => {
       }
       if (!group && props.group?.id) {
         const result = props.group;
+        const select = [];
         result.components = [];
 
         const groups = await boxGroupApi.getByGroupId(props.group?.id);
 
         for (let i = 0; i < groups.length; i++) {
-          const component = {
+          select.push(groups[i].box);
+          result.components.push({
             id: groups[i].id,
             box: groups[i].box,
-          };
-          result.components.push(component);
+          });
           result.game = groups[i].game.name;
         }
 
+        props.setSelectBoxes((prev) => ({ ...prev, boxes: select }));
         setGroup(result);
       }
     }, 100);
@@ -132,7 +134,16 @@ const BoxGroup = (props) => {
               values={games}
               setValue={(value) => setGroup({ ...group, game: value })}
             />
-            <div className={styles.button_add} onClick={() => {}}>
+            <div
+              className={styles.button_add}
+              onClick={() => {
+                if (props.setShowBoxesWindow && group?.game) {
+                  props.setShowBoxesWindow(
+                    games.find((g) => g.name === group.game).id
+                  );
+                }
+              }}
+            >
               Кейсы
             </div>
           </div>
