@@ -78,6 +78,7 @@ const AdminGroups = () => {
       >
         <BoxGroupWindow
           group={group}
+          selectBoxes={selectBoxes}
           setGroup={setGroup}
           setSelectBoxes={setSelectBoxes}
           setShowBoxesWindow={setGameId}

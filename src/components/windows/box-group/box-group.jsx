@@ -17,7 +17,7 @@ const BoxGroup = (props) => {
       if (games.length === 0) {
         const res = [];
         res.push({
-          id: 1,
+          id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
           name: undefined,
         });
         setGames(res.concat(await gameApi.get()));
@@ -70,7 +70,7 @@ const BoxGroup = (props) => {
     if (backOperation > 0) {
       setBackOperation();
       setOperation();
-    } else if (!backOperation) {
+    } else if (!backOperation && group?.game) {
       try {
         if (isDelete) setOperation("delete-group");
         else if (props.group?.id) setOperation("update-group");
@@ -89,17 +89,64 @@ const BoxGroup = (props) => {
   };
 
   const updateGroup = async () => {
+    const deleted = [];
+    const selected = props.selectBoxes.boxes;
+    const gameId = games.find((g) => g.name === group.game).id;
     const res = await boxGroupApi.put(group);
 
+    for (let i = 0; i < group.components.length; i++) {
+      const component = group.components[i];
+      const index = selected.findIndex((b) => b.name === component.box.name);
+
+      if (index > -1) selected.splice(index, 1);
+      else deleted.push(component);
+    }
+
+    for (let i = 0; i < selected.length; i++) {
+      try {
+        await boxGroupApi.postItem({
+          id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          boxId: selected[i].id,
+          gameId: gameId,
+          groupId: res.id,
+        });
+      } catch (ex) {
+        console.log(ex);
+      }
+    }
+
+    for (let i = 0; i < deleted.length; i++) {
+      try {
+        await boxGroupApi.deleteItem(deleted[i].id);
+      } catch (ex) {
+        console.log(ex);
+      }
+    }
+
     props.setGroup(res);
-    setGroup(res);
+    setGroup();
   };
 
   const createGroup = async () => {
+    const selected = props.selectBoxes.boxes;
+    const gameId = games.find((g) => g.name === group.game).id;
     const res = await boxGroupApi.post(group);
 
+    for (let i = 0; i < selected.length; i++) {
+      try {
+        await boxGroupApi.postItem({
+          id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          boxId: selected[i].id,
+          gameId: gameId,
+          groupId: res.id,
+        });
+      } catch (ex) {
+        console.log(ex);
+      }
+    }
+
     props.setGroup(res);
-    setGroup(res);
+    setGroup();
   };
 
   const operations = {
@@ -129,7 +176,6 @@ const BoxGroup = (props) => {
               name="group-game"
               subTittle="Игра:"
               placeholder="Игра"
-              isReadOnly={false}
               value={group?.game}
               values={games}
               setValue={(value) => setGroup({ ...group, game: value })}

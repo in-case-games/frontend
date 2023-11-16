@@ -3,6 +3,8 @@
   align-items: center;
   justify-content: flex-end;
 
+  width: 100%;
+
   cursor: pointer;
 
   .sub_tittle {
@@ -11,6 +13,8 @@
   }
 
   select {
+    width: 100%;
+
     color: var(--color-orange__1);
     background: var(--color-black__2);
 
