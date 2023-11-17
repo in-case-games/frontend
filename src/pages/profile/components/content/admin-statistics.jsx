@@ -4,7 +4,7 @@ import { Site as SiteApi } from "../../../../api";
 import { AdminCommon as ChartCommon } from "../../../../components/common/charts";
 import styles from "./content.module";
 
-const AdminStatistics = () => {
+const AdminStatistics = (props) => {
   const siteApi = new SiteApi();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -38,6 +38,12 @@ const AdminStatistics = () => {
     <div className={styles.statistics}>
       <div className={styles.profile_tittle}>
         <div className={styles.tittle}>
+          <div
+            className={styles.profile_back}
+            onClick={() => props.exchange("admin")}
+          >
+            ←
+          </div>
           <div className={styles.loading}>
             <Loading
               isLoading={isLoading}

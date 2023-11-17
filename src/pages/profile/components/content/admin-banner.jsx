@@ -4,21 +4,21 @@ import {
   Inventory as InventoryLayout,
 } from "../../../../layouts";
 import {
-  BoxGroup as BoxGroupWindow,
-  Boxes as BoxesWindow,
+  Banner as BannerWindow,
+  LoadImage as LoadImageWindow,
 } from "../../../../components/windows";
 import { LoadingArrow as Loading } from "../../../../components/loading";
-import { BoxGroup as BoxGroupApi } from "../../../../api";
+import { Box as BoxApi } from "../../../../api";
 import { BoxGroup } from "../../../../components/box-group";
 import styles from "./content.module";
 
-const AdminGroups = (props) => {
-  const boxGroupApi = new BoxGroupApi();
+const AdminBanner = (props) => {
+  const boxApi = new BoxApi();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [gameId, setGameId] = useState(false);
-  const [group, setGroup] = useState();
-  const [selectBoxes, setSelectBoxes] = useState({ id: "", boxes: [] });
+  const [isOpenLoadWindow, setIsOpenLoadWindow] = useState(false);
+  const [banner, setBanner] = useState();
+  const [image, setImage] = useState();
 
   const additionalLoading = async (array, start, end) => {
     const loaded = [];
@@ -31,13 +31,17 @@ const AdminGroups = (props) => {
   const createShowByLoaded = (array, start, end) => {
     let result = [];
 
-    result.push(<BoxGroup showWindow={() => setGroup({})} key="5123" />);
+    result.push(<BoxGroup showWindow={() => setBanner({})} key="5123" />);
 
     for (let j = start; j < end; j++) {
-      const g = array[j];
+      const b = array[j];
+      const group = {
+        id: b.id,
+        name: b.box.name,
+      };
 
       result.push(
-        <BoxGroup id={g.id} group={g} showWindow={setGroup} key={g.id} />
+        <BoxGroup id={b.id} group={group} showWindow={setBanner} key={b.id} />
       );
     }
 
@@ -45,7 +49,7 @@ const AdminGroups = (props) => {
   };
 
   return (
-    <div className={styles.admin_groups}>
+    <div className={styles.admin_banner}>
       <div className={styles.profile_tittle}>
         <div className={styles.tittle}>
           <div
@@ -60,7 +64,7 @@ const AdminGroups = (props) => {
               setLoading={() => setIsLoading(true)}
             />
           </div>
-          <div className={styles.name}>Группы кейсов: </div>
+          <div className={styles.name}>Баннеры к кейсам: </div>
         </div>
       </div>
       <div className={styles.delimiter}></div>
@@ -70,50 +74,46 @@ const AdminGroups = (props) => {
           setIsLoading={setIsLoading}
           additionalLoading={additionalLoading}
           createShowByLoaded={createShowByLoaded}
-          loadPrimary={boxGroupApi.get}
+          loadPrimary={boxApi.getBanners}
           quantityPerPage={20}
         />
       </div>
       <ModalLayout
-        isActive={group}
+        isActive={banner}
         close={() => {
-          setGroup();
-          setSelectBoxes({ id: "", boxes: [] });
+          setBanner();
+          setImage();
           setIsLoading(true);
         }}
       >
-        <BoxGroupWindow
-          group={group}
-          selectBoxes={selectBoxes}
-          setGroup={setGroup}
-          setSelectBoxes={setSelectBoxes}
-          setShowBoxesWindow={setGameId}
+        <BannerWindow
+          image={image}
+          openLoadWindow={setIsOpenLoadWindow}
+          banner={banner}
+          setBanner={setBanner}
           close={() => {
-            setGroup();
-            setSelectBoxes({ id: "", boxes: [] });
+            setBanner();
+            setImage();
             setIsLoading(true);
           }}
         />
       </ModalLayout>
       <ModalLayout
-        isActive={gameId}
-        close={() => {
-          setGameId();
-          setIsLoading(true);
-        }}
+        isActive={isOpenLoadWindow}
+        close={() => setIsOpenLoadWindow(false)}
       >
-        <BoxesWindow
-          gameId={gameId}
-          selectBoxes={selectBoxes}
-          setSelectBoxes={setSelectBoxes}
-          close={() => {
-            setGameId();
-            setIsLoading(true);
-          }}
+        <LoadImageWindow
+          file={image}
+          setFile={setImage}
+          width={1000}
+          height={400}
+          sizeMb={1}
+          regular={/\.(png)$/}
+          description={"PNG (MAX. 1000x400px | 1MB)"}
         />
       </ModalLayout>
     </div>
   );
 };
 
-export default AdminGroups;
+export default AdminBanner;
