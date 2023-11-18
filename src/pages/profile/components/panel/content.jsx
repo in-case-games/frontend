@@ -12,7 +12,8 @@ import {
   AdminBoxes,
   AdminStatistics,
   AdminGroups,
-  AdminBanner,
+  AdminBanners,
+  AdminPromocodes,
 } from "../content";
 
 const Content = (props) => {
@@ -26,8 +27,8 @@ const Content = (props) => {
     admin: <Admin exchange={props.exchange} />,
     admin_items: <AdminItems exchange={props.exchange} />,
     admin_boxes: <AdminBoxes exchange={props.exchange} />,
-    admin_promocodes: "admin-promocodes",
-    admin_banners: <AdminBanner exchange={props.exchange} />,
+    admin_promocodes: <AdminPromocodes exchange={props.exchange} />,
+    admin_banners: <AdminBanners exchange={props.exchange} />,
     admin_groups: <AdminGroups exchange={props.exchange} />,
     admin_statistics: <AdminStatistics exchange={props.exchange} />,
   };

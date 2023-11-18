@@ -20,3 +20,4 @@ export { Restriction } from "./restriction";
 export { BoxGroup } from "./box-group";
 export { Boxes } from "./boxes";
 export { Banner } from "./banner";
+export { Promocode } from "./promocode";

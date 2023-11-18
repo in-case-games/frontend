@@ -107,9 +107,9 @@ const AdminBanner = (props) => {
           setFile={setImage}
           width={1000}
           height={400}
-          sizeMb={1}
-          regular={/\.(png)$/}
-          description={"PNG (MAX. 1000x400px | 1MB)"}
+          sizeMb={4}
+          regular={/\.(jpg|jpeg|png)$/}
+          description={"JPEG,JPG,PNG (MAX. 1000x400px | 4MB)"}
         />
       </ModalLayout>
     </div>

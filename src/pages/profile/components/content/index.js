@@ -10,4 +10,5 @@ export { default as AdminItems } from "./admin-items";
 export { default as AdminBoxes } from "./admin-boxes";
 export { default as AdminStatistics } from "./admin-statistics";
 export { default as AdminGroups } from "./admin-groups";
-export { default as AdminBanner } from "./admin-banner";
+export { default as AdminBanners } from "./admin-banners";
+export { default as AdminPromocodes } from "./admin-promocodes";
