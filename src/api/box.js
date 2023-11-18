@@ -19,8 +19,20 @@ class Box {
     return response.data.data;
   }
 
+  async getByName(name) {
+    const response = await api.get(RESOURCES_API_URL + "box/name/" + name);
+
+    return response.data.data;
+  }
+
   async getGroupsByGameId(id) {
     const response = await api.get(RESOURCES_API_URL + `box/group/game/${id}`);
+
+    return response.data.data;
+  }
+
+  async getBannerById(id) {
+    const response = await api.get(RESOURCES_API_URL + `box/banner/id/${id}`);
 
     return response.data.data;
   }
@@ -45,14 +57,32 @@ class Box {
     return response.data.data;
   }
 
+  async postBanner(banner) {
+    const response = await api.post(RESOURCES_API_URL + "box/banner", banner);
+
+    return response.data.data;
+  }
+
   async put(box) {
     const response = await api.put(RESOURCES_API_URL + "box", box);
 
     return response.data.data;
   }
 
+  async putBanner(banner) {
+    const response = await api.put(RESOURCES_API_URL + "box/banner", banner);
+
+    return response.data.data;
+  }
+
   async delete(id) {
-    const response = await api.delete(RESOURCES_API_URL + `box/${id}`);
+    const response = await api.delete(RESOURCES_API_URL + `box/id/${id}`);
+
+    return response.data.data;
+  }
+
+  async deleteBanner(id) {
+    const response = await api.delete(RESOURCES_API_URL + `box/banner/${id}`);
 
     return response.data.data;
   }

@@ -16,7 +16,11 @@ class User {
 
     return response.data.data;
   }
+  async getByLogin(login) {
+    const response = await api.get(RESOURCES_API_URL + `user/login/${login}`);
 
+    return response.data.data;
+  }
   async getInventoryById(id) {
     const response = await api.get(
       RESOURCES_API_URL + `user/inventory/id/${id}`
@@ -44,6 +48,11 @@ class User {
   }
   async getRoles() {
     const response = await api.get(RESOURCES_API_URL + `user/role`);
+
+    return response.data.data;
+  }
+  async getPromocodes() {
+    const response = await api.get(RESOURCES_API_URL + `user/promocode`);
 
     return response.data.data;
   }
@@ -213,6 +222,22 @@ class User {
   async deleteUserInventoryByAdmin(id) {
     const response = await api.delete(
       RESOURCES_API_URL + `user/inventory/${id}`
+    );
+
+    return response.data.data;
+  }
+
+  async activatePromocode(name) {
+    const response = await api.get(
+      RESOURCES_API_URL + `user/promocode/activate/${name}`
+    );
+
+    return response.data.data;
+  }
+
+  async exchangePromocode(name) {
+    const response = await api.get(
+      RESOURCES_API_URL + `user/promocode/exchange/${name}`
     );
 
     return response.data.data;

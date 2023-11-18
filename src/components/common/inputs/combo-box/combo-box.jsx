@@ -24,13 +24,18 @@ const ComboBox = (props) => {
           if (props.setIndex)
             props.setIndex(select.children[select.selectedIndex].id);
         }}
-        style={{ borderColor: getBorderColor() }}
+        style={{
+          borderColor: getBorderColor(),
+          cursor: props.isReadOnly ? "default" : "pointer",
+        }}
       >
-        {props.values.map((v) => (
-          <option key={v.id} id={v.id}>
-            {v.name}
-          </option>
-        ))}
+        {props.values
+          ? props.values.map((v) => (
+              <option key={v.id} id={v.id}>
+                {v.name}
+              </option>
+            ))
+          : null}
       </select>
     </div>
   );

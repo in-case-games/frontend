@@ -1,12 +1,14 @@
 const LazyLoading = async (props) => {
   let loaded = props.loaded;
   let additional = [];
+  let quantityPerPage = props.quantityPerPage ? props.quantityPerPage : 20;
 
-  let start = (props.page - 1) * 20;
-  let end = start + 20;
+  let start = (props.page - 1) * quantityPerPage;
+  let end = start + quantityPerPage;
 
   if (end > props.primary.length) end = props.primary.length;
-  if (start > props.primary.length) start = end >= 20 ? end - 20 : 0;
+  if (start > props.primary.length)
+    start = end >= quantityPerPage ? end - quantityPerPage : 0;
   if (start < 0) start = 0;
 
   if (props.isAllReload || start > loaded.length - 1)

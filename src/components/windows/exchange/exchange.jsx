@@ -228,7 +228,6 @@ const Exchange = (props) => {
                 isShowUpdate={true}
                 isClickItem={isClickItem}
                 selectItems={selectItems}
-                setSelectItems={setSelectItems}
                 select={() => {
                   const selected = selectItems.items;
                   const index = selected.findIndex((s) => s.id === i.id);

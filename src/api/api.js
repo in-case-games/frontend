@@ -45,7 +45,7 @@ instance.interceptors.response.use(
           if (rs.status === 401 || rs.data.code === "1") {
             TokenService.removeUser();
           } else if (rs.status === 200) {
-            TokenService.setUser(rs.data.data);
+            await TokenService.setUser(rs.data.data);
           }
 
           return instance(originalConfig);

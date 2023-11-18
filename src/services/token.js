@@ -1,7 +1,9 @@
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
+import { User as UserApi } from "../api";
 
 const getUser = () => JSON.parse(localStorage.getItem("user"));
-const setUser = (user) => {
+const setUser = async (user) => {
+  const userApi = new UserApi();
   const decodeAccess = jwtDecode(user.accessToken);
 
   user.email = jwtDecode(user.refreshToken)[
@@ -15,8 +17,9 @@ const setUser = (user) => {
     decodeAccess[
       "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
     ];
-  user.name =
+  user.login =
     decodeAccess["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+  user.image = await userApi.getImageByUserId(user.id);
 
   localStorage.setItem("user", JSON.stringify(user));
 };

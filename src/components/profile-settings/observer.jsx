@@ -18,6 +18,7 @@ import {
   MiniProfile as MiniProfileWindow,
   TradeUrl as TradeUrlWindow,
   Box as BoxWindow,
+  Restriction as RestrictionWindow,
 } from "../windows";
 import { Restriction } from "../restriction";
 import { PullOutProfile as PullOut } from "../common/buttons";
@@ -32,6 +33,7 @@ const Observer = (props) => {
   const [user, setUser] = useState(TokenService.getUser());
   const [game, setGame] = useState(null);
   const [restrictions, setRestrictions] = useState(null);
+  const [restriction, setRestriction] = useState();
   const [miniProfile, setMiniProfile] = useState(null);
   const [item, setItem] = useState(null);
   const [box, setBox] = useState(null);
@@ -55,32 +57,67 @@ const Observer = (props) => {
       if (
         (showRestriction && !restrictions) ||
         (props.isLoading && showRestriction)
-      ) {
-        let temp = [];
-        const userTemp = TokenService.getUser();
+      )
+        await loadRestrictions();
 
-        if (userTemp.role && userTemp.role !== "user") {
-          Array.prototype.push.apply(
-            temp,
-            await userApi.getRestrictionsByOwner()
-          );
-        } else {
-          Array.prototype.push.apply(temp, await userApi.getRestrictions());
-        }
-
-        setRestrictions(temp.slice(0, 20));
-      }
       if (props.isLoading) {
-        const temp = TokenService.getUser();
-        temp.image = await userApi.getImage();
+        const user = TokenService.getUser();
 
-        setUser(temp);
+        setUser(user);
         props.setIsLoading(false);
       }
     }, 100);
 
     return () => clearInterval(interval);
   });
+
+  const loadRestrictions = async () => {
+    const res = [];
+    const isUser = (user?.role || "user") === "user";
+    const restrictions = isUser
+      ? await userApi.getRestrictionsByUserId(user.id)
+      : await userApi.getRestrictionsByOwnerId(user.id);
+    const length = restrictions.length > 19 ? 19 : restrictions.length;
+
+    if (!isUser)
+      res.push(<Restriction showRestriction={setRestriction} key="91" />);
+
+    for (let i = 0; i < length; i++) {
+      let r = restrictions[i];
+
+      if (r.userId !== user.id) {
+        let userT = restrictions.find((t) => t.userId === r.userId)?.user;
+
+        r.user = userT || (await userApi.getById(r.userId));
+        r.user.image =
+          r.user.image || (await userApi.getImageByUserId(r.userId));
+      } else {
+        r.user = user;
+      }
+
+      if (r.ownerId !== user.id) {
+        let ownerT = restrictions.find((t) => t.ownerId === r.ownerId)?.owner;
+
+        r.owner = ownerT || (await userApi.getById(r.ownerId));
+        r.owner.image =
+          r.owner.image || (await userApi.getImageByUserId(r.ownerId));
+      } else {
+        r.owner = user;
+      }
+
+      res.push(
+        <Restriction
+          restriction={r}
+          isUser={isUser}
+          showRestriction={setRestriction}
+          showMiniProfile={setMiniProfile}
+          key={r.id}
+        />
+      );
+    }
+
+    setRestrictions(res);
+  };
 
   return (
     <div className={styles.profile_settings}>
@@ -98,7 +135,7 @@ const Observer = (props) => {
             <img className={styles.load_icon} alt="" src={Download} />
           </div>
           <div className={styles.inputs}>
-            <Input name="account-login" isReadOnly={true} value={user.name} />
+            <Input name="account-login" isReadOnly={true} value={user.login} />
             <Input name="account-email" isReadOnly={true} value={user.email} />
             <Input name="account-role" isReadOnly={true} value={user.role} />
           </div>
@@ -184,18 +221,7 @@ const Observer = (props) => {
               alignItems: "center",
             }}
           >
-            {restrictions ? (
-              restrictions.map((r) => (
-                <Restriction
-                  restriction={r}
-                  showMiniProfile={() =>
-                    setMiniProfile(user.role === "user" ? r.ownerId : r.userId)
-                  }
-                  isOwnerImage={user.role === "user"}
-                  key={r.id}
-                />
-              ))
-            ) : (
+            {restrictions || (
               <div className={styles.loading}>
                 <Loading isLoading={!restrictions} setIsLoading={() => {}} />
               </div>
@@ -211,9 +237,20 @@ const Observer = (props) => {
       <ModalLayout isActive={miniProfile} close={() => setMiniProfile(null)}>
         <MiniProfileWindow
           userId={miniProfile}
+          openRestrictionWindow={(r) => setRestriction(r)}
           openItemWindow={(item) => setItem(item)}
           openBoxWindow={(box) => setBox(box)}
           exchangeWindow={(id) => setMiniProfile(id)}
+        />
+      </ModalLayout>
+      <ModalLayout isActive={restriction} close={() => setRestriction()}>
+        <RestrictionWindow
+          restriction={restriction}
+          setRestriction={setRestriction}
+          close={() => {
+            setRestriction();
+            setIsLoading();
+          }}
         />
       </ModalLayout>
       <ModalLayout

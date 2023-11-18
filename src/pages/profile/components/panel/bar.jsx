@@ -39,8 +39,7 @@ const Bar = (props) => {
   return (
     <div className={styles.panel_bar}>
       <HeaderBarButton
-        image={user?.image || UserImage}
-        name={user?.name || ""}
+        user={user}
         click={() => props.exchange("profile")}
         isActive={props.content === "profile"}
       />
@@ -51,8 +50,8 @@ const Bar = (props) => {
       />
       <BarButton
         text="Открытые кейсы"
-        click={() => props.exchange("box")}
-        isActive={props.content === "box"}
+        click={() => props.exchange("history_opening")}
+        isActive={props.content === "history_opening"}
       />
       <BarButton
         text="Пополнения"
@@ -66,8 +65,8 @@ const Bar = (props) => {
       />
       <BarButton
         text="Промокоды"
-        click={() => props.exchange("promo_code")}
-        isActive={props.content === "promo_code"}
+        click={() => props.exchange("promocode")}
+        isActive={props.content === "promocode"}
       />
       {user && user.role === "owner" ? (
         <BarButton
