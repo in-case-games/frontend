@@ -109,4 +109,14 @@
     text-align: start;
     max-width: 215px;
   }
+
+  .info {
+    position: absolute;
+
+    bottom: 5px;
+    right: 5px;
+
+    width: 20px;
+    height: 20px;
+  }
 }

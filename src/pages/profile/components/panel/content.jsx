@@ -5,8 +5,15 @@ import {
   Inventory,
   HistoryOpening as Openings,
   HistoryPayment as Payments,
-  HistoryWithdrawn,
-  HistoryPromocode,
+  HistoryWithdrawn as Withdrawn,
+  HistoryPromocode as Promocodes,
+  Admin,
+  AdminItems,
+  AdminBoxes,
+  AdminStatistics,
+  AdminGroups,
+  AdminBanners,
+  AdminPromocodes,
 } from "../content";
 
 const Content = (props) => {
@@ -15,16 +22,15 @@ const Content = (props) => {
     inventory: <Inventory />,
     history_opening: <Openings />,
     payment: <Payments />,
-    withdrawn: <HistoryWithdrawn />,
-    promocode: <HistoryPromocode />,
-    admin: "admin",
-    admin_items: "admin-items",
-    admin_boxes: "admin-boxes",
-    admin_users: "admin-users",
-    admin_promocodes: "admin-promocodes",
-    admin_banners: "admin-banners",
-    admin_groups: "admin-groups",
-    admin_statistics: "admin-statistics",
+    withdrawn: <Withdrawn />,
+    promocode: <Promocodes />,
+    admin: <Admin exchange={props.exchange} />,
+    admin_items: <AdminItems exchange={props.exchange} />,
+    admin_boxes: <AdminBoxes exchange={props.exchange} />,
+    admin_promocodes: <AdminPromocodes exchange={props.exchange} />,
+    admin_banners: <AdminBanners exchange={props.exchange} />,
+    admin_groups: <AdminGroups exchange={props.exchange} />,
+    admin_statistics: <AdminStatistics exchange={props.exchange} />,
   };
 
   return (

@@ -7,9 +7,9 @@ import {
 import { HistoryPromocode as HistoryPromocodeWindow } from "../../../../components/windows";
 import { LoadingArrow as Loading } from "../../../../components/loading";
 import { User as UserApi } from "../../../../api";
-import styles from "./content.module";
 import { Input } from "../../../../components/common/inputs";
 import { AirplaneBlack as Airplane } from "../../../../assets/images/icons";
+import styles from "./content.module";
 
 const HistoryPromocode = () => {
   const userApi = new UserApi();
@@ -23,11 +23,15 @@ const HistoryPromocode = () => {
   const [user, setUser] = useState();
 
   const additionalLoading = async (array, start, end) => {
+    const loaded = [];
     const u = user || (await loadedUser());
 
-    for (let i = start; i < end; i++) array[i].user = u;
+    for (let i = start; i < end; i++) {
+      array[i].user = u;
+      loaded.push(array[i]);
+    }
 
-    return array;
+    return loaded;
   };
 
   const createShowByLoaded = (array, start, end) => {
@@ -37,7 +41,12 @@ const HistoryPromocode = () => {
       const h = array[j];
 
       result.push(
-        <History id={h.id} click={() => setHistory(h)} history={h} key={h.id} />
+        <History
+          id={h.id}
+          click={() => setHistory(h)}
+          promocode={h}
+          key={h.id}
+        />
       );
     }
 

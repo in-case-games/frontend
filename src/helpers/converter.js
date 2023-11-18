@@ -11,10 +11,43 @@ const getMiniDate = (date) => {
     " " +
     ("0" + d.getHours()).slice(-2) +
     ":" +
-    ("0" + d.getMinutes()).slice(-2);
+    ("0" + d.getMinutes()).slice(-2) +
+    ":" +
+    ("0" + d.getSeconds()).slice(-2);
 
   return d1;
 };
+
+const getMiniTime = (date) => {
+  if (date === null) return "Без даты";
+
+  var d = new Date(date);
+  var d1 =
+    ("0" + d.getHours()).slice(-2) +
+    ":" +
+    ("0" + d.getMinutes()).slice(-2) +
+    ":" +
+    ("0" + d.getSeconds()).slice(-2);
+
+  return d1;
+};
+
+const getUtcDate = () => {
+  var date = new Date();
+
+  var now_utc = Date.UTC(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds()
+  );
+
+  return now_utc;
+};
+
+const getDateIso = (date) => date.slice(0, 16);
 
 const cutString = (string, length) =>
   string.length > length ? string.substring(0, length) + "..." : string;
@@ -29,6 +62,9 @@ const cutCost = (cost, rounding = (c) => Math.round(c)) => {
 
 export const Converter = {
   getMiniDate,
+  getMiniTime,
   cutString,
   cutCost,
+  getUtcDate,
+  getDateIso,
 };

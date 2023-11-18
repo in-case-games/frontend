@@ -3,7 +3,7 @@ import { Converter } from "../../../helpers/converter";
 import styles from "./promocode.module";
 
 const Promocode = (props) => {
-  const getColor = () => (props.history.isActivated ? "green" : "yellow");
+  const getColor = () => (props.promocode?.isActivated ? "green" : "yellow");
 
   return (
     <div className={styles.history} onClick={props.click}>
@@ -12,14 +12,20 @@ const Promocode = (props) => {
         style={{ borderColor: getColor() }}
       >
         <div className={styles.discount}>
-          {props.history.discount}
-          <div className={styles.percent}>%</div>
+          {props.promocode?.discount ? props.promocode?.discount : null}
+          <div className={styles.percent}>
+            {props.promocode?.discount ? "%" : "+"}
+          </div>
         </div>
         <div className={styles.name}>
-          {Converter.cutString(props.history.name, 25)}
+          {props.promocode?.name
+            ? Converter.cutString(props.promocode?.name, 25)
+            : null}
         </div>
         <div className={styles.date}>
-          {Converter.getMiniDate(props.history.date)}
+          {props.promocode?.date
+            ? Converter.getMiniDate(props.promocode.date)
+            : null}
         </div>
       </div>
     </div>

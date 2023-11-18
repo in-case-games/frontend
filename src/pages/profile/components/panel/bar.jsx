@@ -39,8 +39,7 @@ const Bar = (props) => {
   return (
     <div className={styles.panel_bar}>
       <HeaderBarButton
-        image={user?.image || UserImage}
-        name={user?.name || ""}
+        user={user}
         click={() => props.exchange("profile")}
         isActive={props.content === "profile"}
       />

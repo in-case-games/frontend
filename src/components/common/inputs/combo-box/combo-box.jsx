@@ -29,11 +29,13 @@ const ComboBox = (props) => {
           cursor: props.isReadOnly ? "default" : "pointer",
         }}
       >
-        {props.values.map((v) => (
-          <option key={v.id} id={v.id}>
-            {v.name}
-          </option>
-        ))}
+        {props.values
+          ? props.values.map((v) => (
+              <option key={v.id} id={v.id}>
+                {v.name}
+              </option>
+            ))
+          : null}
       </select>
     </div>
   );

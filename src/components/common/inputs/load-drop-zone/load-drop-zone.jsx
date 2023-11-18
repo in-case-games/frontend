@@ -63,6 +63,24 @@ const LoadDropZone = (props) => {
     if (e.target.files && e.target.files[0]) setFile(e.target.files[0]);
   };
 
+  const getSizeWhileMaintainingRation = () => {
+    const difference = props.width / props.height;
+    let height, width;
+
+    if (difference >= 1) {
+      width = props.width > 400 ? 400 : props.width;
+      height = width / difference;
+    } else {
+      height = props.height > 400 ? 400 : props.height;
+      width = height / difference;
+    }
+
+    return {
+      height: height,
+      width: width,
+    };
+  };
+
   return (
     <div className={styles.load_drop_zone}>
       <label
@@ -75,10 +93,7 @@ const LoadDropZone = (props) => {
           alt=""
           className={styles.image}
           src={props.file ? props.file : Cloud}
-          style={{
-            height: props.height > 400 ? 400 : props.height,
-            width: props.width > 400 ? 400 : props.width,
-          }}
+          style={getSizeWhileMaintainingRation()}
         />
         {!fileName ? (
           <div className={styles.message}>

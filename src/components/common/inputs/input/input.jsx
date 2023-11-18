@@ -21,7 +21,10 @@ const Input = (props) => {
         readOnly={props.isReadOnly || false}
         onInput={(e) => props.setValue(e.target.value)}
         type={props.type || "text"}
-        style={{ borderColor: getBorderColor() }}
+        style={{
+          borderColor: getBorderColor(),
+          cursor: props.isReadOnly ? "default" : "pointer",
+        }}
       />
     </div>
   );

@@ -1,0 +1,27 @@
+.square_panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 200px;
+  height: 200px;
+
+  font-size: 28px;
+  border: 1px solid var(--color-orange__1);
+  transition: all 0.3s ease-out;
+
+  cursor: pointer;
+
+  margin: 10px;
+
+  &:hover {
+    background: var(--color-black__8);
+
+    transition: all 0.3s ease-out;
+  }
+
+  .image {
+    height: 80px;
+  }
+}

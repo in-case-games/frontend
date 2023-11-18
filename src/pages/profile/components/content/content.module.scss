@@ -13,7 +13,37 @@
   }
 }
 
+.statistics {
+  .inner {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.admin {
+  display: flex;
+  justify-content: center;
+
+  .admin_content {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    .admin_group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  }
+}
+
 .inventory,
+.admin_items,
+.admin_boxes,
+.admin_groups,
+.admin_banner,
+.admin_promocode,
+.statistics,
 .history_opening,
 .history_payment,
 .history_promocode,
@@ -47,6 +77,14 @@
     display: flex;
     padding: 0 20px;
     align-items: center;
+
+    .profile_back {
+      font-size: 28px;
+
+      cursor: pointer;
+
+      margin: 0 10px;
+    }
 
     .name {
       font-family: "Play";

@@ -16,7 +16,11 @@ class User {
 
     return response.data.data;
   }
+  async getByLogin(login) {
+    const response = await api.get(RESOURCES_API_URL + `user/login/${login}`);
 
+    return response.data.data;
+  }
   async getInventoryById(id) {
     const response = await api.get(
       RESOURCES_API_URL + `user/inventory/id/${id}`

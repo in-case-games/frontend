@@ -5,6 +5,7 @@ import {
   PlusLightGreen as Plus,
   KeyGray as Key,
 } from "../../../../assets/images/icons";
+import { TemplateUser as UserImage } from "../../../../assets/images/main";
 import styles from "./user-bar.module";
 
 const UserBar = (props) => {
@@ -20,13 +21,15 @@ const UserBar = (props) => {
           >
             <img alt="" src={Plus} />
             <div className={styles.user_bar_balance}>
-              <div className={styles.balance_amount}>{props.user.balance}</div>
+              <div className={styles.balance_amount}>
+                {props.user?.balance || 0}
+              </div>
               <img alt="" src={InCoin} />
             </div>
           </div>
           <img
             alt=""
-            src={props.user.image}
+            src={props.user?.image || UserImage}
             onClick={() => navigate("/profile")}
           />
         </div>

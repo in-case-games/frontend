@@ -12,7 +12,9 @@ import {
   Item as ItemWindow,
   Box as BoxWindow,
   LoadImage as LoadImageWindow,
+  Restriction as RestrictionWindow,
 } from "../../windows";
+import { Converter } from "../../../helpers/converter";
 
 const OpeningsRoulette = () => {
   const userApi = new UserApi();
@@ -24,9 +26,11 @@ const OpeningsRoulette = () => {
   const [isStart, setIsStart] = useState(true);
 
   const [items, setItems] = useState(null);
+  const [games, setGames] = useState();
   const [item, setItem] = useState(null);
   const [box, setBox] = useState(null);
   const [image, setImage] = useState(null);
+  const [restriction, setRestriction] = useState();
 
   const [miniProfile, setMiniProfile] = useState(null);
   const [isOpenLoadWindow, setIsOpenLoadWindow] = useState(false);
@@ -36,38 +40,23 @@ const OpeningsRoulette = () => {
       async () => {
         setIsStart(false);
 
-        const url = window.location.href.split("/");
-        let h = [];
-        let items = [];
+        const g = games || (await loadedGames());
+        const history = await loadedHistory();
+        const result = [];
 
-        if (url.at(-2) === "box") {
-          try {
-            h = await userApi.getRouletteOpeningsByBoxId(url.at(-1));
-          } catch (err) {}
-        }
+        for (let i = 0; i < history.length; i++) {
+          let h = await pushItemToHistory(history[i], g);
 
-        if (h.length === 0) h = await userApi.getRouletteOpenings();
-
-        const maxItemsWindow = Math.floor(windowWidth.current / 160) + 1;
-
-        h = h.slice(0, maxItemsWindow);
-
-        for (let i = 0; i < h.length; i++) {
-          h[i].item = await itemApi.getById(h[i].itemId);
-          const game = await gameApi.getByName(h[i].item.game);
-          h[i].item.gameId = game.id;
-          h[i].item = await itemApi.pushImage(h[i].item);
-
-          items.push(
+          result.push(
             <Item
-              history={h[i]}
-              showMiniProfile={() => setMiniProfile(h[i].userId)}
-              key={h[i].id}
+              history={h}
+              showMiniProfile={() => setMiniProfile(h.userId)}
+              key={h.id}
             />
           );
         }
 
-        setItems(items);
+        setItems(result);
       },
       isStart ? 1000 : 5000
     );
@@ -77,15 +66,79 @@ const OpeningsRoulette = () => {
     };
   });
 
+  const loadedGames = async () => {
+    const games = {};
+    const response = await gameApi.get();
+
+    for (let i = 0; i < response.length; i++) {
+      games[response[i].name] = response[i].id;
+    }
+
+    setGames(games);
+
+    return games;
+  };
+
+  const loadedHistory = async () => {
+    let history = [];
+    const url = window.location.href.split("/");
+
+    if (url.at(-2) === "box") {
+      try {
+        history = await userApi.getRouletteOpeningsByBoxId(url.at(-1));
+      } catch (err) {}
+    }
+
+    if (history.length === 0) history = await userApi.getRouletteOpenings();
+
+    const maxItemsWindow = Math.floor(windowWidth.current / 160) + 1;
+
+    history = history.slice(0, maxItemsWindow);
+
+    return history;
+  };
+
+  const pushItemToHistory = async (history, games) => {
+    if (items) {
+      const f = items.find((i) => i.props.history.id === history.id)?.props
+        ?.history?.item;
+
+      if (f) history.item = f;
+    }
+
+    var now_utc = Converter.getUtcDate();
+
+    if (
+      !history.item ||
+      !history.item?.image ||
+      (history.item?.updateDate &&
+        new Date(history.item?.updateDate) < new Date(now_utc - 300000))
+    ) {
+      history.item = await itemApi.getById(history.itemId);
+      history.item.gameId = games[history.item.game];
+      history.item = await itemApi.pushImage(history.item);
+    }
+
+    return history;
+  };
+
   return (
     <div className={styles.openings_roulette}>
       {items}
       <ModalLayout isActive={miniProfile} close={() => setMiniProfile(null)}>
         <MiniProfileWindow
           userId={miniProfile}
+          openRestrictionWindow={(r) => setRestriction(r)}
           openItemWindow={(item) => setItem(item)}
           openBoxWindow={(box) => setBox(box)}
           exchangeWindow={(id) => setMiniProfile(id)}
+        />
+      </ModalLayout>
+      <ModalLayout isActive={restriction} close={() => setRestriction()}>
+        <RestrictionWindow
+          restriction={restriction}
+          setRestriction={setRestriction}
+          close={() => setRestriction()}
         />
       </ModalLayout>
       <ModalLayout

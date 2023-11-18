@@ -2,11 +2,26 @@ import React from "react";
 import { TemplateBox as BoxImage } from "../../../assets/images/main";
 import { InCoin } from "../../../assets/images/icons";
 import { Converter } from "../../../helpers/converter";
+import Constants from "../../../constants";
 import styles from "./simple.module";
 
 const Simple = (props) => {
+  const clickBox = () => {
+    if (props.showBox) props.showBox(props.box);
+    else if (props.selectBoxes?.boxes) props.select();
+  };
+
+  const isSelected = () =>
+    props.selectBoxes && props.selectBoxes.boxes.find((i) => i.id === props.id);
+
   return (
-    <div className={styles.box_simple} onClick={() => props.showBox(props.box)}>
+    <div
+      className={styles.box_simple}
+      onClick={clickBox}
+      style={
+        isSelected() ? { background: Constants.ItemGradients["green"] } : {}
+      }
+    >
       <img
         alt=""
         src={props.box?.image ?? BoxImage}
@@ -18,7 +33,7 @@ const Simple = (props) => {
           {Converter.cutString(props.box?.name || "", 12)}
         </div>
         <div className={styles.cost}>
-          {Converter.cutCost(props.box?.cost)}
+          {props.box?.cost ? Converter.cutCost(props.box?.cost) : "Пустой"}
           <img alt="" src={InCoin} className={styles.image} />
         </div>
         <div className={styles.game}>{props.box?.game}</div>
