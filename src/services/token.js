@@ -1,4 +1,4 @@
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { User as UserApi } from "../api";
 
 const getUser = () => JSON.parse(localStorage.getItem("user"));
