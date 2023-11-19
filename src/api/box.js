@@ -13,6 +13,12 @@ class Box {
     return response.data.data;
   }
 
+  async getInventory(id) {
+    const response = await api.get(RESOURCES_API_URL + `box/${id}/inventory`);
+
+    return response.data.data;
+  }
+
   async getById(id) {
     const response = await api.get(RESOURCES_API_URL + "box/id/" + id);
 

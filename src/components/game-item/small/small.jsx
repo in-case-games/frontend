@@ -18,10 +18,14 @@ const Small = (props) => {
     return () => clearInterval(interval);
   });
 
+  const buttonClick = () => {
+    if (props.showWindow) props.showWindow(props.item);
+  };
+
   return (
     <div
       className={styles.small_item}
-      onClick={() => props.showWindow(props.item)}
+      onClick={() => buttonClick()}
       style={{ background: gradientColor }}
     >
       <img
@@ -29,6 +33,7 @@ const Small = (props) => {
         src={props.item?.image ?? ItemImage}
         alt=""
       />
+      {props.item?.chanceWining}
     </div>
   );
 };
