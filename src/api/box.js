@@ -25,6 +25,12 @@ class Box {
     return response.data.data;
   }
 
+  async getByIdBanner(id) {
+    const response = await api.get(RESOURCES_API_URL + `box/${id}/banner`);
+
+    return response.data.data;
+  }
+
   async getByName(name) {
     const response = await api.get(RESOURCES_API_URL + "box/name/" + name);
 

@@ -7,6 +7,7 @@ const Small = (props) => {
   const [gradientColor, setGradientColor] = useState(
     Constants.ItemGradients[props.item.rarity ? props.item.rarity : "white"]
   );
+  const [showChances, setShowChances] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -26,14 +27,24 @@ const Small = (props) => {
     <div
       className={styles.small_item}
       onClick={() => buttonClick()}
-      style={{ background: gradientColor }}
+      style={{
+        background: gradientColor,
+        cursor: props.item?.chanceWining ? "pointer" : "default",
+      }}
+      onMouseEnter={() => setShowChances(true)}
+      onMouseLeave={() => setShowChances(false)}
     >
+      {props.item?.chanceWining ? (
+        <div className={styles.chance} style={{ opacity: showChances ? 1 : 0 }}>
+          ~{props.item?.chanceWining}
+        </div>
+      ) : null}
       <img
         className={styles.image}
         src={props.item?.image ?? ItemImage}
+        style={{ opacity: props.item?.chanceWining && showChances ? 0 : 1 }}
         alt=""
       />
-      {props.item?.chanceWining}
     </div>
   );
 };

@@ -23,7 +23,7 @@ const Content = () => {
   useEffect(() => {
     const interval = setInterval(
       async () => {
-        if (!games) await loadedGames();
+        if (!games) setGames(await gameApi.get());
         else if (!inventory) {
           setIsStart(false);
           await loadInventory();
@@ -33,14 +33,6 @@ const Content = () => {
     );
     return () => clearInterval(interval);
   });
-
-  const loadedGames = async () => {
-    const games = await gameApi.get();
-
-    setGames(games);
-
-    return games;
-  };
 
   const loadInventory = async () => {
     try {
