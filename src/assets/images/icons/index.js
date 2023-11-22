@@ -7,6 +7,7 @@ export { default as ArrowBottom } from "./arrow-bottom.svg";
 export { default as ArrowBottomGray } from "./arrow-bottom-gray.svg";
 export { default as ArrowBottomBlack } from "./arrow-bottom-black.svg";
 export { default as BackPack } from "./backpack.svg";
+export { default as InCoinGray } from "./incoin-gray.svg";
 export { default as Box } from "./box.svg";
 export { default as BoxBeige } from "./box-beige.svg";
 export { default as CartBeige } from "./cart-beige.svg";

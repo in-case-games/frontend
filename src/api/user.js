@@ -110,6 +110,14 @@ class User {
     return response.data.data;
   }
 
+  async openBox(id) {
+    const response = await api.get(
+      RESOURCES_API_URL + `user/opening/box/${id}`
+    );
+
+    return response.data.data;
+  }
+
   async getRestrictions() {
     const response = await api.get(RESOURCES_API_URL + `user/restriction`);
 

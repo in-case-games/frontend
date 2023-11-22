@@ -1,0 +1,36 @@
+.roulette {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  min-height: 100px;
+
+  .button_open {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: var(--color-orange__1);
+    color: black;
+    border-radius: 5px;
+
+    transition: all 200ms;
+
+    .text {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .key {
+        max-height: 15px;
+
+        margin-right: 5px;
+      }
+
+      .inCoin {
+        max-height: 15px;
+      }
+    }
+  }
+}

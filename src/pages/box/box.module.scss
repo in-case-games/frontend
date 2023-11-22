@@ -2,6 +2,15 @@
   height: 100%;
   width: 100%;
 
+  .display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .content {
+  }
+
   .container_small {
     max-width: 1060px;
 
