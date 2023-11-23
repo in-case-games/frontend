@@ -18,56 +18,60 @@ const Box = () => {
   const { id } = useParams();
 
   const [isStart, setIsStart] = useState(true);
-  const [inventory, setInventory] = useState();
-  const [games, setGames] = useState();
   const [isRollingRoulette, setIsRollingRoulette] = useState(false);
+
+  let [games, setGames] = useState();
 
   const [user, setUser] = useState();
   const [box, setBox] = useState();
+  const [inventory, setInventory] = useState();
   const [winItem, setWinItem] = useState();
   const [banner, setBanner] = useState();
-
-  const whatShow = () => {
-    if (isRollingRoulette) return null;
-
-    return winItem ? (
-      <ItemDisplay winItem={winItem} goBack={() => setWinItem()} />
-    ) : (
-      <BoxDisplay box={box} isHasBanner={banner} />
-    );
-  };
 
   useEffect(() => {
     const interval = setInterval(
       async () => {
+        setIsStart(false);
+
         const user = TokenService.getUser();
         user.balance = read_cookie("user-balance");
 
-        setUser(user);
-
-        if (!games) setGames(await gameApi.get());
-        else if (!inventory) {
-          setIsStart(false);
-          await loadInventory();
+        if (!games) {
+          games = await gameApi.get();
+          setGames(games);
         }
 
-        if (!box) {
-          try {
-            const banner = await boxApi.getByIdBanner(id);
+        setUser(user);
 
-            if (banner && banner?.box) setBox(banner.box);
-            else setBox(await boxApi.getById(id));
+        try {
+          const result = [];
+          const banner = await boxApi.getByIdBanner(id);
+          const inventories = await boxApi.getInventory(id);
+          const box =
+            banner && banner?.box ? banner.box : await boxApi.getById(id);
+          box.inventory = inventories;
 
-            console.log(banner);
-            setBanner(banner);
-          } catch (ex) {
-            console.log(ex);
-            if (
-              ex?.response?.data?.error?.code === 4 ||
-              ex?.response?.data?.errors?.id
-            ) {
-              navigate("/not-found");
-            }
+          let gameId;
+
+          for (let i = 0; i < inventories.length; i++) {
+            const inv = inventories[i];
+            gameId = gameId || games.find((g) => g.name === inv.item.game).id;
+            inv.item.chanceWining = inv.chanceWining / 100000;
+            inv.item.gameId = gameId;
+            inv.item = await itemApi.pushImage(inv.item);
+            result.push(inv);
+          }
+
+          setBox(box);
+          setBanner(banner);
+          setInventory(result);
+        } catch (ex) {
+          console.log(ex);
+          if (
+            ex?.response?.data?.error?.code === 4 ||
+            ex?.response?.data?.errors?.id
+          ) {
+            navigate("/not-found");
           }
         }
       },
@@ -76,32 +80,14 @@ const Box = () => {
     return () => clearInterval(interval);
   });
 
-  const loadInventory = async () => {
-    try {
-      const inventories = await boxApi.getInventory(id);
-      const result = [];
+  const whatShow = () => {
+    if (isRollingRoulette) return null;
 
-      let gameId;
-
-      for (let i = 0; i < inventories.length; i++) {
-        const inv = inventories[i];
-        gameId = gameId || games.find((g) => g.name === inv.item.game).id;
-        inv.item.gameId = gameId;
-        inv.item = await itemApi.pushImage(inv.item);
-        inv.item.chanceWining = inv.chanceWining / 100000;
-        result.push(inv);
-      }
-
-      setInventory(result);
-    } catch (ex) {
-      console.log(ex);
-      if (
-        ex?.response?.data?.error?.code === 4 ||
-        ex?.response?.data?.errors?.id
-      ) {
-        navigate("/not-found");
-      }
-    }
+    return winItem ? (
+      <ItemDisplay item={winItem} goBack={() => setWinItem()} />
+    ) : (
+      <BoxDisplay box={box} isHasBanner={banner} />
+    );
   };
 
   return (

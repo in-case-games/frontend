@@ -82,9 +82,10 @@ const Langs = [
   },
 ];
 
-function generateGradient(color) {
-  return `linear-gradient(180deg, rgb(${color}, 0) 0%, rgb(${color}, 0.6) 60%)`;
-}
+const generateGradient = (color, transparent = true) =>
+  `linear-gradient(180deg, rgb(${
+    transparent ? color + ", 0" : "26, 26, 29, 1"
+  }) 0%, rgb(${color}, ${transparent ? 0.6 : 1}) 60%)`;
 
 const ItemGradients = {
   blue: generateGradient("5, 0, 255"),
@@ -96,6 +97,18 @@ const ItemGradients = {
   green: generateGradient("0, 255, 30"),
   gray: generateGradient("211, 211, 211"),
   orange: generateGradient("254, 115, 36"),
+};
+
+const ItemGradientsNoTransparent = {
+  blue: generateGradient("5, 0, 255", false),
+  gold: generateGradient("255, 199, 0", false),
+  red: generateGradient("255, 0, 0", false),
+  pink: generateGradient("173, 0, 255", false),
+  violet: generateGradient("255, 0, 199", false),
+  white: generateGradient("255, 255, 255", false),
+  green: generateGradient("0, 255, 30", false),
+  gray: generateGradient("211, 211, 211", false),
+  orange: generateGradient("254, 115, 36", false),
 };
 
 const ItemColors = {
@@ -156,6 +169,7 @@ const Constants = {
   Infos,
   Games,
   ItemGradients,
+  ItemGradientsNoTransparent,
   ItemColors,
   TemplateItem,
   TemplateBox,

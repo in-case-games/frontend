@@ -15,8 +15,14 @@ const Roulette = (props) => {
   const clickOpenBox = async () => {
     if (props.user.balance && props.box?.cost <= props.user?.balance) {
       props.setIsRollingRoulette(true);
+
       const winItem = await userApi.openBox(props.box.id);
-      props.setWinItem(winItem);
+      const findItem = props.box.inventory.find(
+        (i) => i.item.id === winItem.id
+      ).item;
+      const res = Object.assign(winItem, findItem);
+
+      props.setWinItem(res);
 
       setTimeout(
         () => props.setIsRollingRoulette(false),
@@ -33,7 +39,7 @@ const Roulette = (props) => {
     return (
       <div className={styles.text}>
         <img className={styles.key} alt="" src={Key} />
-        Открыть за {Converter.cutCost(props.box?.cost, (v) => Math.round(v))}
+        Открыть за {Converter.cutCost(props.box?.cost, (v) => Math.ceil(v))}
         <img className={styles.inCoin} alt="" src={InCoin} />
       </div>
     );
@@ -52,15 +58,17 @@ const Roulette = (props) => {
 
   return (
     <div className={styles.roulette}>
-      <div
-        className={styles.button_open}
-        style={getStyles()}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        onClick={clickOpenBox}
-      >
-        {getTextButton()}
-      </div>
+      {!props.isRollingRoulette ? (
+        <div
+          className={styles.button_open}
+          style={getStyles()}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          onClick={clickOpenBox}
+        >
+          {getTextButton()}
+        </div>
+      ) : null}
     </div>
   );
 };
