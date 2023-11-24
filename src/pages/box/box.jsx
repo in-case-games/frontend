@@ -47,9 +47,10 @@ const Box = () => {
           const result = [];
           const banner = await boxApi.getByIdBanner(id);
           const inventories = await boxApi.getInventory(id);
-          const box =
+          let box =
             banner && banner?.box ? banner.box : await boxApi.getById(id);
           box.inventory = inventories;
+          box = await boxApi.pushImage(box);
 
           let gameId;
 

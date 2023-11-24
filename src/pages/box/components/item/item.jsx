@@ -1,6 +1,8 @@
 import React from "react";
 import { TemplateItem as ItemImage } from "../../../../assets/images/main";
 import Constants from "../../../../constants";
+import { AirplaneBlack, InCoinGray } from "../../../../assets/images/icons";
+import { Converter } from "../../../../helpers/converter";
 import styles from "./item.module";
 
 const Item = (props) => {
@@ -10,14 +12,16 @@ const Item = (props) => {
     ];
 
   return (
-    <div
-      className={styles.item}
-      onClick={() => props.goBack()}
-      style={{ background: getGradientColor() }}
-    >
+    <div className={styles.item} style={{ background: getGradientColor() }}>
+      <div className={styles.part_top}></div>
       <div className={styles.part_left}></div>
+      <div className={styles.part_left__border}></div>
+      <div className={styles.part_right}></div>
+      <div className={styles.part_right__border}></div>
       <div className={styles.part_center}>
-        <div className={styles.button_back}>{"<"} Назад</div>
+        <div className={styles.button_back} onClick={() => props.goBack()}>
+          {"<"} Назад
+        </div>
         <div className={styles.content}>
           <div className={styles.tittle}>{props.item?.name}</div>
           <img
@@ -27,7 +31,15 @@ const Item = (props) => {
           />
         </div>
       </div>
-      <div className={styles.part_right}></div>
+      <div className={styles.part_bottom}>
+        <div className={styles.button_sell} onClick={() => props.goBack()}>
+          {props.item?.cost ? Converter.cutCost(props.item?.cost) : null}
+          <img className={styles.image} alt="" src={InCoinGray} />
+        </div>
+        <div className={styles.button_send} onClick={() => props.goBack()}>
+          <img className={styles.image} alt="" src={AirplaneBlack} />
+        </div>
+      </div>
     </div>
   );
 };
