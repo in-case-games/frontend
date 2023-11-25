@@ -74,7 +74,13 @@ class Item {
 
     return response.data.data;
   }
+  async sellLastByItemId(id) {
+    const response = await api.get(
+      RESOURCES_API_URL + `user/inventory/last/sell/${id}`
+    );
 
+    return response.data.data;
+  }
   async post(item) {
     const response = await api.post(RESOURCES_API_URL + "game/item", item);
 

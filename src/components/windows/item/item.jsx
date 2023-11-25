@@ -156,7 +156,7 @@ const Item = (props) => {
 
   const operations = {
     "create-item": createItem,
-    "delete-tem": deleteItem,
+    "delete-item": deleteItem,
     "update-item": updateItem,
   };
 

@@ -5,17 +5,30 @@ import {
 } from "../../../../assets/images/icons";
 import { User as UserApi } from "../../../../api";
 import { Converter } from "../../../../helpers/converter";
+import { Group } from "../../../../layouts";
+import { Simple as Item } from "../../../../components/game-item";
 import styles from "./roulette.module";
 
 const Roulette = (props) => {
   const userApi = new UserApi();
 
   const [hovered, setHovered] = useState(false);
+  const [items, setItems] = useState();
+  const [time, setTime] = useState(-1);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!items && props.box?.inventory) loadRandomParams(10);
+    }, 100);
+    return () => clearInterval(interval);
+  });
 
   const clickOpenBox = async () => {
-    if (props.user.balance && props.box?.cost <= props.user?.balance) {
-      props.setIsRollingRoulette(true);
-
+    if (
+      !props.box?.isLocked &&
+      props.user.balance &&
+      props.box?.cost <= props.user?.balance
+    ) {
       const winItem = await userApi.openBox(props.box.id);
       const findItem = props.box.inventory.find(
         (i) => i.item.id === winItem.id
@@ -23,11 +36,9 @@ const Roulette = (props) => {
       const res = Object.assign(winItem, findItem);
 
       props.setWinItem(res);
+      props.setIsRollingRoulette(true);
 
-      setTimeout(
-        () => props.setIsRollingRoulette(false),
-        Converter.getRandomInt(1, 5) * 1000
-      );
+      loadRandomParams(time, res);
     }
   };
 
@@ -56,8 +67,37 @@ const Roulette = (props) => {
     };
   };
 
+  const loadRandomParams = (winItem) => {
+    const target = Converter.getRandomInt(120, 180);
+    const items = [];
+
+    for (let i = 0; i < target + 10; i++) {
+      const num = Converter.getRandomInt(
+        0,
+        props.box.inventory.at(-1).chanceWining
+      );
+      const item =
+        target === i && winItem
+          ? {}
+          : props.box.inventory.find((i) => i.chanceWining >= num).item;
+
+      items.push(<Item id={item.id} item={item} key={item.id + i} />);
+    }
+
+    setItems(items);
+  };
+
   return (
     <div className={styles.roulette}>
+      {items ? (
+        <Group
+          isRolling={props.isRollingRoulette}
+          setRollingEnd={() => props.setIsRollingRoulette(false)}
+          name="Рулетка"
+        >
+          {items}
+        </Group>
+      ) : null}
       {!props.isRollingRoulette ? (
         <div
           className={styles.button_open}

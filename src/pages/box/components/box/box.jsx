@@ -1,8 +1,7 @@
 import React from "react";
 import { TemplateBox as BoxImage } from "../../../../assets/images/main";
 import Constants from "../../../../constants";
-import { AirplaneBlack, InCoinGray } from "../../../../assets/images/icons";
-import { Converter } from "../../../../helpers/converter";
+import { FlagBlack as Flag } from "../../../../assets/images/icons";
 import styles from "./box.module";
 
 const Box = (props) => {
@@ -30,12 +29,8 @@ const Box = (props) => {
         </div>
       </div>
       <div className={styles.part_bottom}>
-        <div className={styles.button_sell} onClick={() => {}}>
-          {props.box?.cost ? Converter.cutCost(props.box?.cost) : null}
-          <img className={styles.image} alt="" src={InCoinGray} />
-        </div>
-        <div className={styles.button_send} onClick={() => {}}>
-          <img className={styles.image} alt="" src={AirplaneBlack} />
+        <div className={styles.button_banner} onClick={() => {}}>
+          <img className={styles.image} alt="" src={Flag} />
         </div>
       </div>
     </div>

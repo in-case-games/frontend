@@ -19,6 +19,7 @@ export { default as DotLightGreen } from "./dot-light-green.svg";
 export { default as DownloadWhite } from "./download-white.svg";
 export { default as FaqBeige } from "./faq-beige.svg";
 export { default as Flag } from "./flag.svg";
+export { default as FlagBlack } from "./flag-black.svg";
 export { default as FlagRUS } from "./flag-rus.svg";
 export { default as Gamepad } from "./gamepad.svg";
 export { default as Gun } from "./gun.svg";

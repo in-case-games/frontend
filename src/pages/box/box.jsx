@@ -49,7 +49,9 @@ const Box = () => {
           const inventories = await boxApi.getInventory(id);
           let box =
             banner && banner?.box ? banner.box : await boxApi.getById(id);
-          box.inventory = inventories;
+          box.inventory = inventories.sort(
+            (a, b) => a.chanceWining - b.chanceWining
+          );
           box = await boxApi.pushImage(box);
 
           let gameId;

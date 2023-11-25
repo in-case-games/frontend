@@ -73,13 +73,12 @@
 
   z-index: 9;
 
-  .button_sell,
-  .button_send {
+  .button_banner {
     display: flex;
     align-items: center;
     justify-content: center;
 
-    width: 300px;
+    width: 600px;
     height: 40px;
 
     font-size: 24px;
@@ -92,31 +91,18 @@
     transition: background 300ms;
 
     .image {
-      margin-left: 5px;
       height: 25px;
     }
   }
 
-  .button_sell {
+  .button_banner {
     border-right: 2px solid var(--color-orange__1);
-    background: var(--color-red__2);
+    background: var(--color-yellow__1);
 
     cursor: pointer;
 
     &:hover {
-      background: var(--color-red__3);
-      transition: background 100ms;
-    }
-  }
-
-  .button_send {
-    border-left: 2px solid var(--color-orange__1);
-    background: var(--color-green__1);
-
-    cursor: pointer;
-
-    &:hover {
-      background: var(--color-green__2);
+      background: var(--color-yellow__2);
       transition: background 100ms;
     }
   }
