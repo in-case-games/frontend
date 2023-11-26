@@ -13,6 +13,8 @@
 
     overflow: hidden;
 
+    transition: all 500ms;
+
     & * {
       margin: 0 5px;
     }

@@ -1,0 +1,37 @@
+.roulette {
+  color: var(--color-orange__1);
+
+  max-width: 100%;
+
+  margin: 20px 0;
+}
+
+.inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 500ms;
+
+  .arrow {
+    transform: rotate(90deg);
+    font-size: 28px;
+  }
+
+  & * {
+    margin: 0 5px;
+  }
+
+  .text {
+    text-align: center;
+
+    font-family: "Nunito";
+    font-size: 32px;
+    font-weight: 900;
+
+    color: var(--color-gray__5);
+
+    margin: 0 auto;
+  }
+}

@@ -34,7 +34,8 @@ const Box = () => {
         setIsStart(false);
 
         const user = TokenService.getUser();
-        user.balance = read_cookie("user-balance");
+
+        if (user) user.balance = read_cookie("user-balance");
 
         if (!games) {
           games = await gameApi.get();

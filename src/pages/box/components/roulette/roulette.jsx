@@ -5,8 +5,8 @@ import {
 } from "../../../../assets/images/icons";
 import { User as UserApi } from "../../../../api";
 import { Converter } from "../../../../helpers/converter";
-import { Group } from "../../../../layouts";
 import { Simple as Item } from "../../../../components/game-item";
+import { Roulette as Group } from "../../../../layouts";
 import styles from "./roulette.module";
 
 const Roulette = (props) => {
@@ -14,7 +14,6 @@ const Roulette = (props) => {
 
   const [hovered, setHovered] = useState(false);
   const [items, setItems] = useState();
-  const [time, setTime] = useState(-1);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -38,7 +37,7 @@ const Roulette = (props) => {
       props.setWinItem(res);
       props.setIsRollingRoulette(true);
 
-      loadRandomParams(time, res);
+      loadRandomParams(res);
     }
   };
 
@@ -68,17 +67,17 @@ const Roulette = (props) => {
   };
 
   const loadRandomParams = (winItem) => {
-    const target = Converter.getRandomInt(120, 180);
+    const target = Converter.getRandomInt(20, 60);
     const items = [];
 
-    for (let i = 0; i < target + 10; i++) {
+    for (let i = 0; i < target + 3; i++) {
       const num = Converter.getRandomInt(
         0,
         props.box.inventory.at(-1).chanceWining
       );
       const item =
-        target === i && winItem
-          ? {}
+        target === i && winItem && winItem.image
+          ? winItem
           : props.box.inventory.find((i) => i.chanceWining >= num).item;
 
       items.push(<Item id={item.id} item={item} key={item.id + i} />);
@@ -93,7 +92,6 @@ const Roulette = (props) => {
         <Group
           isRolling={props.isRollingRoulette}
           setRollingEnd={() => props.setIsRollingRoulette(false)}
-          name="Рулетка"
         >
           {items}
         </Group>

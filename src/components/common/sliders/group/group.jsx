@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ArrowBottomBlack as Arrow } from "../../../../assets/images/icons";
 import styles from "./group.module";
-import { Converter } from "../../../../helpers/converter";
 
 const Group = (props) => {
   const parent = useRef();
@@ -14,43 +13,14 @@ const Group = (props) => {
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
 
-  const boost = Converter.getRandomInt(3, 8);
-  const [isRolling, setIsRolling] = useState(false);
-
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!itemWidth) setItemWidth(getItemWidth());
-      else if (props.isRolling !== undefined) {
-        const isPassive = props.isRolling === false;
-        const distance = (props.items.length - 10) * itemWidth;
-
-        const remainedItems = (distance + marginLeft) / itemWidth - 2;
-
-        if ((isPassive && remainedItems <= 0) || (!isRolling && !isPassive)) {
-          setMarginLeft(0);
-        } else {
-          const speed = isPassive ? itemWidth / 100 : remainedItems * boost;
-
-          if (speed <= 0.01) props.setRollingEnd(false);
-
-          setMarginLeft(-(Math.abs(marginLeft) + speed));
-        }
-
-        setIsRolling(!isPassive);
-      }
-    }, 10);
-
-    return () => clearInterval(interval);
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (props.isRolling === undefined) {
-        const max = maxMove(props.speed);
+      if (itemWidth) {
+        const max = maxMove();
 
         setShowLeft(max !== 0 && counter !== 0);
         setShowRight(max - counter !== 0);
-      }
+      } else setItemWidth(getItemWidth());
     }, 100);
 
     return () => clearInterval(interval);
@@ -59,7 +29,7 @@ const Group = (props) => {
   const clickArrow = (step) => {
     let move = counter + step;
 
-    const max = maxMove(props.speed);
+    const max = maxMove();
     const min = 0;
 
     if (move > max) move = max;
@@ -74,7 +44,7 @@ const Group = (props) => {
     setMarginLeft(margin);
   };
 
-  const maxMove = (speed) => Math.ceil(itemWidth / speed);
+  const maxMove = () => Math.ceil(hiddenWidth() / props.speed);
   const hiddenWidth = () => hiddenItems() * itemWidth;
   const hiddenItems = () => {
     let parentWidth =
@@ -108,8 +78,7 @@ const Group = (props) => {
       <div
         className={styles.inner}
         style={{
-          marginLeft: marginLeft || "0",
-          transition: props.isRolling !== undefined ? "none" : "all 500ms",
+          marginLeft: marginLeft || 0,
         }}
         ref={child}
       >
