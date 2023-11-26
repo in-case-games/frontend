@@ -28,7 +28,7 @@ const Roulette = (props) => {
 
         if (speed <= 0.01) props.setRollingEnd(false);
 
-        if (isPassive && remainedItems <= 3) zeroingOut();
+        if (isPassive && remainedItems <= 5) zeroingOut();
         else setMarginLeft(marginLeft - speed);
       }
 
@@ -39,7 +39,7 @@ const Roulette = (props) => {
   });
 
   const zeroingOut = () => {
-    const distance = (props.items.length - 3) * itemWidth;
+    const distance = (props.items.length - 5) * itemWidth;
     const parentWidth =
       parent && parent.current && parent.current.offsetWidth
         ? parent.current.offsetWidth

@@ -70,7 +70,7 @@ const Roulette = (props) => {
     const target = Converter.getRandomInt(20, 60);
     const items = [];
 
-    for (let i = 0; i < target + 3; i++) {
+    for (let i = 0; i < target + 5; i++) {
       const num = Converter.getRandomInt(
         0,
         props.box.inventory.at(-1).chanceWining

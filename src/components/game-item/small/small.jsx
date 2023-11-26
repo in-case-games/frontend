@@ -19,7 +19,7 @@ const Small = (props) => {
       onClick={() => buttonClick()}
       style={{
         background: getGradientColor(),
-        cursor: props.item?.chanceWining ? "pointer" : "default",
+        cursor: props.item?.chanceWining ? "default" : "pointer",
       }}
       onMouseEnter={() => setShowChances(true)}
       onMouseLeave={() => setShowChances(false)}
