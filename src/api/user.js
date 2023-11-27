@@ -140,6 +140,14 @@ class User {
     return response.data.data;
   }
 
+  async getPathBannerByBoxId(id) {
+    const response = await api.get(
+      RESOURCES_API_URL + `user/path/banner/box/${id}`
+    );
+
+    return response.data.data;
+  }
+
   async getRestrictionsByOwnerId(id) {
     const response = await api.get(
       RESOURCES_API_URL + `user/restriction/owner/${id}`
@@ -238,6 +246,32 @@ class User {
   async activatePromocode(name) {
     const response = await api.get(
       RESOURCES_API_URL + `user/promocode/activate/${name}`
+    );
+
+    return response.data.data;
+  }
+
+  async postPathBanner(data) {
+    const response = await api.post(
+      RESOURCES_API_URL + `user/path/banner`,
+      data
+    );
+
+    return response.data.data;
+  }
+
+  async putPathBanner(data) {
+    const response = await api.put(
+      RESOURCES_API_URL + `user/path/banner`,
+      data
+    );
+
+    return response.data.data;
+  }
+
+  async deletePathBannerById(id) {
+    const response = await api.delete(
+      RESOURCES_API_URL + `user/path/banner/${id}`
     );
 
     return response.data.data;

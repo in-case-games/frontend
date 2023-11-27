@@ -1,24 +1,33 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Box as BoxApi, Game as GameApi, Item as ItemApi } from "../../api";
+import {
+  Box as BoxApi,
+  Game as GameApi,
+  Item as ItemApi,
+  User as UserApi,
+} from "../../api";
 import { Helmet } from "react-helmet";
 import { Reviews } from "../../components/structure";
 import { BoxItems } from "../../components/structure";
 import { read_cookie } from "sfcookies";
 import { Box as BoxDisplay, Item as ItemDisplay, Roulette } from "./components";
 import TokenService from "../../services/token";
+import { Modal as ModalLayout } from "../../layouts";
+import { TakeItemBanner as TakeItemBannerWindow } from "../../components/windows";
 import styles from "./box.module";
 
 const Box = () => {
   const boxApi = new BoxApi();
   const itemApi = new ItemApi();
   const gameApi = new GameApi();
+  const userApi = new UserApi();
 
   const navigate = useNavigate();
   const { id } = useParams();
 
   const [isStart, setIsStart] = useState(true);
   const [isRollingRoulette, setIsRollingRoulette] = useState(false);
+  const [isShowTakeItemWindow, setIsShowTakeItemWindow] = useState(false);
 
   let [games, setGames] = useState();
 
@@ -27,6 +36,7 @@ const Box = () => {
   const [inventory, setInventory] = useState();
   const [winItem, setWinItem] = useState();
   const [banner, setBanner] = useState();
+  const [pathBanner, setPathBanner] = useState();
 
   useEffect(() => {
     const interval = setInterval(
@@ -46,10 +56,22 @@ const Box = () => {
 
         try {
           const result = [];
-          const banner = await boxApi.getByIdBanner(id);
           const inventories = await boxApi.getInventory(id);
-          let box =
-            banner && banner?.box ? banner.box : await boxApi.getById(id);
+          let banner = await boxApi.getByIdBanner(id);
+          let box;
+
+          if (banner && banner?.box) {
+            box = banner.box;
+            try {
+              setPathBanner(await userApi.getPathBannerByBoxId(box.id));
+            } catch (ex) {
+              setPathBanner();
+            }
+
+            if (new Date(banner.expirationDate) <= new Date())
+              banner = undefined;
+          } else box = await boxApi.getById(id);
+
           box.inventory = inventories.sort(
             (a, b) => a.chanceWining - b.chanceWining
           );
@@ -88,9 +110,18 @@ const Box = () => {
     if (isRollingRoulette) return null;
 
     return winItem ? (
-      <ItemDisplay item={winItem} goBack={() => setWinItem()} />
+      <ItemDisplay
+        item={winItem}
+        pathBanner={pathBanner}
+        goBack={() => setWinItem()}
+      />
     ) : (
-      <BoxDisplay box={box} isHasBanner={banner} />
+      <BoxDisplay
+        box={box}
+        isHasBanner={banner}
+        pathBanner={pathBanner}
+        openBannerWindow={() => setIsShowTakeItemWindow(banner)}
+      />
     );
   };
 
@@ -106,7 +137,16 @@ const Box = () => {
             box={box}
             user={user}
             isRollingRoulette={isRollingRoulette}
-            setWinItem={setWinItem}
+            pathBanner={pathBanner}
+            setWinItem={async (i) => {
+              try {
+                setPathBanner(await userApi.getPathBannerByBoxId(box.id));
+              } catch (ex) {
+                setPathBanner();
+              }
+
+              setWinItem(i);
+            }}
             setIsRollingRoulette={setIsRollingRoulette}
           />
         </div>
@@ -115,6 +155,40 @@ const Box = () => {
         </div>
         <Reviews />
       </div>
+      <ModalLayout
+        isActive={isShowTakeItemWindow}
+        close={async () => {
+          setIsShowTakeItemWindow();
+          try {
+            setPathBanner(await userApi.getPathBannerByBoxId(box.id));
+          } catch (ex) {
+            setPathBanner();
+          }
+        }}
+      >
+        <TakeItemBannerWindow
+          items={
+            inventory
+              ? inventory
+                  .filter((i) => i.item.cost > box.cost)
+                  .map((i) => {
+                    i.item.chanceWining = null;
+                    return i.item;
+                  })
+              : null
+          }
+          boxId={box?.id}
+          pathBanner={pathBanner}
+          close={async () => {
+            setIsShowTakeItemWindow();
+            try {
+              setPathBanner(await userApi.getPathBannerByBoxId(box.id));
+            } catch (ex) {
+              setPathBanner();
+            }
+          }}
+        />
+      </ModalLayout>
     </div>
   );
 };

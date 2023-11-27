@@ -97,13 +97,13 @@
 
   .button_banner {
     border-right: 2px solid var(--color-orange__1);
-    background: var(--color-yellow__1);
 
     cursor: pointer;
 
+    transition: background 500ms;
+
     &:hover {
-      background: var(--color-yellow__2);
-      transition: background 100ms;
+      transition: background 500ms;
     }
   }
 }

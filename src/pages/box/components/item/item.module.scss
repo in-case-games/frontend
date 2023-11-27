@@ -103,9 +103,11 @@
 
     cursor: pointer;
 
+    transition: background 500ms;
+
     &:hover {
       background: var(--color-red__3);
-      transition: background 100ms;
+      transition: background 500ms;
     }
   }
 
@@ -115,9 +117,11 @@
 
     cursor: pointer;
 
+    transition: background 500ms;
+
     &:hover {
       background: var(--color-green__2);
-      transition: background 100ms;
+      transition: background 500ms;
     }
   }
 }
