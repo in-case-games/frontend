@@ -52,18 +52,27 @@
     margin-right: 5px;
   }
 
-  .counter {
+  .counter,
+  .button_delete {
     display: flex;
     align-items: center;
     justify-content: center;
 
     width: 100px;
+    height: 30px;
 
     color: white;
     border: 2px solid var(--color-orange__1);
 
     margin: 0 5px;
     padding: 10px 20px;
+  }
+
+  .button_delete {
+    color: black;
+    font-size: 28px;
+
+    cursor: pointer;
   }
 }
 

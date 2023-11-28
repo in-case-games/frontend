@@ -16,6 +16,14 @@ class Item {
     return response.data.data;
   }
 
+  async getByName(name) {
+    const response = await api.get(
+      RESOURCES_API_URL + "game/item/name/" + name
+    );
+
+    return response.data.data;
+  }
+
   async getByGameId(id) {
     const response = await api.get(RESOURCES_API_URL + `game/${id}/item`);
 

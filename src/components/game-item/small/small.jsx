@@ -10,8 +10,13 @@ const Small = (props) => {
     if (props.showWindow) props.showWindow(props.item);
   };
 
-  const getGradientColor = () =>
-    Constants.ItemGradients[props.item.rarity ? props.item.rarity : "white"];
+  const getGradientColor = () => {
+    if (props.isSelected) return Constants.ItemGradients["green"];
+    else
+      return Constants.ItemGradients[
+        props.item?.rarity ? props.item?.rarity : "white"
+      ];
+  };
 
   return (
     <div
@@ -19,7 +24,7 @@ const Small = (props) => {
       onClick={() => buttonClick()}
       style={{
         background: getGradientColor(),
-        cursor: props.item?.chanceWining ? "default" : "pointer",
+        cursor: props.showWindow ? "pointer" : "default",
       }}
       onMouseEnter={() => setShowChances(true)}
       onMouseLeave={() => setShowChances(false)}

@@ -3,7 +3,7 @@ import {
   KeyGray as Key,
   InCoinGray as InCoin,
 } from "../../../../assets/images/icons";
-import { User as UserApi } from "../../../../api";
+import { User as UserApi, Item as ItemApi } from "../../../../api";
 import { Converter } from "../../../../helpers/converter";
 import { Simple as Item } from "../../../../components/game-item";
 import { Roulette as Group } from "../../../../layouts";
@@ -11,6 +11,7 @@ import styles from "./roulette.module";
 
 const Roulette = (props) => {
   const userApi = new UserApi();
+  const itemApi = new ItemApi();
 
   const [hovered, setHovered] = useState(false);
   const [items, setItems] = useState();
@@ -25,14 +26,16 @@ const Roulette = (props) => {
   const clickOpenBox = async () => {
     if (
       !props.box?.isLocked &&
-      props.user.balance &&
+      props.user?.balance &&
       props.box?.cost <= props.user?.balance
     ) {
-      const winItem = await userApi.openBox(props.box.id);
+      let winItem = await userApi.openBox(props.box.id);
       const findItem = props.box.inventory.find(
         (i) => i.item.id === winItem.id
-      ).item;
-      const res = Object.assign(winItem, findItem);
+      )?.item;
+      const res = Object.assign(winItem, findItem || {});
+
+      if (!winItem.image) winItem = await itemApi.pushImage(winItem);
 
       props.setWinItem(res);
       props.setIsRollingRoulette(true);
@@ -56,7 +59,9 @@ const Roulette = (props) => {
   };
 
   const getStyles = () => {
-    const isOrange = !props.user || props.box?.cost <= props.user?.balance;
+    const isOrange =
+      !props.user ||
+      (props.box?.cost <= props.user?.balance && !props.box.isLocked);
 
     return {
       cursor: isOrange ? "pointer" : "default",

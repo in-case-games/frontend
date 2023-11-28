@@ -2,26 +2,42 @@ import React, { useState } from "react";
 import { GunWhite as ItemIcon } from "../../../assets/images/icons";
 import { User as UserApi } from "../../../api";
 import { Small as Item } from "../../game-item";
+import TokenService from "../../../services/token";
 import styles from "./take-item-banner.module";
 
 const TakeItemBanner = (props) => {
   const userApi = new UserApi();
 
+  const [hovered, setHovered] = useState(false);
+
+  const role = TokenService.getUser()?.role;
+
   const takeItem = async (id) => {
-    if (props.pathBanner)
+    if (!role) return;
+
+    if (props.pathBanner) {
+      if (props.pathBanner.item.id === id) return;
+
       await userApi.putPathBanner({
         id: props.pathBanner.id,
         itemId: id,
         userId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
         boxId: props.boxId,
       });
-    else
+    } else {
       await userApi.postPathBanner({
         id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
         itemId: id,
         userId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
         boxId: props.boxId,
       });
+    }
+
+    props.close();
+  };
+
+  const deletePath = async () => {
+    await userApi.deletePathBannerById(props.pathBanner.id);
 
     props.close();
   };
@@ -46,6 +62,7 @@ const TakeItemBanner = (props) => {
               <Item
                 id={i.id}
                 item={i}
+                isSelected={props.pathBanner?.item?.id === i.id}
                 showWindow={() => takeItem(i.id)}
                 key={i.id}
               />
@@ -55,13 +72,27 @@ const TakeItemBanner = (props) => {
           <div className={styles.not_found}>Предметы не найдены</div>
         )}
         <div className={styles.delimiter}></div>
-        <div className={styles.banner_counter}>
-          <div className={styles.counter} style={{ background: "green" }}>
-            <div className={styles.tittle}>
-              {props.pathBanner?.numberSteps || 0}
+        <div
+          className={styles.banner_counter}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+        >
+          {!hovered || !props.pathBanner?.numberSteps ? (
+            <div className={styles.counter} style={{ background: "green" }}>
+              <div className={styles.tittle}>
+                {props.pathBanner?.numberSteps || 0}
+              </div>
+              <img src={ItemIcon} alt="" />
             </div>
-            <img src={ItemIcon} alt="" />
-          </div>
+          ) : (
+            <div
+              className={styles.button_delete}
+              style={{ background: "red" }}
+              onClick={async () => await deletePath()}
+            >
+              ✕
+            </div>
+          )}
         </div>
       </div>
     </div>

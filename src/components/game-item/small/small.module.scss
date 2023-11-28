@@ -15,7 +15,8 @@
   margin: 3px;
 
   .image {
-    height: 50px;
+    max-height: 50px;
+    max-width: 70px;
     padding: 10px;
     transition: opacity 300ms;
   }
