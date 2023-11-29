@@ -8,6 +8,7 @@ const Box = (props) => {
   const [hovered, setHovered] = useState(false);
 
   const getBackground = () => {
+    if (props.pathBanner) return "#00ff82";
     if (props.isHasBanner) return hovered ? "#ffed94" : "#ffe665";
     else return hovered ? "#d3d3d3" : "#b8b8b8";
   };
