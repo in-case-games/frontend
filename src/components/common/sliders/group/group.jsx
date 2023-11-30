@@ -6,6 +6,7 @@ const Group = (props) => {
   const parent = useRef();
   const child = useRef();
 
+  const [itemWidth, setItemWidth] = useState();
   const [marginLeft, setMarginLeft] = useState(0);
   const [counter, setCounter] = useState(0);
 
@@ -14,10 +15,12 @@ const Group = (props) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const max = maxMove();
+      if (itemWidth) {
+        const max = maxMove();
 
-      setShowLeft(max !== 0 && counter !== 0);
-      setShowRight(max - counter !== 0);
+        setShowLeft(max !== 0 && counter !== 0);
+        setShowRight(max - counter !== 0);
+      } else setItemWidth(getItemWidth());
     }, 100);
 
     return () => clearInterval(interval);
@@ -42,18 +45,18 @@ const Group = (props) => {
   };
 
   const maxMove = () => Math.ceil(hiddenWidth() / props.speed);
-  const hiddenWidth = () => hiddenItems() * itemWidth();
+  const hiddenWidth = () => hiddenItems() * itemWidth;
   const hiddenItems = () => {
     let parentWidth =
       parent && parent.current && parent.current.offsetWidth
         ? parent.current.offsetWidth
         : 0;
 
-    const hidden = props.items.length - Math.floor(parentWidth / itemWidth());
+    const hidden = props.items.length - Math.floor(parentWidth / itemWidth);
 
     return hidden > 0 ? hidden : 0;
   };
-  const itemWidth = () => {
+  const getItemWidth = () => {
     if (child && child.current) {
       var item = child.current.children[0];
       var style = window.getComputedStyle(item, null);
@@ -74,7 +77,9 @@ const Group = (props) => {
       ) : null}
       <div
         className={styles.inner}
-        style={{ marginLeft: marginLeft }}
+        style={{
+          marginLeft: marginLeft || 0,
+        }}
         ref={child}
       >
         {props.items}

@@ -1,7 +1,10 @@
 $border_color: var(--color-orange__1);
 
 .group {
+  max-width: 100%;
+
   color: $border_color;
+
   margin: 20px 0;
 
   .group_header {

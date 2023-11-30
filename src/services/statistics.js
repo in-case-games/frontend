@@ -16,6 +16,7 @@ const renderCommonChart = (statistics) => {
   const totalReplenishedFunds = [];
   const fundsUsersInventories = [];
   const returnedFunds = [];
+  const revenueLootBoxCommissions = [];
 
   statistics.forEach((s) => {
     labels.push(s.date);
@@ -27,6 +28,7 @@ const renderCommonChart = (statistics) => {
     totalReplenishedFunds.push(s.totalReplenishedFunds);
     fundsUsersInventories.push(s.fundsUsersInventories);
     returnedFunds.push(s.returnedFunds);
+    revenueLootBoxCommissions.push(s.revenueLootBoxCommission);
   });
 
   const chart = {
@@ -40,6 +42,11 @@ const renderCommonChart = (statistics) => {
       getBaseDataset("Total Replenished Funds", totalReplenishedFunds, "brown"),
       getBaseDataset("FundsUsers Inventories", fundsUsersInventories, "gray"),
       getBaseDataset("Returned Funds", returnedFunds, "black"),
+      getBaseDataset(
+        "Revenue Box Commission",
+        revenueLootBoxCommissions,
+        "yellow"
+      ),
     ],
   };
 

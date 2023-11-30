@@ -13,8 +13,20 @@ class Box {
     return response.data.data;
   }
 
+  async getInventory(id) {
+    const response = await api.get(RESOURCES_API_URL + `box/${id}/inventory`);
+
+    return response.data.data;
+  }
+
   async getById(id) {
     const response = await api.get(RESOURCES_API_URL + "box/id/" + id);
+
+    return response.data.data;
+  }
+
+  async getByIdBanner(id) {
+    const response = await api.get(RESOURCES_API_URL + `box/${id}/banner`);
 
     return response.data.data;
   }
@@ -53,6 +65,26 @@ class Box {
 
   async post(box) {
     const response = await api.post(RESOURCES_API_URL + "box", box);
+
+    return response.data.data;
+  }
+
+  async postInventory(data) {
+    const response = await api.post(RESOURCES_API_URL + `box/inventory`, data);
+
+    return response.data.data;
+  }
+
+  async putInventory(data) {
+    const response = await api.put(RESOURCES_API_URL + `box/inventory`, data);
+
+    return response.data.data;
+  }
+
+  async deleteInventory(id) {
+    const response = await api.delete(
+      RESOURCES_API_URL + `box/inventory/${id}`
+    );
 
     return response.data.data;
   }

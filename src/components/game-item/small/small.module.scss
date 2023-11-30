@@ -1,4 +1,6 @@
 .small_item {
+  position: relative;
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,7 +15,16 @@
   margin: 3px;
 
   .image {
-    height: 50px;
+    max-height: 50px;
+    max-width: 70px;
     padding: 10px;
+    transition: opacity 300ms;
+  }
+
+  .chance {
+    position: absolute;
+    font-size: 14px;
+    color: black;
+    transition: opacity 300ms;
   }
 }
