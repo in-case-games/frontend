@@ -1,0 +1,112 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+
+  max-width: 1500px;
+  width: 100%;
+
+  .inner {
+    display: flex;
+
+    width: 100%;
+    height: 700px;
+
+    border: 1px var(--color-black__6) solid;
+  }
+
+  .delimiter {
+    border: 1px solid var(--color-orange__1);
+    margin-top: 5px;
+    width: 100%;
+  }
+}
+
+.menu_left {
+  display: flex;
+  flex-direction: column;
+
+  width: 70%;
+  height: 100%;
+
+  min-height: 200px;
+
+  .reviews {
+    flex: 1 0 auto;
+
+    width: 100%;
+  }
+
+  .menu_top {
+    width: 100%;
+    height: 100px;
+
+    border-bottom: 1px var(--color-black__6) solid;
+
+    &:hover {
+      transition: background 200ms;
+      background: var(--color-black__7);
+    }
+  }
+}
+
+.menu_right {
+  display: flex;
+  flex-direction: column;
+
+  width: 30%;
+  height: 100%;
+
+  min-height: 200px;
+
+  border-left: 1px var(--color-black__6) solid;
+
+  .review_info {
+    flex: 1 0 auto;
+
+    width: 100%;
+
+    &:hover {
+      transition: background 200ms;
+      background: var(--color-black__7);
+    }
+  }
+
+  .user_reviews {
+    width: 100%;
+    min-height: 100px;
+
+    border-top: 1px var(--color-black__6) solid;
+
+    &:hover {
+      transition: background 200ms;
+      background: var(--color-black__7);
+    }
+  }
+}
+
+.content_tittle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+
+  padding: 0 20px;
+
+  .tittle {
+    display: flex;
+    padding: 0 20px;
+    align-items: center;
+
+    .name {
+      font-family: "Play";
+      margin-right: 20px;
+
+      font-size: 30px;
+    }
+
+    .loading {
+      margin-right: 15px;
+    }
+  }
+}

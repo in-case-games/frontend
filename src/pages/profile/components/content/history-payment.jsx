@@ -62,7 +62,7 @@ const HistoryPayment = () => {
               setLoading={() => setIsLoading(true)}
             />
           </div>
-          <div className={styles.name}>История пополнения: </div>
+          <div className={styles.name}>История пополнения </div>
         </div>
       </div>
       <div className={styles.delimiter}></div>

@@ -53,7 +53,7 @@ const ObservedProfile = () => {
               setLoading={() => setIsLoading(true)}
             />
           </div>
-          <div className={styles.name}>Профиль пользователя:</div>
+          <div className={styles.name}>Профиль пользователя</div>
         </div>
       </div>
       <div className={styles.delimiter}></div>

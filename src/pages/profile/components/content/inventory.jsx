@@ -163,7 +163,7 @@ const Inventory = () => {
               setLoading={() => setIsLoading(true)}
             />
           </div>
-          <div className={styles.name}>Мои предметы: </div>
+          <div className={styles.name}>Мои предметы </div>
         </div>
         <div className={styles.filter}>
           <ComboBox

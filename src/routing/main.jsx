@@ -7,11 +7,14 @@ import { Game as GamePage } from "../pages/game";
 import { Info as InfoRouting } from ".";
 import { Profile as ProfilePage } from "../pages/profile";
 import { Box as BoxPage } from "../pages/box";
+import { Reviews as ReviewsPage } from "../pages/reviews";
 
 class Main extends React.Component {
   render() {
     return (
       <Routes>
+        <Route path="/reviews/:id" element={<ReviewsPage />} />
+        <Route path="/reviews/*" element={<ReviewsPage />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
         <Route path="/profile/*" element={<ProfilePage />} />
         <Route path="/email/*" element={<EmailRouting />} />
