@@ -58,19 +58,9 @@
   height: 100%;
 
   min-height: 200px;
+  min-width: 300px;
 
   border-left: 1px var(--color-black__6) solid;
-
-  .review_info {
-    flex: 1 0 auto;
-
-    width: 100%;
-
-    &:hover {
-      transition: background 200ms;
-      background: var(--color-black__7);
-    }
-  }
 
   .user_reviews {
     width: 100%;
@@ -82,6 +72,143 @@
       transition: background 200ms;
       background: var(--color-black__7);
     }
+  }
+}
+
+.review_info {
+  display: flex;
+  flex-direction: column;
+
+  flex: 1 0 auto;
+
+  width: 100%;
+
+  padding: 20px 0;
+
+  &:hover {
+    transition: background 200ms;
+    background: var(--color-black__7);
+  }
+
+  .date {
+    display: flex;
+    justify-content: center;
+  }
+
+  .main_info {
+    flex: 1 0 auto;
+  }
+
+  .delimiter {
+    width: 70%;
+
+    margin: 0 auto;
+  }
+
+  .review_header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 20px;
+    margin-bottom: 20px;
+
+    .logo {
+      width: 100px;
+      height: 100px;
+
+      background-repeat: no-repeat;
+      background-position: 50%;
+      border-radius: 50%;
+
+      object-fit: cover;
+
+      margin-right: 10px;
+    }
+
+    .close_review {
+      color: var(--color-red__1);
+      font-size: 30px;
+
+      cursor: pointer;
+
+      margin-left: 5px;
+    }
+  }
+}
+
+.review_buttons {
+  display: flex;
+  justify-content: center;
+
+  margin-top: 15px;
+
+  padding: 0 20px;
+
+  .button_send,
+  .button_delete,
+  .button_back,
+  .button_approve,
+  .button_denied {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    border-radius: 8px;
+
+    font-family: "Play";
+    font-weight: 400;
+    font-size: 20px;
+    font-weight: 400;
+    font-size: 20px;
+
+    cursor: pointer;
+
+    padding: 8px 10px;
+  }
+  .button_send {
+    width: 150px;
+
+    background: var(--color-orange__1);
+    color: var(--color-black__2);
+
+    margin-right: 5px;
+  }
+
+  .button_delete {
+    width: 150px;
+
+    background: var(--color-red__1);
+    color: var(--color-black__2);
+
+    margin-left: 5px;
+  }
+
+  .button_back {
+    width: 200px;
+
+    background: var(--color-green__1);
+    color: var(--color-black__2);
+
+    .timer {
+      margin-left: 5px;
+    }
+  }
+
+  .button_approve {
+    width: 50px;
+
+    background: var(--color-green__3);
+    color: var(--color-black__2);
+  }
+
+  .button_denied {
+    width: 50px;
+
+    background: var(--color-red__3);
+    color: var(--color-black__2);
   }
 }
 

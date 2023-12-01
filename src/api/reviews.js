@@ -14,6 +14,46 @@ class Reviews {
 
     return response.data.data;
   }
+
+  async getAllByAdmin() {
+    const response = await api.get(RESOURCES_API_URL + "admin/review");
+
+    return response.data.data;
+  }
+
+  async post(data) {
+    const response = await api.post(RESOURCES_API_URL + "user/review", data);
+
+    return response.data.data;
+  }
+
+  async put(data) {
+    const response = await api.put(RESOURCES_API_URL + "user/review", data);
+
+    return response.data.data;
+  }
+
+  async delete(id) {
+    const response = await api.delete(RESOURCES_API_URL + `user/review/${id}`);
+
+    return response.data.data;
+  }
+
+  async approve(id) {
+    const response = await api.get(
+      RESOURCES_API_URL + `user/review/${id}/approve`
+    );
+
+    return response.data.data;
+  }
+
+  async denied(id) {
+    const response = await api.get(
+      RESOURCES_API_URL + `user/review/${id}/denied`
+    );
+
+    return response.data.data;
+  }
 }
 
 export default Reviews;
