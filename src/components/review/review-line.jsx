@@ -30,17 +30,23 @@ const ReviewLine = (props) => {
       }}
     >
       <div className={styles.content}>
-        <img
-          className={styles.image}
-          src={props.review?.user?.image}
-          alt=""
-          style={{ cursor: props.showMiniProfile ? "pointer" : "default" }}
-          onClick={(e) => {
-            e.stopPropagation();
+        <div className={styles.group}>
+          {props.review.isApproved ? (
+            <div className={styles.approve}>✓</div>
+          ) : (
+            <div className={styles.denied}>✕</div>
+          )}
+          <img
+            className={styles.image}
+            src={props.review?.user?.image}
+            alt=""
+            onClick={(e) => {
+              e.stopPropagation();
 
-            if (props.showMiniProfile) props.showMiniProfile();
-          }}
-        />
+              if (props.showMiniProfile) props.showMiniProfile();
+            }}
+          />
+        </div>
         <div className={styles.tittle}>
           {Converter.cutString(props.review?.title, 25)}
         </div>

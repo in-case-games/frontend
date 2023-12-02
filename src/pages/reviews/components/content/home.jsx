@@ -4,22 +4,37 @@ import { Reviews as ReviewsApi, User as UserApi } from "../../../../api";
 import { Inventory as InventoryLayout } from "../../../../layouts";
 import { ReviewLine as Review } from "../../../../components/review";
 import TokenService from "../../../../services/token";
-import { TemplateUser as UserImage } from "../../../../assets/images/main";
+import { useParams } from "react-router-dom";
+import {
+  TemplateUser as UserImage,
+  TemplateSoon as ReviewImage,
+} from "../../../../assets/images/main";
 import {
   Input,
   TextArea,
   ComboBox,
 } from "../../../../components/common/inputs";
+import { Modal as ModalLayout } from "../../../../layouts";
+import {
+  MiniProfile as MiniProfileWindow,
+  Item as ItemWindow,
+  Box as BoxWindow,
+  LoadImage as LoadImageWindow,
+  Restriction as RestrictionWindow,
+} from "../../../../components/windows";
 import { Converter } from "../../../../helpers/converter";
 import styles from "./content.module";
 
 const Home = (props) => {
+  const { id } = useParams();
   const reviewsApi = new ReviewsApi();
   const userApi = new UserApi();
 
   const user = TokenService.getUser();
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isOpenLoadWindow, setIsOpenLoadWindow] = useState(false);
+  const [loadReviewImageWindow, setLoadReviewImageWindow] = useState();
 
   const [backOperation, setBackOperation] = useState();
   const [operation, setOperation] = useState();
@@ -27,6 +42,14 @@ const Home = (props) => {
   const [primary, setPrimary] = useState({ items: [] });
   const [review, setReview] = useState();
   const [userReview, setUserReview] = useState();
+  const [hoveredImage, setHoveredImage] = useState();
+  const [miniProfile, setMiniProfile] = useState();
+  const [item, setItem] = useState();
+  const [box, setBox] = useState();
+  const [image, setImage] = useState();
+  const [restriction, setRestriction] = useState();
+
+  const [imageOptions, setImageOptions] = useState();
 
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -66,7 +89,17 @@ const Home = (props) => {
         const ur = reviews.length > 0 ? reviews[0] : {};
 
         setUserReview(ur);
-        setReview(ur);
+
+        let r = ur;
+
+        if (id)
+          r = isAdmin()
+            ? await reviewsApi.getByIdAdmin(id)
+            : await reviewsApi.getById(id);
+
+        r = await pushImages(r || ur);
+
+        setReview(r);
         setIsLoading(true);
       }
 
@@ -94,16 +127,40 @@ const Home = (props) => {
           id={r.id}
           isSelected={r.id === review?.id}
           review={r}
-          click={() => {
-            setReview(r.id === review?.id ? userReview : r);
+          click={async () => {
+            const temp = await pushImages(r);
+            setReview(temp.id === review?.id ? userReview : temp);
             setIsLoading(true);
           }}
+          showMiniProfile={() => setMiniProfile(r.userId)}
           key={r.id}
         />
       );
     }
 
     return result;
+  };
+
+  const pushImages = async (review) => {
+    review.images = review.images || [];
+    const length = 3 - review.images.length;
+
+    for (let i = 0; i < length; i++) review.images.push({ id: i });
+
+    review.images[0].image = await reviewsApi.getImageReview(
+      review.id,
+      review.images[0].id
+    );
+    review.images[1].image = await reviewsApi.getImageReview(
+      review.id,
+      review.images[1].id
+    );
+    review.images[2].image = await reviewsApi.getImageReview(
+      review.id,
+      review.images[2].id
+    );
+
+    return review;
   };
 
   const buttonClick = (isDelete = false) => {
@@ -131,6 +188,25 @@ const Home = (props) => {
   const updateReview = async () => {
     await reviewsApi.put(review);
 
+    for (let i = 0; i < review.images.length; i++) {
+      try {
+        const img = review.images[i];
+
+        if (img.image === ReviewImage && isNaN(img.id)) {
+          await reviewsApi.deleteImage(img.id);
+        }
+        if (img.image !== ReviewImage) {
+          await reviewsApi.postImage({
+            id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            image: img.image,
+            reviewId: review.id,
+          });
+        }
+      } catch (ex) {
+        console.log(ex);
+      }
+    }
+
     if (!isAdmin()) window.location.reload();
 
     setUserReview();
@@ -138,15 +214,33 @@ const Home = (props) => {
   };
 
   const createReview = async () => {
-    await reviewsApi.post({
+    const result = await reviewsApi.post({
       id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
       title: review.title,
       content: review.content,
       creationDate: "2023-12-01T13:24:21.814Z",
-      score: review.score,
+      score: review.score || 5,
       isApproved: false,
       userId: user.id,
     });
+
+    if (result) {
+      for (let i = 0; i < review.images.length; i++) {
+        try {
+          const img = review.images[i];
+
+          if (img.image !== ReviewImage) {
+            await reviewsApi.postImage({
+              id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+              image: img.image,
+              reviewId: result.id,
+            });
+          }
+        } catch (ex) {
+          console.log(ex);
+        }
+      }
+    }
 
     if (!isAdmin()) window.location.reload();
 
@@ -155,17 +249,21 @@ const Home = (props) => {
   };
 
   const deniedReview = async () => {
-    await reviewsApi.denied(review.id);
+    if (isAdmin()) {
+      await reviewsApi.denied(review.id);
 
-    setUserReview();
-    setIsLoading(true);
+      setUserReview();
+      setIsLoading(true);
+    }
   };
 
   const approveReview = async () => {
-    await reviewsApi.approve(review.id);
+    if (isAdmin()) {
+      await reviewsApi.approve(review.id);
 
-    setUserReview();
-    setIsLoading(true);
+      setUserReview();
+      setIsLoading(true);
+    }
   };
 
   const operations = {
@@ -220,7 +318,14 @@ const Home = (props) => {
               <img
                 className={styles.logo}
                 alt=""
-                src={review?.user?.image || user?.image || UserImage}
+                src={
+                  review?.id && review?.id !== userReview?.id
+                    ? review?.user?.image || UserImage
+                    : user?.image || UserImage
+                }
+                onClick={() => {
+                  if (review.userId) setMiniProfile(review.userId);
+                }}
               />
               <Input
                 name="tittle"
@@ -281,8 +386,7 @@ const Home = (props) => {
                     {review?.id ? "Изменить" : "Создать"}
                   </div>
                 ) : null}
-                {(!backOperation && review?.id && user?.role === "owner") ||
-                user?.role === "admin" ? (
+                {!backOperation && review?.id ? (
                   !review.isApproved ? (
                     <div
                       className={styles.button_approve}
@@ -319,9 +423,193 @@ const Home = (props) => {
               </div>
             ) : null}
           </div>
-          <div className={styles.user_reviews}></div>
+          <div className={styles.review_images}>
+            {review?.images
+              ? review?.images.map((i) => (
+                  <div
+                    className={styles.review_image}
+                    key={i.id}
+                    onMouseEnter={() => setHoveredImage(i.id)}
+                    onMouseLeave={() => setHoveredImage({})}
+                  >
+                    <img
+                      className={styles.image}
+                      alt=""
+                      src={i.image}
+                      style={{
+                        opacity: hoveredImage === i.id ? 0.5 : 1,
+                      }}
+                    />
+                    <div
+                      className={styles.image_remove}
+                      style={{
+                        opacity:
+                          isAccessActions() &&
+                          hoveredImage === i.id &&
+                          isNaN(i.id)
+                            ? 1
+                            : 0,
+                        visibility:
+                          isAccessActions() &&
+                          hoveredImage === i.id &&
+                          isNaN(i.id)
+                            ? "visible"
+                            : "hidden",
+                      }}
+                      onClick={() => {
+                        if (
+                          isAccessActions() &&
+                          hoveredImage === i.id &&
+                          isNaN(i.id)
+                        ) {
+                          const images = review.images;
+                          const index = images.findIndex((r) => r.id === i.id);
+
+                          images[index].image = ReviewImage;
+
+                          setReview((prev) => ({ ...prev, images: images }));
+                        }
+                      }}
+                    >
+                      x
+                    </div>
+                    <div
+                      className={styles.image_add}
+                      style={{
+                        opacity:
+                          isAccessActions() &&
+                          hoveredImage === i.id &&
+                          !isNaN(i.id)
+                            ? 1
+                            : 0,
+                        visibility:
+                          isAccessActions() &&
+                          hoveredImage === i.id &&
+                          !isNaN(i.id)
+                            ? "visible"
+                            : "hidden",
+                      }}
+                      onClick={() => {
+                        if (
+                          isAccessActions() &&
+                          hoveredImage === i.id &&
+                          !isNaN(i.id)
+                        ) {
+                          setImage(i.image);
+                          setLoadReviewImageWindow(i.id);
+                          setImageOptions({
+                            width: 2000,
+                            height: 2000,
+                            sizeMb: 4,
+                            regular: /\.(jpg|jpeg|png)$/,
+                            description:
+                              "JPEG,JPG,PNG (MAX. 2000x2000px | 4MB)",
+                          });
+                          setIsOpenLoadWindow(true);
+                        }
+                      }}
+                    >
+                      +
+                    </div>
+                  </div>
+                ))
+              : null}
+          </div>
         </div>
       </div>
+      <ModalLayout isActive={miniProfile} close={() => setMiniProfile()}>
+        <MiniProfileWindow
+          userId={miniProfile}
+          openRestrictionWindow={(r) => setRestriction(r)}
+          openItemWindow={(item) => setItem(item)}
+          openBoxWindow={(box) => setBox(box)}
+          exchangeWindow={(id) => setMiniProfile(id)}
+        />
+      </ModalLayout>
+      <ModalLayout isActive={restriction} close={() => setRestriction()}>
+        <RestrictionWindow
+          restriction={restriction}
+          setRestriction={setRestriction}
+          close={() => setRestriction()}
+        />
+      </ModalLayout>
+      <ModalLayout
+        isActive={item}
+        close={() => {
+          setItem();
+          setImage();
+        }}
+      >
+        <ItemWindow
+          item={item}
+          image={image}
+          setImage={setImage}
+          setItem={setItem}
+          openLoadWindow={(v) => {
+            setImageOptions({
+              width: 200,
+              height: 200,
+              sizeMb: 1,
+              regular: /\.(png)$/,
+              description: "PNG (MAX. 200x200px | 1MB)",
+            });
+            setIsOpenLoadWindow(v);
+          }}
+        />
+      </ModalLayout>
+      <ModalLayout
+        isActive={box}
+        close={() => {
+          setBox();
+          setImage();
+        }}
+      >
+        <BoxWindow
+          box={box}
+          image={image}
+          setImage={setImage}
+          setBox={setBox}
+          openLoadWindow={(v) => {
+            setImageOptions({
+              width: 200,
+              height: 200,
+              sizeMb: 1,
+              regular: /\.(png)$/,
+              description: "PNG (MAX. 200x200px | 1MB)",
+            });
+            setIsOpenLoadWindow(v);
+          }}
+        />
+      </ModalLayout>
+      <ModalLayout
+        isActive={isOpenLoadWindow}
+        close={() => {
+          if (loadReviewImageWindow || loadReviewImageWindow === 0) {
+            const images = review.images;
+            const index = images.findIndex(
+              (i) => i.id === loadReviewImageWindow
+            );
+
+            images[index].image = image;
+
+            setReview((prev) => ({ ...prev, images: images }));
+            setLoadReviewImageWindow();
+            setImage();
+          }
+
+          setIsOpenLoadWindow(false);
+        }}
+      >
+        <LoadImageWindow
+          file={image}
+          setFile={setImage}
+          width={imageOptions?.width}
+          height={imageOptions?.height}
+          sizeMb={imageOptions?.sizeMb}
+          regular={imageOptions?.regular}
+          description={imageOptions?.description}
+        />
+      </ModalLayout>
     </div>
   );
 };

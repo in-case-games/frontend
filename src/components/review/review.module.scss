@@ -40,14 +40,61 @@
     border-top: 1px var(--color-black__6) solid;
     border-bottom: 1px var(--color-black__6) solid;
 
-    .image {
-      background-repeat: no-repeat;
-      background-position: 50%;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      cursor: pointer;
-      object-fit: cover;
+    .group {
+      display: flex;
+      align-items: center;
+
+      .approve,
+      .denied {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+
+        width: 15px;
+        height: 15px;
+
+        font-family: "Play";
+        font-weight: 400;
+        font-size: 20px;
+        font-weight: 400;
+        font-size: 20px;
+
+        border-radius: 8px;
+
+        padding: 8px 10px;
+      }
+
+      .approve {
+        background: var(--color-green__3);
+        color: var(--color-black__2);
+      }
+
+      .denied {
+        background: var(--color-red__3);
+        color: var(--color-black__2);
+      }
+
+      .image {
+        background-repeat: no-repeat;
+        background-position: 50%;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        cursor: pointer;
+
+        margin-left: 15px;
+        object-fit: cover;
+      }
+    }
+
+    .approve,
+    .denied {
+      font-family: "Play";
+      font-weight: 400;
+      font-size: 20px;
+      font-weight: 400;
+      font-size: 20px;
     }
 
     .tittle {

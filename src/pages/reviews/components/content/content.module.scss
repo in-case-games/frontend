@@ -10,7 +10,7 @@
     display: flex;
 
     width: 100%;
-    height: 700px;
+    min-height: 700px;
 
     border: 1px var(--color-black__6) solid;
   }
@@ -25,9 +25,6 @@
 .menu_left {
   display: flex;
   flex-direction: column;
-
-  width: 70%;
-  height: 100%;
 
   min-height: 200px;
 
@@ -54,17 +51,20 @@
   display: flex;
   flex-direction: column;
 
-  width: 30%;
-  height: 100%;
-
   min-height: 200px;
-  min-width: 300px;
+  min-width: 350px;
+  max-width: 350px;
 
   border-left: 1px var(--color-black__6) solid;
 
-  .user_reviews {
+  .review_images {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+
     width: 100%;
     min-height: 100px;
+    max-height: 100px;
 
     border-top: 1px var(--color-black__6) solid;
 
@@ -72,6 +72,51 @@
       transition: background 200ms;
       background: var(--color-black__7);
     }
+  }
+}
+
+.review_image {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+
+  border: 1px var(--color-black__6) solid;
+
+  .image {
+    height: 80px;
+    width: 80px;
+
+    cursor: pointer;
+
+    transition: opacity 200ms;
+  }
+
+  .image_remove,
+  .image_add {
+    display: flex;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    left: 0;
+    top: 0;
+
+    font-size: 65px;
+
+    transition: opacity 100ms;
+
+    cursor: pointer;
+  }
+
+  .image_remove {
+    color: var(--color-red__1);
+  }
+
+  .image_add {
+    color: var(--color-green__1);
   }
 }
 
@@ -122,6 +167,7 @@
       background-position: 50%;
       border-radius: 50%;
 
+      cursor: pointer;
       object-fit: cover;
 
       margin-right: 10px;
@@ -235,5 +281,46 @@
     .loading {
       margin-right: 15px;
     }
+  }
+}
+
+@media (min-width: 1405px) {
+  .menu_left {
+    flex: 1 0 auto;
+  }
+  .menu_right {
+  }
+}
+
+@media (max-width: 1200px) {
+  .home {
+    .inner {
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  }
+  .menu_left {
+    width: 100%;
+  }
+  .menu_right {
+    order: -1;
+  }
+}
+
+@media (min-width: 400px) and (max-width: 1200px) {
+  .menu_left {
+    border-bottom: 1px var(--color-black__6) solid;
+  }
+  .menu_right {
+    border-right: 1px var(--color-black__6) solid;
+  }
+  .menu_top {
+    border-top: 1px var(--color-black__6) solid;
+  }
+}
+
+@media (max-width: 400px) {
+  .menu_right {
+    border: none;
   }
 }
