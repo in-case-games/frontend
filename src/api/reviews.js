@@ -1,4 +1,4 @@
-import { TemplateSoon } from "../assets/images/main";
+import { TemplateLoadImage } from "../assets/images/main";
 import api from "./api";
 
 const RESOURCES_API_URL = "https://localhost:5000/api/";
@@ -30,12 +30,19 @@ class Reviews {
 
   async getImageReview(reviewId, imageId) {
     try {
-      await api.get(
-        `http://localhost:8080/reviews/${reviewId}/${imageId}/${imageId}.png`
-      );
-      return `http://localhost:8080/reviews/${reviewId}/${imageId}/${imageId}.png`;
+      try {
+        await api.get(
+          `http://localhost:8080/reviews/${reviewId}/${imageId}/${imageId}.jpg`
+        );
+        return `http://localhost:8080/reviews/${reviewId}/${imageId}/${imageId}.jpg`;
+      } catch (err) {
+        await api.get(
+          `http://localhost:8080/reviews/${reviewId}/${imageId}/${imageId}.jpeg`
+        );
+        return `http://localhost:8080/reviews/${reviewId}/${imageId}/${imageId}.jpeg`;
+      }
     } catch (err) {
-      return TemplateSoon;
+      return TemplateLoadImage;
     }
   }
 
@@ -87,6 +94,14 @@ class Reviews {
   async deleteImage(id) {
     const response = await api.delete(
       RESOURCES_API_URL + `user/review/image/${id}`
+    );
+
+    return response.data.data;
+  }
+
+  async deleteImageByAdmin(id) {
+    const response = await api.delete(
+      RESOURCES_API_URL + `admin/review/image/id/${id}`
     );
 
     return response.data.data;

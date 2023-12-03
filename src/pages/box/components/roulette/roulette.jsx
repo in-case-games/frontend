@@ -47,7 +47,15 @@ const Roulette = (props) => {
   const getTextButton = () => {
     if (!props.user) return <div className={styles.text}>Вход</div>;
     if (!props.user.balance || props.box?.cost > props.user?.balance)
-      return <div className={styles.text}>Пополнить баланс</div>;
+      return (
+        <div className={styles.text}>
+          Пополнить на{" "}
+          {Converter.cutCost(props.box?.cost - props.user?.balance, (v) =>
+            Math.ceil(v)
+          )}
+          <img className={styles.inCoin} alt="" src={InCoin} />
+        </div>
+      );
 
     return (
       <div className={styles.text}>
@@ -59,15 +67,12 @@ const Roulette = (props) => {
   };
 
   const getStyles = () => {
-    const isOrange =
-      !props.user ||
-      (props.box?.cost <= props.user?.balance && !props.box.isLocked);
+    const isOrange = !props.user || !props.box?.isLocked;
 
     return {
       cursor: isOrange ? "pointer" : "default",
       background: isOrange ? "#f8b415" : "#b8b8b8",
-      minWidth: hovered ? "200px" : "150px",
-      height: hovered ? "35px" : "30px",
+      padding: hovered ? "8px 30px" : "5px 10px",
     };
   };
 

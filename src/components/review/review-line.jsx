@@ -48,10 +48,10 @@ const ReviewLine = (props) => {
           />
         </div>
         <div className={styles.tittle}>
-          {Converter.cutString(props.review?.title, 25)}
+          {Converter.cutString(props.review?.title || "", 25)}
         </div>
         <div className={styles.description}>
-          {Converter.cutString(props.review?.content, 25)}
+          {Converter.cutString(props.review?.content || "", 25)}
         </div>
         <div className={styles.date}>
           {Converter.getMiniDate(props.review?.creationDate || new Date())}

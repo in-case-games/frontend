@@ -4,10 +4,14 @@ import { Reviews as ReviewsApi, User as UserApi } from "../../../../api";
 import { Inventory as InventoryLayout } from "../../../../layouts";
 import { ReviewLine as Review } from "../../../../components/review";
 import TokenService from "../../../../services/token";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   TemplateUser as UserImage,
-  TemplateSoon as ReviewImage,
+  TemplateLoadImage as LoadImage,
+  Template1Image as ShowImage1,
+  Template2Image as ShowImage2,
+  Template3Image as ShowImage3,
+  TemplateUser as CreateImage,
 } from "../../../../assets/images/main";
 import {
   Input,
@@ -24,6 +28,7 @@ import {
 } from "../../../../components/windows";
 import { Converter } from "../../../../helpers/converter";
 import styles from "./content.module";
+import { Eye } from "../../../../assets/images/icons";
 
 const Home = (props) => {
   const { id } = useParams();
@@ -31,6 +36,7 @@ const Home = (props) => {
   const userApi = new UserApi();
 
   const user = TokenService.getUser();
+  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(true);
   const [isOpenLoadWindow, setIsOpenLoadWindow] = useState(false);
@@ -53,6 +59,8 @@ const Home = (props) => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
+      if (!userReview) await loadUserReview();
+
       if (backOperation) {
         let temp = backOperation - 1;
         temp = temp >= 0 ? temp : 0;
@@ -71,6 +79,39 @@ const Home = (props) => {
     return () => clearInterval(interval);
   });
 
+  const loadUserReview = async () => {
+    let reviews = [];
+
+    try {
+      reviews = await reviewsApi.get();
+    } catch (ex) {}
+
+    const ur = await pushImages(reviews.length > 0 ? reviews[0] : {});
+
+    let r = ur;
+
+    if (id) {
+      try {
+        r = isAdmin()
+          ? await reviewsApi.getByIdAdmin(id)
+          : await reviewsApi.getById(id);
+        r.user = {
+          id: r.userId,
+          image: await userApi.getImageByUserId(r.userId),
+        };
+      } catch (ex) {
+        console.log(ex);
+        navigate("/reviews");
+      }
+    }
+
+    r = r ? await pushImages(r) : ur;
+
+    setReview(r);
+    setUserReview(ur);
+    setIsLoading(true);
+  };
+
   const additionalLoading = async (array, start, end) => {
     const loaded = [];
 
@@ -78,30 +119,6 @@ const Home = (props) => {
 
     for (let i = start; i < end; i++) {
       const review = array[i];
-
-      if (!userReview) {
-        let reviews = [];
-
-        try {
-          reviews = await reviewsApi.get();
-        } catch (ex) {}
-
-        const ur = reviews.length > 0 ? reviews[0] : {};
-
-        setUserReview(ur);
-
-        let r = ur;
-
-        if (id)
-          r = isAdmin()
-            ? await reviewsApi.getByIdAdmin(id)
-            : await reviewsApi.getById(id);
-
-        r = await pushImages(r || ur);
-
-        setReview(r);
-        setIsLoading(true);
-      }
 
       if (!review.user) {
         review.user = {
@@ -145,20 +162,8 @@ const Home = (props) => {
     review.images = review.images || [];
     const length = 3 - review.images.length;
 
-    for (let i = 0; i < length; i++) review.images.push({ id: i });
-
-    review.images[0].image = await reviewsApi.getImageReview(
-      review.id,
-      review.images[0].id
-    );
-    review.images[1].image = await reviewsApi.getImageReview(
-      review.id,
-      review.images[1].id
-    );
-    review.images[2].image = await reviewsApi.getImageReview(
-      review.id,
-      review.images[2].id
-    );
+    for (let i = 0; i < length; i++)
+      review.images.push({ id: i, image: LoadImage, action: "create" });
 
     return review;
   };
@@ -179,9 +184,10 @@ const Home = (props) => {
   const deleteReview = async () => {
     await reviewsApi.delete(review.id);
 
+    if (review.id === id) navigate("/reviews");
     if (!isAdmin()) window.location.reload();
 
-    setUserReview();
+    loadUserReview();
     setIsLoading(true);
   };
 
@@ -192,10 +198,12 @@ const Home = (props) => {
       try {
         const img = review.images[i];
 
-        if (img.image === ReviewImage && isNaN(img.id)) {
-          await reviewsApi.deleteImage(img.id);
-        }
-        if (img.image !== ReviewImage) {
+        if (
+          (img.image && img.image !== LoadImage && img.action === "create") ||
+          img.action === "update"
+        ) {
+          if (img.action === "update") await reviewsApi.deleteImage(img.id);
+
           await reviewsApi.postImage({
             id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             image: img.image,
@@ -209,7 +217,7 @@ const Home = (props) => {
 
     if (!isAdmin()) window.location.reload();
 
-    setUserReview();
+    loadUserReview();
     setIsLoading(true);
   };
 
@@ -229,7 +237,7 @@ const Home = (props) => {
         try {
           const img = review.images[i];
 
-          if (img.image !== ReviewImage) {
+          if (img.image && img.image !== LoadImage && img.action === "create") {
             await reviewsApi.postImage({
               id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
               image: img.image,
@@ -244,7 +252,7 @@ const Home = (props) => {
 
     if (!isAdmin()) window.location.reload();
 
-    setUserReview();
+    loadUserReview();
     setIsLoading(true);
   };
 
@@ -252,7 +260,7 @@ const Home = (props) => {
     if (isAdmin()) {
       await reviewsApi.denied(review.id);
 
-      setUserReview();
+      loadUserReview();
       setIsLoading(true);
     }
   };
@@ -261,7 +269,7 @@ const Home = (props) => {
     if (isAdmin()) {
       await reviewsApi.approve(review.id);
 
-      setUserReview();
+      loadUserReview();
       setIsLoading(true);
     }
   };
@@ -276,6 +284,65 @@ const Home = (props) => {
 
   const isAccessActions = () =>
     isAdmin() || (user && (!review?.id || review?.userId === user?.id));
+
+  const showImage = async (image) => {
+    let options = {
+      width: 2000,
+      height: 2000,
+      sizeMb: 2,
+      regular: /\.(jpg|jpeg)$/,
+      description: "JPEG,JPG (MAX. 2000x2000px | 2MB)",
+      isBlockedLoad: review?.userId && review?.userId !== user?.id,
+    };
+
+    if (image.action === undefined) {
+      const images = review.images;
+      const index = images.findIndex((i) => i.id === image.id);
+
+      if (!image.image) {
+        image.image = await reviewsApi.getImageReview(review.id, image.id);
+        images[index].image = image.image;
+      }
+
+      setReview((prev) => ({ ...prev, images: images }));
+
+      if (isAccessActions()) {
+        options = Object.assign(options, {
+          buttonName: "Удалить",
+          buttonColor: "#e36060",
+          click: async () => {
+            isAdmin()
+              ? await reviewsApi.deleteImageByAdmin(image.id)
+              : await reviewsApi.deleteImage(image.id);
+
+            setLoadReviewImageWindow();
+            setImage();
+
+            if (!isAdmin()) window.location.reload();
+
+            loadUserReview();
+            setIsLoading(true);
+          },
+        });
+      }
+    }
+
+    setImage(image?.image);
+    setLoadReviewImageWindow(image?.id);
+    setImageOptions(options);
+    setIsOpenLoadWindow(true);
+  };
+
+  const getImageReview = (image) => {
+    if (image.image) return image.image;
+
+    const images = review.images;
+    const index = images.findIndex((i) => i.id === image.id);
+
+    if (index === 0) return ShowImage1;
+    if (index === 1) return ShowImage2;
+    if (index === 2) return ShowImage3;
+  };
 
   return (
     <div className={styles.home}>
@@ -304,11 +371,17 @@ const Home = (props) => {
                 if (user?.role === "owner" || user?.role === "admin")
                   return await reviewsApi.getAllByAdmin();
 
-                return primary.items.length > 0
-                  ? primary.items
-                  : await reviewsApi.getAll();
+                if (primary.items.length > 0) return primary.items;
+
+                const reviews = [];
+                const userReviews = await reviewsApi.get();
+
+                if (userReviews.length > 0 && !userReviews[0].isApproved)
+                  reviews.push(userReviews[0]);
+
+                return reviews.concat(await reviewsApi.getAll());
               }}
-              quantityPerPage={20}
+              quantityPerPage={8}
             />
           </div>
         </div>
@@ -335,7 +408,7 @@ const Home = (props) => {
                 value={review?.title}
                 setValue={(title) => setReview({ ...review, title })}
               />
-              {review && review?.userId !== user?.id ? (
+              {review && review?.userId && review?.userId !== user?.id ? (
                 <div
                   className={styles.close_review}
                   onClick={() => {
@@ -431,85 +504,29 @@ const Home = (props) => {
                     key={i.id}
                     onMouseEnter={() => setHoveredImage(i.id)}
                     onMouseLeave={() => setHoveredImage({})}
+                    onClick={async () => {
+                      if (hoveredImage === i.id) await showImage(i);
+                    }}
                   >
                     <img
                       className={styles.image}
                       alt=""
-                      src={i.image}
+                      src={getImageReview(i)}
                       style={{
-                        opacity: hoveredImage === i.id ? 0.5 : 1,
+                        opacity: hoveredImage === i.id ? 0 : 1,
                       }}
                     />
-                    <div
-                      className={styles.image_remove}
-                      style={{
-                        opacity:
-                          isAccessActions() &&
-                          hoveredImage === i.id &&
-                          isNaN(i.id)
-                            ? 1
-                            : 0,
-                        visibility:
-                          isAccessActions() &&
-                          hoveredImage === i.id &&
-                          isNaN(i.id)
-                            ? "visible"
-                            : "hidden",
-                      }}
-                      onClick={() => {
-                        if (
-                          isAccessActions() &&
-                          hoveredImage === i.id &&
-                          isNaN(i.id)
-                        ) {
-                          const images = review.images;
-                          const index = images.findIndex((r) => r.id === i.id);
-
-                          images[index].image = ReviewImage;
-
-                          setReview((prev) => ({ ...prev, images: images }));
-                        }
-                      }}
-                    >
-                      x
-                    </div>
-                    <div
-                      className={styles.image_add}
-                      style={{
-                        opacity:
-                          isAccessActions() &&
-                          hoveredImage === i.id &&
-                          !isNaN(i.id)
-                            ? 1
-                            : 0,
-                        visibility:
-                          isAccessActions() &&
-                          hoveredImage === i.id &&
-                          !isNaN(i.id)
-                            ? "visible"
-                            : "hidden",
-                      }}
-                      onClick={() => {
-                        if (
-                          isAccessActions() &&
-                          hoveredImage === i.id &&
-                          !isNaN(i.id)
-                        ) {
-                          setImage(i.image);
-                          setLoadReviewImageWindow(i.id);
-                          setImageOptions({
-                            width: 2000,
-                            height: 2000,
-                            sizeMb: 4,
-                            regular: /\.(jpg|jpeg|png)$/,
-                            description:
-                              "JPEG,JPG,PNG (MAX. 2000x2000px | 4MB)",
-                          });
-                          setIsOpenLoadWindow(true);
-                        }
-                      }}
-                    >
-                      +
+                    <div className={styles.show_image}>
+                      <img
+                        alt=""
+                        className={styles.image}
+                        src={Eye}
+                        style={{
+                          opacity: hoveredImage === i.id ? 1 : 0,
+                          visibility:
+                            hoveredImage === i.id ? "visible" : "hidden",
+                        }}
+                      />
                     </div>
                   </div>
                 ))
@@ -590,9 +607,19 @@ const Home = (props) => {
               (i) => i.id === loadReviewImageWindow
             );
 
-            images[index].image = image;
+            if (images[index].action !== "remove") {
+              images[index].image = image;
 
-            setReview((prev) => ({ ...prev, images: images }));
+              if (
+                images[index].action !== "create" &&
+                images[index].image !== image
+              ) {
+                images[index].action = "update";
+              }
+
+              setReview((prev) => ({ ...prev, images: images }));
+            }
+
             setLoadReviewImageWindow();
             setImage();
           }
@@ -608,6 +635,10 @@ const Home = (props) => {
           sizeMb={imageOptions?.sizeMb}
           regular={imageOptions?.regular}
           description={imageOptions?.description}
+          isBlockedLoad={imageOptions?.isBlockedLoad}
+          click={imageOptions?.click}
+          buttonColor={imageOptions?.buttonColor}
+          buttonName={imageOptions?.buttonName}
         />
       </ModalLayout>
     </div>
