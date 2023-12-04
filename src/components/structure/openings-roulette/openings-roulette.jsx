@@ -25,14 +25,14 @@ const OpeningsRoulette = () => {
 
   const [isStart, setIsStart] = useState(true);
 
-  const [items, setItems] = useState(null);
+  const [items, setItems] = useState();
   const [games, setGames] = useState();
-  const [item, setItem] = useState(null);
-  const [box, setBox] = useState(null);
-  const [image, setImage] = useState(null);
+  const [item, setItem] = useState();
+  const [box, setBox] = useState();
+  const [image, setImage] = useState();
   const [restriction, setRestriction] = useState();
 
-  const [miniProfile, setMiniProfile] = useState(null);
+  const [miniProfile, setMiniProfile] = useState();
   const [isOpenLoadWindow, setIsOpenLoadWindow] = useState(false);
 
   useEffect(() => {
@@ -125,7 +125,7 @@ const OpeningsRoulette = () => {
   return (
     <div className={styles.openings_roulette}>
       {items}
-      <ModalLayout isActive={miniProfile} close={() => setMiniProfile(null)}>
+      <ModalLayout isActive={miniProfile} close={() => setMiniProfile()}>
         <MiniProfileWindow
           userId={miniProfile}
           openRestrictionWindow={(r) => setRestriction(r)}
@@ -144,8 +144,8 @@ const OpeningsRoulette = () => {
       <ModalLayout
         isActive={item}
         close={() => {
-          setItem(null);
-          setImage(null);
+          setItem();
+          setImage();
         }}
       >
         <ItemWindow
@@ -159,8 +159,8 @@ const OpeningsRoulette = () => {
       <ModalLayout
         isActive={box}
         close={() => {
-          setBox(null);
-          setImage(null);
+          setBox();
+          setImage();
         }}
       >
         <BoxWindow

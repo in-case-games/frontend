@@ -137,7 +137,21 @@ class Box {
       );
       banner.image = `http://localhost:8080/loot-box-banners/${banner.box.id}/${banner.id}.png`;
     } catch (err) {
-      banner.image = TemplateBannerImage;
+      try {
+        try {
+          await api.get(
+            `http://localhost:8080/loot-box-banners/${banner.box.id}/${banner.id}.jpg`
+          );
+          banner.image = `http://localhost:8080/loot-box-banners/${banner.box.id}/${banner.id}.jpg`;
+        } catch (err) {
+          await api.get(
+            `http://localhost:8080/loot-box-banners/${banner.box.id}/${banner.id}.jpeg`
+          );
+          banner.image = `http://localhost:8080/loot-box-banners/${banner.box.id}/${banner.id}.jpeg`;
+        }
+      } catch (err) {
+        banner.image = TemplateBannerImage;
+      }
     }
 
     return banner;

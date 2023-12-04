@@ -31,17 +31,32 @@ const LoadDropZone = (props) => {
 
       context.drawImage(img, 0, 0, cvs.width, cvs.height);
 
-      setFileName(Converter.cutString(f.name, 19));
-      setError(false);
       props.setFile(cvs.toDataURL());
     };
 
     if (!isName || !isSize) setError(true);
-    else img.src = URL.createObjectURL(f);
+    else {
+      setFileName(Converter.cutString(f.name, 19));
+      setError(false);
+
+      if (f.name.split(".")[1] === "png") {
+        img.src = URL.createObjectURL(f);
+      } else {
+        const reader = new FileReader();
+
+        reader.onload = function () {
+          props.setFile(reader.result);
+        };
+
+        reader.readAsDataURL(f);
+      }
+    }
   };
   const handleDrag = (e) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (props.isBlockedLoad) return;
 
     setError(false);
 
@@ -53,6 +68,8 @@ const LoadDropZone = (props) => {
     e.preventDefault();
     e.stopPropagation();
 
+    if (props.isBlockedLoad) return;
+
     if (e.dataTransfer.files && e.dataTransfer.files[0])
       setFile(e.dataTransfer.files[0]);
   };
@@ -60,6 +77,7 @@ const LoadDropZone = (props) => {
   const handleChange = (e) => {
     e.preventDefault();
 
+    if (props.isBlockedLoad) return;
     if (e.target.files && e.target.files[0]) setFile(e.target.files[0]);
   };
 
@@ -87,7 +105,10 @@ const LoadDropZone = (props) => {
         className={isDrag ? styles.drop_zone__hover : styles.drop_zone}
         htmlFor="drop-zone-file"
         onDragEnter={handleDrag}
-        style={{ borderColor: getBorderColor() }}
+        style={{
+          borderColor: getBorderColor(),
+          cursor: props.isBlockedLoad ? "default" : "pointer",
+        }}
       >
         <img
           alt=""
@@ -95,16 +116,17 @@ const LoadDropZone = (props) => {
           src={props.file ? props.file : Cloud}
           style={getSizeWhileMaintainingRation()}
         />
-        {!fileName ? (
+        {!props.isBlockedLoad && !fileName ? (
           <div className={styles.message}>
             <b>Нажмите для загрузки</b>
             <br />
             или перетащите и отпустите
             <div className={styles.description}>{props.description}</div>
           </div>
-        ) : (
+        ) : null}
+        {!props.isBlockedLoad && fileName ? (
           <div className={styles.message}>{fileName}</div>
-        )}
+        ) : null}
         {isDrag && (
           <div
             className={styles.element}
@@ -120,6 +142,7 @@ const LoadDropZone = (props) => {
         className={styles.file}
         type="file"
         onChange={handleChange}
+        disabled={props.isBlockedLoad}
       />
     </div>
   );

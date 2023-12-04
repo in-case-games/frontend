@@ -60,7 +60,7 @@ const AdminGroups = (props) => {
               setLoading={() => setIsLoading(true)}
             />
           </div>
-          <div className={styles.name}>Группы кейсов: </div>
+          <div className={styles.name}>Группы кейсов </div>
         </div>
       </div>
       <div className={styles.delimiter}></div>

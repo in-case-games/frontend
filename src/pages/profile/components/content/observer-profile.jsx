@@ -67,7 +67,7 @@ const ObserverProfile = () => {
               setLoading={() => setIsLoading(true)}
             />
           </div>
-          <div className={styles.name}>Мой профиль:</div>
+          <div className={styles.name}>Мой профиль</div>
         </div>
         {controller ? (
           <div className={styles.profile_controller}>

@@ -12,13 +12,14 @@
     justify-content: center;
     align-items: center;
 
+    min-width: 150px;
+    height: 30px;
+
     background: var(--color-orange__1);
     color: black;
     border-radius: 5px;
 
-    transition: all 200ms;
-
-    padding: 5px 10px;
+    transition: padding 200ms;
 
     .text {
       display: flex;

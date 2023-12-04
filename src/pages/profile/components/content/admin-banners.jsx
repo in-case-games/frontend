@@ -64,7 +64,7 @@ const AdminBanner = (props) => {
               setLoading={() => setIsLoading(true)}
             />
           </div>
-          <div className={styles.name}>Баннеры к кейсам: </div>
+          <div className={styles.name}>Баннеры к кейсам </div>
         </div>
       </div>
       <div className={styles.delimiter}></div>
