@@ -17,6 +17,7 @@ import {
   Input,
   TextArea,
   ComboBox,
+  CheckBox,
 } from "../../../../components/common/inputs";
 import { Modal as ModalLayout } from "../../../../layouts";
 import {
@@ -56,6 +57,9 @@ const Home = (props) => {
   const [restriction, setRestriction] = useState();
 
   const [imageOptions, setImageOptions] = useState();
+
+  const [search, setSearch] = useState("");
+  const [filterScore, setFilterScore] = useState("none");
 
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -360,13 +364,67 @@ const Home = (props) => {
       <div className={styles.delimiter}></div>
       <div className={styles.inner}>
         <div className={styles.menu_left}>
-          <div className={styles.menu_top}></div>
+          <div className={styles.menu_top}>
+            <div className={styles.input}>
+              <Input
+                name="search"
+                placeholder="Поиск"
+                value={search}
+                setValue={setSearch}
+              />
+            </div>
+            <div className={styles.combo_box}>
+              <ComboBox
+                name="score"
+                value={isNaN(filterScore) ? "none" : "Оценка " + filterScore}
+                values={[
+                  { id: "none", name: "none" },
+                  { id: 5, name: "Оценка 5" },
+                  { id: 4, name: "Оценка 4" },
+                  { id: 3, name: "Оценка 3" },
+                  { id: 2, name: "Оценка 2" },
+                  { id: 1, name: "Оценка 1" },
+                ]}
+                setValue={() => {}}
+                setIndex={(score) => setFilterScore(score)}
+              />
+            </div>
+          </div>
           <div className={styles.reviews}>
             <InventoryLayout
               isLoading={isLoading}
               setIsLoading={setIsLoading}
               additionalLoading={additionalLoading}
               createShowByLoaded={createShowByLoaded}
+              filter={(primary) => {
+                let res = primary;
+
+                if (search !== "")
+                  res = res?.filter(
+                    (p) =>
+                      p.id === review?.id ||
+                      p.title.toLowerCase().startsWith(search.toLowerCase()) ||
+                      p.content
+                        .toLowerCase()
+                        .startsWith(search.toLowerCase()) ||
+                      p.id.toLowerCase().startsWith(search.toLowerCase())
+                  );
+
+                if (filterScore !== "none")
+                  res = res?.filter(
+                    (p) =>
+                      p.id === review?.id ||
+                      Number(p.score) === Number(filterScore)
+                  );
+
+                return res.sort((a, b) => {
+                  if (a.id === review?.id) return -1;
+                  if (b.id === review?.id) return 1;
+
+                  return 0;
+                });
+              }}
+              filterName={search + filterScore}
               loadPrimary={async () => {
                 if (user?.role === "owner" || user?.role === "admin")
                   return await reviewsApi.getAllByAdmin();
