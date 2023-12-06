@@ -14,6 +14,7 @@ const LoadImage = (props) => {
           height={props.height}
           regular={props.regular}
           description={props.description}
+          isBlockedLoad={props.isBlockedLoad}
         />
         {props.click ? (
           <div
@@ -21,9 +22,17 @@ const LoadImage = (props) => {
               props.file ? styles.button_send__active : styles.button_send
             }
             onClick={() => props.click()}
-            style={{ cursor: props.file ? "pointer" : "default" }}
+            style={
+              props.buttonColor
+                ? {
+                    cursor: props.file ? "pointer" : "default",
+                    color: props.buttonColor,
+                    borderColor: props.buttonColor,
+                  }
+                : { cursor: props.file ? "pointer" : "default" }
+            }
           >
-            Отправить
+            {props.buttonName || "Отправить"}
           </div>
         ) : null}
       </div>

@@ -109,7 +109,7 @@ const HistoryOpening = () => {
               setLoading={() => setIsLoading(true)}
             />
           </div>
-          <div className={styles.name}>История открытия кейсов: </div>
+          <div className={styles.name}>История открытия кейсов </div>
         </div>
       </div>
       <div className={styles.delimiter}></div>

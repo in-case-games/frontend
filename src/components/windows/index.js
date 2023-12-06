@@ -21,3 +21,5 @@ export { BoxGroup } from "./box-group";
 export { Boxes } from "./boxes";
 export { Banner } from "./banner";
 export { Promocode } from "./promocode";
+export { TakeItemBanner } from "./take-item-banner";
+export { BoxInventory } from "./box-inventory";

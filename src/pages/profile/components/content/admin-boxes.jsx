@@ -101,7 +101,7 @@ const AdminBoxes = (props) => {
               setLoading={() => setIsLoading(true)}
             />
           </div>
-          <div className={styles.name}>Игровые кейсы: </div>
+          <div className={styles.name}>Игровые кейсы </div>
         </div>
         <div className={styles.input}>
           <Input

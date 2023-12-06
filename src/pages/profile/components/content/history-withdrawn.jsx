@@ -101,7 +101,7 @@ const HistoryWithdrawn = () => {
               setLoading={() => setIsLoading(true)}
             />
           </div>
-          <div className={styles.name}>История выведенных предметов: </div>
+          <div className={styles.name}>История выведенных предметов </div>
         </div>
       </div>
       <div className={styles.delimiter}></div>

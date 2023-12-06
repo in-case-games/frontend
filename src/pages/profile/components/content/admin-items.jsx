@@ -102,7 +102,7 @@ const AdminItems = (props) => {
               setLoading={() => setIsLoading(true)}
             />
           </div>
-          <div className={styles.name}>Игровые предметы: </div>
+          <div className={styles.name}>Игровые предметы </div>
         </div>
         <div className={styles.input}>
           <Input

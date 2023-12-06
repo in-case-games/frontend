@@ -5,3 +5,4 @@ export { Reviews } from "./reviews";
 export { Games } from "./games";
 export { Banners } from "./banners";
 export { Boxes } from "./boxes";
+export { BoxItems } from "./box-items";

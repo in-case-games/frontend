@@ -60,7 +60,7 @@ const AdminPromocodes = (props) => {
               setLoading={() => setIsLoading(true)}
             />
           </div>
-          <div className={styles.name}>Промокоды: </div>
+          <div className={styles.name}>Промокоды </div>
         </div>
       </div>
       <div className={styles.delimiter}></div>

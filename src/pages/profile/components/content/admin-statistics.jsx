@@ -50,7 +50,7 @@ const AdminStatistics = (props) => {
               setLoading={() => setIsLoading(true)}
             />
           </div>
-          <div className={styles.name}>Статистика: </div>
+          <div className={styles.name}>Статистика </div>
         </div>
       </div>
       <div className={styles.delimiter}></div>

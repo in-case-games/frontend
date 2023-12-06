@@ -100,7 +100,7 @@ const HistoryPromocode = () => {
               setLoading={() => setIsLoading(true)}
             />
           </div>
-          <div className={styles.name}>История промокодов: </div>
+          <div className={styles.name}>История промокодов </div>
         </div>
         <div className={styles.buttons}>
           <div className={styles.input}>

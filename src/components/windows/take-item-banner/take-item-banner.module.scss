@@ -1,0 +1,96 @@
+.take_item_banner {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+
+  border-radius: 15px;
+  background: var(--color-black__2);
+
+  min-width: 310px;
+
+  padding: 40px;
+}
+
+.banner_content {
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+  align-items: center;
+
+  .items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    max-height: 400px;
+  }
+
+  .delimiter {
+    width: 80%;
+
+    border: 1px solid var(--color-orange__1);
+
+    margin: 5px 0;
+  }
+
+  .not_found {
+    font-family: "Nunito";
+    font-size: 20px;
+  }
+}
+
+.banner_counter {
+  display: flex;
+  flex-wrap: wrap;
+
+  font-size: 20px;
+  font-family: "Nunito";
+
+  margin-top: 10px;
+
+  .tittle {
+    margin-right: 5px;
+  }
+
+  .counter,
+  .button_delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100px;
+    height: 30px;
+
+    color: white;
+    border: 2px solid var(--color-orange__1);
+
+    margin: 0 5px;
+    padding: 10px 20px;
+  }
+
+  .button_delete {
+    color: black;
+    font-size: 28px;
+
+    cursor: pointer;
+  }
+}
+
+.banner_header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .tittle {
+    font-family: "Nunito";
+    font-size: 28px;
+
+    margin: 0px 10px 0 5px;
+  }
+}
+
+@media (max-width: 400px) {
+  .items {
+    padding: 10px;
+  }
+}

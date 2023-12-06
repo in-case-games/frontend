@@ -18,6 +18,12 @@ const getMiniDate = (date) => {
   return d1;
 };
 
+const getRandomInt = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; //Максимум не включается, минимум включается
+};
+
 const getMiniTime = (date) => {
   if (date === null) return "Без даты";
 
@@ -67,4 +73,5 @@ export const Converter = {
   cutCost,
   getUtcDate,
   getDateIso,
+  getRandomInt,
 };
