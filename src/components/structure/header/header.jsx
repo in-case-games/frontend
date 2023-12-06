@@ -20,6 +20,7 @@ import {
   SignIn as SignInWindow,
   SignUp as SignUpWindow,
 } from "../../windows";
+import { Input } from "../../common/inputs";
 
 const Header = () => {
   const userApi = new UserApi();
@@ -35,6 +36,8 @@ const Header = () => {
   const [paymentActive, setPaymentActive] = useState(false);
   const [forgotPasswordActive, setForgotPasswordActive] = useState(false);
   const [burgerActive, setBurgerActive] = useState();
+
+  const [search, setSearch] = useState();
 
   const setWindow = {
     sign_in: () => setSignInActive(true),
@@ -115,6 +118,11 @@ const Header = () => {
     return () => clearInterval(interval);
   });
 
+  const goSearch = (e) => {
+    if (e.keyCode === 13) {
+    }
+  };
+
   return (
     <header className={styles.header}>
       <div className={styles.container}>
@@ -136,20 +144,6 @@ const Header = () => {
                 items={Constants.Games}
               />
               <ListLunge
-                isActive={false}
-                setIsActive={() => {}}
-                tittle="Баннеры"
-                icon={Flag}
-                items={null}
-              />
-              <ListLunge
-                isActive={false}
-                setIsActive={() => {}}
-                tittle="Кейсы"
-                icon={LootBox}
-                items={null}
-              />
-              <ListLunge
                 isActive={burgerActive === "infos"}
                 setIsActive={() =>
                   setBurgerActive(burgerActive === "infos" ? "" : "infos")
@@ -160,20 +154,34 @@ const Header = () => {
               />
             </nav>
           </div>
+          <div className={styles.header_search_bar}>
+            <Input
+              isApply={true}
+              color="#00ff82"
+              placeholder="Поиск"
+              onKeyDown={goSearch}
+              value={search}
+              setValue={setSearch}
+            />
+          </div>
           <div className={styles.header_user_bar}>
-            <UserBar
-              user={user}
-              isAuth={isAuth === true}
-              isSignIn={isAuth === false}
-              showWindow={exchangeWindow}
-            />
-            <ListLunge
-              isActive={false}
-              setIsActive={() => {}}
-              tittle="RU"
-              icon={FlagRUS}
-              items={null}
-            />
+            <div className={styles.user_bar}>
+              <UserBar
+                user={user}
+                isAuth={isAuth === true}
+                isSignIn={isAuth === false}
+                showWindow={exchangeWindow}
+              />
+            </div>
+            <div className={styles.list_lunge}>
+              <ListLunge
+                isActive={false}
+                setIsActive={() => {}}
+                tittle="RU"
+                icon={FlagRUS}
+                items={null}
+              />
+            </div>
           </div>
         </div>
       </div>

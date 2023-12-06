@@ -46,7 +46,7 @@ const Loader = () => {
 
         const keys = Object.keys(groups);
         setGroups(
-          keys.map((k) => <Group name={k} boxes={groups[k]} key={groups[k]} />)
+          keys.map((k) => <Group name={k} boxes={groups[k]} key={k} />)
         );
       },
       isStart ? 100 : 30000

@@ -4,6 +4,8 @@
 .user_bar__auth {
   display: flex;
   align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
 
   img {
     background-repeat: no-repeat;
@@ -80,5 +82,15 @@
   img {
     height: 20px;
     width: 20px;
+  }
+}
+
+@media (max-width: 338px) {
+  .button_balance {
+    margin: 20px 0;
+  }
+
+  .user_bar__sign_in {
+    margin-top: 20px;
   }
 }

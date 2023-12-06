@@ -17,6 +17,7 @@
 .header__wrapper {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   flex-wrap: wrap;
   height: 100%;
 }
@@ -38,7 +39,6 @@
 }
 
 .header_navbar {
-  flex: 1 1 auto;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
@@ -54,9 +54,19 @@
 .header_user_bar {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+
+  .list_lunge {
+    display: flex;
+    align-items: center;
+  }
 }
 
-@media (max-width: 1150px) {
+.header_search_bar {
+  width: 220px;
+}
+
+@media (max-width: 1162px) {
   .header {
     height: 120px;
   }
@@ -65,7 +75,7 @@
   }
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1010px) {
   .header_online {
     margin-right: 10px;
   }
@@ -75,20 +85,6 @@
 }
 
 @media (max-width: 900px) {
-  .header_online {
-    order: -1;
-  }
-
-  .header_user_bar {
-    order: 0;
-  }
-
-  .header_navbar {
-    order: 1;
-  }
-}
-
-@media (max-width: 890px) {
   .header {
     height: 180px;
   }
@@ -102,8 +98,28 @@
   }
 
   .header_user_bar,
+  .header_search_bar,
   .header_online {
     margin-top: 20px;
+  }
+
+  .header_online {
+    order: -1;
+  }
+
+  .header_user_bar {
+    order: 0;
+  }
+
+  .header_navbar {
+    flex: 1 1 auto;
+    order: 1;
+  }
+}
+
+@media (max-width: 700px) {
+  .header_search_bar {
+    order: 1;
   }
 }
 
@@ -135,8 +151,31 @@
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 458px) {
   .header {
-    height: 280px;
+    height: 350px;
+  }
+
+  .header_user_bar {
+    .list_lunge {
+      order: -1;
+    }
+  }
+}
+
+@media (max-width: 336px) {
+  .header {
+    height: 440px;
+  }
+
+  .header_user_bar {
+    display: flex;
+    align-items: center;
+
+    .user_bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 }

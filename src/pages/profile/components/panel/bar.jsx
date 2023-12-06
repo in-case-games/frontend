@@ -72,7 +72,7 @@ const Bar = (props) => {
         <BarButton
           text="Админ панель"
           click={() => props.exchange("admin")}
-          isActive={props.content.split("-")[0] === "admin"}
+          isActive={props.content.split("_")[0] === "admin"}
         />
       ) : null}
       <BarButton click={exit} text="Выйти" />

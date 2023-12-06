@@ -39,8 +39,14 @@ header footer {
   }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 458px) {
   main {
-    margin-top: 280px;
+    margin-top: 350px;
+  }
+}
+
+@media (max-width: 336px) {
+  main {
+    margin-top: 440px;
   }
 }
