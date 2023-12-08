@@ -63,7 +63,29 @@
 }
 
 .header_search_bar {
+  position: relative;
   width: 220px;
+
+  .search_item {
+    position: absolute;
+
+    width: 90%;
+
+    background: var(--color-gray__2);
+    border: 1px solid var(--color-green__1);
+
+    padding: 10px;
+
+    .image {
+      background-repeat: no-repeat;
+      background-position: 50%;
+      border-radius: 50%;
+      width: 65px;
+      height: 65px;
+      cursor: pointer;
+      object-fit: cover;
+    }
+  }
 }
 
 @media (max-width: 1162px) {

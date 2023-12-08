@@ -7,7 +7,12 @@ import {
   Info,
   LootBox,
 } from "../../../assets/images/icons";
-import { User as UserApi } from "../../../api";
+import {
+  User as UserApi,
+  Box as BoxApi,
+  Item as ItemApi,
+  Game as GameApi,
+} from "../../../api";
 import TokenService from "../../../services/token";
 import { ListLunge, Logo, UserBar } from "../../common/buttons";
 import Constants from "../../../constants";
@@ -24,6 +29,9 @@ import { Input } from "../../common/inputs";
 
 const Header = () => {
   const userApi = new UserApi();
+  const boxApi = new BoxApi();
+  const itemApi = new ItemApi();
+  const gameApi = new GameApi();
 
   const [user, setUser] = useState(null);
 
@@ -38,6 +46,8 @@ const Header = () => {
   const [burgerActive, setBurgerActive] = useState();
 
   const [search, setSearch] = useState();
+  const [searchDetected, setSearchDetected] = useState({ items: [] });
+  const [games, setGames] = useState();
 
   const setWindow = {
     sign_in: () => setSignInActive(true),
@@ -92,6 +102,7 @@ const Header = () => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
+      if (!games) setGames(await gameApi.get());
       if (TokenService.getAccessToken() !== undefined && user === null)
         setIsAuth(null);
       else setIsAuth(TokenService.getAccessToken() !== undefined);
@@ -161,8 +172,55 @@ const Header = () => {
               placeholder="Поиск"
               onKeyDown={goSearch}
               value={search}
-              setValue={setSearch}
+              setValue={async (v) => {
+                let result = [];
+
+                try {
+                  const res = await userApi.getByLogin(v);
+
+                  result.push({
+                    id: res.id,
+                    image: await userApi.getImageByUserId(res.id),
+                    name: v,
+                  });
+                } catch (ex) {}
+                try {
+                  const res = await boxApi.getByName(v);
+                  const box = await boxApi.pushImage(res);
+
+                  result.push({
+                    id: box.id,
+                    image: box.image,
+                    name: v,
+                  });
+                } catch (ex) {}
+                try {
+                  let res = await itemApi.getByName(v);
+
+                  for (let i = 0; i < res.length; i++) {
+                    res[i].gameId = games.find(
+                      (g) => g.name === res[i].game
+                    ).id;
+                    const item = await itemApi.pushImage(res[i]);
+                    result.push({
+                      id: item.id,
+                      image: item.image,
+                      name: v,
+                    });
+                  }
+                } catch (ex) {}
+
+                setSearchDetected((prev) => ({ ...prev, items: result }));
+                setSearch(v);
+              }}
             />
+            {searchDetected.items?.length > 0
+              ? searchDetected.items.map((i) => (
+                  <div className={styles.search_item} key={i.id + "search"}>
+                    <img alt="" src={i.image} className={styles.image} />
+                  </div>
+                ))
+              : null}
           </div>
           <div className={styles.header_user_bar}>
             <div className={styles.user_bar}>
