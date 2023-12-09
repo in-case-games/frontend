@@ -1,9 +1,11 @@
-import { KeyGray as Key } from "../assets/images/icons";
 import {
-  GameCSGO as CSGO,
-  GameDota2 as Dota2,
-  TemplateSoon as Soon,
-} from "../assets/images/main";
+  BrainBlack as Brain,
+  KeyGray as Key,
+  GunBlack as Gun,
+  InfoBlack as Info,
+  FaqBlack,
+} from "../assets/images/icons";
+import { GameCSGO as CSGO, GameDota2 as Dota2 } from "../assets/images/main";
 
 const Games = [
   {
@@ -11,7 +13,7 @@ const Games = [
     text: "CSGO",
     name: "csgo",
     link: "game/csgo",
-    icon: Key,
+    icon: Gun,
     image: CSGO,
     nameTrade: "Ссылка на обмен",
     urlTrade: "http://steamcommunity.com/my/tradeoffers/privacy",
@@ -23,19 +25,12 @@ const Games = [
     text: "Dota 2",
     name: "dota2",
     link: "game/dota2",
-    icon: Key,
+    icon: Brain,
     image: Dota2,
     nameTrade: "Ссылка на обмен",
     urlTrade: "http://steamcommunity.com/my/tradeoffers/privacy",
     regexTrade:
       /https:\/\/steamcommunity\.com\/tradeoffer\/new\/\?partner=[0-9]+&token=[A-Za-z0-9]+/i,
-  },
-  {
-    id: 3,
-    text: "Скоро",
-    link: "",
-    icon: Key,
-    image: Soon,
   },
 ];
 
@@ -56,14 +51,14 @@ const Infos = [
   {
     id: 1,
     text: "FAQ",
-    link: "",
-    icon: Key,
+    link: "faq",
+    icon: FaqBlack,
   },
   {
     id: 2,
     text: "Инфо",
     link: "info",
-    icon: Key,
+    icon: Info,
   },
 ];
 
