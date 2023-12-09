@@ -51,7 +51,7 @@ const Infos = [
   {
     id: 1,
     text: "FAQ",
-    link: "",
+    link: "faq",
     icon: FaqBlack,
   },
   {

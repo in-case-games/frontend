@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
-  Flag,
   FlagRUS,
   Gamepad,
   DotLightGreen,
   Info,
-  LootBox,
 } from "../../../assets/images/icons";
 import {
   User as UserApi,
@@ -16,7 +14,6 @@ import {
 import TokenService from "../../../services/token";
 import { ListLunge, Logo, UserBar } from "../../common/buttons";
 import Constants from "../../../constants";
-import styles from "./header.module";
 import { Modal as ModalLayout } from "../../../layouts";
 import {
   EmailSend as EmailSendWindow,
@@ -25,13 +22,16 @@ import {
   SignIn as SignInWindow,
   SignUp as SignUpWindow,
 } from "../../windows";
+import { useNavigate } from "react-router-dom";
 import { Input } from "../../common/inputs";
+import styles from "./header.module";
 
 const Header = () => {
   const userApi = new UserApi();
   const boxApi = new BoxApi();
   const itemApi = new ItemApi();
   const gameApi = new GameApi();
+  const navigate = useNavigate();
 
   const [user, setUser] = useState(null);
 
@@ -48,6 +48,8 @@ const Header = () => {
   const [search, setSearch] = useState();
   const [searchDetected, setSearchDetected] = useState({ items: [] });
   const [games, setGames] = useState();
+
+  const [timeBeforeGoSearch, setTimeBeforeGoSearch] = useState();
 
   const setWindow = {
     sign_in: () => setSignInActive(true),
@@ -106,6 +108,64 @@ const Header = () => {
       if (TokenService.getAccessToken() !== undefined && user === null)
         setIsAuth(null);
       else setIsAuth(TokenService.getAccessToken() !== undefined);
+
+      if (timeBeforeGoSearch) {
+        const nextTime = timeBeforeGoSearch - 100;
+
+        if (nextTime <= 0) {
+          let result = [];
+
+          try {
+            const res = await userApi.getByLogin(search);
+
+            result.push({
+              id: res.id,
+              image: await userApi.getImageByUserId(res.id),
+              name: search,
+              click: () => {
+                setSearch();
+                setSearchDetected((prev) => ({ ...prev, items: [] }));
+                navigate(`/profile/${res.id}`);
+              },
+            });
+          } catch (ex) {}
+          try {
+            const res = await boxApi.getByName(search);
+            const box = await boxApi.pushImage(res);
+
+            result.push({
+              id: box.id,
+              image: box.image,
+              name: search,
+              click: () => {
+                setSearch();
+                setSearchDetected((prev) => ({ ...prev, items: [] }));
+                navigate(`/box/${box.id}`);
+              },
+            });
+          } catch (ex) {}
+          try {
+            let res = await itemApi.getByName(search);
+
+            for (let i = 0; i < res.length; i++) {
+              res[i].gameId = games.find((g) => g.name === res[i].game).id;
+              const item = await itemApi.pushImage(res[i]);
+              result.push({
+                id: item.id,
+                image: item.image,
+                name: search,
+                click: () => {
+                  setSearchDetected((prev) => ({ ...prev, items: [] }));
+                  setSearch();
+                },
+              });
+            }
+          } catch (ex) {}
+
+          setSearchDetected((prev) => ({ ...prev, items: result }));
+          setTimeBeforeGoSearch();
+        } else setTimeBeforeGoSearch(nextTime);
+      }
     }, 100);
 
     return () => clearInterval(interval);
@@ -173,54 +233,24 @@ const Header = () => {
               onKeyDown={goSearch}
               value={search}
               setValue={async (v) => {
-                let result = [];
-
-                try {
-                  const res = await userApi.getByLogin(v);
-
-                  result.push({
-                    id: res.id,
-                    image: await userApi.getImageByUserId(res.id),
-                    name: v,
-                  });
-                } catch (ex) {}
-                try {
-                  const res = await boxApi.getByName(v);
-                  const box = await boxApi.pushImage(res);
-
-                  result.push({
-                    id: box.id,
-                    image: box.image,
-                    name: v,
-                  });
-                } catch (ex) {}
-                try {
-                  let res = await itemApi.getByName(v);
-
-                  for (let i = 0; i < res.length; i++) {
-                    res[i].gameId = games.find(
-                      (g) => g.name === res[i].game
-                    ).id;
-                    const item = await itemApi.pushImage(res[i]);
-                    result.push({
-                      id: item.id,
-                      image: item.image,
-                      name: v,
-                    });
-                  }
-                } catch (ex) {}
-
-                setSearchDetected((prev) => ({ ...prev, items: result }));
+                setTimeBeforeGoSearch(500);
                 setSearch(v);
               }}
             />
-            {searchDetected.items?.length > 0
-              ? searchDetected.items.map((i) => (
-                  <div className={styles.search_item} key={i.id + "search"}>
-                    <img alt="" src={i.image} className={styles.image} />
-                  </div>
-                ))
-              : null}
+            <div className={styles.search_items}>
+              {searchDetected.items?.length > 0
+                ? searchDetected.items.map((i) => (
+                    <div
+                      className={styles.search_item}
+                      key={i.id + "search"}
+                      onClick={i.click}
+                    >
+                      <img alt="" src={i.image} className={styles.image} />
+                      <div className={styles.name}>{i.name}</div>
+                    </div>
+                  ))
+                : null}
+            </div>
           </div>
           <div className={styles.header_user_bar}>
             <div className={styles.user_bar}>

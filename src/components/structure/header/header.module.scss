@@ -65,14 +65,21 @@
 .header_search_bar {
   position: relative;
   width: 220px;
+}
+
+.search_items {
+  position: absolute;
+
+  width: 100%;
 
   .search_item {
-    position: absolute;
-
-    width: 90%;
+    display: flex;
+    align-items: center;
 
     background: var(--color-gray__2);
     border: 1px solid var(--color-green__1);
+
+    cursor: pointer;
 
     padding: 10px;
 
@@ -84,6 +91,11 @@
       height: 65px;
       cursor: pointer;
       object-fit: cover;
+      margin-right: 8px;
+    }
+
+    .name {
+      color: var(--color-green__1);
     }
   }
 }

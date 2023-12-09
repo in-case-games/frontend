@@ -8,11 +8,13 @@ import { Info as InfoRouting } from ".";
 import { Profile as ProfilePage } from "../pages/profile";
 import { Box as BoxPage } from "../pages/box";
 import { Reviews as ReviewsPage } from "../pages/reviews";
+import { FAQ as FAQPage } from "../pages/faq";
 
 class Main extends React.Component {
   render() {
     return (
       <Routes>
+        <Route path="/faq/*" element={<FAQPage />} />
         <Route path="/reviews/:id" element={<ReviewsPage />} />
         <Route path="/reviews/*" element={<ReviewsPage />} />
         <Route path="/profile/:id" element={<ProfilePage />} />
