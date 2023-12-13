@@ -24,11 +24,11 @@ const Roulette = (props) => {
   });
 
   const clickOpenBox = async () => {
-    if (
-      !props.box?.isLocked &&
-      props.user?.balance &&
-      props.box?.cost <= props.user?.balance
-    ) {
+    if (!props.user) {
+      console.log("Need sign in");
+    } else if (!props.user?.balance || props.box?.cost > props.user?.balance) {
+      props.setIsShowPayment(true);
+    } else if (!props.box?.isLocked) {
       let winItem = await userApi.openBox(props.box.id);
       const findItem = props.box.inventory.find(
         (i) => i.item.id === winItem.id
@@ -45,7 +45,8 @@ const Roulette = (props) => {
   };
 
   const getTextButton = () => {
-    if (!props.user) return <div className={styles.text}>Вход</div>;
+    if (!props.user)
+      return <div className={styles.text}>Войдите в аккаунт</div>;
     if (!props.user.balance || props.box?.cost > props.user?.balance)
       return (
         <div className={styles.text}>
@@ -67,7 +68,7 @@ const Roulette = (props) => {
   };
 
   const getStyles = () => {
-    const isOrange = !props.user || !props.box?.isLocked;
+    const isOrange = props.user && !props.box?.isLocked;
 
     return {
       cursor: isOrange ? "pointer" : "default",

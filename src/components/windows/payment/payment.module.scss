@@ -1,25 +1,137 @@
 .payment {
   display: flex;
-  justify-content: center;
-  text-align: center;
   background: var(--color-black__2);
   border-radius: 15px;
-  padding: 40px;
+
+  min-width: 400px;
+
+  padding: 20px;
 }
 
 .payment_content {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   flex-direction: column;
-  align-items: center;
+
+  width: 100%;
 }
 
-.payment_header {
+.header {
   display: flex;
+  justify-content: space-around;
   align-items: center;
 
-  .payment_tittle {
-    font-size: 28px;
+  width: 100%;
+
+  font-family: "Nunito";
+
+  margin-top: 10px;
+
+  .tittle {
+    font-size: 20px;
     margin-left: 5px;
+  }
+
+  .current_course {
+    display: flex;
+    align-items: center;
+
+    border: 1px dashed var(--color-orange__1);
+    border-radius: 10px;
+
+    padding: 10px;
+    margin-top: 5px;
+
+    .real_valuta {
+    }
+    .our_valuta {
+      display: flex;
+      align-items: center;
+
+      .image {
+        width: 15px;
+        height: 15px;
+
+        margin-left: 2px;
+      }
+    }
+  }
+}
+
+.content {
+  flex: 1 0 auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+
+  & * {
+    margin: 5px 0;
+  }
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  .delimiter {
+    border: 1px solid var(--color-orange__1);
+    width: 100%;
+    margin: 20px 0;
+  }
+
+  .description {
+    margin-bottom: 20px;
+  }
+
+  .button_pay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 25px;
+    width: 200px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    margin: 0 20px;
+    padding: 8px 10px;
+
+    &:hover {
+      background-position: 60px;
+    }
+
+    .image {
+      height: 20px;
+      width: 20px;
+
+      margin-right: 10px;
+    }
+
+    .text {
+      font-family: "Play";
+      font-weight: 500;
+      font-size: 18px;
+
+      color: black;
+    }
+
+    background: -moz-linear-gradient(var(--gradient-1__0-70));
+    background: -webkit-linear-gradient(var(--gradient-1__0-70));
+    background: linear-gradient(var(--gradient-1__0-70));
+
+    background-size: 1px 50px;
+
+    -webkit-transition: background 400ms ease-out;
+    -moz-transition: background 400ms ease-out;
+    -o-transition: background 400ms ease-out;
+    transition: background 400ms ease-out;
   }
 }

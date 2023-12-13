@@ -77,6 +77,59 @@ const Langs = [
   },
 ];
 
+const TypePayments = [
+  {
+    id: 1,
+    name: "Master Card / Visa (RUB)",
+    currency: "RUB",
+    rate: 7,
+    maxAmount: 111111,
+    minAmount: 11,
+    description: "Ограничение Master Card / Visa",
+  },
+  {
+    id: 2,
+    name: "SkinPay",
+    description: "Ограничение SkinPay",
+  },
+  {
+    id: 3,
+    name: "Payment 3 (RUB)",
+    currency: "RUB",
+    rate: 7,
+    maxAmount: 11111,
+    minAmount: 11,
+    description: "Ограничение Payment 3",
+  },
+  {
+    id: 4,
+    name: "Payment 4 (USD)",
+    currency: "USD",
+    rate: 427,
+    maxAmount: 11111,
+    minAmount: 11,
+    description: "Ограничение Payment 4",
+  },
+  {
+    id: 5,
+    name: "Payment 5 (EURO)",
+    currency: "EURO",
+    rate: 477,
+    maxAmount: 11111,
+    minAmount: 11,
+    description: "Ограничение Payment 5",
+  },
+  {
+    id: 6,
+    name: "Payment 6 (EURO)",
+    currency: "EURO",
+    rate: 60,
+    maxAmount: 11111,
+    minAmount: 11,
+    description: "Ограничение Payment 6",
+  },
+];
+
 const generateGradient = (color, transparent = true) =>
   `linear-gradient(180deg, rgb(${
     transparent ? color + ", 0" : "26, 26, 29, 1"
@@ -173,6 +226,7 @@ const Constants = {
   CommonTimeDelays,
   CommonTypeTimeDelays,
   CountDots,
+  TypePayments,
 };
 
 export default Constants;

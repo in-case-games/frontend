@@ -226,30 +226,32 @@ const Header = () => {
             </nav>
           </div>
           <div className={styles.header_search_bar}>
-            <Input
-              isApply={true}
-              color="#00ff82"
-              placeholder="Поиск"
-              onKeyDown={goSearch}
-              value={search}
-              setValue={async (v) => {
-                setTimeBeforeGoSearch(500);
-                setSearch(v);
-              }}
-            />
-            <div className={styles.search_items}>
-              {searchDetected.items?.length > 0
-                ? searchDetected.items.map((i) => (
-                    <div
-                      className={styles.search_item}
-                      key={i.id + "search"}
-                      onClick={i.click}
-                    >
-                      <img alt="" src={i.image} className={styles.image} />
-                      <div className={styles.name}>{i.name}</div>
-                    </div>
-                  ))
-                : null}
+            <div className={styles.search}>
+              <Input
+                isApply={true}
+                color="#00ff82"
+                placeholder="Поиск"
+                onKeyDown={goSearch}
+                value={search}
+                setValue={async (v) => {
+                  setTimeBeforeGoSearch(500);
+                  setSearch(v);
+                }}
+              />
+              <div className={styles.search_items}>
+                {searchDetected.items?.length > 0
+                  ? searchDetected.items.map((i) => (
+                      <div
+                        className={styles.search_item}
+                        key={i.id + "search"}
+                        onClick={i.click}
+                      >
+                        <img alt="" src={i.image} className={styles.image} />
+                        <div className={styles.name}>{i.name}</div>
+                      </div>
+                    ))
+                  : null}
+              </div>
             </div>
           </div>
           <div className={styles.header_user_bar}>

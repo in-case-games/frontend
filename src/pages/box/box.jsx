@@ -19,6 +19,7 @@ import {
   Item as ItemWindow,
   LoadImage as LoadImageWindow,
   BoxInventory as BoxInventoryWindow,
+  Payment as PaymentWindow,
 } from "../../components/windows";
 import styles from "./box.module";
 
@@ -36,6 +37,7 @@ const Box = () => {
   const [isRollingRoulette, setIsRollingRoulette] = useState(false);
   const [isShowTakeItemWindow, setIsShowTakeItemWindow] = useState(false);
   const [isShowImageWindow, setIsShowImageWindow] = useState();
+  const [isShowPaymentWindow, setIsShowPaymentWindow] = useState();
   const [showInventoryWindow, setShowInventoryWindow] = useState();
   const [showItemWindow, setShowItemWindow] = useState();
   const [showBoxWindow, setShowBoxWindow] = useState();
@@ -163,6 +165,7 @@ const Box = () => {
               setWinItem(i);
             }}
             setIsRollingRoulette={setIsRollingRoulette}
+            setIsShowPayment={setIsShowPaymentWindow}
           />
         </div>
         <div className={styles.content}>
@@ -270,6 +273,11 @@ const Box = () => {
           description={"PNG (MAX. 200x200px | 1MB)"}
         />
       </ModalLayout>
+      <ModalLayout
+        isActive={isShowPaymentWindow}
+        close={() => setIsShowPaymentWindow()}
+        children={<PaymentWindow />}
+      />
     </div>
   );
 };
