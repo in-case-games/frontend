@@ -71,8 +71,12 @@ const Box = () => {
         try {
           const result = [];
           const inventories = await boxApi.getInventory(id);
-          let banner = await boxApi.getByIdBanner(id);
+          let banner;
           let box;
+
+          try {
+            banner = await boxApi.getByIdBanner(id);
+          } catch (ex) {}
 
           if (banner && banner?.box) {
             box = banner.box;
@@ -150,23 +154,25 @@ const Box = () => {
       <div className={styles.container_small}>
         <div className={styles.display}>
           {whatShow()}
-          <Roulette
-            box={box}
-            user={user}
-            isRollingRoulette={isRollingRoulette}
-            pathBanner={pathBanner}
-            setWinItem={async (i) => {
-              try {
-                setPathBanner(await userApi.getPathBannerByBoxId(box.id));
-              } catch (ex) {
-                setPathBanner();
-              }
+          {inventory && inventory.length > 1 ? (
+            <Roulette
+              box={box}
+              user={user}
+              isRollingRoulette={isRollingRoulette}
+              pathBanner={pathBanner}
+              setWinItem={async (i) => {
+                try {
+                  setPathBanner(await userApi.getPathBannerByBoxId(box.id));
+                } catch (ex) {
+                  setPathBanner();
+                }
 
-              setWinItem(i);
-            }}
-            setIsRollingRoulette={setIsRollingRoulette}
-            setIsShowPayment={setIsShowPaymentWindow}
-          />
+                setWinItem(i);
+              }}
+              setIsRollingRoulette={setIsRollingRoulette}
+              setIsShowPayment={setIsShowPaymentWindow}
+            />
+          ) : null}
         </div>
         <div className={styles.content}>
           {inventory ? (
@@ -191,7 +197,7 @@ const Box = () => {
       >
         <TakeItemBannerWindow
           items={
-            inventory
+            inventory && inventory.length > 1
               ? inventory
                   .filter(
                     (i) =>

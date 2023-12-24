@@ -30,29 +30,28 @@ const Withdrawn = (props) => {
   });
 
   const getBackgroundColor = () =>
-    props.history.status === "cancel" ? "red" : "green";
+    props.history.status === "cancel" || props.history.status === "blocked"
+      ? "red"
+      : "green";
 
   const getColor = () =>
-    props.history.status === "cancel" ? "black" : "greenyellow";
+    props.history.status === "cancel" || props.history.status === "blocked"
+      ? "black"
+      : "greenyellow";
 
   const getSymbol = () => {
     if (
       props.history.status === "purchase" ||
-      props.history.status === "transfer"
+      props.history.status === "transfer" ||
+      props.history.status === "recorded"
     ) {
       return (
         <div className={styles.loading}>
-          <Loading
-            isLoading={
-              props.history.status !== "given" ||
-              props.history.status !== "cancel"
-            }
-            click={() => {}}
-            cursor="default"
-          />
+          <Loading isLoading={true} click={() => {}} cursor="default" />
         </div>
       );
     } else if (props.history.status === "given") return "✓";
+    else if (props.history.status === "blocked") return "Ban";
     else return "✖";
   };
 
@@ -60,6 +59,7 @@ const Withdrawn = (props) => {
     if (props.history.status === "cancel") {
       try {
         await userApi.transferWithdrawn(props.history.id);
+        window.location.reload();
       } catch (err) {
         console.log(err);
       }
