@@ -65,7 +65,7 @@ class Email {
     const response = await api.put(
       EMAIL_API_URL + "authentication/sending/login/" + password,
       {
-        login: user.name,
+        login: user.login,
         email: user.email,
       }
     );
@@ -79,7 +79,7 @@ class Email {
     const response = await api.put(
       EMAIL_API_URL + "authentication/sending/email/" + password,
       {
-        login: user.name,
+        login: user.login,
         email: user.email,
       }
     );
@@ -93,7 +93,7 @@ class Email {
     const response = await api.put(
       EMAIL_API_URL + "authentication/sending/password/" + password,
       {
-        login: user.name,
+        login: user.login,
         email: user.email,
       }
     );
@@ -117,7 +117,7 @@ class Email {
       EMAIL_API_URL + "authentication/sending/account/" + password,
       {
         data: {
-          login: user.name,
+          login: user.login,
           email: user.email,
         },
       }
