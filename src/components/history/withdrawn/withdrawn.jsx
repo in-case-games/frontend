@@ -59,6 +59,7 @@ const Withdrawn = (props) => {
     if (props.history.status === "cancel") {
       try {
         await userApi.transferWithdrawn(props.history.id);
+        window.location.reload();
       } catch (err) {
         console.log(err);
       }
