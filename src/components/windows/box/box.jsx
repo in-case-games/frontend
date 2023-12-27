@@ -17,10 +17,12 @@ const Box = (props) => {
 
   const [backOperation, setBackOperation] = useState(null);
   const [operation, setOperation] = useState(null);
+
   const [user, setUser] = useState(TokenService.getUser());
   const [box, setBox] = useState(
     props.box?.id ? props.box : Constants.TemplateBox
   );
+  const [errorMessage, setErrorMessage] = useState();
 
   const [games, setGames] = useState([]);
 
@@ -33,17 +35,27 @@ const Box = (props) => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (isLoading) {
-        setUser(TokenService.getUser());
-
-        setBox(
-          props.box?.id
-            ? await boxApi.getById(props.box?.id)
-            : Constants.TemplateBox
-        );
-
-        setGames(await gameApi.get());
-
-        setIsLoading(false);
+        try {
+          setUser(TokenService.getUser());
+          setBox(
+            props.box?.id
+              ? await boxApi.getById(props.box?.id)
+              : Constants.TemplateBox
+          );
+          setGames(await gameApi.get());
+          setIsLoading(false);
+        } catch (ex) {
+          if (
+            ex?.response?.status < 500 &&
+            ex?.response?.data?.error?.message
+          ) {
+            console.log(ex);
+            setErrorMessage(ex.response.data.error.message);
+          } else {
+            console.log(ex);
+            setErrorMessage("Неизвестная ошибка");
+          }
+        }
       }
     }, 100);
 
@@ -59,7 +71,21 @@ const Box = (props) => {
         setBackOperation(temp);
 
         if (temp === 0) {
-          await operations[operation]();
+          try {
+            await operations[operation]();
+          } catch (ex) {
+            setIsLoading(true);
+            console.log(ex);
+
+            if (
+              ex?.response?.status < 500 &&
+              ex?.response?.data?.error?.message
+            ) {
+              setErrorMessage(ex.response.data.error.message);
+            } else {
+              setErrorMessage("Неизвестная ошибка");
+            }
+          }
 
           setOperation(null);
           setBackOperation(null);
@@ -151,15 +177,18 @@ const Box = (props) => {
             />
           </div>
           <div className={styles.tittle}>Информация по кейсу</div>
-          <a
-            className={styles.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            href={`/box/${props.box.id}`}
-          >
-            <img className={styles.image} alt="" src={Link} />
-          </a>
+          {props.box.id ? (
+            <a
+              className={styles.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`/box/${props.box.id}`}
+            >
+              <img className={styles.image} alt="" src={Link} />
+            </a>
+          ) : null}
         </div>
+        <div className={styles.error}>{errorMessage}</div>
         <div className={styles.box_info}>
           <div className={styles.box_display}>
             <img

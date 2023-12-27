@@ -45,6 +45,7 @@ const Header = () => {
   const [forgotPasswordActive, setForgotPasswordActive] = useState(false);
   const [burgerActive, setBurgerActive] = useState();
 
+  const [errorMessage, setErrorMessage] = useState();
   const [search, setSearch] = useState();
   const [searchDetected, setSearchDetected] = useState({ items: [] });
   const [games, setGames] = useState();
@@ -83,19 +84,31 @@ const Header = () => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (TokenService.getAccessToken() !== undefined) {
-        let response = await userApi.getBalance();
+        try {
+          let response = await userApi.getBalance();
 
-        response =
-          response >= 10000000
-            ? `${Math.ceil(response / 1000000)}M`
-            : Math.ceil(response);
+          response =
+            response >= 10000000
+              ? `${Math.ceil(response / 1000000)}M`
+              : Math.ceil(response);
 
-        let temp = {
-          image: user?.image,
-          balance: response,
-        };
+          let temp = {
+            image: user?.image,
+            balance: response,
+          };
 
-        setUser(temp);
+          setUser(temp);
+        } catch (ex) {
+          console.log(ex);
+          if (
+            ex?.response?.status < 500 &&
+            ex?.response?.data?.error?.message
+          ) {
+            setErrorMessage(ex.response.data.error.message);
+          } else {
+            setErrorMessage("Неизвестная ошибка");
+          }
+        }
       }
     }, 5000);
 
@@ -104,7 +117,16 @@ const Header = () => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      if (!games) setGames(await gameApi.get());
+      try {
+        if (!games) setGames(await gameApi.get());
+      } catch (ex) {
+        console.log(ex);
+        if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
+          setErrorMessage(ex.response.data.error.message);
+        } else {
+          setErrorMessage("Неизвестная ошибка");
+        }
+      }
       if (TokenService.getAccessToken() !== undefined && user === null)
         setIsAuth(null);
       else setIsAuth(TokenService.getAccessToken() !== undefined);
@@ -180,7 +202,17 @@ const Header = () => {
             image: await userApi.getImage(),
             balance: user?.balance ?? 0,
           });
-        } catch (err) {}
+        } catch (ex) {
+          console.log(ex);
+          if (
+            ex?.response?.status < 500 &&
+            ex?.response?.data?.error?.message
+          ) {
+            setErrorMessage(ex.response.data.error.message);
+          } else {
+            setErrorMessage("Неизвестная ошибка");
+          }
+        }
       }
 
       setIsDate(TokenService.getExpiresAccessToken());

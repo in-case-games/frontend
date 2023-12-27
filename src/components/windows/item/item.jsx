@@ -20,14 +20,15 @@ const Item = (props) => {
   const [backOperation, setBackOperation] = useState(null);
   const [operation, setOperation] = useState(null);
 
-  const [gradient, setGradient] = useState(
-    Constants.ItemGradients[props.item?.rarity ? props.item.rarity : "white"]
-  );
-
   const [user, setUser] = useState(TokenService.getUser());
   const [item, setItem] = useState(
     props.item?.id ? props.item : Constants.TemplateItem
   );
+  const [gradient, setGradient] = useState(
+    Constants.ItemGradients[props.item?.rarity ? props.item.rarity : "white"]
+  );
+  const [errorMessage, setErrorMessage] = useState();
+
   const [rarities, setRarities] = useState([]);
   const [types, setTypes] = useState([]);
   const [qualities, setQualities] = useState([]);
@@ -47,7 +48,22 @@ const Item = (props) => {
         setBackOperation(t);
 
         if (t === 0) {
-          await operations[operation]();
+          try {
+            await operations[operation]();
+          } catch (ex) {
+            setIsLoading(true);
+
+            if (
+              ex?.response?.status < 500 &&
+              ex?.response?.data?.error?.message
+            ) {
+              console.log(ex);
+              setErrorMessage(ex.response.data.error.message);
+            } else {
+              console.log(ex);
+              setErrorMessage("Неизвестная ошибка");
+            }
+          }
 
           setOperation(null);
           setBackOperation(null);
@@ -67,20 +83,33 @@ const Item = (props) => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (isLoading) {
-        setUser(TokenService.getUser());
-        setItem(
-          props.item?.id
-            ? await itemApi.getById(props.item?.id)
-            : Constants.TemplateItem
-        );
+        try {
+          setUser(TokenService.getUser());
+          setItem(
+            props.item?.id
+              ? await itemApi.getById(props.item?.id)
+              : Constants.TemplateItem
+          );
 
-        setTypes(await itemApi.getTypes());
-        setRarities(await itemApi.getRarities());
-        setQualities(await itemApi.getQualities());
-        setGames(await gameApi.get());
-        setGradient(Constants.ItemGradients[item.rarity]);
+          setTypes(await itemApi.getTypes());
+          setRarities(await itemApi.getRarities());
+          setQualities(await itemApi.getQualities());
+          setGames(await gameApi.get());
+          setGradient(Constants.ItemGradients[item.rarity]);
 
-        setIsLoading(false);
+          setIsLoading(false);
+        } catch (ex) {
+          console.log(ex);
+
+          if (
+            ex?.response?.status < 500 &&
+            ex?.response?.data?.error?.message
+          ) {
+            setErrorMessage(ex.response.data.error.message);
+          } else {
+            setErrorMessage("Неизвестная ошибка");
+          }
+        }
       }
 
       setGradient(
@@ -176,6 +205,7 @@ const Item = (props) => {
           </div>
           <div className={styles.tittle}>Информация по предмету</div>
         </div>
+        <div className={styles.error}>{errorMessage}</div>
         <div className={styles.item_info}>
           <div
             className={styles.item_display}

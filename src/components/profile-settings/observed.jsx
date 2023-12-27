@@ -45,6 +45,7 @@ const Observed = (props) => {
   const [inventory, setInventory] = useState(null);
   const [restriction, setRestriction] = useState(null);
 
+  const [errorMessage, setErrorMessage] = useState();
   const [login, setLogin] = useState(props.user.login);
   const [email, setEmail] = useState(props.user.additionalInfo.email);
   const [balance, setBalance] = useState(null);
@@ -77,28 +78,37 @@ const Observed = (props) => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      props.setIsAllReload(false);
+      try {
+        props.setIsAllReload(false);
 
-      if (props.isAllReload) resetToGlobalZero();
-      if (!balance && (observer?.role || "user") !== "user")
-        await loadBalance();
-      if (!games || games.length === 0) setGames(await gameApi.get());
-      if (!roles || roles.length === 0) setRoles(await userApi.getRoles());
-      if (
-        (showRestriction && !restrictions) ||
-        (props.isLoading && showRestriction)
-      )
-        await loadRestrictions();
-      if (
-        (showInventories && !inventories) ||
-        (props.isLoading && showInventories)
-      )
-        await loadItems();
+        if (props.isAllReload) resetToGlobalZero();
+        if (!balance && (observer?.role || "user") !== "user")
+          await loadBalance();
+        if (!games || games.length === 0) setGames(await gameApi.get());
+        if (!roles || roles.length === 0) setRoles(await userApi.getRoles());
+        if (
+          (showRestriction && !restrictions) ||
+          (props.isLoading && showRestriction)
+        )
+          await loadRestrictions();
+        if (
+          (showInventories && !inventories) ||
+          (props.isLoading && showInventories)
+        )
+          await loadItems();
 
-      if (props.isLoading && (showItems || showBoxes))
-        await loadHistoryOpenings();
+        if (props.isLoading && (showItems || showBoxes))
+          await loadHistoryOpenings();
 
-      props.setIsLoading(false);
+        props.setIsLoading(false);
+      } catch (ex) {
+        console.log(ex);
+        if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
+          setErrorMessage(ex.response.data.error.message);
+        } else {
+          setErrorMessage("Неизвестная ошибка");
+        }
+      }
     }, 500);
 
     return () => clearInterval(interval);
@@ -215,11 +225,16 @@ const Observed = (props) => {
 
       setIsErrorEmail(false);
       setIsApplyEmail(true);
-    } catch (err) {
+    } catch (ex) {
       setIsApplyEmail(false);
       setIsErrorEmail(true);
+      console.log(ex);
 
-      console.log(err);
+      if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
+        setErrorMessage(ex.response.data.error.message);
+      } else {
+        setErrorMessage("Неизвестная ошибка");
+      }
     }
   };
 
@@ -229,11 +244,16 @@ const Observed = (props) => {
 
       setIsErrorLogin(false);
       setIsApplyLogin(true);
-    } catch (err) {
+    } catch (ex) {
       setIsApplyLogin(false);
       setIsErrorLogin(true);
+      console.log(ex);
 
-      console.log(err);
+      if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
+        setErrorMessage(ex.response.data.error.message);
+      } else {
+        setErrorMessage("Неизвестная ошибка");
+      }
     }
   };
 
@@ -244,11 +264,16 @@ const Observed = (props) => {
 
       setIsErrorRole(false);
       setIsApplyRole(true);
-    } catch (err) {
+    } catch (ex) {
       setIsApplyRole(false);
       setIsErrorRole(true);
+      console.log(ex);
 
-      console.log(err);
+      if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
+        setErrorMessage(ex.response.data.error.message);
+      } else {
+        setErrorMessage("Неизвестная ошибка");
+      }
     }
   };
 
@@ -258,11 +283,16 @@ const Observed = (props) => {
 
       setIsErrorBalance(false);
       setIsApplyBalance(true);
-    } catch (err) {
+    } catch (ex) {
       setIsApplyBalance(false);
       setIsErrorBalance(true);
+      console.log(ex);
 
-      console.log(err);
+      if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
+        setErrorMessage(ex.response.data.error.message);
+      } else {
+        setErrorMessage("Неизвестная ошибка");
+      }
     }
   };
 

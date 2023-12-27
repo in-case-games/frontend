@@ -28,6 +28,7 @@ const OpeningHistory = (props) => {
 
   const [box, setBox] = useState(null);
   const [userLogo, setUserLogo] = useState(UserLogo);
+  const [errorMessage, setErrorMessage] = useState();
 
   useEffect(() => {
     const interval = setInterval(
@@ -44,11 +45,22 @@ const OpeningHistory = (props) => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (isClick && !box) {
-        setIsClick(false);
+        try {
+          setIsClick(false);
+          let box = await boxApi.getById(props.history.boxId);
+          setBox(await boxApi.pushImage(box));
+        } catch (ex) {
+          console.log(ex);
 
-        let box = await boxApi.getById(props.history.boxId);
-
-        setBox(await boxApi.pushImage(box));
+          if (
+            ex?.response?.status < 500 &&
+            ex?.response?.data?.error?.message
+          ) {
+            setErrorMessage(ex.response.data.error.message);
+          } else {
+            setErrorMessage("Неизвестная ошибка");
+          }
+        }
       }
     }, 10);
 

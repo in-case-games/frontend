@@ -139,9 +139,11 @@ const Box = () => {
     ) : (
       <BoxDisplay
         box={box}
-        isHasBanner={banner}
+        isHasBanner={banner && inventory.length > 1}
         pathBanner={pathBanner}
-        openBannerWindow={() => setIsShowTakeItemWindow(banner)}
+        openBannerWindow={() => {
+          if (inventory.length > 1) setIsShowTakeItemWindow(banner);
+        }}
       />
     );
   };

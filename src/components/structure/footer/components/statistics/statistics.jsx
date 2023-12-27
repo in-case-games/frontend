@@ -16,9 +16,9 @@ const Statistics = () => {
 
   const [isStart, setIsStart] = useState(true);
 
+  const [errorMessage, setErrorMessage] = useState();
   const [statistics, setStatistics] = useState(null);
 
-  //TODO add lock refresh if error
   useEffect(() => {
     const interval = setInterval(
       async () => {
@@ -35,7 +35,18 @@ const Statistics = () => {
             inCoins: response.withdrawnFunds,
             online: 0,
           });
-        } catch (err) {}
+        } catch (ex) {
+          console.log(ex);
+
+          if (
+            ex?.response?.status < 500 &&
+            ex?.response?.data?.error?.message
+          ) {
+            setErrorMessage(ex.response.data.error.message);
+          } else {
+            setErrorMessage("Неизвестная ошибка");
+          }
+        }
       },
       isStart ? 100 : 5000
     );

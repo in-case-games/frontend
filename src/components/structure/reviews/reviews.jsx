@@ -24,32 +24,46 @@ const Reviews = () => {
   const [box, setBox] = useState();
   const [restriction, setRestriction] = useState();
   const [image, setImage] = useState();
+  const [errorMessage, setErrorMessage] = useState();
 
   useEffect(() => {
     const interval = setInterval(
       async () => {
-        setIsStart(false);
-        const response = await userApi.getReviewLast(10);
-        const result = [];
+        try {
+          setIsStart(false);
+          const response = await userApi.getReviewLast(10);
+          const result = [];
 
-        for (let i = 0; i < response.length; i++) {
-          const r = response[i];
-          const image = await userApi.getImageByUserId(r.userId);
-          result.push(
-            <Review
-              id={r.id}
-              image={image}
-              name={r.title}
-              date={r.creationDate}
-              showMiniProfile={() => setMiniProfile(r.userId)}
-              content={r.content}
-              score={r.score}
-              key={r.id}
-            />
-          );
+          for (let i = 0; i < response.length; i++) {
+            const r = response[i];
+            const image = await userApi.getImageByUserId(r.userId);
+            result.push(
+              <Review
+                id={r.id}
+                image={image}
+                name={r.title}
+                date={r.creationDate}
+                showMiniProfile={() => setMiniProfile(r.userId)}
+                content={r.content}
+                score={r.score}
+                key={r.id}
+              />
+            );
+          }
+
+          setReviews(result);
+        } catch (ex) {
+          console.log(ex);
+
+          if (
+            ex?.response?.status < 500 &&
+            ex?.response?.data?.error?.message
+          ) {
+            setErrorMessage(ex.response.data.error.message);
+          } else {
+            setErrorMessage("Неизвестная ошибка");
+          }
         }
-
-        setReviews(result);
       },
       isStart ? 100 : 50000
     );

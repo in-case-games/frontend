@@ -6,36 +6,50 @@ import styles from "./banners.module";
 import { useNavigate } from "react-router-dom";
 
 const Banners = () => {
+  const boxApi = new BoxApi();
+
   const windowWidth = useRef(window.innerWidth);
   const navigate = useNavigate();
-
-  const boxApi = new BoxApi();
 
   const [isStart, setIsStart] = useState(true);
   const [banners, setBanners] = useState([]);
   const [counter, setCounter] = useState(1);
+  const [errorMessage, setErrorMessage] = useState();
 
   useEffect(() => {
     const interval = setInterval(
       async () => {
-        setIsStart(false);
-        const response = await boxApi.getBannersByIsActive(true);
-        const result = [];
+        try {
+          setIsStart(false);
+          const response = await boxApi.getBannersByIsActive(true);
+          const result = [];
 
-        for (let i = 0; i < response.length; i++) {
-          let r = await boxApi.bannerPushImage(response[i]);
-          result.push(
-            <Banner
-              image={r.image}
-              click={() => navigate(`box/${r.box.id}`)}
-              key={r.id}
-            />
-          );
+          for (let i = 0; i < response.length; i++) {
+            let r = await boxApi.bannerPushImage(response[i]);
+            result.push(
+              <Banner
+                image={r.image}
+                click={() => navigate(`/box/${r.box.id}`)}
+                key={r.id}
+              />
+            );
+          }
+
+          setBanners(result);
+        } catch (ex) {
+          console.log(ex);
+
+          if (
+            ex?.response?.status < 500 &&
+            ex?.response?.data?.error?.message
+          ) {
+            setErrorMessage(ex.response.data.error.message);
+          } else {
+            setErrorMessage("Неизвестная ошибка");
+          }
         }
-
-        setBanners(result);
       },
-      isStart ? 100 : 50000
+      isStart ? 100 : 5000
     );
 
     return () => clearInterval(interval);

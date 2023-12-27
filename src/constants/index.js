@@ -60,6 +60,12 @@ const Infos = [
     link: "info",
     icon: Info,
   },
+  {
+    id: 3,
+    text: "Отзывы",
+    link: "reviews",
+    icon: Info,
+  },
 ];
 
 const Langs = [

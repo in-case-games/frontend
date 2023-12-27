@@ -7,6 +7,7 @@ const BoxGroup = (props) => {
   const boxGroupApi = new BoxGroupApi();
   const gameApi = new GameApi();
 
+  const [errorMessage, setErrorMessage] = useState();
   const [group, setGroup] = useState();
   const [games, setGames] = useState([]);
   const [backOperation, setBackOperation] = useState();
@@ -14,32 +15,42 @@ const BoxGroup = (props) => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      if (games.length === 0) {
-        const res = [];
-        res.push({
-          id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-          name: undefined,
-        });
-        setGames(res.concat(await gameApi.get()));
-      }
-      if (!group && props.group?.id) {
-        const result = props.group;
-        const select = [];
-        result.components = [];
-
-        const groups = await boxGroupApi.getByGroupId(props.group?.id);
-
-        for (let i = 0; i < groups.length; i++) {
-          select.push(groups[i].box);
-          result.components.push({
-            id: groups[i].id,
-            box: groups[i].box,
+      try {
+        if (games.length === 0) {
+          const res = [];
+          res.push({
+            id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            name: undefined,
           });
-          result.game = groups[i].game.name;
+          setGames(res.concat(await gameApi.get()));
         }
+        if (!group && props.group?.id) {
+          const result = props.group;
+          const select = [];
+          result.components = [];
 
-        props.setSelectBoxes((prev) => ({ ...prev, boxes: select }));
-        setGroup(result);
+          const groups = await boxGroupApi.getByGroupId(props.group?.id);
+
+          for (let i = 0; i < groups.length; i++) {
+            select.push(groups[i].box);
+            result.components.push({
+              id: groups[i].id,
+              box: groups[i].box,
+            });
+            result.game = groups[i].game.name;
+          }
+
+          props.setSelectBoxes((prev) => ({ ...prev, boxes: select }));
+          setGroup(result);
+        }
+      } catch (ex) {
+        console.log(ex);
+
+        if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
+          setErrorMessage(ex.response.data.error.message);
+        } else {
+          setErrorMessage("Неизвестная ошибка");
+        }
       }
     }, 100);
 
@@ -55,7 +66,19 @@ const BoxGroup = (props) => {
         setBackOperation(temp);
 
         if (temp === 0) {
-          await operations[operation]();
+          try {
+            await operations[operation]();
+          } catch (ex) {
+            console.log(ex);
+            if (
+              ex?.response?.status < 500 &&
+              ex?.response?.data?.error?.message
+            ) {
+              setErrorMessage(ex.response.data.error.message);
+            } else {
+              setErrorMessage("Неизвестная ошибка");
+            }
+          }
 
           setOperation(null);
           setBackOperation(null);
@@ -71,13 +94,11 @@ const BoxGroup = (props) => {
       setBackOperation();
       setOperation();
     } else if (!backOperation && group?.game) {
-      try {
-        if (isDelete) setOperation("delete-group");
-        else if (props.group?.id) setOperation("update-group");
-        else setOperation("create-group");
+      if (isDelete) setOperation("delete-group");
+      else if (props.group?.id) setOperation("update-group");
+      else setOperation("create-group");
 
-        setBackOperation(5);
-      } catch (ex) {}
+      setBackOperation(5);
     }
   };
 

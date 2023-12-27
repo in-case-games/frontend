@@ -30,6 +30,7 @@ import styles from "./profile-settings.module";
 const Observer = (props) => {
   const userApi = new UserApi();
 
+  const [errorMessage, setErrorMessage] = useState();
   const [user, setUser] = useState(TokenService.getUser());
   const [game, setGame] = useState(null);
   const [restrictions, setRestrictions] = useState(null);
@@ -54,17 +55,27 @@ const Observer = (props) => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      if (
-        (showRestriction && !restrictions) ||
-        (props.isLoading && showRestriction)
-      )
-        await loadRestrictions();
+      try {
+        if (
+          (showRestriction && !restrictions) ||
+          (props.isLoading && showRestriction)
+        )
+          await loadRestrictions();
 
-      if (props.isLoading) {
-        const user = TokenService.getUser();
+        if (props.isLoading) {
+          const user = TokenService.getUser();
 
-        setUser(user);
-        props.setIsLoading(false);
+          setUser(user);
+          props.setIsLoading(false);
+        }
+      } catch (ex) {
+        console.log(ex);
+
+        if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
+          setErrorMessage(ex.response.data.error.message);
+        } else {
+          setErrorMessage("Неизвестная ошибка");
+        }
       }
     }, 100);
 

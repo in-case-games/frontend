@@ -25,6 +25,7 @@ const OpeningsRoulette = () => {
 
   const [isStart, setIsStart] = useState(true);
 
+  const [errorMessage, setErrorMessage] = useState();
   const [items, setItems] = useState();
   const [games, setGames] = useState();
   const [item, setItem] = useState();
@@ -38,25 +39,38 @@ const OpeningsRoulette = () => {
   useEffect(() => {
     const interval = setInterval(
       async () => {
-        setIsStart(false);
+        try {
+          setIsStart(false);
 
-        const g = games || (await loadedGames());
-        const history = await loadedHistory();
-        const result = [];
+          const g = games || (await loadedGames());
+          const history = await loadedHistory();
+          const result = [];
 
-        for (let i = 0; i < history.length; i++) {
-          let h = await pushItemToHistory(history[i], g);
+          for (let i = 0; i < history.length; i++) {
+            let h = await pushItemToHistory(history[i], g);
 
-          result.push(
-            <Item
-              history={h}
-              showMiniProfile={() => setMiniProfile(h.userId)}
-              key={h.id}
-            />
-          );
+            result.push(
+              <Item
+                history={h}
+                showMiniProfile={() => setMiniProfile(h.userId)}
+                key={h.id}
+              />
+            );
+          }
+
+          setItems(result);
+        } catch (ex) {
+          console.log(ex);
+
+          if (
+            ex?.response?.status < 500 &&
+            ex?.response?.data?.error?.message
+          ) {
+            setErrorMessage(ex.response.data.error.message);
+          } else {
+            setErrorMessage("Неизвестная ошибка");
+          }
         }
-
-        setItems(result);
       },
       isStart ? 1000 : 5000
     );

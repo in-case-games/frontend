@@ -59,7 +59,7 @@ const Footer = () => {
                   <img alt="" src={FlagRUSImage} />
                   RU
                 </div>
-                <div className={styles.project}>InCase.games @2023</div>
+                <div className={styles.project}>incase.games @2023</div>
               </div>
             </div>
           </div>

@@ -9,11 +9,13 @@ import styles from "./withdrawn.module";
 
 const Withdrawn = (props) => {
   const userApi = new UserApi();
+
   const [gradientColor, setGradientColor] = useState(
     Constants.ItemGradients[
       props.history.item.rarity ? props.history.item.rarity : "white"
     ]
   );
+  const [errorMessage, setErrorMessage] = useState();
 
   useEffect(() => {
     const interval = setInterval(
@@ -61,7 +63,12 @@ const Withdrawn = (props) => {
         await userApi.transferWithdrawn(props.history.id);
         window.location.reload();
       } catch (err) {
-        console.log(err);
+        console.log(ex);
+        if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
+          setErrorMessage(ex.response.data.error.message);
+        } else {
+          setErrorMessage("Неизвестная ошибка");
+        }
       }
     }
   };

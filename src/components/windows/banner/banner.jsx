@@ -12,15 +12,29 @@ const Banner = (props) => {
   const [box, setBox] = useState();
   const [backOperation, setBackOperation] = useState();
   const [operation, setOperation] = useState();
+  const [errorMessage, setErrorMessage] = useState();
 
   useEffect(() => {
     const interval = setInterval(async () => {
       if (!banner && props.banner?.id) {
-        const result = await boxApi.bannerPushImage(
-          await boxApi.getBannerById(props.banner.id)
-        );
-        setBox(result?.box?.name);
-        setBanner(result);
+        try {
+          const result = await boxApi.bannerPushImage(
+            await boxApi.getBannerById(props.banner.id)
+          );
+          setBox(result?.box?.name);
+          setBanner(result);
+        } catch (ex) {
+          console.log(ex);
+
+          if (
+            ex?.response?.status < 500 &&
+            ex?.response?.data?.error?.message
+          ) {
+            setErrorMessage(ex.response.data.error.message);
+          } else {
+            setErrorMessage("Неизвестная ошибка");
+          }
+        }
       }
     }, 100);
 
@@ -36,7 +50,20 @@ const Banner = (props) => {
         setBackOperation(temp);
 
         if (temp === 0) {
-          await operations[operation]();
+          try {
+            await operations[operation]();
+          } catch (ex) {
+            console.log(ex);
+
+            if (
+              ex?.response?.status < 500 &&
+              ex?.response?.data?.error?.message
+            ) {
+              setErrorMessage(ex.response.data.error.message);
+            } else {
+              setErrorMessage("Неизвестная ошибка");
+            }
+          }
 
           setOperation(null);
           setBackOperation(null);
@@ -53,18 +80,32 @@ const Banner = (props) => {
       setOperation();
     } else if (!backOperation && box) {
       try {
-        banner.image = props.image || null;
-        banner.boxId = (await boxApi.getByName(box)).id;
-        banner.expirationDate = new Date(banner.expirationDate);
-        banner.creationDate = new Date(banner.creationDate);
+        const res = banner ? banner : {};
+        res.image = props.image || null;
+        res.boxId = (await boxApi.getByName(box)).id;
+        res.expirationDate = new Date(banner.expirationDate || new Date());
+        res.creationDate = new Date(banner.creationDate || new Date());
 
         if (isDelete) setOperation("delete-banner");
         else if (props.banner?.id) setOperation("update-banner");
         else setOperation("create-banner");
 
         setBackOperation(5);
-        setBanner(banner);
-      } catch (ex) {}
+        setBanner(res);
+      } catch (ex) {
+        console.log(ex);
+
+        if (!banner?.image || banner?.image === BannerImage) {
+          setErrorMessage("Загрузите фото");
+        } else if (
+          ex?.response?.status < 500 &&
+          ex?.response?.data?.error?.message
+        ) {
+          setErrorMessage(ex.response.data.error.message);
+        } else {
+          setErrorMessage("Неизвестная ошибка");
+        }
+      }
     }
   };
 
@@ -101,6 +142,7 @@ const Banner = (props) => {
         <div className={styles.banner_header}>
           <div className={styles.tittle}>Баннер</div>
         </div>
+        <div className={styles.error}>{errorMessage}</div>
         <div className={styles.banner_info}>
           <div className={styles.banner_display}>
             <img

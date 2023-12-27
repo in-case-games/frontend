@@ -19,6 +19,7 @@ const BoxInventory = (props) => {
   const [backOperation, setBackOperation] = useState(null);
   const [operation, setOperation] = useState(null);
 
+  const [errorMessage, setErrorMessage] = useState();
   const [user, setUser] = useState(TokenService.getUser());
   const [item, setItem] = useState(props.inventory?.item || {});
   const [box, setBox] = useState(props.inventory?.box || {});
@@ -26,15 +27,24 @@ const BoxInventory = (props) => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      if (!games) setGames(await gameApi.get());
-      if (isLoading && !box?.image) {
-        setUser(TokenService.getUser());
-        setBox(
-          await boxApi.pushImage(await boxApi.getById(props.inventory.boxId))
-        );
-      }
+      try {
+        if (!games) setGames(await gameApi.get());
+        if (isLoading && !box?.image) {
+          setUser(TokenService.getUser());
+          setBox(
+            await boxApi.pushImage(await boxApi.getById(props.inventory.boxId))
+          );
+        }
 
-      setIsLoading(false);
+        setIsLoading(false);
+      } catch (ex) {
+        console.log(ex);
+        if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
+          setErrorMessage(ex.response.data.error.message);
+        } else {
+          setErrorMessage("Неизвестная ошибка");
+        }
+      }
     }, 500);
 
     return () => clearInterval(interval);
@@ -49,8 +59,20 @@ const BoxInventory = (props) => {
         setBackOperation(t);
 
         if (t === 0) {
-          await operations[operation]();
+          try {
+            await operations[operation]();
+          } catch (ex) {
+            console.log(ex);
 
+            if (
+              ex?.response?.status < 500 &&
+              ex?.response?.data?.error?.message
+            ) {
+              setErrorMessage(ex.response.data.error.message);
+            } else {
+              setErrorMessage("Неизвестная ошибка");
+            }
+          }
           setOperation(null);
           setBackOperation(null);
         }
@@ -78,6 +100,12 @@ const BoxInventory = (props) => {
         setBackOperation(5);
       } catch (ex) {
         console.log(ex);
+
+        if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
+          setErrorMessage(ex.response.data.error.message);
+        } else {
+          setErrorMessage("Неизвестная ошибка");
+        }
       }
     }
   };

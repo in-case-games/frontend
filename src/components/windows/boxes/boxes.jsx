@@ -15,6 +15,7 @@ const Boxes = (props) => {
 
   const [search, setSearch] = useState("");
 
+  const [errorMessage, setErrorMessage] = useState();
   const [primaryBoxes, setPrimaryBoxes] = useState([]);
   const [showBoxes, setShowBoxes] = useState([]);
 
@@ -55,11 +56,25 @@ const Boxes = (props) => {
         setShowBoxes(show);
       };
       if (!isBanned && (isLoading || isClickBox)) {
-        loaded(isLoading);
+        try {
+          await loaded(isLoading);
 
-        setIsClickBox(false);
-        setIsLoading(false);
-        setIsBanned(false);
+          setIsClickBox(false);
+          setIsLoading(false);
+          setIsBanned(false);
+        } catch (ex) {
+          setIsBanned(false);
+          console.log(ex);
+
+          if (
+            ex?.response?.status < 500 &&
+            ex?.response?.data?.error?.message
+          ) {
+            setErrorMessage(ex.response.data.error.message);
+          } else {
+            setErrorMessage("Неизвестная ошибка");
+          }
+        }
       }
     }, 100);
 
