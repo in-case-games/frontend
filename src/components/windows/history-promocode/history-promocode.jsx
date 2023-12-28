@@ -9,15 +9,51 @@ import styles from "./history-promocode.module";
 const HistoryPromocode = (props) => {
   const promocodeApi = new PromocodeApi();
   const navigate = useNavigate();
+
+  const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [types, setTypes] = useState([]);
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      if (!types || types.length === 0) setTypes(await promocodeApi.getTypes());
+      try {
+        await errorHandler(async () => {
+          if (!types || types.length === 0)
+            setTypes(await promocodeApi.getTypes());
+        });
+      } catch (ex) {
+        if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
+          console.log(ex);
+          setErrorMessage(ex.response.data.error.message);
+        } else {
+          console.log(ex);
+          setErrorMessage("Неизвестная ошибка");
+        }
+      }
     }, 500);
 
     return () => clearInterval(interval);
   });
+
+  const errorHandler = async (action) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+      setPenaltyDelay(penaltyDelay + 1000);
+      setTimeout(
+        () =>
+          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
+        1000
+      );
+    }
+  };
 
   return (
     <div className={styles.history_promocode}>

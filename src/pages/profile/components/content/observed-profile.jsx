@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Modal as ModalLayout } from "../../../../layouts";
 import { LoadImage as LoadImageWindow } from "../../../../components/windows";
 import { LoadingArrow as Loading } from "../../../../components/loading";
@@ -11,20 +11,33 @@ const ObservedProfile = () => {
   const userApi = new UserApi();
 
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAllReload, setIsAllReload] = useState(true);
   const [isLoadImage, setIsLoadImage] = useState(false);
 
   const [image, setImage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   useEffect(() => {
     const func = async () => {
-      const temp = await userApi.getById(id);
-      temp.image = await userApi.getImageByUserId(id);
-      setUser(temp);
-      setIsAllReload(true);
-      setIsLoading(true);
+      await errorHandler(
+        async () => {
+          const temp = await userApi.getById(id);
+          temp.image = await userApi.getImageByUserId(id);
+          setUser(temp);
+          setIsAllReload(true);
+          setIsLoading(true);
+        },
+        async (ex) => {
+          if (ex?.response?.status === 404) {
+            navigate("/not-found");
+          }
+        }
+      );
     };
 
     func();
@@ -33,15 +46,45 @@ const ObservedProfile = () => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (!user) {
-        const temp = await userApi.getById(id);
-        temp.image = await userApi.getImageByUserId(id);
+        await errorHandler(
+          async () => {
+            const temp = await userApi.getById(id);
+            temp.image = await userApi.getImageByUserId(id);
 
-        setUser(temp);
+            setUser(temp);
+          },
+          async () => {
+            if (ex?.response?.status === 404) {
+              navigate("/not-found");
+            }
+          }
+        );
       }
-    }, 100);
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
+
+  const errorHandler = async (action, actionCatch = async () => {}) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+      await actionCatch(ex);
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+      setPenaltyDelay(penaltyDelay + 1000);
+      setTimeout(
+        () =>
+          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
+        1000
+      );
+    }
+  };
 
   return (
     <div className={styles.observed_profile}>

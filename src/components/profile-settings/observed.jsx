@@ -46,6 +46,7 @@ const Observed = (props) => {
   const [restriction, setRestriction] = useState(null);
 
   const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [login, setLogin] = useState(props.user.login);
   const [email, setEmail] = useState(props.user.additionalInfo.email);
   const [balance, setBalance] = useState(null);
@@ -78,7 +79,7 @@ const Observed = (props) => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      try {
+      await errorHandler(async () => {
         props.setIsAllReload(false);
 
         if (props.isAllReload) resetToGlobalZero();
@@ -101,15 +102,8 @@ const Observed = (props) => {
           await loadHistoryOpenings();
 
         props.setIsLoading(false);
-      } catch (ex) {
-        console.log(ex);
-        if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
-          setErrorMessage(ex.response.data.error.message);
-        } else {
-          setErrorMessage("Неизвестная ошибка");
-        }
-      }
-    }, 500);
+      });
+    }, 500 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
@@ -220,79 +214,84 @@ const Observed = (props) => {
   };
 
   const changeEmail = async () => {
-    try {
-      await userApi.updateEmailByAdmin(props.user.id, email);
+    await errorHandler(
+      async () => {
+        await userApi.updateEmailByAdmin(props.user.id, email);
 
-      setIsErrorEmail(false);
-      setIsApplyEmail(true);
-    } catch (ex) {
-      setIsApplyEmail(false);
-      setIsErrorEmail(true);
-      console.log(ex);
-
-      if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
-        setErrorMessage(ex.response.data.error.message);
-      } else {
-        setErrorMessage("Неизвестная ошибка");
+        setIsErrorEmail(false);
+        setIsApplyEmail(true);
+      },
+      async () => {
+        setIsApplyEmail(false);
+        setIsErrorEmail(true);
       }
-    }
+    );
   };
 
   const changeLogin = async () => {
-    try {
-      await userApi.updateLoginByAdmin(props.user.id, login);
+    await errorHandler(
+      async () => {
+        await userApi.updateLoginByAdmin(props.user.id, login);
 
-      setIsErrorLogin(false);
-      setIsApplyLogin(true);
-    } catch (ex) {
-      setIsApplyLogin(false);
-      setIsErrorLogin(true);
-      console.log(ex);
-
-      if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
-        setErrorMessage(ex.response.data.error.message);
-      } else {
-        setErrorMessage("Неизвестная ошибка");
+        setIsErrorLogin(false);
+        setIsApplyLogin(true);
+      },
+      async () => {
+        setIsApplyLogin(false);
+        setIsErrorLogin(true);
       }
-    }
+    );
   };
 
   const changeRole = async () => {
-    try {
-      const id = roles.find((r) => r.name === role).id;
-      await userApi.updateRoleByAdmin(props.user.id, id);
+    await errorHandler(
+      async () => {
+        const id = roles.find((r) => r.name === role).id;
+        await userApi.updateRoleByAdmin(props.user.id, id);
 
-      setIsErrorRole(false);
-      setIsApplyRole(true);
-    } catch (ex) {
-      setIsApplyRole(false);
-      setIsErrorRole(true);
-      console.log(ex);
-
-      if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
-        setErrorMessage(ex.response.data.error.message);
-      } else {
-        setErrorMessage("Неизвестная ошибка");
+        setIsErrorRole(false);
+        setIsApplyRole(true);
+      },
+      async () => {
+        setIsApplyRole(false);
+        setIsErrorRole(true);
       }
-    }
+    );
   };
 
   const changeBalance = async () => {
-    try {
-      await userApi.updateBalanceByAdmin(props.user.id, balance);
+    await errorHandler(
+      async () => {
+        await userApi.updateBalanceByAdmin(props.user.id, balance);
 
-      setIsErrorBalance(false);
-      setIsApplyBalance(true);
-    } catch (ex) {
-      setIsApplyBalance(false);
-      setIsErrorBalance(true);
-      console.log(ex);
-
-      if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
-        setErrorMessage(ex.response.data.error.message);
-      } else {
-        setErrorMessage("Неизвестная ошибка");
+        setIsErrorBalance(false);
+        setIsApplyBalance(true);
+      },
+      async () => {
+        setIsApplyBalance(false);
+        setIsErrorBalance(true);
       }
+    );
+  };
+
+  const errorHandler = async (action, actionCatch = async () => {}) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+      await actionCatch();
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+      setPenaltyDelay(penaltyDelay + 1000);
+      setTimeout(
+        () =>
+          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
+        1000
+      );
     }
   };
 

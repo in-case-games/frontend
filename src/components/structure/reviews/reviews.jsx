@@ -29,7 +29,7 @@ const Reviews = () => {
   useEffect(() => {
     const interval = setInterval(
       async () => {
-        try {
+        await errorHandler(async () => {
           setIsStart(false);
           const response = await userApi.getReviewLast(10);
           const result = [];
@@ -52,24 +52,33 @@ const Reviews = () => {
           }
 
           setReviews(result);
-        } catch (ex) {
-          console.log(ex);
-
-          if (
-            ex?.response?.status < 500 &&
-            ex?.response?.data?.error?.message
-          ) {
-            setErrorMessage(ex.response.data.error.message);
-          } else {
-            setErrorMessage("Неизвестная ошибка");
-          }
-        }
+        });
       },
       isStart ? 100 : 50000
     );
 
     return () => clearInterval(interval);
   });
+
+  const errorHandler = async (action) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+      setPenaltyDelay(penaltyDelay + 1000);
+      setTimeout(
+        () =>
+          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
+        1000
+      );
+    }
+  };
 
   return (
     <div>

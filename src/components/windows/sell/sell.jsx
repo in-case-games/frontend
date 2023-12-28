@@ -16,6 +16,8 @@ const Sell = (props) => {
   const [remainingInventories, setRemainingInventories] = useState({
     items: [],
   });
+  const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   const click = () => {
     setIsBanned(true);
@@ -38,25 +40,31 @@ const Sell = (props) => {
     for (let i = 0; i < items.length; i++) {
       const id = items[i].id;
       const index = props.selectItems.items.indexOf(id);
+      let error = false;
 
-      try {
-        if (items[i].status !== "success") {
-          items[i].status = "loading";
-          setFinishedInventories((prev) => ({ ...prev, items: items }));
+      await errorHandler(
+        async () => {
+          if (items[i].status !== "success") {
+            items[i].status = "loading";
+            setFinishedInventories((prev) => ({ ...prev, items: items }));
 
-          await itemApi.sell(id);
+            await itemApi.sell(id);
 
-          items[i].status = "success";
+            items[i].status = "success";
+            setFinishedInventories((prev) => ({ ...prev, items: items }));
+          }
+        },
+        async () => {
+          error = true;
+          items[i].status = "cancel";
+          items[i].error = "Внутренняя ошибка, попробуйте еще раз";
           setFinishedInventories((prev) => ({ ...prev, items: items }));
         }
-      } catch (err) {
-        items[i].status = "cancel";
-        items[i].error = "Внутренняя ошибка, попробуйте еще раз";
-        setFinishedInventories((prev) => ({ ...prev, items: items }));
-        break;
-      } finally {
-        removeSelectItem(index);
-      }
+      );
+
+      removeSelectItem(index);
+
+      if (error) break;
     }
 
     setIsLoading(false);
@@ -81,7 +89,7 @@ const Sell = (props) => {
         setIsApply(remaining.length === 0);
         setIsDisplayedButton(remaining.length > 0);
       }
-    }, 100);
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
@@ -105,10 +113,31 @@ const Sell = (props) => {
         setIsLoading(false);
         setIsBanned(false);
       }
-    }, 10);
+    }, 10 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
+
+  const errorHandler = async (action, actionCatch = async () => {}) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+      await actionCatch();
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+      setPenaltyDelay(penaltyDelay + 1000);
+      setTimeout(
+        () =>
+          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
+        1000
+      );
+    }
+  };
 
   return (
     <div className={styles.sell}>

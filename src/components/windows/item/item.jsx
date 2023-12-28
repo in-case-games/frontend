@@ -28,6 +28,7 @@ const Item = (props) => {
     Constants.ItemGradients[props.item?.rarity ? props.item.rarity : "white"]
   );
   const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   const [rarities, setRarities] = useState([]);
   const [types, setTypes] = useState([]);
@@ -48,22 +49,10 @@ const Item = (props) => {
         setBackOperation(t);
 
         if (t === 0) {
-          try {
-            await operations[operation]();
-          } catch (ex) {
-            setIsLoading(true);
-
-            if (
-              ex?.response?.status < 500 &&
-              ex?.response?.data?.error?.message
-            ) {
-              console.log(ex);
-              setErrorMessage(ex.response.data.error.message);
-            } else {
-              console.log(ex);
-              setErrorMessage("Неизвестная ошибка");
-            }
-          }
+          await errorHandler(
+            async () => await operations[operation](),
+            async () => setIsLoading(true)
+          );
 
           setOperation(null);
           setBackOperation(null);
@@ -83,7 +72,7 @@ const Item = (props) => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (isLoading) {
-        try {
+        await errorHandler(async () => {
           setUser(TokenService.getUser());
           setItem(
             props.item?.id
@@ -98,18 +87,7 @@ const Item = (props) => {
           setGradient(Constants.ItemGradients[item.rarity]);
 
           setIsLoading(false);
-        } catch (ex) {
-          console.log(ex);
-
-          if (
-            ex?.response?.status < 500 &&
-            ex?.response?.data?.error?.message
-          ) {
-            setErrorMessage(ex.response.data.error.message);
-          } else {
-            setErrorMessage("Неизвестная ошибка");
-          }
-        }
+        });
       }
 
       setGradient(
@@ -117,7 +95,7 @@ const Item = (props) => {
           props.item?.rarity ? props.item.rarity : "white"
         ]
       );
-    }, 100);
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
@@ -187,6 +165,27 @@ const Item = (props) => {
     "create-item": createItem,
     "delete-item": deleteItem,
     "update-item": updateItem,
+  };
+
+  const errorHandler = async (action, actionCatch = async () => {}) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+      await actionCatch();
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+      setPenaltyDelay(penaltyDelay + 1000);
+      setTimeout(
+        () =>
+          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
+        1000
+      );
+    }
   };
 
   return (

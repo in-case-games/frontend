@@ -15,7 +15,7 @@ const Withdrawn = (props) => {
       props.history.item.rarity ? props.history.item.rarity : "white"
     ]
   );
-  const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(
@@ -59,17 +59,24 @@ const Withdrawn = (props) => {
 
   const click = async () => {
     if (props.history.status === "cancel") {
-      try {
+      await errorHandler(async () => {
         await userApi.transferWithdrawn(props.history.id);
         window.location.reload();
-      } catch (err) {
-        console.log(ex);
-        if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
-          setErrorMessage(ex.response.data.error.message);
-        } else {
-          setErrorMessage("Неизвестная ошибка");
-        }
-      }
+      });
+    }
+  };
+
+  const errorHandler = async (action) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
     }
   };
 

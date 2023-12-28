@@ -23,6 +23,7 @@ const Box = (props) => {
     props.box?.id ? props.box : Constants.TemplateBox
   );
   const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   const [games, setGames] = useState([]);
 
@@ -35,7 +36,7 @@ const Box = (props) => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (isLoading) {
-        try {
+        await errorHandler(async () => {
           setUser(TokenService.getUser());
           setBox(
             props.box?.id
@@ -44,20 +45,9 @@ const Box = (props) => {
           );
           setGames(await gameApi.get());
           setIsLoading(false);
-        } catch (ex) {
-          if (
-            ex?.response?.status < 500 &&
-            ex?.response?.data?.error?.message
-          ) {
-            console.log(ex);
-            setErrorMessage(ex.response.data.error.message);
-          } else {
-            console.log(ex);
-            setErrorMessage("Неизвестная ошибка");
-          }
-        }
+        });
       }
-    }, 100);
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
@@ -71,22 +61,14 @@ const Box = (props) => {
         setBackOperation(temp);
 
         if (temp === 0) {
-          try {
-            await operations[operation]();
-          } catch (ex) {
-            setIsLoading(true);
-            console.log(ex);
-
-            if (
-              ex?.response?.status < 500 &&
-              ex?.response?.data?.error?.message
-            ) {
-              setErrorMessage(ex.response.data.error.message);
-            } else {
-              setErrorMessage("Неизвестная ошибка");
+          await errorHandler(
+            async () => {
+              await operations[operation]();
+            },
+            async () => {
+              setIsLoading(true);
             }
-          }
-
+          );
           setOperation(null);
           setBackOperation(null);
         }
@@ -160,6 +142,27 @@ const Box = (props) => {
     "create-box": createBox,
     "delete-box": deleteBox,
     "update-box": updateBox,
+  };
+
+  const errorHandler = async (action, actionCatch = async () => {}) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+      await actionCatch();
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+      setPenaltyDelay(penaltyDelay + 1000);
+      setTimeout(
+        () =>
+          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
+        1000
+      );
+    }
   };
 
   return (

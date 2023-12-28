@@ -16,6 +16,7 @@ const Boxes = (props) => {
   const [search, setSearch] = useState("");
 
   const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [primaryBoxes, setPrimaryBoxes] = useState([]);
   const [showBoxes, setShowBoxes] = useState([]);
 
@@ -56,27 +57,18 @@ const Boxes = (props) => {
         setShowBoxes(show);
       };
       if (!isBanned && (isLoading || isClickBox)) {
-        try {
-          await loaded(isLoading);
+        await errorHandler(
+          async () => {
+            await loaded(isLoading);
 
-          setIsClickBox(false);
-          setIsLoading(false);
-          setIsBanned(false);
-        } catch (ex) {
-          setIsBanned(false);
-          console.log(ex);
-
-          if (
-            ex?.response?.status < 500 &&
-            ex?.response?.data?.error?.message
-          ) {
-            setErrorMessage(ex.response.data.error.message);
-          } else {
-            setErrorMessage("Неизвестная ошибка");
-          }
-        }
+            setIsClickBox(false);
+            setIsLoading(false);
+            setIsBanned(false);
+          },
+          async () => setIsBanned(false)
+        );
       }
-    }, 100);
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
@@ -98,6 +90,27 @@ const Boxes = (props) => {
 
       setSearch(value);
       setShowBoxes(show);
+    }
+  };
+
+  const errorHandler = async (action, actionCatch = async () => {}) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+      await actionCatch();
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+      setPenaltyDelay(penaltyDelay + 1000);
+      setTimeout(
+        () =>
+          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
+        1000
+      );
     }
   };
 

@@ -18,30 +18,51 @@ const Inventory = (props) => {
 
   const observerRole = TokenService.getUser()?.role ?? "user";
 
+  const [errorMessage, setErrorMessage] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [backRemove, setBackRemove] = useState(null);
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      if (backRemove !== null) {
-        let t = backRemove - 1;
-        t = t >= 0 ? t : 0;
+      await errorHandler(
+        async () => {
+          if (backRemove !== null) {
+            let t = backRemove - 1;
+            t = t >= 0 ? t : 0;
 
-        setBackRemove(t);
+            setBackRemove(t);
 
-        if (t === 0) {
-          await userApi.deleteUserInventoryByAdmin(props.inventory.id);
+            if (t === 0) {
+              await userApi.deleteUserInventoryByAdmin(props.inventory.id);
 
-          setBackRemove(null);
-          props.close();
-        }
-      }
+              setBackRemove(null);
+              props.close();
+            }
+          }
 
-      setIsLoading(false);
+          setIsLoading(false);
+        },
+        async () => setBackRemove(null)
+      );
     }, 1000);
 
     return () => clearInterval(interval);
   });
+
+  const errorHandler = async (action, actionCatch = async () => {}) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+      await actionCatch();
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+    }
+  };
 
   return (
     <div className={styles.inventory}>

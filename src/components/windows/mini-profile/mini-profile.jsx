@@ -40,6 +40,8 @@ const MiniProfileWindow = (props) => {
   const [history, setHistory] = useState(null);
   const [restrictions, setRestrictions] = useState(null);
 
+  const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [item, setItem] = useState(false);
   const [box, setBox] = useState(false);
   const [restriction, setRestriction] = useState(false);
@@ -55,58 +57,62 @@ const MiniProfileWindow = (props) => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (isAllRefresh) {
-        setIsAllRefresh(false);
+        await errorHandler(async () => {
+          setIsAllRefresh(false);
 
-        const user = await userApi.getById(props.userId);
+          const user = await userApi.getById(props.userId);
 
-        user.image = await userApi.getImageByUserId(user.id);
-        user.ownerRestrictions = user.ownerRestrictions.slice(0, 3);
-        user.restrictions = user.restrictions.slice(0, 3);
+          user.image = await userApi.getImageByUserId(user.id);
+          user.ownerRestrictions = user.ownerRestrictions.slice(0, 3);
+          user.restrictions = user.restrictions.slice(0, 3);
 
-        await loadRestrictions(user);
-        await loadHistory(user);
+          await loadRestrictions(user);
+          await loadHistory(user);
 
-        setUser(user);
-        setIsLoading(false);
-        setIsLoadingItems(false);
-        setIsStart(false);
+          setUser(user);
+          setIsLoading(false);
+          setIsLoadingItems(false);
+          setIsStart(false);
+        });
       }
-    }, 100);
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
 
   const firstLoadHistory = async (data) => {
-    const isBox = data === "box";
-    const isItem = data === "item";
+    await errorHandler(async () => {
+      const isBox = data === "box";
+      const isItem = data === "item";
 
-    if (isItem) setBarActive(() => setItem(!item));
-    else if (isBox) setBarActive(() => setBox(!box));
+      if (isItem) setBarActive(() => setItem(!item));
+      else if (isBox) setBarActive(() => setBox(!box));
 
-    if (
-      (isItem && (!history || !history[0]?.item)) ||
-      (isBox && (!history || !history[0]?.box))
-    ) {
-      let h = !history
-        ? await userApi.getOpeningsByUserId(props.userId)
-        : history;
-      h = h.slice(0, 15);
+      if (
+        (isItem && (!history || !history[0]?.item)) ||
+        (isBox && (!history || !history[0]?.box))
+      ) {
+        let h = !history
+          ? await userApi.getOpeningsByUserId(props.userId)
+          : history;
+        h = h.slice(0, 15);
 
-      for (let i = 0; i < h.length; i++) {
-        if (isBox) {
-          h[i].box = await boxApi.pushImage(await boxApi.getById(h[i].boxId));
-        } else if (isItem) {
-          h[i].item = await itemApi.getById(h[i].itemId);
-          const game = await gameApi.getByName(h[i].item.game);
-          h[i].item.gameId = game.id;
-          h[i].item = await itemApi.pushImage(h[i].item);
+        for (let i = 0; i < h.length; i++) {
+          if (isBox) {
+            h[i].box = await boxApi.pushImage(await boxApi.getById(h[i].boxId));
+          } else if (isItem) {
+            h[i].item = await itemApi.getById(h[i].itemId);
+            const game = await gameApi.getByName(h[i].item.game);
+            h[i].item.gameId = game.id;
+            h[i].item = await itemApi.pushImage(h[i].item);
+          }
         }
+
+        setHistory(h);
       }
 
-      setHistory(h);
-    }
-
-    setIsLoadingItems(false);
+      setIsLoadingItems(false);
+    });
   };
 
   const loadHistory = async (user) => {
@@ -182,6 +188,26 @@ const MiniProfileWindow = (props) => {
       }
 
       setRestrictions(res);
+    }
+  };
+
+  const errorHandler = async (action) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+      setPenaltyDelay(penaltyDelay + 1000);
+      setTimeout(
+        () =>
+          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
+        1000
+      );
     }
   };
 

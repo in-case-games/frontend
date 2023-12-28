@@ -7,39 +7,57 @@ import styles from "./take-item-banner.module";
 
 const TakeItemBanner = (props) => {
   const userApi = new UserApi();
-
-  const [hovered, setHovered] = useState(false);
-
   const role = TokenService.getUser()?.role;
 
+  const [errorMessage, setErrorMessage] = useState("");
+  const [hovered, setHovered] = useState(false);
+
   const takeItem = async (id) => {
-    if (!role) return;
+    await errorHandler(async () => {
+      if (!role) return;
 
-    if (props.pathBanner) {
-      if (props.pathBanner.item.id === id) return;
+      if (props.pathBanner) {
+        if (props.pathBanner.item.id === id) return;
 
-      await userApi.putPathBanner({
-        id: props.pathBanner.id,
-        itemId: id,
-        userId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        boxId: props.boxId,
-      });
-    } else {
-      await userApi.postPathBanner({
-        id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        itemId: id,
-        userId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        boxId: props.boxId,
-      });
-    }
+        await userApi.putPathBanner({
+          id: props.pathBanner.id,
+          itemId: id,
+          userId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          boxId: props.boxId,
+        });
+      } else {
+        await userApi.postPathBanner({
+          id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          itemId: id,
+          userId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          boxId: props.boxId,
+        });
+      }
 
-    props.close();
+      props.close();
+    });
   };
 
   const deletePath = async () => {
-    await userApi.deletePathBannerById(props.pathBanner.id);
+    await errorHandler(async () => {
+      await userApi.deletePathBannerById(props.pathBanner.id);
 
-    props.close();
+      props.close();
+    });
+  };
+
+  const errorHandler = async (action) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+    }
   };
 
   return (

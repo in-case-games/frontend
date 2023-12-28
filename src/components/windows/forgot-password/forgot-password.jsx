@@ -5,19 +5,31 @@ import { Input } from "../../common/inputs";
 
 const ForgotPassword = (props) => {
   const emailApi = new EmailApi();
-  const [error, setError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
 
   const sendForgot = async () => {
-    try {
+    await errorHandler(async () => {
       await emailApi.sendForgotPassword({
         login: login,
         email: email,
       });
       props.exchangeWindow("email");
-    } catch (err) {
-      setError(err.response.data.error.message);
+    });
+  };
+
+  const errorHandler = async (action) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
     }
   };
 
@@ -26,7 +38,7 @@ const ForgotPassword = (props) => {
       <div className={styles.forgot_password_content}>
         <div className={styles.forgot_password_header}>
           <div className={styles.tittle}>Забыли пароль?</div>
-          <div className={styles.error}>{error}</div>
+          <div className={styles.error}>{errorMessage}</div>
         </div>
         <div className={styles.forgot_password_inputs}>
           <Input

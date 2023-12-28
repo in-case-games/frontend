@@ -39,7 +39,7 @@ const OpeningsRoulette = () => {
   useEffect(() => {
     const interval = setInterval(
       async () => {
-        try {
+        await errorHandler(async () => {
           setIsStart(false);
 
           const g = games || (await loadedGames());
@@ -59,18 +59,7 @@ const OpeningsRoulette = () => {
           }
 
           setItems(result);
-        } catch (ex) {
-          console.log(ex);
-
-          if (
-            ex?.response?.status < 500 &&
-            ex?.response?.data?.error?.message
-          ) {
-            setErrorMessage(ex.response.data.error.message);
-          } else {
-            setErrorMessage("Неизвестная ошибка");
-          }
-        }
+        });
       },
       isStart ? 1000 : 5000
     );
@@ -134,6 +123,20 @@ const OpeningsRoulette = () => {
     }
 
     return history;
+  };
+
+  const errorHandler = async (action) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+    }
   };
 
   return (

@@ -8,6 +8,7 @@ const BoxGroup = (props) => {
   const gameApi = new GameApi();
 
   const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [group, setGroup] = useState();
   const [games, setGames] = useState([]);
   const [backOperation, setBackOperation] = useState();
@@ -15,7 +16,7 @@ const BoxGroup = (props) => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      try {
+      await errorHandler(async () => {
         if (games.length === 0) {
           const res = [];
           res.push({
@@ -43,16 +44,8 @@ const BoxGroup = (props) => {
           props.setSelectBoxes((prev) => ({ ...prev, boxes: select }));
           setGroup(result);
         }
-      } catch (ex) {
-        console.log(ex);
-
-        if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
-          setErrorMessage(ex.response.data.error.message);
-        } else {
-          setErrorMessage("Неизвестная ошибка");
-        }
-      }
-    }, 100);
+      });
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
@@ -66,20 +59,9 @@ const BoxGroup = (props) => {
         setBackOperation(temp);
 
         if (temp === 0) {
-          try {
+          await errorHandler(async () => {
             await operations[operation]();
-          } catch (ex) {
-            console.log(ex);
-            if (
-              ex?.response?.status < 500 &&
-              ex?.response?.data?.error?.message
-            ) {
-              setErrorMessage(ex.response.data.error.message);
-            } else {
-              setErrorMessage("Неизвестная ошибка");
-            }
-          }
-
+          });
           setOperation(null);
           setBackOperation(null);
         }
@@ -168,6 +150,26 @@ const BoxGroup = (props) => {
 
     props.setGroup(res);
     setGroup();
+  };
+
+  const errorHandler = async (action) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+      setPenaltyDelay(penaltyDelay + 1000);
+      setTimeout(
+        () =>
+          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
+        1000
+      );
+    }
   };
 
   const operations = {

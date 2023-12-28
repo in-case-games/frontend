@@ -22,7 +22,7 @@ const Statistics = () => {
   useEffect(() => {
     const interval = setInterval(
       async () => {
-        try {
+        await errorHandler(async () => {
           setIsStart(false);
 
           const response = await siteApi.getStatistics();
@@ -35,18 +35,7 @@ const Statistics = () => {
             inCoins: response.withdrawnFunds,
             online: 0,
           });
-        } catch (ex) {
-          console.log(ex);
-
-          if (
-            ex?.response?.status < 500 &&
-            ex?.response?.data?.error?.message
-          ) {
-            setErrorMessage(ex.response.data.error.message);
-          } else {
-            setErrorMessage("Неизвестная ошибка");
-          }
-        }
+        });
       },
       isStart ? 100 : 5000
     );
@@ -55,6 +44,20 @@ const Statistics = () => {
       clearInterval(interval);
     };
   });
+
+  const errorHandler = async (action) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+    }
+  };
 
   return (
     <div className={styles.statistics}>

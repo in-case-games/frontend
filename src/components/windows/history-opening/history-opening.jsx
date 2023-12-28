@@ -19,6 +19,8 @@ const HistoryOpening = (props) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
+  const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [item, setItem] = useState(props.history.item);
   const [box, setBox] = useState(props.history.box);
   const [games, setGames] = useState(null);
@@ -27,28 +29,50 @@ const HistoryOpening = (props) => {
     const interval = setInterval(async () => {
       const temp = props.history;
 
-      if (!games && (!temp.box || !temp.item)) setGames(await gameApi.get());
-      if (isLoading && games) {
-        if (!temp.box) {
-          temp.box = await boxApi.getById(temp.boxId);
-          temp.box = await boxApi.pushImage(temp.box);
-        }
-        if (!temp.item) {
-          temp.item = await itemApi.getById(temp.itemId);
-          temp.item.gameId = games.find((g) => g.name === temp.item.game).id;
-          temp.item = await itemApi.pushImage(temp.item);
-        }
+      await errorHandler(async () => {
+        if (!games && (!temp.box || !temp.item)) setGames(await gameApi.get());
+        if (isLoading && games) {
+          if (!temp.box) {
+            temp.box = await boxApi.getById(temp.boxId);
+            temp.box = await boxApi.pushImage(temp.box);
+          }
+          if (!temp.item) {
+            temp.item = await itemApi.getById(temp.itemId);
+            temp.item.gameId = games.find((g) => g.name === temp.item.game).id;
+            temp.item = await itemApi.pushImage(temp.item);
+          }
 
-        setBox(temp.box);
-        setItem(temp.item);
-        setIsLoading(false);
-      }
+          setBox(temp.box);
+          setItem(temp.item);
+          setIsLoading(false);
+        }
+      });
 
       if (temp.box && temp.item) setIsLoading(false);
-    }, 500);
+    }, 500 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
+
+  const errorHandler = async (action) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+      setPenaltyDelay(penaltyDelay + 1000);
+      setTimeout(
+        () =>
+          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
+        1000
+      );
+    }
+  };
 
   return (
     <div className={styles.history_opening}>

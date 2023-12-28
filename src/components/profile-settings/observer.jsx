@@ -55,12 +55,13 @@ const Observer = (props) => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      try {
+      await errorHandler(async () => {
         if (
           (showRestriction && !restrictions) ||
           (props.isLoading && showRestriction)
-        )
+        ) {
           await loadRestrictions();
+        }
 
         if (props.isLoading) {
           const user = TokenService.getUser();
@@ -68,15 +69,7 @@ const Observer = (props) => {
           setUser(user);
           props.setIsLoading(false);
         }
-      } catch (ex) {
-        console.log(ex);
-
-        if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
-          setErrorMessage(ex.response.data.error.message);
-        } else {
-          setErrorMessage("Неизвестная ошибка");
-        }
-      }
+      });
     }, 100);
 
     return () => clearInterval(interval);
@@ -128,6 +121,20 @@ const Observer = (props) => {
     }
 
     setRestrictions(res);
+  };
+
+  const errorHandler = async (action) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+    }
   };
 
   return (
@@ -258,10 +265,7 @@ const Observer = (props) => {
         <RestrictionWindow
           restriction={restriction}
           setRestriction={setRestriction}
-          close={() => {
-            setRestriction();
-            setIsLoading();
-          }}
+          close={() => setRestriction()}
         />
       </ModalLayout>
       <ModalLayout

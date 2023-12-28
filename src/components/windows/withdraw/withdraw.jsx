@@ -9,8 +9,6 @@ import styles from "./withdraw.module";
 const Withdraw = (props) => {
   const itemApi = new ItemApi();
 
-  const [error, setError] = useState(null);
-
   const [finishedInventories, setFinishedInventories] = useState({ items: [] });
   const [remainingInventories, setRemainingInventories] = useState({
     items: [],
@@ -20,6 +18,8 @@ const Withdraw = (props) => {
   const [isApply, setIsApply] = useState(false);
   const [isBanned, setIsBanned] = useState(false);
   const [isDisplayedButton, setIsDisplayedButton] = useState(false);
+  const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   const isValidTradeUrls = () => {
     let error = null;
@@ -73,59 +73,65 @@ const Withdraw = (props) => {
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
       const selected = props.selectItems.items;
+      let error = false;
 
-      try {
-        if (item.status !== "success") {
-          items[i].status = "loading";
+      await errorHandler(
+        async () => {
+          if (item.status !== "success") {
+            items[i].status = "loading";
+            setFinishedInventories((prev) => ({
+              ...prev,
+              items: items,
+            }));
+
+            const index = selected.indexOf(item.id);
+
+            await itemApi.withdraw(
+              item.id,
+              TradeUrlService.GetUrlByGame[item.item.game]()
+            );
+
+            items[i].status = "success";
+            setFinishedInventories((prev) => ({
+              ...prev,
+              items: items,
+            }));
+
+            removeSelectItem(index, item);
+          }
+        },
+        async () => {
+          const code = err.response.data.error.code;
+
+          items[i].status = "cancel";
+          items[i].error =
+            Constants.WithdrawErrors[code] === undefined
+              ? "Подождите или напишите в тех. поддержку"
+              : Constants.WithdrawErrors[code];
+
           setFinishedInventories((prev) => ({
             ...prev,
             items: items,
           }));
 
-          const index = selected.indexOf(item.id);
+          if (code === 4) {
+            const index = props.selectItems.items.indexOf(item.id);
 
-          await itemApi.withdraw(
-            item.id,
-            TradeUrlService.GetUrlByGame[item.item.game]()
-          );
+            items.push(item);
 
-          items[i].status = "success";
-          setFinishedInventories((prev) => ({
-            ...prev,
-            items: items,
-          }));
+            removeSelectItem(index);
+          } else if (code === 5) {
+            items[i].status = "exchange";
 
-          removeSelectItem(index, item);
+            setFinishedInventories((prev) => ({
+              ...prev,
+              items: items,
+            }));
+          } else error = true;
         }
-      } catch (err) {
-        const code = err.response.data.error.code;
+      );
 
-        items[i].status = "cancel";
-        items[i].error =
-          Constants.WithdrawErrors[code] === undefined
-            ? "Подождите или напишите в тех. поддержку"
-            : Constants.WithdrawErrors[code];
-
-        setFinishedInventories((prev) => ({
-          ...prev,
-          items: items,
-        }));
-
-        if (code === 4) {
-          const index = props.selectItems.items.indexOf(item.id);
-
-          items.push(item);
-
-          removeSelectItem(index);
-        } else if (code === 5) {
-          items[i].status = "exchange";
-
-          setFinishedInventories((prev) => ({
-            ...prev,
-            items: items,
-          }));
-        } else break;
-      }
+      if (error) break;
     }
     setIsLoading(false);
     setIsBanned(false);
@@ -164,10 +170,31 @@ const Withdraw = (props) => {
         setIsLoading(false);
         setIsBanned(false);
       }
-    }, 100);
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
+
+  const errorHandler = async (action, actionCatch = async () => {}) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+      await actionCatch();
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+      setPenaltyDelay(penaltyDelay + 1000);
+      setTimeout(
+        () =>
+          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
+        1000
+      );
+    }
+  };
 
   return (
     <div className={styles.withdraw}>
@@ -186,7 +213,9 @@ const Withdraw = (props) => {
               finishedInventories.items.length}
           </div>
         ) : null}
-        {error ? <div className={styles.error}>{error}</div> : null}
+        {errorMessage ? (
+          <div className={styles.error}>{errorMessage}</div>
+        ) : null}
         {isDisplayedButton ? (
           <div className={styles.button_withdraw} onClick={click}>
             Вывести

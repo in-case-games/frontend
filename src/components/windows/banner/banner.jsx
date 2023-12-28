@@ -13,30 +13,20 @@ const Banner = (props) => {
   const [backOperation, setBackOperation] = useState();
   const [operation, setOperation] = useState();
   const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(async () => {
       if (!banner && props.banner?.id) {
-        try {
+        await errorHandler(async () => {
           const result = await boxApi.bannerPushImage(
             await boxApi.getBannerById(props.banner.id)
           );
-          setBox(result?.box?.name);
           setBanner(result);
-        } catch (ex) {
-          console.log(ex);
-
-          if (
-            ex?.response?.status < 500 &&
-            ex?.response?.data?.error?.message
-          ) {
-            setErrorMessage(ex.response.data.error.message);
-          } else {
-            setErrorMessage("Неизвестная ошибка");
-          }
-        }
+          setBox(result?.box?.name);
+        });
       }
-    }, 100);
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
@@ -50,20 +40,9 @@ const Banner = (props) => {
         setBackOperation(temp);
 
         if (temp === 0) {
-          try {
+          await errorHandler(async () => {
             await operations[operation]();
-          } catch (ex) {
-            console.log(ex);
-
-            if (
-              ex?.response?.status < 500 &&
-              ex?.response?.data?.error?.message
-            ) {
-              setErrorMessage(ex.response.data.error.message);
-            } else {
-              setErrorMessage("Неизвестная ошибка");
-            }
-          }
+          });
 
           setOperation(null);
           setBackOperation(null);
@@ -79,33 +58,30 @@ const Banner = (props) => {
       setBackOperation();
       setOperation();
     } else if (!backOperation && box) {
-      try {
-        const res = banner ? banner : {};
-        res.image = props.image || null;
-        res.boxId = (await boxApi.getByName(box)).id;
-        res.expirationDate = new Date(banner.expirationDate || new Date());
-        res.creationDate = new Date(banner.creationDate || new Date());
+      await errorHandler(
+        async () => {
+          const res = banner ? banner : {};
+          res.image = props.image || null;
+          res.boxId = (await boxApi.getByName(box)).id;
+          res.expirationDate = new Date(banner.expirationDate || new Date());
+          res.creationDate = new Date(banner.creationDate || new Date());
 
-        if (isDelete) setOperation("delete-banner");
-        else if (props.banner?.id) setOperation("update-banner");
-        else setOperation("create-banner");
+          if (isDelete) setOperation("delete-banner");
+          else if (props.banner?.id) setOperation("update-banner");
+          else setOperation("create-banner");
 
-        setBackOperation(5);
-        setBanner(res);
-      } catch (ex) {
-        console.log(ex);
+          setBackOperation(5);
+          setBanner(res);
+        },
+        async () => {
+          if (!banner?.image || banner?.image === BannerImage) {
+            setErrorMessage("Загрузите фото");
+            return true;
+          }
 
-        if (!banner?.image || banner?.image === BannerImage) {
-          setErrorMessage("Загрузите фото");
-        } else if (
-          ex?.response?.status < 500 &&
-          ex?.response?.data?.error?.message
-        ) {
-          setErrorMessage(ex.response.data.error.message);
-        } else {
-          setErrorMessage("Неизвестная ошибка");
+          return false;
         }
-      }
+      );
     }
   };
 
@@ -134,6 +110,29 @@ const Banner = (props) => {
     "create-banner": createBanner,
     "delete-banner": deleteBanner,
     "update-banner": updateBanner,
+  };
+
+  const errorHandler = async (action, actionCatch = async () => false) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+
+      if (await actionCatch()) {
+        setErrorMessage(
+          ex?.response?.status < 500 && ex?.response?.data?.error?.message
+            ? ex.response.data.error.message
+            : "Неизвестная ошибка"
+        );
+      }
+
+      setPenaltyDelay(penaltyDelay + 1000);
+      setTimeout(
+        () =>
+          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
+        1000
+      );
+    }
   };
 
   return (

@@ -20,6 +20,7 @@ const BoxInventory = (props) => {
   const [operation, setOperation] = useState(null);
 
   const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [user, setUser] = useState(TokenService.getUser());
   const [item, setItem] = useState(props.inventory?.item || {});
   const [box, setBox] = useState(props.inventory?.box || {});
@@ -27,7 +28,7 @@ const BoxInventory = (props) => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      try {
+      await errorHandler(async () => {
         if (!games) setGames(await gameApi.get());
         if (isLoading && !box?.image) {
           setUser(TokenService.getUser());
@@ -37,15 +38,8 @@ const BoxInventory = (props) => {
         }
 
         setIsLoading(false);
-      } catch (ex) {
-        console.log(ex);
-        if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
-          setErrorMessage(ex.response.data.error.message);
-        } else {
-          setErrorMessage("Неизвестная ошибка");
-        }
-      }
-    }, 500);
+      });
+    }, 500 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
@@ -59,20 +53,9 @@ const BoxInventory = (props) => {
         setBackOperation(t);
 
         if (t === 0) {
-          try {
+          await errorHandler(async () => {
             await operations[operation]();
-          } catch (ex) {
-            console.log(ex);
-
-            if (
-              ex?.response?.status < 500 &&
-              ex?.response?.data?.error?.message
-            ) {
-              setErrorMessage(ex.response.data.error.message);
-            } else {
-              setErrorMessage("Неизвестная ошибка");
-            }
-          }
+          });
           setOperation(null);
           setBackOperation(null);
         }
@@ -87,7 +70,7 @@ const BoxInventory = (props) => {
       setBackOperation(null);
       setOperation(null);
     } else if (backOperation === null) {
-      try {
+      await errorHandler(async () => {
         const i = (await itemApi.getByName(item.name))[0];
         i.gameId = games.find((g) => g.name === i.game).id;
         setItem(await itemApi.pushImage(i));
@@ -98,15 +81,7 @@ const BoxInventory = (props) => {
         else setOperation("create-inventory");
 
         setBackOperation(5);
-      } catch (ex) {
-        console.log(ex);
-
-        if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
-          setErrorMessage(ex.response.data.error.message);
-        } else {
-          setErrorMessage("Неизвестная ошибка");
-        }
-      }
+      });
     }
   };
 
@@ -136,6 +111,26 @@ const BoxInventory = (props) => {
     });
 
     props.close();
+  };
+
+  const errorHandler = async (action) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+      setPenaltyDelay(penaltyDelay + 1000);
+      setTimeout(
+        () =>
+          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
+        1000
+      );
+    }
   };
 
   const operations = {

@@ -139,10 +139,11 @@ const Box = () => {
     ) : (
       <BoxDisplay
         box={box}
-        isHasBanner={banner && inventory.length > 1}
+        isHasBanner={banner && inventory.length > 1 && !box?.isLocked && role}
         pathBanner={pathBanner}
         openBannerWindow={() => {
-          if (inventory.length > 1) setIsShowTakeItemWindow(banner);
+          if (inventory.length > 1 && !box?.isLocked && role)
+            setIsShowTakeItemWindow(banner);
         }}
       />
     );

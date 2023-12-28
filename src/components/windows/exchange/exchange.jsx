@@ -27,6 +27,8 @@ const Exchange = (props) => {
   const [selectItems, setSelectItems] = useState({ items: [] });
   const [primaryItems, setPrimaryItems] = useState([]);
   const [showItems, setShowItems] = useState([]);
+  const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   const loadedGames = async () => {
     const games = {};
@@ -90,33 +92,40 @@ const Exchange = (props) => {
         setShowItems(show);
       };
       if (!isBanned && (isLoading || isClickItem)) {
-        loaded(isLoading);
+        await errorHandler(
+          async () => {
+            await loaded(isLoading);
 
-        setIsClickItem(false);
-        setIsLoading(false);
-        setIsBanned(false);
+            setIsClickItem(false);
+            setIsLoading(false);
+            setIsBanned(false);
+          },
+          async () => setIsBanned(false)
+        );
       }
-    }, 100);
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
 
   const click = async () => {
     if (allowedCost >= 0) {
-      const index = props.selectItems.items.findIndex(
-        (s) => s.id === props.inventory.id
-      );
-      removeSelectItem(index);
-
-      if (selectItems.items.length === 0)
-        await itemApi.sell(props.inventory.id);
-      else
-        await itemApi.exchangeInventoryForItems(
-          props.inventory.id,
-          selectItems.items
+      await errorHandler(async () => {
+        const index = props.selectItems.items.findIndex(
+          (s) => s.id === props.inventory.id
         );
+        removeSelectItem(index);
 
-      props.close();
+        if (selectItems.items.length === 0)
+          await itemApi.sell(props.inventory.id);
+        else
+          await itemApi.exchangeInventoryForItems(
+            props.inventory.id,
+            selectItems.items
+          );
+
+        props.close();
+      });
     }
   };
 
@@ -187,6 +196,27 @@ const Exchange = (props) => {
       let selected = props.selectItems.items;
       selected.splice(index, 1);
       props.setSelectItems((prev) => ({ ...prev, items: selected }));
+    }
+  };
+
+  const errorHandler = async (action, actionCatch = async () => {}) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+      await actionCatch();
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+      setPenaltyDelay(penaltyDelay + 1000);
+      setTimeout(
+        () =>
+          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
+        1000
+      );
     }
   };
 

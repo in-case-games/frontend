@@ -29,6 +29,7 @@ const OpeningHistory = (props) => {
   const [box, setBox] = useState(null);
   const [userLogo, setUserLogo] = useState(UserLogo);
   const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(
@@ -45,27 +46,36 @@ const OpeningHistory = (props) => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (isClick && !box) {
-        try {
+        await errorHandler(async () => {
           setIsClick(false);
           let box = await boxApi.getById(props.history.boxId);
           setBox(await boxApi.pushImage(box));
-        } catch (ex) {
-          console.log(ex);
-
-          if (
-            ex?.response?.status < 500 &&
-            ex?.response?.data?.error?.message
-          ) {
-            setErrorMessage(ex.response.data.error.message);
-          } else {
-            setErrorMessage("Неизвестная ошибка");
-          }
-        }
+        });
       }
-    }, 10);
+    }, 10 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
+
+  const errorHandler = async (action) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+      setPenaltyDelay(penaltyDelay + 1000);
+      setTimeout(
+        () =>
+          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
+        1000
+      );
+    }
+  };
 
   return (
     <div className={styles.opening_history}>

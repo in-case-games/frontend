@@ -11,13 +11,11 @@ import {
   Template1Image as ShowImage1,
   Template2Image as ShowImage2,
   Template3Image as ShowImage3,
-  TemplateUser as CreateImage,
 } from "../../../../assets/images/main";
 import {
   Input,
   TextArea,
   ComboBox,
-  CheckBox,
 } from "../../../../components/common/inputs";
 import { Modal as ModalLayout } from "../../../../layouts";
 import {
@@ -31,7 +29,7 @@ import { Converter } from "../../../../helpers/converter";
 import styles from "./content.module";
 import { Eye } from "../../../../assets/images/icons";
 
-const Home = (props) => {
+const Home = () => {
   const { id } = useParams();
   const reviewsApi = new ReviewsApi();
   const userApi = new UserApi();
@@ -296,7 +294,7 @@ const Home = (props) => {
       sizeMb: 2,
       regular: /\.(jpg|jpeg)$/,
       description: "JPEG,JPG (MAX. 2000x2000px | 2MB)",
-      isBlockedLoad: review?.userId && review?.userId !== user?.id,
+      isBlockedLoad: !user || (review?.userId && review?.userId !== user?.id),
     };
 
     if (image.action === undefined) {
@@ -432,7 +430,10 @@ const Home = (props) => {
                 if (primary.items.length > 0) return primary.items;
 
                 const reviews = [];
-                const userReviews = await reviewsApi.get();
+                const userReviews = [];
+                try {
+                  userReviews = await reviewsApi.get();
+                } catch (ex) {}
 
                 if (userReviews.length > 0 && !userReviews[0].isApproved)
                   reviews.push(userReviews[0]);
@@ -664,6 +665,8 @@ const Home = (props) => {
             const index = images.findIndex(
               (i) => i.id === loadReviewImageWindow
             );
+
+            console.log(images);
 
             if (images[index].action !== "remove") {
               images[index].image = image;

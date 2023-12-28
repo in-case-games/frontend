@@ -19,7 +19,7 @@ const Banners = () => {
   useEffect(() => {
     const interval = setInterval(
       async () => {
-        try {
+        await errorHandler(async () => {
           setIsStart(false);
           const response = await boxApi.getBannersByIsActive(true);
           const result = [];
@@ -36,18 +36,7 @@ const Banners = () => {
           }
 
           setBanners(result);
-        } catch (ex) {
-          console.log(ex);
-
-          if (
-            ex?.response?.status < 500 &&
-            ex?.response?.data?.error?.message
-          ) {
-            setErrorMessage(ex.response.data.error.message);
-          } else {
-            setErrorMessage("Неизвестная ошибка");
-          }
-        }
+        });
       },
       isStart ? 100 : 5000
     );
@@ -59,6 +48,20 @@ const Banners = () => {
     const width = windowWidth.current > 1000 ? 1000 : windowWidth.current;
 
     return `${-width * (counter - 1)}px`;
+  };
+
+  const errorHandler = async (action) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+    }
   };
 
   return (

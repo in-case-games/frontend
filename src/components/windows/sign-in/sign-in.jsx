@@ -6,16 +6,28 @@ import { Input } from "../../common/inputs";
 const SignIn = (props) => {
   const authApi = new AuthApi();
 
-  const [error, setError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
   const signIn = async () => {
-    try {
+    await errorHandler(async () => {
       await authApi.signIn(login, password);
       props.exchangeWindow("email");
-    } catch (err) {
-      setError(err.response.data.error.message);
+    });
+  };
+
+  const errorHandler = async (action) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
     }
   };
 
@@ -24,7 +36,7 @@ const SignIn = (props) => {
       <div className={styles.sign_in_content}>
         <div className={styles.content_header}>
           <div className={styles.tittle}>Вход</div>
-          <div className={styles.error}>{error}</div>
+          <div className={styles.error}>{errorMessage}</div>
         </div>
         <div className={styles.content_inputs}>
           <Input

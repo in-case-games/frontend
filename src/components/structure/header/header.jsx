@@ -46,6 +46,7 @@ const Header = () => {
   const [burgerActive, setBurgerActive] = useState();
 
   const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [search, setSearch] = useState();
   const [searchDetected, setSearchDetected] = useState({ items: [] });
   const [games, setGames] = useState();
@@ -84,7 +85,7 @@ const Header = () => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (TokenService.getAccessToken() !== undefined) {
-        try {
+        await errorHandler(async () => {
           let response = await userApi.getBalance();
 
           response =
@@ -98,17 +99,7 @@ const Header = () => {
           };
 
           setUser(temp);
-        } catch (ex) {
-          console.log(ex);
-          if (
-            ex?.response?.status < 500 &&
-            ex?.response?.data?.error?.message
-          ) {
-            setErrorMessage(ex.response.data.error.message);
-          } else {
-            setErrorMessage("Неизвестная ошибка");
-          }
-        }
+        });
       }
     }, 5000);
 
@@ -117,16 +108,9 @@ const Header = () => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      try {
+      await errorHandler(async () => {
         if (!games) setGames(await gameApi.get());
-      } catch (ex) {
-        console.log(ex);
-        if (ex?.response?.status < 500 && ex?.response?.data?.error?.message) {
-          setErrorMessage(ex.response.data.error.message);
-        } else {
-          setErrorMessage("Неизвестная ошибка");
-        }
-      }
+      });
       if (TokenService.getAccessToken() !== undefined && user === null)
         setIsAuth(null);
       else setIsAuth(TokenService.getAccessToken() !== undefined);
@@ -188,7 +172,7 @@ const Header = () => {
           setTimeBeforeGoSearch();
         } else setTimeBeforeGoSearch(nextTime);
       }
-    }, 100);
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
@@ -196,33 +180,38 @@ const Header = () => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (TokenService.getAccessToken()) {
-        try {
+        await errorHandler(async () => {
           await userApi.get();
           setUser({
             image: await userApi.getImage(),
             balance: user?.balance ?? 0,
           });
-        } catch (ex) {
-          console.log(ex);
-          if (
-            ex?.response?.status < 500 &&
-            ex?.response?.data?.error?.message
-          ) {
-            setErrorMessage(ex.response.data.error.message);
-          } else {
-            setErrorMessage("Неизвестная ошибка");
-          }
-        }
+        });
       }
 
       setIsDate(TokenService.getExpiresAccessToken());
-    }, secondsBeforeRefresh());
+    }, secondsBeforeRefresh() + penaltyDelay);
 
     return () => clearInterval(interval);
   });
 
-  const goSearch = (e) => {
-    if (e.keyCode === 13) {
+  const errorHandler = async (action) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
+      setPenaltyDelay(penaltyDelay + 1000);
+      setTimeout(
+        () =>
+          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
+        1000
+      );
     }
   };
 
@@ -263,7 +252,6 @@ const Header = () => {
                 isApply={true}
                 color="#00ff82"
                 placeholder="Поиск"
-                onKeyDown={goSearch}
                 value={search}
                 setValue={async (v) => {
                   setTimeBeforeGoSearch(500);

@@ -20,12 +20,24 @@ const SignUp = (props) => {
     if (!isAgree) setErrorMessage("Примите пользовательское соглашение");
     else if (!isLegalAge) setErrorMessage("Примите если вам есть 18 лет");
     else {
-      try {
+      await errorHandler(async () => {
         await authApi.signUp(login, email, password);
         props.exchangeWindow("email");
-      } catch (err) {
-        setErrorMessage(err.response.data.error.message);
-      }
+      });
+    }
+  };
+
+  const errorHandler = async (action) => {
+    try {
+      await action();
+    } catch (ex) {
+      console.log(ex);
+
+      setErrorMessage(
+        ex?.response?.status < 500 && ex?.response?.data?.error?.message
+          ? ex.response.data.error.message
+          : "Неизвестная ошибка"
+      );
     }
   };
 
