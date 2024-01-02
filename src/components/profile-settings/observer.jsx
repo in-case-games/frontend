@@ -9,7 +9,6 @@ import {
   PenBlack as Pen,
 } from "../../assets/images/icons";
 import { User as UserApi } from "../../api";
-import TokenService from "../../services/token";
 import { Game } from "../game";
 import { Modal as ModalLayout } from "../../layouts";
 import {
@@ -24,13 +23,15 @@ import { Restriction } from "../restriction";
 import { PullOutProfile as PullOut } from "../common/buttons";
 import { LoadingArrow as Loading } from "../loading";
 import { Input } from "../common/inputs";
+import { Handler } from "../../helpers/handler";
 import Constants from "../../constants";
+import TokenService from "../../services/token";
 import styles from "./profile-settings.module";
 
 const Observer = (props) => {
   const userApi = new UserApi();
 
-  const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [user, setUser] = useState(TokenService.getUser());
   const [game, setGame] = useState(null);
   const [restrictions, setRestrictions] = useState(null);
@@ -47,30 +48,38 @@ const Observer = (props) => {
   useEffect(() => {
     const interval = setInterval(
       () => props.setIsLoading(!props.isLoading),
-      10000
+      5000
     );
 
     return () => clearInterval(interval);
   });
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      await errorHandler(async () => {
-        if (
-          (showRestriction && !restrictions) ||
-          (props.isLoading && showRestriction)
-        ) {
-          await loadRestrictions();
-        }
+    const interval = setInterval(
+      async () =>
+        await Handler.error(
+          async () => {
+            if (
+              (showRestriction && !restrictions) ||
+              (props.isLoading && showRestriction)
+            ) {
+              await loadRestrictions();
+            }
 
-        if (props.isLoading) {
-          const user = TokenService.getUser();
+            if (props.isLoading) {
+              const user = TokenService.getUser();
 
-          setUser(user);
-          props.setIsLoading(false);
-        }
-      });
-    }, 100);
+              setUser(user);
+              props.setIsLoading(false);
+            }
+          },
+          undefined,
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay
+        ),
+      100 + penaltyDelay
+    );
 
     return () => clearInterval(interval);
   });
@@ -121,20 +130,6 @@ const Observer = (props) => {
     }
 
     setRestrictions(res);
-  };
-
-  const errorHandler = async (action) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-    }
   };
 
   return (

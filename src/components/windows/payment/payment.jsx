@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { InCoin, InCoinGray } from "../../../assets/images/icons";
 import { ComboBox, Input } from "../../../components/common/inputs";
-import styles from "./payment.module";
 import Constants from "../../../constants";
+import styles from "./payment.module";
 
 const Payment = () => {
   const [amount, setAmount] = useState(50);

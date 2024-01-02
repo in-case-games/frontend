@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import LazyLoading from "./lazy-loading";
 import { Counter as Slider } from "../../components/common/sliders";
+import LazyLoading from "./lazy-loading";
 import styles from "./inventory.module";
 
 const Inventory = (props) => {

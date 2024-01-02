@@ -4,8 +4,8 @@ import {
   TemplateItem as ItemImage,
 } from "../../../assets/images/main";
 import { InCoin } from "../../../assets/images/icons";
-import Constants from "../../../constants";
 import { Converter } from "../../../helpers/converter";
+import Constants from "../../../constants";
 import styles from "./opening.module";
 
 const Opening = (props) => {

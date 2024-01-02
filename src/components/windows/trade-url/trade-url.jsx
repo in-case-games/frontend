@@ -1,7 +1,7 @@
 import React, { useState } from "react";
+import { Input } from "../../common/inputs";
 import TradeUrlService from "../../../services/trade-url";
 import styles from "./trade-url.module";
-import { Input } from "../../common/inputs";
 
 const TradeUrl = (props) => {
   const [error, setError] = useState(false);

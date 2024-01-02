@@ -18,6 +18,7 @@ import { Small as Box } from "../../loot-box";
 import { Restriction } from "../../restriction";
 import { LoadingArrow as Loading } from "../../loading";
 import { Converter } from "../../../helpers/converter";
+import { Handler } from "../../../helpers/handler";
 import TokenService from "../../../services/token";
 import styles from "./mini-profile.module";
 
@@ -38,13 +39,11 @@ const MiniProfileWindow = (props) => {
 
   const [user, setUser] = useState(null);
   const [history, setHistory] = useState(null);
-  const [restrictions, setRestrictions] = useState(null);
-
-  const [errorMessage, setErrorMessage] = useState();
-  const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [item, setItem] = useState(false);
   const [box, setBox] = useState(false);
   const [restriction, setRestriction] = useState(false);
+  const [restrictions, setRestrictions] = useState(null);
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   const setBarActive = (action) => {
     setItem(false);
@@ -57,23 +56,29 @@ const MiniProfileWindow = (props) => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (isAllRefresh) {
-        await errorHandler(async () => {
-          setIsAllRefresh(false);
+        await Handler.error(
+          async () => {
+            setIsAllRefresh(false);
 
-          const user = await userApi.getById(props.userId);
+            const user = await userApi.getById(props.userId);
 
-          user.image = await userApi.getImageByUserId(user.id);
-          user.ownerRestrictions = user.ownerRestrictions.slice(0, 3);
-          user.restrictions = user.restrictions.slice(0, 3);
+            user.image = await userApi.getImageByUserId(user.id);
+            user.ownerRestrictions = user.ownerRestrictions.slice(0, 3);
+            user.restrictions = user.restrictions.slice(0, 3);
 
-          await loadRestrictions(user);
-          await loadHistory(user);
+            await loadRestrictions(user);
+            await loadHistory(user);
 
-          setUser(user);
-          setIsLoading(false);
-          setIsLoadingItems(false);
-          setIsStart(false);
-        });
+            setUser(user);
+            setIsLoading(false);
+            setIsLoadingItems(false);
+            setIsStart(false);
+          },
+          undefined,
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay
+        );
       }
     }, 100 + penaltyDelay);
 
@@ -81,13 +86,13 @@ const MiniProfileWindow = (props) => {
   });
 
   const firstLoadHistory = async (data) => {
-    await errorHandler(async () => {
-      const isBox = data === "box";
-      const isItem = data === "item";
+    const isBox = data === "box";
+    const isItem = data === "item";
 
-      if (isItem) setBarActive(() => setItem(!item));
-      else if (isBox) setBarActive(() => setBox(!box));
+    if (isItem) setBarActive(() => setItem(!item));
+    else if (isBox) setBarActive(() => setBox(!box));
 
+    await Handler.error(async () => {
       if (
         (isItem && (!history || !history[0]?.item)) ||
         (isBox && (!history || !history[0]?.box))
@@ -110,9 +115,9 @@ const MiniProfileWindow = (props) => {
 
         setHistory(h);
       }
-
-      setIsLoadingItems(false);
     });
+
+    setIsLoadingItems(false);
   };
 
   const loadHistory = async (user) => {
@@ -188,26 +193,6 @@ const MiniProfileWindow = (props) => {
       }
 
       setRestrictions(res);
-    }
-  };
-
-  const errorHandler = async (action) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-      setPenaltyDelay(penaltyDelay + 1000);
-      setTimeout(
-        () =>
-          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
-        1000
-      );
     }
   };
 

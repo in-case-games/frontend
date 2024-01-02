@@ -1,8 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Constants from "../../../constants";
 import { Group } from "../../../layouts/group";
 import { Game } from "../../game";
+import Constants from "../../../constants";
 
 const Games = () => {
   const navigate = useNavigate();

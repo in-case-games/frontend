@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   TemplateItem as ItemImage,
   TemplateBox as BoxImage,
@@ -7,19 +8,18 @@ import {
 import { Game as GameApi, Item as ItemApi, Box as BoxApi } from "../../../api";
 import { LoadingArrow as Loading } from "../../loading";
 import { Input } from "../../common/inputs";
-import { useNavigate } from "react-router-dom";
 import { Converter } from "../../../helpers/converter";
+import { Handler } from "../../../helpers/handler";
 import styles from "./history-opening.module";
 
 const HistoryOpening = (props) => {
   const itemApi = new ItemApi();
   const gameApi = new GameApi();
   const boxApi = new BoxApi();
-
   const navigate = useNavigate();
+
   const [isLoading, setIsLoading] = useState(true);
 
-  const [errorMessage, setErrorMessage] = useState();
   const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [item, setItem] = useState(props.history.item);
   const [box, setBox] = useState(props.history.box);
@@ -29,50 +29,39 @@ const HistoryOpening = (props) => {
     const interval = setInterval(async () => {
       const temp = props.history;
 
-      await errorHandler(async () => {
-        if (!games && (!temp.box || !temp.item)) setGames(await gameApi.get());
-        if (isLoading && games) {
-          if (!temp.box) {
-            temp.box = await boxApi.getById(temp.boxId);
-            temp.box = await boxApi.pushImage(temp.box);
-          }
-          if (!temp.item) {
-            temp.item = await itemApi.getById(temp.itemId);
-            temp.item.gameId = games.find((g) => g.name === temp.item.game).id;
-            temp.item = await itemApi.pushImage(temp.item);
-          }
+      await Handler.error(
+        async () => {
+          if (!games && (!temp.box || !temp.item))
+            setGames(await gameApi.get());
+          if (isLoading && games) {
+            if (!temp.box) {
+              temp.box = await boxApi.getById(temp.boxId);
+              temp.box = await boxApi.pushImage(temp.box);
+            }
+            if (!temp.item) {
+              temp.item = await itemApi.getById(temp.itemId);
+              temp.item.gameId = games.find(
+                (g) => g.name === temp.item.game
+              ).id;
+              temp.item = await itemApi.pushImage(temp.item);
+            }
 
-          setBox(temp.box);
-          setItem(temp.item);
-          setIsLoading(false);
-        }
-      });
+            setBox(temp.box);
+            setItem(temp.item);
+            setIsLoading(false);
+          }
+        },
+        undefined,
+        undefined,
+        penaltyDelay,
+        setPenaltyDelay
+      );
 
       if (temp.box && temp.item) setIsLoading(false);
     }, 500 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
-
-  const errorHandler = async (action) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-      setPenaltyDelay(penaltyDelay + 1000);
-      setTimeout(
-        () =>
-          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
-        1000
-      );
-    }
-  };
 
   return (
     <div className={styles.history_opening}>

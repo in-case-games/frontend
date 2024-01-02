@@ -2,24 +2,23 @@ import React, { useState, useEffect, useRef } from "react";
 import { Banner } from "../../banner";
 import { Box as BoxApi } from "../../../api";
 import { AutomaticDot } from "../../common/sliders";
-import styles from "./banners.module";
 import { useNavigate } from "react-router-dom";
+import { Handler } from "../../../helpers/handler";
+import styles from "./banners.module";
 
 const Banners = () => {
   const boxApi = new BoxApi();
-
   const windowWidth = useRef(window.innerWidth);
   const navigate = useNavigate();
 
   const [isStart, setIsStart] = useState(true);
   const [banners, setBanners] = useState([]);
   const [counter, setCounter] = useState(1);
-  const [errorMessage, setErrorMessage] = useState();
 
   useEffect(() => {
     const interval = setInterval(
       async () => {
-        await errorHandler(async () => {
+        await Handler.error(async () => {
           setIsStart(false);
           const response = await boxApi.getBannersByIsActive(true);
           const result = [];
@@ -34,7 +33,6 @@ const Banners = () => {
               />
             );
           }
-
           setBanners(result);
         });
       },
@@ -48,20 +46,6 @@ const Banners = () => {
     const width = windowWidth.current > 1000 ? 1000 : windowWidth.current;
 
     return `${-width * (counter - 1)}px`;
-  };
-
-  const errorHandler = async (action) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-    }
   };
 
   return (

@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { RegistrationMen } from "../../../assets/images/main";
 import { Authentication as AuthApi } from "../../../api";
-import styles from "./sign-up.module";
 import { CheckBox, Input } from "../../common/inputs";
+import { Handler } from "../../../helpers/handler";
+import styles from "./sign-up.module";
 
 const SignUp = (props) => {
   const authApi = new AuthApi();
 
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState();
 
   const [isAgree, setIsAgree] = useState(false);
   const [isLegalAge, setIsLegalAge] = useState(false);
@@ -20,23 +21,13 @@ const SignUp = (props) => {
     if (!isAgree) setErrorMessage("Примите пользовательское соглашение");
     else if (!isLegalAge) setErrorMessage("Примите если вам есть 18 лет");
     else {
-      await errorHandler(async () => {
-        await authApi.signUp(login, email, password);
-        props.exchangeWindow("email");
-      });
-    }
-  };
-
-  const errorHandler = async (action) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
+      await Handler.error(
+        async () => {
+          await authApi.signUp(login, email, password);
+          props.exchangeWindow("email");
+        },
+        undefined,
+        setErrorMessage
       );
     }
   };

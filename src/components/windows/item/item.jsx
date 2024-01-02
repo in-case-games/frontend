@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { TemplateItem as ItemImage } from "../../../assets/images/main";
 import { Game as GameApi, Item as ItemApi } from "../../../api";
-import TokenService from "../../../services/token";
-import Constants from "../../../constants";
 import {
   LoadingHourglass as Hourglass,
   LoadingArrow as Loading,
 } from "../../loading";
 import { Input, ComboBox } from "../../common/inputs";
+import { Handler } from "../../../helpers/handler";
+import TokenService from "../../../services/token";
+import Constants from "../../../constants";
 import styles from "./item.module";
 
 const Item = (props) => {
@@ -49,9 +50,13 @@ const Item = (props) => {
         setBackOperation(t);
 
         if (t === 0) {
-          await errorHandler(
+          await Handler.error(
             async () => await operations[operation](),
-            async () => setIsLoading(true)
+            async () => {
+              setIsLoading(true);
+              return false;
+            },
+            setErrorMessage
           );
 
           setOperation(null);
@@ -72,22 +77,28 @@ const Item = (props) => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (isLoading) {
-        await errorHandler(async () => {
-          setUser(TokenService.getUser());
-          setItem(
-            props.item?.id
-              ? await itemApi.getById(props.item?.id)
-              : Constants.TemplateItem
-          );
+        await Handler.error(
+          async () => {
+            setUser(TokenService.getUser());
+            setItem(
+              props.item?.id
+                ? await itemApi.getById(props.item?.id)
+                : Constants.TemplateItem
+            );
 
-          setTypes(await itemApi.getTypes());
-          setRarities(await itemApi.getRarities());
-          setQualities(await itemApi.getQualities());
-          setGames(await gameApi.get());
-          setGradient(Constants.ItemGradients[item.rarity]);
+            setTypes(await itemApi.getTypes());
+            setRarities(await itemApi.getRarities());
+            setQualities(await itemApi.getQualities());
+            setGames(await gameApi.get());
+            setGradient(Constants.ItemGradients[item.rarity]);
 
-          setIsLoading(false);
-        });
+            setIsLoading(false);
+          },
+          undefined,
+          setErrorMessage,
+          penaltyDelay,
+          setPenaltyDelay
+        );
       }
 
       setGradient(
@@ -165,27 +176,6 @@ const Item = (props) => {
     "create-item": createItem,
     "delete-item": deleteItem,
     "update-item": updateItem,
-  };
-
-  const errorHandler = async (action, actionCatch = async () => {}) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-      await actionCatch();
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-      setPenaltyDelay(penaltyDelay + 1000);
-      setTimeout(
-        () =>
-          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
-        1000
-      );
-    }
   };
 
   return (

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Item as ItemApi, User as UserApi } from "../../../api";
+import { Item as ItemApi } from "../../../api";
 import { Simple as Item } from "../../game-item";
 import { LoadingArrow as Loading } from "../../loading";
+import { Handler } from "../../../helpers/handler";
 import Constants from "../../../constants";
 import TradeUrlService from "../../../services/trade-url";
 import styles from "./withdraw.module";
@@ -37,7 +38,7 @@ const Withdraw = (props) => {
       }
     }
 
-    setError(error);
+    setErrorMessage(error);
 
     return error === null;
   };
@@ -75,7 +76,7 @@ const Withdraw = (props) => {
       const selected = props.selectItems.items;
       let error = false;
 
-      await errorHandler(
+      await Handler.error(
         async () => {
           if (item.status !== "success") {
             items[i].status = "loading";
@@ -128,7 +129,12 @@ const Withdraw = (props) => {
               items: items,
             }));
           } else error = true;
-        }
+
+          return false;
+        },
+        setErrorMessage,
+        penaltyDelay,
+        setPenaltyDelay
       );
 
       if (error) break;
@@ -174,27 +180,6 @@ const Withdraw = (props) => {
 
     return () => clearInterval(interval);
   });
-
-  const errorHandler = async (action, actionCatch = async () => {}) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-      await actionCatch();
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-      setPenaltyDelay(penaltyDelay + 1000);
-      setTimeout(
-        () =>
-          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
-        1000
-      );
-    }
-  };
 
   return (
     <div className={styles.withdraw}>

@@ -3,6 +3,7 @@ import { Box as BoxApi } from "../../../api";
 import { Input } from "../../common/inputs";
 import { Converter } from "../../../helpers/converter";
 import { TemplateBanner as BannerImage } from "../../../assets/images/main";
+import { Handler } from "../../../helpers/handler";
 import styles from "./banner.module";
 
 const Banner = (props) => {
@@ -18,13 +19,19 @@ const Banner = (props) => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (!banner && props.banner?.id) {
-        await errorHandler(async () => {
-          const result = await boxApi.bannerPushImage(
-            await boxApi.getBannerById(props.banner.id)
-          );
-          setBanner(result);
-          setBox(result?.box?.name);
-        });
+        await Handler.error(
+          async () => {
+            const result = await boxApi.bannerPushImage(
+              await boxApi.getBannerById(props.banner.id)
+            );
+            setBanner(result);
+            setBox(result?.box?.name);
+          },
+          undefined,
+          setErrorMessage,
+          penaltyDelay,
+          setPenaltyDelay
+        );
       }
     }, 100 + penaltyDelay);
 
@@ -40,9 +47,11 @@ const Banner = (props) => {
         setBackOperation(temp);
 
         if (temp === 0) {
-          await errorHandler(async () => {
-            await operations[operation]();
-          });
+          await Handler.error(
+            async () => await operations[operation](),
+            undefined,
+            setErrorMessage
+          );
 
           setOperation(null);
           setBackOperation(null);
@@ -58,7 +67,7 @@ const Banner = (props) => {
       setBackOperation();
       setOperation();
     } else if (!backOperation && box) {
-      await errorHandler(
+      await Handler.error(
         async () => {
           const res = banner ? banner : {};
           res.image = props.image || null;
@@ -80,7 +89,8 @@ const Banner = (props) => {
           }
 
           return false;
-        }
+        },
+        setErrorMessage
       );
     }
   };
@@ -110,29 +120,6 @@ const Banner = (props) => {
     "create-banner": createBanner,
     "delete-banner": deleteBanner,
     "update-banner": updateBanner,
-  };
-
-  const errorHandler = async (action, actionCatch = async () => false) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-
-      if (await actionCatch()) {
-        setErrorMessage(
-          ex?.response?.status < 500 && ex?.response?.data?.error?.message
-            ? ex.response.data.error.message
-            : "Неизвестная ошибка"
-        );
-      }
-
-      setPenaltyDelay(penaltyDelay + 1000);
-      setTimeout(
-        () =>
-          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
-        1000
-      );
-    }
   };
 
   return (

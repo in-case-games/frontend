@@ -9,60 +9,41 @@ import { Input } from "../../common/inputs";
 import { useNavigate } from "react-router-dom";
 import { Converter } from "../../../helpers/converter";
 import { InCoin } from "../../../assets/images/icons";
+import { Handler } from "../../../helpers/handler";
 import TokenService from "../../../services/token";
 import styles from "./inventory.module";
 
 const Inventory = (props) => {
-  const navigate = useNavigate();
   const userApi = new UserApi();
-
   const observerRole = TokenService.getUser()?.role ?? "user";
+  const navigate = useNavigate();
 
-  const [errorMessage, setErrorMessage] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [backRemove, setBackRemove] = useState(null);
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      await errorHandler(
-        async () => {
-          if (backRemove !== null) {
-            let t = backRemove - 1;
-            t = t >= 0 ? t : 0;
+      if (backRemove !== null) {
+        let t = backRemove - 1;
+        t = t >= 0 ? t : 0;
 
-            setBackRemove(t);
+        setBackRemove(t);
 
-            if (t === 0) {
-              await userApi.deleteUserInventoryByAdmin(props.inventory.id);
+        if (t === 0) {
+          setBackRemove(null);
 
-              setBackRemove(null);
-              props.close();
-            }
-          }
+          await Handler.error(async () => {
+            await userApi.deleteUserInventoryByAdmin(props.inventory.id);
+            props.close();
+          });
+        }
+      }
 
-          setIsLoading(false);
-        },
-        async () => setBackRemove(null)
-      );
+      setIsLoading(false);
     }, 1000);
 
     return () => clearInterval(interval);
   });
-
-  const errorHandler = async (action, actionCatch = async () => {}) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-      await actionCatch();
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-    }
-  };
 
   return (
     <div className={styles.inventory}>

@@ -5,7 +5,6 @@ import {
   Game as GameApi,
 } from "../../../api";
 import { OpeningHistory as Item } from "../../game-item";
-import styles from "./openings-roulette.module";
 import { Modal as ModalLayout } from "../../../layouts";
 import {
   MiniProfile as MiniProfileWindow,
@@ -15,17 +14,17 @@ import {
   Restriction as RestrictionWindow,
 } from "../../windows";
 import { Converter } from "../../../helpers/converter";
+import { Handler } from "../../../helpers/handler";
+import styles from "./openings-roulette.module";
 
 const OpeningsRoulette = () => {
   const userApi = new UserApi();
   const itemApi = new ItemApi();
   const gameApi = new GameApi();
-
   const windowWidth = useRef(window.innerWidth);
 
   const [isStart, setIsStart] = useState(true);
 
-  const [errorMessage, setErrorMessage] = useState();
   const [items, setItems] = useState();
   const [games, setGames] = useState();
   const [item, setItem] = useState();
@@ -39,7 +38,7 @@ const OpeningsRoulette = () => {
   useEffect(() => {
     const interval = setInterval(
       async () => {
-        await errorHandler(async () => {
+        await Handler.error(async () => {
           setIsStart(false);
 
           const g = games || (await loadedGames());
@@ -123,20 +122,6 @@ const OpeningsRoulette = () => {
     }
 
     return history;
-  };
-
-  const errorHandler = async (action) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-    }
   };
 
   return (

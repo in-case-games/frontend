@@ -11,9 +11,7 @@ import {
   Item as ItemApi,
   Game as GameApi,
 } from "../../../api";
-import TokenService from "../../../services/token";
 import { ListLunge, Logo, UserBar } from "../../common/buttons";
-import Constants from "../../../constants";
 import { Modal as ModalLayout } from "../../../layouts";
 import {
   EmailSend as EmailSendWindow,
@@ -24,7 +22,10 @@ import {
 } from "../../windows";
 import { useNavigate } from "react-router-dom";
 import { Input } from "../../common/inputs";
+import TokenService from "../../../services/token";
+import Constants from "../../../constants";
 import styles from "./header.module";
+import { Handler } from "../../../helpers/handler";
 
 const Header = () => {
   const userApi = new UserApi();
@@ -45,7 +46,6 @@ const Header = () => {
   const [forgotPasswordActive, setForgotPasswordActive] = useState(false);
   const [burgerActive, setBurgerActive] = useState();
 
-  const [errorMessage, setErrorMessage] = useState();
   const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [search, setSearch] = useState();
   const [searchDetected, setSearchDetected] = useState({ items: [] });
@@ -85,7 +85,7 @@ const Header = () => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (TokenService.getAccessToken() !== undefined) {
-        await errorHandler(async () => {
+        await Handler.error(async () => {
           let response = await userApi.getBalance();
 
           response =
@@ -108,9 +108,15 @@ const Header = () => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      await errorHandler(async () => {
-        if (!games) setGames(await gameApi.get());
-      });
+      await Handler.error(
+        async () => {
+          if (!games) setGames(await gameApi.get());
+        },
+        undefined,
+        undefined,
+        penaltyDelay,
+        setPenaltyDelay
+      );
       if (TokenService.getAccessToken() !== undefined && user === null)
         setIsAuth(null);
       else setIsAuth(TokenService.getAccessToken() !== undefined);
@@ -180,13 +186,19 @@ const Header = () => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (TokenService.getAccessToken()) {
-        await errorHandler(async () => {
-          await userApi.get();
-          setUser({
-            image: await userApi.getImage(),
-            balance: user?.balance ?? 0,
-          });
-        });
+        await Handler.error(
+          async () => {
+            await userApi.get();
+            setUser({
+              image: TokenService.getUser()?.image,
+              balance: user?.balance ?? 0,
+            });
+          },
+          undefined,
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay
+        );
       }
 
       setIsDate(TokenService.getExpiresAccessToken());
@@ -194,26 +206,6 @@ const Header = () => {
 
     return () => clearInterval(interval);
   });
-
-  const errorHandler = async (action) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-      setPenaltyDelay(penaltyDelay + 1000);
-      setTimeout(
-        () =>
-          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
-        1000
-      );
-    }
-  };
 
   return (
     <header className={styles.header}>

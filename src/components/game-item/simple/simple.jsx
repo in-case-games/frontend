@@ -6,10 +6,10 @@ import {
   TransferIvory as Transfer,
 } from "../../../assets/images/icons";
 import { LoadingHourglass as Loading, LoadingArrow } from "../../loading";
-import Constants from "../../../constants";
 import { Converter } from "../../../helpers/converter";
-import styles from "./simple.module";
 import { StripCounterSlider } from "../../common/inputs";
+import Constants from "../../../constants";
+import styles from "./simple.module";
 
 const Simple = (props) => {
   const [gradientColor, setGradientColor] = useState("transparent");

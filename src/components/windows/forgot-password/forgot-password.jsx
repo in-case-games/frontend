@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Email as EmailApi } from "../../../api";
-import styles from "./forgot-password.module";
 import { Input } from "../../common/inputs";
+import { Handler } from "../../../helpers/handler";
+import styles from "./forgot-password.module";
 
 const ForgotPassword = (props) => {
   const emailApi = new EmailApi();
@@ -9,29 +10,18 @@ const ForgotPassword = (props) => {
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
 
-  const sendForgot = async () => {
-    await errorHandler(async () => {
-      await emailApi.sendForgotPassword({
-        login: login,
-        email: email,
-      });
-      props.exchangeWindow("email");
-    });
-  };
-
-  const errorHandler = async (action) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-    }
-  };
+  const sendForgot = async () =>
+    await Handler.error(
+      async () => {
+        await emailApi.sendForgotPassword({
+          login: login,
+          email: email,
+        });
+        props.exchangeWindow("email");
+      },
+      undefined,
+      setErrorMessage
+    );
 
   return (
     <div className={styles.forgot_password}>

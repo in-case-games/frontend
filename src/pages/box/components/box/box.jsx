@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TemplateBox as BoxImage } from "../../../../assets/images/main";
-import Constants from "../../../../constants";
 import { FlagBlack as Flag } from "../../../../assets/images/icons";
+import Constants from "../../../../constants";
 import styles from "./box.module";
 
 const Box = (props) => {

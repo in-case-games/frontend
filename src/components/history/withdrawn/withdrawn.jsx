@@ -3,8 +3,9 @@ import { TemplateItem as ItemImage } from "../../../assets/images/main";
 import { InCoin } from "../../../assets/images/icons";
 import { User as UserApi } from "../../../api";
 import { Converter } from "../../../helpers/converter";
-import Constants from "../../../constants";
 import { LoadingArrow as Loading } from "../../loading";
+import { Handler } from "../../../helpers/handler";
+import Constants from "../../../constants";
 import styles from "./withdrawn.module";
 
 const Withdrawn = (props) => {
@@ -15,7 +16,6 @@ const Withdrawn = (props) => {
       props.history.item.rarity ? props.history.item.rarity : "white"
     ]
   );
-  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(
@@ -59,24 +59,10 @@ const Withdrawn = (props) => {
 
   const click = async () => {
     if (props.history.status === "cancel") {
-      await errorHandler(async () => {
+      await Handler.error(async () => {
         await userApi.transferWithdrawn(props.history.id);
         window.location.reload();
       });
-    }
-  };
-
-  const errorHandler = async (action) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
     }
   };
 

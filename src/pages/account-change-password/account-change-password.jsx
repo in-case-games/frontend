@@ -2,9 +2,10 @@ import { React, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { delete_cookie } from "sfcookies";
 import { Email as EmailApi } from "../../api";
+import { Input } from "../../components/common/inputs";
+import { Handler } from "../../helpers/handler";
 import TokenService from "../../services/token";
 import styles from "./account-change-password.module";
-import { Input } from "../../components/common/inputs";
 
 const AccountChangePassword = () => {
   const emailApi = new EmailApi();
@@ -16,31 +17,29 @@ const AccountChangePassword = () => {
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleClick = async () => {
     if (isSuccess) navigate("/#");
 
-    const token = searchParams.get("token");
-    let err = "";
+    await Handler.error(async () => {
+      const token = searchParams.get("token");
 
-    if (!token) err = "Токен не валидный, повторите все еще раз";
-    else if (password === "" || confirmPassword === "")
-      err = "Заполните все поля";
-    else if (password !== confirmPassword)
-      err = "Пароли не сходятся, скорее всего допустили ошибку";
-    else {
-      try {
+      if (!token) {
+        setErrorMessage("Токен не валидный, повторите все еще раз");
+      } else if (password === "" || confirmPassword === "") {
+        setErrorMessage("Заполните все поля");
+      } else if (password !== confirmPassword) {
+        setErrorMessage("Пароли не сходятся, скорее всего допустили ошибку");
+      } else {
         await emailApi.confirmPassword(password, token);
         TokenService.removeUser();
         delete_cookie("user-balance");
         setIsSuccess(true);
-      } catch (e) {
-        err = e.response.data.error.message;
       }
-    }
 
-    setError(err);
+      setErrorMessage();
+    });
   };
 
   return (
@@ -48,7 +47,7 @@ const AccountChangePassword = () => {
       <div className={styles.tittle}>
         {!isSuccess ? "Подтвердите новый пароль" : "Ваш аккаунт сменил пароль"}
       </div>
-      {error ? <div className={styles.error}>{error}</div> : null}
+      {errorMessage ? <div className={styles.error}>{errorMessage}</div> : null}
       {!isSuccess ? (
         <div className={styles.inputs}>
           <Input

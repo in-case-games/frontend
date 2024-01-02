@@ -6,6 +6,7 @@ import {
 import { Item as ItemApi, Box as BoxApi, Game as GameApi } from "../../../api";
 import { LoadingArrow as Loading } from "../../loading";
 import { Input } from "../../common/inputs";
+import { Handler } from "../../../helpers/handler";
 import TokenService from "../../../services/token";
 import styles from "./box-inventory.module";
 
@@ -19,7 +20,6 @@ const BoxInventory = (props) => {
   const [backOperation, setBackOperation] = useState(null);
   const [operation, setOperation] = useState(null);
 
-  const [errorMessage, setErrorMessage] = useState();
   const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [user, setUser] = useState(TokenService.getUser());
   const [item, setItem] = useState(props.inventory?.item || {});
@@ -27,19 +27,29 @@ const BoxInventory = (props) => {
   const [games, setGames] = useState();
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      await errorHandler(async () => {
-        if (!games) setGames(await gameApi.get());
-        if (isLoading && !box?.image) {
-          setUser(TokenService.getUser());
-          setBox(
-            await boxApi.pushImage(await boxApi.getById(props.inventory.boxId))
-          );
-        }
+    const interval = setInterval(
+      async () =>
+        await Handler.error(
+          async () => {
+            if (!games) setGames(await gameApi.get());
+            if (isLoading && !box?.image) {
+              setUser(TokenService.getUser());
+              setBox(
+                await boxApi.pushImage(
+                  await boxApi.getById(props.inventory.boxId)
+                )
+              );
+            }
 
-        setIsLoading(false);
-      });
-    }, 500 + penaltyDelay);
+            setIsLoading(false);
+          },
+          undefined,
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay
+        ),
+      500 + penaltyDelay
+    );
 
     return () => clearInterval(interval);
   });
@@ -53,9 +63,7 @@ const BoxInventory = (props) => {
         setBackOperation(t);
 
         if (t === 0) {
-          await errorHandler(async () => {
-            await operations[operation]();
-          });
+          await Handler.error(async () => await operations[operation]());
           setOperation(null);
           setBackOperation(null);
         }
@@ -70,7 +78,7 @@ const BoxInventory = (props) => {
       setBackOperation(null);
       setOperation(null);
     } else if (backOperation === null) {
-      await errorHandler(async () => {
+      await Handler.error(async () => {
         const i = (await itemApi.getByName(item.name))[0];
         i.gameId = games.find((g) => g.name === i.game).id;
         setItem(await itemApi.pushImage(i));
@@ -111,26 +119,6 @@ const BoxInventory = (props) => {
     });
 
     props.close();
-  };
-
-  const errorHandler = async (action) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-      setPenaltyDelay(penaltyDelay + 1000);
-      setTimeout(
-        () =>
-          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
-        1000
-      );
-    }
   };
 
   const operations = {

@@ -8,21 +8,21 @@ import {
   StarBeige as StarImage,
 } from "../../../../../assets/images/icons";
 import { Site as SiteApi } from "../../../../../api";
-import styles from "./statistics.module";
+import { Handler } from "../../../../../helpers/handler";
 import Statistic from "./statistic";
+import styles from "./statistics.module";
 
 const Statistics = () => {
   const siteApi = new SiteApi();
 
   const [isStart, setIsStart] = useState(true);
 
-  const [errorMessage, setErrorMessage] = useState();
   const [statistics, setStatistics] = useState(null);
 
   useEffect(() => {
     const interval = setInterval(
-      async () => {
-        await errorHandler(async () => {
+      async () =>
+        await Handler.error(async () => {
           setIsStart(false);
 
           const response = await siteApi.getStatistics();
@@ -35,8 +35,7 @@ const Statistics = () => {
             inCoins: response.withdrawnFunds,
             online: 0,
           });
-        });
-      },
+        }),
       isStart ? 100 : 5000
     );
 
@@ -44,20 +43,6 @@ const Statistics = () => {
       clearInterval(interval);
     };
   });
-
-  const errorHandler = async (action) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-    }
-  };
 
   return (
     <div className={styles.statistics}>

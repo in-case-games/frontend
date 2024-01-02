@@ -10,6 +10,7 @@ import {
   LoadImage as LoadImageWindow,
   Restriction as RestrictionWindow,
 } from "../../windows";
+import { Handler } from "../../../helpers/handler";
 
 const Reviews = () => {
   const userApi = new UserApi();
@@ -24,12 +25,11 @@ const Reviews = () => {
   const [box, setBox] = useState();
   const [restriction, setRestriction] = useState();
   const [image, setImage] = useState();
-  const [errorMessage, setErrorMessage] = useState();
 
   useEffect(() => {
     const interval = setInterval(
-      async () => {
-        await errorHandler(async () => {
+      async () =>
+        await Handler.error(async () => {
           setIsStart(false);
           const response = await userApi.getReviewLast(10);
           const result = [];
@@ -52,33 +52,12 @@ const Reviews = () => {
           }
 
           setReviews(result);
-        });
-      },
-      isStart ? 100 : 50000
+        }),
+      isStart ? 100 : 5000
     );
 
     return () => clearInterval(interval);
   });
-
-  const errorHandler = async (action) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-      setPenaltyDelay(penaltyDelay + 1000);
-      setTimeout(
-        () =>
-          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
-        1000
-      );
-    }
-  };
 
   return (
     <div>

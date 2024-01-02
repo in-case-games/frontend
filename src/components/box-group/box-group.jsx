@@ -1,6 +1,6 @@
 import React from "react";
-import styles from "./box-group.module";
 import { Converter } from "../../helpers/converter";
+import styles from "./box-group.module";
 
 const BoxGroup = (props) => {
   return (

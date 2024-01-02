@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { GunWhite as ItemIcon } from "../../../assets/images/icons";
 import { User as UserApi } from "../../../api";
 import { Small as Item } from "../../game-item";
+import { Handler } from "../../../helpers/handler";
 import TokenService from "../../../services/token";
 import styles from "./take-item-banner.module";
 
@@ -9,11 +10,10 @@ const TakeItemBanner = (props) => {
   const userApi = new UserApi();
   const role = TokenService.getUser()?.role;
 
-  const [errorMessage, setErrorMessage] = useState("");
   const [hovered, setHovered] = useState(false);
 
-  const takeItem = async (id) => {
-    await errorHandler(async () => {
+  const takeItem = async (id) =>
+    await Handler.error(async () => {
       if (!role) return;
 
       if (props.pathBanner) {
@@ -36,29 +36,13 @@ const TakeItemBanner = (props) => {
 
       props.close();
     });
-  };
 
-  const deletePath = async () => {
-    await errorHandler(async () => {
+  const deletePath = async () =>
+    await Handler.error(async () => {
       await userApi.deletePathBannerById(props.pathBanner.id);
 
       props.close();
     });
-  };
-
-  const errorHandler = async (action) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-    }
-  };
 
   return (
     <div className={styles.take_item_banner}>

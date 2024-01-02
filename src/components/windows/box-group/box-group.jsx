@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { BoxGroup as BoxGroupApi, Game as GameApi } from "../../../api";
 import { Input, ComboBox } from "../../common/inputs";
+import { Handler } from "../../../helpers/handler";
 import styles from "./box-group.module";
 
 const BoxGroup = (props) => {
   const boxGroupApi = new BoxGroupApi();
   const gameApi = new GameApi();
 
-  const [errorMessage, setErrorMessage] = useState();
   const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [group, setGroup] = useState();
   const [games, setGames] = useState([]);
@@ -15,37 +15,45 @@ const BoxGroup = (props) => {
   const [operation, setOperation] = useState();
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      await errorHandler(async () => {
-        if (games.length === 0) {
-          const res = [];
-          res.push({
-            id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-            name: undefined,
-          });
-          setGames(res.concat(await gameApi.get()));
-        }
-        if (!group && props.group?.id) {
-          const result = props.group;
-          const select = [];
-          result.components = [];
+    const interval = setInterval(
+      async () =>
+        await Handler.error(
+          async () => {
+            if (games.length === 0) {
+              const res = [];
+              res.push({
+                id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+                name: undefined,
+              });
+              setGames(res.concat(await gameApi.get()));
+            }
+            if (!group && props.group?.id) {
+              const result = props.group;
+              const select = [];
+              result.components = [];
 
-          const groups = await boxGroupApi.getByGroupId(props.group?.id);
+              const groups = await boxGroupApi.getByGroupId(props.group?.id);
 
-          for (let i = 0; i < groups.length; i++) {
-            select.push(groups[i].box);
-            result.components.push({
-              id: groups[i].id,
-              box: groups[i].box,
-            });
-            result.game = groups[i].game.name;
-          }
+              for (let i = 0; i < groups.length; i++) {
+                select.push(groups[i].box);
+                result.components.push({
+                  id: groups[i].id,
+                  box: groups[i].box,
+                });
+                result.game = groups[i].game.name;
+              }
 
-          props.setSelectBoxes((prev) => ({ ...prev, boxes: select }));
-          setGroup(result);
-        }
-      });
-    }, 100 + penaltyDelay);
+              props.setSelectBoxes((prev) => ({ ...prev, boxes: select }));
+              setGroup(result);
+            }
+          },
+          undefined,
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay
+        ),
+      100 + penaltyDelay
+    );
 
     return () => clearInterval(interval);
   });
@@ -59,9 +67,7 @@ const BoxGroup = (props) => {
         setBackOperation(temp);
 
         if (temp === 0) {
-          await errorHandler(async () => {
-            await operations[operation]();
-          });
+          await Handler.error(async () => await operations[operation]());
           setOperation(null);
           setBackOperation(null);
         }
@@ -150,26 +156,6 @@ const BoxGroup = (props) => {
 
     props.setGroup(res);
     setGroup();
-  };
-
-  const errorHandler = async (action) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-      setPenaltyDelay(penaltyDelay + 1000);
-      setTimeout(
-        () =>
-          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
-        1000
-      );
-    }
   };
 
   const operations = {

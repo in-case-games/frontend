@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Authentication as AuthApi } from "../../../api";
-import styles from "./sign-in.module.scss";
 import { Input } from "../../common/inputs";
+import { Handler } from "../../../helpers/handler";
+import styles from "./sign-in.module.scss";
 
 const SignIn = (props) => {
   const authApi = new AuthApi();
@@ -11,24 +12,14 @@ const SignIn = (props) => {
   const [password, setPassword] = useState("");
 
   const signIn = async () => {
-    await errorHandler(async () => {
-      await authApi.signIn(login, password);
-      props.exchangeWindow("email");
-    });
-  };
-
-  const errorHandler = async (action) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-    }
+    await Handler.error(
+      async () => {
+        await authApi.signIn(login, password);
+        props.exchangeWindow("email");
+      },
+      undefined,
+      setErrorMessage
+    );
   };
 
   return (

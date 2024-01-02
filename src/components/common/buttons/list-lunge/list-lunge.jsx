@@ -1,7 +1,7 @@
 import React from "react";
+import { ArrowBottom } from "../../../../assets/images/icons";
 import ItemLunge from "./item-lunge";
 import styles from "./list-lunge.module";
-import { ArrowBottom } from "../../../../assets/images/icons";
 
 const ListLunge = (props) => {
   return (

@@ -13,6 +13,7 @@ import { Email as EmailApi, User as UserApi } from "../../../../api";
 import { Input } from "../../../../components/common/inputs";
 import { Observer as ProfileSettings } from "../../../../components/profile-settings";
 import styles from "./content.module";
+import TokenService from "../../../../services/token";
 
 const ObserverProfile = () => {
   const emailApi = new EmailApi();
@@ -134,7 +135,8 @@ const ObserverProfile = () => {
             if (image) {
               const userApi = new UserApi();
               await userApi.updateImage(image);
-              window.location.reload();
+              TokenService.setUser(TokenService.getUser());
+              setIsLoadImage(false);
             }
           }}
         />

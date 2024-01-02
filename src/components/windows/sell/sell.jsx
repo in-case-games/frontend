@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Item as ItemApi } from "../../../api";
 import { Simple as Item } from "../../game-item";
 import { LoadingArrow as Loading } from "../../loading";
+import { Handler } from "../../../helpers/handler";
 import styles from "./sell.module";
 
 const Sell = (props) => {
@@ -16,7 +17,6 @@ const Sell = (props) => {
   const [remainingInventories, setRemainingInventories] = useState({
     items: [],
   });
-  const [errorMessage, setErrorMessage] = useState();
   const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   const click = () => {
@@ -42,7 +42,7 @@ const Sell = (props) => {
       const index = props.selectItems.items.indexOf(id);
       let error = false;
 
-      await errorHandler(
+      await Handler.error(
         async () => {
           if (items[i].status !== "success") {
             items[i].status = "loading";
@@ -59,7 +59,11 @@ const Sell = (props) => {
           items[i].status = "cancel";
           items[i].error = "Внутренняя ошибка, попробуйте еще раз";
           setFinishedInventories((prev) => ({ ...prev, items: items }));
-        }
+          return false;
+        },
+        undefined,
+        penaltyDelay,
+        setPenaltyDelay
       );
 
       removeSelectItem(index);
@@ -117,27 +121,6 @@ const Sell = (props) => {
 
     return () => clearInterval(interval);
   });
-
-  const errorHandler = async (action, actionCatch = async () => {}) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-      await actionCatch();
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-      setPenaltyDelay(penaltyDelay + 1000);
-      setTimeout(
-        () =>
-          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
-        1000
-      );
-    }
-  };
 
   return (
     <div className={styles.sell}>

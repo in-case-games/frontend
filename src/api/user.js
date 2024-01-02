@@ -165,8 +165,22 @@ class User {
   async getImage() {
     const user = TokenService.getUser();
     try {
-      await api.get(`http://localhost:8080/users/${user.id}/${user.id}.png`);
-      return `http://localhost:8080/users/${user.id}/${user.id}.png`;
+      try {
+        await api.get(`http://localhost:8080/users/${user.id}/${user.id}.jpg`);
+        return `http://localhost:8080/users/${user.id}/${user.id}.jpg`;
+      } catch (err) {
+        try {
+          await api.get(
+            `http://localhost:8080/users/${user.id}/${user.id}.jpeg`
+          );
+          return `http://localhost:8080/users/${user.id}/${user.id}.jpeg`;
+        } catch (err) {
+          await api.get(
+            `http://localhost:8080/users/${user.id}/${user.id}.png`
+          );
+          return `http://localhost:8080/users/${user.id}/${user.id}.png`;
+        }
+      }
     } catch (err) {
       return TemplateUser;
     }
@@ -174,8 +188,18 @@ class User {
 
   async getImageByUserId(id) {
     try {
-      await api.get(`http://localhost:8080/users/${id}/${id}.png`);
-      return `http://localhost:8080/users/${id}/${id}.png`;
+      try {
+        await api.get(`http://localhost:8080/users/${id}/${id}.jpg`);
+        return `http://localhost:8080/users/${id}/${id}.jpg`;
+      } catch (err) {
+        try {
+          await api.get(`http://localhost:8080/users/${id}/${id}.jpeg`);
+          return `http://localhost:8080/users/${id}/${id}.jpeg`;
+        } catch (err) {
+          await api.get(`http://localhost:8080/users/${id}/${id}.png`);
+          return `http://localhost:8080/users/${id}/${id}.png`;
+        }
+      }
     } catch (err) {
       return TemplateUser;
     }

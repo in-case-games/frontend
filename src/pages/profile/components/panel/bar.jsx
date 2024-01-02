@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { delete_cookie } from "sfcookies";
-import { TemplateUser as UserImage } from "../../../../assets/images/main";
 import {
   ProfileBar as BarButton,
   ProfileHeaderBar as HeaderBarButton,
@@ -26,7 +25,6 @@ const Bar = (props) => {
         setIsStart(false);
 
         const temp = TokenService.getUser();
-        temp.image = await userApi.getImage();
 
         setUser(temp);
       },

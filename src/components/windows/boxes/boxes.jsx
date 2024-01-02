@@ -4,6 +4,7 @@ import { Box as BoxApi } from "../../../api";
 import { Simple as Box } from "../../loot-box";
 import { LoadingArrow as Loading } from "../../loading";
 import { Input } from "../../common/inputs";
+import { Handler } from "../../../helpers/handler";
 import styles from "./boxes.module";
 
 const Boxes = (props) => {
@@ -15,7 +16,6 @@ const Boxes = (props) => {
 
   const [search, setSearch] = useState("");
 
-  const [errorMessage, setErrorMessage] = useState();
   const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [primaryBoxes, setPrimaryBoxes] = useState([]);
   const [showBoxes, setShowBoxes] = useState([]);
@@ -57,7 +57,7 @@ const Boxes = (props) => {
         setShowBoxes(show);
       };
       if (!isBanned && (isLoading || isClickBox)) {
-        await errorHandler(
+        await Handler.error(
           async () => {
             await loaded(isLoading);
 
@@ -65,8 +65,12 @@ const Boxes = (props) => {
             setIsLoading(false);
             setIsBanned(false);
           },
-          async () => setIsBanned(false)
+          undefined,
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay
         );
+        setIsBanned(false);
       }
     }, 100 + penaltyDelay);
 
@@ -90,27 +94,6 @@ const Boxes = (props) => {
 
       setSearch(value);
       setShowBoxes(show);
-    }
-  };
-
-  const errorHandler = async (action, actionCatch = async () => {}) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-      await actionCatch();
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-      setPenaltyDelay(penaltyDelay + 1000);
-      setTimeout(
-        () =>
-          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
-        1000
-      );
     }
   };
 

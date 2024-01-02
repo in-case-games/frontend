@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import { TemplateUser as UserImage } from "../../../assets/images/main";
 import { Restriction as RestrictionApi, User as UserApi } from "../../../api";
 import { useNavigate } from "react-router-dom";
-import TokenService from "../../../services/token";
 import { Input, ComboBox } from "../../common/inputs";
 import { Converter } from "../../../helpers/converter";
+import { Handler } from "../../../helpers/handler";
+import TokenService from "../../../services/token";
 import styles from "./restriction.module";
 
 const Restriction = (props) => {
@@ -19,27 +20,32 @@ const Restriction = (props) => {
 
   const [type, setType] = useState();
   const [types, setTypes] = useState();
-  const [errorMessage, setErrorMessage] = useState();
   const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      await errorHandler(async () => {
-        if (!types) setTypes(await restrictionApi.getTypes());
-        if (!type) setType(props.restriction?.type?.name || "warn");
-        if (!restriction) {
-          if (props.restriction && !props.restriction?.owner) {
-            setRestriction({
-              owner: TokenService.getUser(),
-              creationDate: new Date(),
-              expirationDate: new Date(),
-            });
-          } else {
-            setRestriction(props.restriction);
-          }
-        }
-      });
-    }, 100 + penaltyDelay);
+    const interval = setInterval(
+      async () =>
+        await Handler.error(
+          async () => {
+            if (!types) setTypes(await restrictionApi.getTypes());
+            if (!type) setType(props.restriction?.type?.name || "warn");
+            if (!restriction) {
+              if (props.restriction && !props.restriction?.owner) {
+                setRestriction({
+                  owner: TokenService.getUser(),
+                  creationDate: new Date(),
+                  expirationDate: new Date(),
+                });
+              } else setRestriction(props.restriction);
+            }
+          },
+          undefined,
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay
+        ),
+      100 + penaltyDelay
+    );
 
     return () => clearInterval(interval);
   });
@@ -53,7 +59,7 @@ const Restriction = (props) => {
         setBackOperation(temp);
 
         if (temp === 0) {
-          await errorHandler(async () => await operations[operation]());
+          await Handler.error(async () => await operations[operation]());
 
           setOperation(null);
           setBackOperation(null);
@@ -69,7 +75,7 @@ const Restriction = (props) => {
       setBackOperation();
       setOperation();
     } else if (!backOperation) {
-      await errorHandler(async () => {
+      await Handler.error(async () => {
         restriction.userId = (
           await userApi.getByLogin(restriction?.user?.login)
         ).id;
@@ -118,26 +124,6 @@ const Restriction = (props) => {
     "create-restriction": createRestriction,
     "delete-restriction": deleteRestriction,
     "update-restriction": updateRestriction,
-  };
-
-  const errorHandler = async (action) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-      setPenaltyDelay(penaltyDelay + 1000);
-      setTimeout(
-        () =>
-          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
-        1000
-      );
-    }
   };
 
   return (

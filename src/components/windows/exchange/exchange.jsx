@@ -8,6 +8,7 @@ import { Simple as Item } from "../../game-item";
 import { LoadingArrow as Loading } from "../../loading";
 import { Converter } from "../../../helpers/converter";
 import { Input } from "../../common/inputs";
+import { Handler } from "../../../helpers/handler";
 import styles from "./exchange.module";
 
 const Exchange = (props) => {
@@ -27,7 +28,6 @@ const Exchange = (props) => {
   const [selectItems, setSelectItems] = useState({ items: [] });
   const [primaryItems, setPrimaryItems] = useState([]);
   const [showItems, setShowItems] = useState([]);
-  const [errorMessage, setErrorMessage] = useState();
   const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   const loadedGames = async () => {
@@ -92,16 +92,20 @@ const Exchange = (props) => {
         setShowItems(show);
       };
       if (!isBanned && (isLoading || isClickItem)) {
-        await errorHandler(
+        await Handler.error(
           async () => {
             await loaded(isLoading);
 
             setIsClickItem(false);
             setIsLoading(false);
-            setIsBanned(false);
           },
-          async () => setIsBanned(false)
+          undefined,
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay
         );
+
+        setIsBanned(false);
       }
     }, 100 + penaltyDelay);
 
@@ -110,7 +114,7 @@ const Exchange = (props) => {
 
   const click = async () => {
     if (allowedCost >= 0) {
-      await errorHandler(async () => {
+      await Handler.error(async () => {
         const index = props.selectItems.items.findIndex(
           (s) => s.id === props.inventory.id
         );
@@ -196,27 +200,6 @@ const Exchange = (props) => {
       let selected = props.selectItems.items;
       selected.splice(index, 1);
       props.setSelectItems((prev) => ({ ...prev, items: selected }));
-    }
-  };
-
-  const errorHandler = async (action, actionCatch = async () => {}) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-      await actionCatch();
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-      setPenaltyDelay(penaltyDelay + 1000);
-      setTimeout(
-        () =>
-          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
-        1000
-      );
     }
   };
 

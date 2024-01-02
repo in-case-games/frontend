@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { TemplateBox as BoxImage } from "../../../assets/images/main";
 import { Link } from "../../../assets/images/icons";
 import { Box as BoxApi, Game as GameApi } from "../../../api";
-import TokenService from "../../../services/token";
 import { Input, ComboBox } from "../../common/inputs";
 import { LoadingArrow as Loading } from "../../loading";
-import styles from "./box.module";
+import { Handler } from "../../../helpers/handler";
 import Constants from "../../../constants";
+import TokenService from "../../../services/token";
+import styles from "./box.module";
 
 const Box = (props) => {
   const boxApi = new BoxApi();
@@ -36,16 +37,22 @@ const Box = (props) => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (isLoading) {
-        await errorHandler(async () => {
-          setUser(TokenService.getUser());
-          setBox(
-            props.box?.id
-              ? await boxApi.getById(props.box?.id)
-              : Constants.TemplateBox
-          );
-          setGames(await gameApi.get());
-          setIsLoading(false);
-        });
+        await Handler.error(
+          async () => {
+            setUser(TokenService.getUser());
+            setBox(
+              props.box?.id
+                ? await boxApi.getById(props.box?.id)
+                : Constants.TemplateBox
+            );
+            setGames(await gameApi.get());
+            setIsLoading(false);
+          },
+          undefined,
+          setErrorMessage,
+          penaltyDelay,
+          setPenaltyDelay
+        );
       }
     }, 100 + penaltyDelay);
 
@@ -61,16 +68,14 @@ const Box = (props) => {
         setBackOperation(temp);
 
         if (temp === 0) {
-          await errorHandler(
-            async () => {
-              await operations[operation]();
-            },
-            async () => {
-              setIsLoading(true);
-            }
+          await Handler.error(
+            async () => await operations[operation](),
+            undefined,
+            setErrorMessage
           );
           setOperation(null);
           setBackOperation(null);
+          setIsLoading(true);
         }
       }
     }, 1000);
@@ -142,27 +147,6 @@ const Box = (props) => {
     "create-box": createBox,
     "delete-box": deleteBox,
     "update-box": updateBox,
-  };
-
-  const errorHandler = async (action, actionCatch = async () => {}) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-      await actionCatch();
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-      setPenaltyDelay(penaltyDelay + 1000);
-      setTimeout(
-        () =>
-          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
-        1000
-      );
-    }
   };
 
   return (
