@@ -5,6 +5,7 @@ import { LoadImage as LoadImageWindow } from "../../../../components/windows";
 import { LoadingArrow as Loading } from "../../../../components/loading";
 import { User as UserApi } from "../../../../api";
 import { Observed as ProfileSettings } from "../../../../components/profile-settings";
+import { Handler } from "../../../../helpers/handler";
 import styles from "./content.module";
 
 const ObservedProfile = () => {
@@ -19,12 +20,11 @@ const ObservedProfile = () => {
   const [isLoadImage, setIsLoadImage] = useState(false);
 
   const [image, setImage] = useState(null);
-  const [errorMessage, setErrorMessage] = useState();
   const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   useEffect(() => {
-    const func = async () => {
-      await errorHandler(
+    const func = async () =>
+      await Handler.error(
         async () => {
           const temp = await userApi.getById(id);
           temp.image = await userApi.getImageByUserId(id);
@@ -33,58 +33,44 @@ const ObservedProfile = () => {
           setIsLoading(true);
         },
         async (ex) => {
-          if (ex?.response?.status === 404) {
-            navigate("/not-found");
-          }
-        }
+          if (ex?.response?.status === 404) navigate("/not-found");
+
+          return false;
+        },
+        undefined,
+        penaltyDelay,
+        setPenaltyDelay
       );
-    };
 
     func();
   }, [id]);
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      if (!user) {
-        await errorHandler(
+    const interval = setInterval(
+      async () =>
+        await Handler.error(
           async () => {
-            const temp = await userApi.getById(id);
-            temp.image = await userApi.getImageByUserId(id);
+            if (!user) {
+              const temp = await userApi.getById(id);
+              temp.image = await userApi.getImageByUserId(id);
 
-            setUser(temp);
+              setUser(temp);
+            }
           },
           async () => {
-            if (ex?.response?.status === 404) {
-              navigate("/not-found");
-            }
-          }
-        );
-      }
-    }, 100 + penaltyDelay);
+            if (ex?.response?.status === 404) navigate("/not-found");
+
+            return false;
+          },
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay
+        ),
+      100 + penaltyDelay
+    );
 
     return () => clearInterval(interval);
   });
-
-  const errorHandler = async (action, actionCatch = async () => {}) => {
-    try {
-      await action();
-    } catch (ex) {
-      console.log(ex);
-      await actionCatch(ex);
-
-      setErrorMessage(
-        ex?.response?.status < 500 && ex?.response?.data?.error?.message
-          ? ex.response.data.error.message
-          : "Неизвестная ошибка"
-      );
-      setPenaltyDelay(penaltyDelay + 1000);
-      setTimeout(
-        () =>
-          setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
-        1000
-      );
-    }
-  };
 
   return (
     <div className={styles.observed_profile}>

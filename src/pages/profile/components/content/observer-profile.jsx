@@ -12,10 +12,12 @@ import { LoadingArrow as Loading } from "../../../../components/loading";
 import { Email as EmailApi, User as UserApi } from "../../../../api";
 import { Input } from "../../../../components/common/inputs";
 import { Observer as ProfileSettings } from "../../../../components/profile-settings";
-import styles from "./content.module";
+import { Handler } from "../../../../helpers/handler";
 import TokenService from "../../../../services/token";
+import styles from "./content.module";
 
 const ObserverProfile = () => {
+  const userApi = new UserApi();
   const emailApi = new EmailApi();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -88,17 +90,21 @@ const ObserverProfile = () => {
               alt=""
               src={Airplane}
               className={styles.send}
-              onClick={async () => {
-                try {
-                  await controllers[controller]();
-                  setIsEmail(true);
-                  setController(null);
-                  setError(false);
-                } catch (err) {
-                  console.log(err);
-                  setError(true);
-                }
-              }}
+              onClick={async () =>
+                await Handler.error(
+                  async () => {
+                    await controllers[controller]();
+                    setIsEmail(true);
+                    setController(null);
+                    setError(false);
+                  },
+                  async () => {
+                    setError(true);
+                    return true;
+                  },
+                  setError
+                )
+              }
             />
             <img
               alt=""
@@ -131,14 +137,15 @@ const ObserverProfile = () => {
           sizeMb={1}
           regular={/\.(jpg|jpeg|png)$/}
           description={"JPG, JPEG, PNG (MAX. 400x400px | 1MB)"}
-          click={async () => {
-            if (image) {
-              const userApi = new UserApi();
-              await userApi.updateImage(image);
-              TokenService.setUser(TokenService.getUser());
-              setIsLoadImage(false);
-            }
-          }}
+          click={async () =>
+            await Handler.error(async () => {
+              if (image) {
+                await userApi.updateImage(image);
+                TokenService.setUser(TokenService.getUser());
+                setIsLoadImage(false);
+              }
+            })
+          }
         />
       </ModalLayout>
       <ModalLayout isActive={isEmail} close={() => setIsEmail(false)}>

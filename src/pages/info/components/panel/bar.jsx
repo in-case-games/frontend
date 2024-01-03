@@ -1,6 +1,6 @@
 import React from "react";
-import styles from "../../info.module";
 import { Info as InfoButton } from "../../../../components/common/buttons";
+import styles from "../../info.module";
 
 const Bar = (props) => {
   return (

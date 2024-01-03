@@ -10,10 +10,7 @@ const error = async (
   } catch (ex) {
     console.log(ex);
 
-    if (
-      (!actionCatch || (actionCatch && !(await actionCatch(ex)))) &&
-      setErrorMessage
-    ) {
+    if ((!actionCatch || !(await actionCatch(ex))) && setErrorMessage) {
       setErrorMessage(
         ex?.response?.status < 500 && ex?.response?.data?.error?.message
           ? ex.response.data.error.message

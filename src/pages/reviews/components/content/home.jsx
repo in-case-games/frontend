@@ -3,7 +3,6 @@ import { LoadingArrow as Loading } from "../../../../components/loading";
 import { Reviews as ReviewsApi, User as UserApi } from "../../../../api";
 import { Inventory as InventoryLayout } from "../../../../layouts";
 import { ReviewLine as Review } from "../../../../components/review";
-import TokenService from "../../../../services/token";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   TemplateUser as UserImage,
@@ -26,15 +25,16 @@ import {
   Restriction as RestrictionWindow,
 } from "../../../../components/windows";
 import { Converter } from "../../../../helpers/converter";
-import styles from "./content.module";
 import { Eye } from "../../../../assets/images/icons";
+import { Handler } from "../../../../helpers/handler";
+import TokenService from "../../../../services/token";
+import styles from "./content.module";
 
 const Home = () => {
-  const { id } = useParams();
   const reviewsApi = new ReviewsApi();
   const userApi = new UserApi();
-
   const user = TokenService.getUser();
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -61,7 +61,9 @@ const Home = () => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      if (!userReview) await loadUserReview();
+      await Handler.error(async () => {
+        if (!userReview) await loadUserReview();
+      });
 
       if (backOperation) {
         let temp = backOperation - 1;
@@ -70,7 +72,7 @@ const Home = () => {
         setBackOperation(temp);
 
         if (temp === 0) {
-          await operations[operation]();
+          await Handler.error(async () => await operations[operation]());
 
           setOperation();
           setBackOperation();
@@ -258,23 +260,25 @@ const Home = () => {
     setIsLoading(true);
   };
 
-  const deniedReview = async () => {
-    if (isAdmin()) {
-      await reviewsApi.denied(review.id);
+  const deniedReview = async () =>
+    await Handler.error(async () => {
+      if (isAdmin()) {
+        await reviewsApi.denied(review.id);
 
-      loadUserReview();
-      setIsLoading(true);
-    }
-  };
+        loadUserReview();
+        setIsLoading(true);
+      }
+    });
 
-  const approveReview = async () => {
-    if (isAdmin()) {
-      await reviewsApi.approve(review.id);
+  const approveReview = async () =>
+    await Handler.error(async () => {
+      if (isAdmin()) {
+        await reviewsApi.approve(review.id);
 
-      loadUserReview();
-      setIsLoading(true);
-    }
-  };
+        loadUserReview();
+        setIsLoading(true);
+      }
+    });
 
   const operations = {
     "create-review": createReview,
@@ -564,7 +568,8 @@ const Home = () => {
                     onMouseEnter={() => setHoveredImage(i.id)}
                     onMouseLeave={() => setHoveredImage({})}
                     onClick={async () => {
-                      if (hoveredImage === i.id) await showImage(i);
+                      if (hoveredImage === i.id)
+                        await Handler.error(async () => await showImage(i));
                     }}
                   >
                     <img

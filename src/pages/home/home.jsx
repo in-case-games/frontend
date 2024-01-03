@@ -1,7 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import styles from "./home.module";
 import { Banners, Games, Reviews } from "../../components/structure";
+import styles from "./home.module";
 
 class Home extends React.Component {
   render() {

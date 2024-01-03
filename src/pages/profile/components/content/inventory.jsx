@@ -18,12 +18,12 @@ import {
   Item as ItemApi,
 } from "../../../../api";
 import { Simple as Item } from "../../../../components/game-item";
-import styles from "./content.module";
 import { ComboBox } from "../../../../components/common/inputs";
 import {
   AirplaneBlack as Airplane,
   CartBlack as Cart,
 } from "../../../../assets/images/icons";
+import styles from "./content.module";
 
 const Inventory = () => {
   const userApi = new UserApi();

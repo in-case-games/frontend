@@ -1,7 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import styles from "./profile.module";
 import { Panel } from "./components";
+import styles from "./profile.module";
 
 class Profile extends React.Component {
   render() {

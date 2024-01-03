@@ -4,12 +4,10 @@ import {
   ProfileBar as BarButton,
   ProfileHeaderBar as HeaderBarButton,
 } from "../../../../components/common/buttons";
-import { User as UserApi } from "../../../../api";
 import TokenService from "../../../../services/token";
 import styles from "../../profile.module";
 
 const Bar = (props) => {
-  const userApi = new UserApi();
   const [isStart, setIsStart] = useState(true);
   const [user, setUser] = useState(TokenService.getUser());
 
