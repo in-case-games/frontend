@@ -15,4 +15,4 @@ const DropDown = (props) => {
   );
 };
 
-export default DropDown;
+export default React.memo(DropDown);

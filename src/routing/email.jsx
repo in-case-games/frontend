@@ -8,54 +8,50 @@ import { AccountChangeLogin as AccountChangeLoginPage } from "../pages/account-c
 import { AccountChangeEmail as AccountChangeEmailPage } from "../pages/account-change-email";
 import { AccountChangePassword as AccountChangePasswordPage } from "../pages/account-change-password";
 
-class Email extends React.Component {
-  render() {
-    return (
-      <Routes>
-        <Route
-          path="confirm/account"
-          element={
-            <Layout>
-              <AccountConfirmPage />
-            </Layout>
-          }
-        />
-        <Route
-          path="confirm/delete"
-          element={
-            <Layout>
-              <AccountDeletePage />
-            </Layout>
-          }
-        />
-        <Route
-          path="confirm/update/login"
-          element={
-            <Layout>
-              <AccountChangeLoginPage />
-            </Layout>
-          }
-        />
-        <Route
-          path="confirm/update/email"
-          element={
-            <Layout>
-              <AccountChangeEmailPage />
-            </Layout>
-          }
-        />
-        <Route
-          path="confirm/update/password"
-          element={
-            <Layout>
-              <AccountChangePasswordPage />
-            </Layout>
-          }
-        />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    );
-  }
-}
+const Email = () => (
+  <Routes>
+    <Route
+      path="confirm/account"
+      element={
+        <Layout>
+          <AccountConfirmPage />
+        </Layout>
+      }
+    />
+    <Route
+      path="confirm/delete"
+      element={
+        <Layout>
+          <AccountDeletePage />
+        </Layout>
+      }
+    />
+    <Route
+      path="confirm/update/login"
+      element={
+        <Layout>
+          <AccountChangeLoginPage />
+        </Layout>
+      }
+    />
+    <Route
+      path="confirm/update/email"
+      element={
+        <Layout>
+          <AccountChangeEmailPage />
+        </Layout>
+      }
+    />
+    <Route
+      path="confirm/update/password"
+      element={
+        <Layout>
+          <AccountChangePasswordPage />
+        </Layout>
+      }
+    />
+    <Route path="*" element={<NotFoundPage />} />
+  </Routes>
+);
 
 export default Email;

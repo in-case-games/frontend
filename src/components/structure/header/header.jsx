@@ -22,10 +22,10 @@ import {
 } from "../../windows";
 import { useNavigate } from "react-router-dom";
 import { Input } from "../../common/inputs";
+import { Handler } from "../../../helpers/handler";
 import TokenService from "../../../services/token";
 import Constants from "../../../constants";
 import styles from "./header.module";
-import { Handler } from "../../../helpers/handler";
 
 const Header = () => {
   const userApi = new UserApi();

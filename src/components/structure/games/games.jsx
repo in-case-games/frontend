@@ -14,4 +14,4 @@ const Games = () => {
   return <Group name="Лучший дроп в этих играх">{games}</Group>;
 };
 
-export default Games;
+export default React.memo(Games);

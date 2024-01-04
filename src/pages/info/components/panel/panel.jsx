@@ -36,4 +36,4 @@ const Panel = () => {
   );
 };
 
-export default Panel;
+export default React.memo(Panel);

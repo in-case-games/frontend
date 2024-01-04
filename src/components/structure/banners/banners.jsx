@@ -69,4 +69,4 @@ const Banners = () => {
   );
 };
 
-export default Banners;
+export default React.memo(Banners);

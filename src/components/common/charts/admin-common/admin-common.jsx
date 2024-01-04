@@ -79,4 +79,4 @@ const AdminCommon = (props) => {
   );
 };
 
-export default AdminCommon;
+export default React.memo(AdminCommon);

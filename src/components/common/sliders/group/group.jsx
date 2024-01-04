@@ -93,4 +93,4 @@ const Group = (props) => {
   ) : null;
 };
 
-export default Group;
+export default React.memo(Group);
