@@ -7,6 +7,7 @@ import { User as UserApi, Item as ItemApi } from "../../../../api";
 import { Converter } from "../../../../helpers/converter";
 import { Simple as Item } from "../../../../components/game-item";
 import { Roulette as Group } from "../../../../layouts";
+import { Handler } from "../../../../helpers/handler";
 import styles from "./roulette.module";
 
 const Roulette = (props) => {
@@ -29,18 +30,20 @@ const Roulette = (props) => {
     } else if (!props.user?.balance || props.box?.cost > props.user?.balance) {
       props.setIsShowPayment(true);
     } else if (!props.box?.isLocked) {
-      let winItem = await userApi.openBox(props.box.id);
-      const findItem = props.box.inventory.find(
-        (i) => i.item.id === winItem.id
-      )?.item;
-      const res = Object.assign(winItem, findItem || {});
+      await Handler.error(async () => {
+        let winItem = await userApi.openBox(props.box.id);
+        const findItem = props.box.inventory.find(
+          (i) => i.item.id === winItem.id
+        )?.item;
+        const res = Object.assign(winItem, findItem || {});
 
-      if (!winItem.image) winItem = await itemApi.pushImage(winItem);
+        if (!winItem.image) winItem = await itemApi.pushImage(winItem);
 
-      props.setWinItem(res);
-      props.setIsRollingRoulette(true);
+        props.setWinItem(res);
+        props.setIsRollingRoulette(true);
 
-      loadRandomParams(res);
+        loadRandomParams(res);
+      });
     }
   };
 

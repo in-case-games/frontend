@@ -4,6 +4,7 @@ import { Box as BoxApi } from "../../../api";
 import { Simple as Box } from "../../loot-box";
 import { LoadingArrow as Loading } from "../../loading";
 import { Input } from "../../common/inputs";
+import { Handler } from "../../../helpers/handler";
 import styles from "./boxes.module";
 
 const Boxes = (props) => {
@@ -15,6 +16,7 @@ const Boxes = (props) => {
 
   const [search, setSearch] = useState("");
 
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [primaryBoxes, setPrimaryBoxes] = useState([]);
   const [showBoxes, setShowBoxes] = useState([]);
 
@@ -55,13 +57,22 @@ const Boxes = (props) => {
         setShowBoxes(show);
       };
       if (!isBanned && (isLoading || isClickBox)) {
-        loaded(isLoading);
+        await Handler.error(
+          async () => {
+            await loaded(isLoading);
 
-        setIsClickBox(false);
-        setIsLoading(false);
+            setIsClickBox(false);
+            setIsLoading(false);
+            setIsBanned(false);
+          },
+          undefined,
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay
+        );
         setIsBanned(false);
       }
-    }, 100);
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });

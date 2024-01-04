@@ -1,39 +1,36 @@
 import { React, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Email as EmailApi } from "../../api";
-import styles from "./account-confirm.module";
+import { Handler } from "../../helpers/handler";
 import TokenService from "../../services/token";
+import styles from "./account-confirm.module";
 
 const AccountConfirm = () => {
+  const emailApi = new EmailApi();
   const navigate = useNavigate();
 
-  const emailApi = new EmailApi();
-
   const [searchParams] = useSearchParams();
-  const [error, setError] = useState(null);
+  const [errorMessage, setErrorMessage] = useState();
   const [isStart, setIsStart] = useState(true);
 
-  const isAuth = () => {
-    const token = TokenService.getAccessToken();
-
-    return token !== null && token !== undefined;
-  };
+  const isAuth = () => TokenService.getAccessToken();
 
   useEffect(() => {
     const interval = setInterval(
       async () => {
-        if (isStart && !isAuth() && error === null) {
+        if (isStart && !isAuth()) {
           setIsStart(false);
 
-          const token = searchParams.get("token");
+          await Handler.error(async () => {
+            const token = searchParams.get("token");
 
-          if (token) {
-            try {
+            if (token) {
               await emailApi.confirmAccount(searchParams.get("token"));
-            } catch (err) {
-              setError(err.response.data.error.message);
+              setErrorMessage();
+            } else {
+              setErrorMessage("Токен не валидный, повторите все еще раз");
             }
-          } else setError("Токен не валидный, повторите все еще раз");
+          });
         }
       },
       isStart ? 100 : 10000
@@ -44,8 +41,8 @@ const AccountConfirm = () => {
 
   return (
     <div className={styles.account_confirm}>
-      {error ? <div className={styles.error}>{error}</div> : null}
-      {!error && !isAuth() ? (
+      {errorMessage ? <div className={styles.error}>{errorMessage}</div> : null}
+      {!errorMessage && !isAuth() ? (
         <div className={styles.tittle}>Успешно произведен вход в аккаунт</div>
       ) : null}
       <div className={styles.button_back} onClick={() => navigate("/#")}>

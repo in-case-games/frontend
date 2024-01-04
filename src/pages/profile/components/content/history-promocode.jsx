@@ -9,17 +9,17 @@ import { LoadingArrow as Loading } from "../../../../components/loading";
 import { User as UserApi } from "../../../../api";
 import { Input } from "../../../../components/common/inputs";
 import { AirplaneBlack as Airplane } from "../../../../assets/images/icons";
+import { Handler } from "../../../../helpers/handler";
 import styles from "./content.module";
 
 const HistoryPromocode = () => {
   const userApi = new UserApi();
 
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [errorMessage, setErrorMessage] = useState();
   const [isApply, setIsApply] = useState(false);
   const [history, setHistory] = useState();
   const [name, setName] = useState();
-
   const [user, setUser] = useState();
 
   const additionalLoading = async (array, start, end) => {
@@ -63,31 +63,32 @@ const HistoryPromocode = () => {
   };
 
   const click = async () => {
-    let er = null;
-    let apply = false;
+    setIsApply(false);
+    setErrorMessage();
 
-    try {
-      await userApi.activatePromocode(name);
-      apply = true;
-    } catch (ex) {
-      er = ex.response.data.error.message;
-
-      if (ex.response.data.error.code !== 4) {
-        try {
-          await userApi.exchangePromocode(name);
-          er = null;
-          apply = true;
-          setIsLoading(true);
-        } catch (ex) {
-          er = ex.response.data.error.message;
+    await Handler.error(
+      async () => {
+        await userApi.activatePromocode(name);
+        setIsApply(true);
+      },
+      async (ex) => {
+        if (ex.response.data.error.code !== 4) {
+          try {
+            await userApi.exchangePromocode(name);
+            setIsApply(true);
+            setIsLoading(true);
+          } catch (ex) {
+            console.log(ex.response?.data?.error?.message);
+            setErrorMessage(ex.response?.data?.error?.message);
+          } finally {
+            return true;
+          }
         }
-      }
-    }
 
-    if (er !== null) console.log(er);
-
-    setError(er);
-    setIsApply(apply);
+        return false;
+      },
+      setErrorMessage
+    );
   };
 
   return (
@@ -110,7 +111,7 @@ const HistoryPromocode = () => {
               value={name}
               setValue={setName}
               isApply={isApply}
-              isError={error !== null}
+              isError={errorMessage}
             />
           </div>
           <div className={styles.button_send} onClick={click}>

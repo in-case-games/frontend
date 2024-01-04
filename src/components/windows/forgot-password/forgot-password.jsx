@@ -1,32 +1,34 @@
 import React, { useState } from "react";
 import { Email as EmailApi } from "../../../api";
-import styles from "./forgot-password.module";
 import { Input } from "../../common/inputs";
+import { Handler } from "../../../helpers/handler";
+import styles from "./forgot-password.module";
 
 const ForgotPassword = (props) => {
   const emailApi = new EmailApi();
-  const [error, setError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [login, setLogin] = useState("");
   const [email, setEmail] = useState("");
 
-  const sendForgot = async () => {
-    try {
-      await emailApi.sendForgotPassword({
-        login: login,
-        email: email,
-      });
-      props.exchangeWindow("email");
-    } catch (err) {
-      setError(err.response.data.error.message);
-    }
-  };
+  const sendForgot = async () =>
+    await Handler.error(
+      async () => {
+        await emailApi.sendForgotPassword({
+          login: login,
+          email: email,
+        });
+        props.exchangeWindow("email");
+      },
+      undefined,
+      setErrorMessage
+    );
 
   return (
     <div className={styles.forgot_password}>
       <div className={styles.forgot_password_content}>
         <div className={styles.forgot_password_header}>
           <div className={styles.tittle}>Забыли пароль?</div>
-          <div className={styles.error}>{error}</div>
+          <div className={styles.error}>{errorMessage}</div>
         </div>
         <div className={styles.forgot_password_inputs}>
           <Input

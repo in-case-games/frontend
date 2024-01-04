@@ -2,16 +2,16 @@ import { React, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { delete_cookie } from "sfcookies";
 import { Email as EmailApi } from "../../api";
+import { Handler } from "../../helpers/handler";
 import TokenService from "../../services/token";
 import styles from "./account-delete.module";
 
 const AccountDeleteHandler = () => {
+  const emailApi = new EmailApi();
   const navigate = useNavigate();
 
-  const emailApi = new EmailApi();
-
   const [searchParams] = useSearchParams();
-  const [error, setError] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const [isStart, setIsStart] = useState(true);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -19,22 +19,23 @@ const AccountDeleteHandler = () => {
   useEffect(() => {
     const interval = setInterval(
       async () => {
-        if (isStart && !isSuccess && error === null) {
+        if (isStart && !isSuccess) {
           setIsStart(false);
 
-          const token = searchParams.get("token");
+          await Handler.error(async () => {
+            const token = searchParams.get("token");
 
-          if (token) {
-            try {
+            if (token) {
               await emailApi.confirmDeleteAccount(searchParams.get("token"));
               TokenService.removeUser();
               delete_cookie("user-balance");
 
               setIsSuccess(true);
-            } catch (err) {
-              setError(err.response.data.error.message);
+              setErrorMessage();
+            } else {
+              setErrorMessage("Токен не валидный, повторите все еще раз");
             }
-          } else setError("Токен не валидный, повторите все еще раз");
+          });
         }
       },
       isStart ? 100 : 10000
@@ -45,7 +46,7 @@ const AccountDeleteHandler = () => {
 
   return (
     <div className={styles.account_delete}>
-      {error ? <div className={styles.error}>{error}</div> : null}
+      {errorMessage ? <div className={styles.error}>{errorMessage}</div> : null}
       {isSuccess ? (
         <div className={styles.tittle}>
           Ваш аккаунт будет удален в течении 30 дней с момента, того, как вы

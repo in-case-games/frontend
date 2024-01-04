@@ -80,4 +80,4 @@ const Roulette = (props) => {
   ) : null;
 };
 
-export default Roulette;
+export default React.memo(Roulette);

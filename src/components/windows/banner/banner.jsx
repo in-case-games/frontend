@@ -3,6 +3,7 @@ import { Box as BoxApi } from "../../../api";
 import { Input } from "../../common/inputs";
 import { Converter } from "../../../helpers/converter";
 import { TemplateBanner as BannerImage } from "../../../assets/images/main";
+import { Handler } from "../../../helpers/handler";
 import styles from "./banner.module";
 
 const Banner = (props) => {
@@ -12,17 +13,27 @@ const Banner = (props) => {
   const [box, setBox] = useState();
   const [backOperation, setBackOperation] = useState();
   const [operation, setOperation] = useState();
+  const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(async () => {
       if (!banner && props.banner?.id) {
-        const result = await boxApi.bannerPushImage(
-          await boxApi.getBannerById(props.banner.id)
+        await Handler.error(
+          async () => {
+            const result = await boxApi.bannerPushImage(
+              await boxApi.getBannerById(props.banner.id)
+            );
+            setBanner(result);
+            setBox(result?.box?.name);
+          },
+          undefined,
+          setErrorMessage,
+          penaltyDelay,
+          setPenaltyDelay
         );
-        setBox(result?.box?.name);
-        setBanner(result);
       }
-    }, 100);
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
@@ -36,7 +47,11 @@ const Banner = (props) => {
         setBackOperation(temp);
 
         if (temp === 0) {
-          await operations[operation]();
+          await Handler.error(
+            async () => await operations[operation](),
+            undefined,
+            setErrorMessage
+          );
 
           setOperation(null);
           setBackOperation(null);
@@ -52,19 +67,31 @@ const Banner = (props) => {
       setBackOperation();
       setOperation();
     } else if (!backOperation && box) {
-      try {
-        banner.image = props.image || null;
-        banner.boxId = (await boxApi.getByName(box)).id;
-        banner.expirationDate = new Date(banner.expirationDate);
-        banner.creationDate = new Date(banner.creationDate);
+      await Handler.error(
+        async () => {
+          const res = banner ? banner : {};
+          res.image = props.image || null;
+          res.boxId = (await boxApi.getByName(box)).id;
+          res.expirationDate = new Date(banner.expirationDate || new Date());
+          res.creationDate = new Date(banner.creationDate || new Date());
 
-        if (isDelete) setOperation("delete-banner");
-        else if (props.banner?.id) setOperation("update-banner");
-        else setOperation("create-banner");
+          if (isDelete) setOperation("delete-banner");
+          else if (props.banner?.id) setOperation("update-banner");
+          else setOperation("create-banner");
 
-        setBackOperation(5);
-        setBanner(banner);
-      } catch (ex) {}
+          setBackOperation(5);
+          setBanner(res);
+        },
+        async () => {
+          if (!banner?.image || banner?.image === BannerImage) {
+            setErrorMessage("Загрузите фото");
+            return true;
+          }
+
+          return false;
+        },
+        setErrorMessage
+      );
     }
   };
 
@@ -101,6 +128,7 @@ const Banner = (props) => {
         <div className={styles.banner_header}>
           <div className={styles.tittle}>Баннер</div>
         </div>
+        <div className={styles.error}>{errorMessage}</div>
         <div className={styles.banner_info}>
           <div className={styles.banner_display}>
             <img

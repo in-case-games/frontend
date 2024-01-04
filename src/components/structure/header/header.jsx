@@ -11,9 +11,7 @@ import {
   Item as ItemApi,
   Game as GameApi,
 } from "../../../api";
-import TokenService from "../../../services/token";
 import { ListLunge, Logo, UserBar } from "../../common/buttons";
-import Constants from "../../../constants";
 import { Modal as ModalLayout } from "../../../layouts";
 import {
   EmailSend as EmailSendWindow,
@@ -24,6 +22,9 @@ import {
 } from "../../windows";
 import { useNavigate } from "react-router-dom";
 import { Input } from "../../common/inputs";
+import { Handler } from "../../../helpers/handler";
+import TokenService from "../../../services/token";
+import Constants from "../../../constants";
 import styles from "./header.module";
 
 const Header = () => {
@@ -45,6 +46,7 @@ const Header = () => {
   const [forgotPasswordActive, setForgotPasswordActive] = useState(false);
   const [burgerActive, setBurgerActive] = useState();
 
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [search, setSearch] = useState();
   const [searchDetected, setSearchDetected] = useState({ items: [] });
   const [games, setGames] = useState();
@@ -83,19 +85,21 @@ const Header = () => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (TokenService.getAccessToken() !== undefined) {
-        let response = await userApi.getBalance();
+        await Handler.error(async () => {
+          let response = await userApi.getBalance();
 
-        response =
-          response >= 10000000
-            ? `${Math.ceil(response / 1000000)}M`
-            : Math.ceil(response);
+          response =
+            response >= 10000000
+              ? `${Math.ceil(response / 1000000)}M`
+              : Math.ceil(response);
 
-        let temp = {
-          image: user?.image,
-          balance: response,
-        };
+          let temp = {
+            image: user?.image,
+            balance: response,
+          };
 
-        setUser(temp);
+          setUser(temp);
+        });
       }
     }, 5000);
 
@@ -104,7 +108,15 @@ const Header = () => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      if (!games) setGames(await gameApi.get());
+      await Handler.error(
+        async () => {
+          if (!games) setGames(await gameApi.get());
+        },
+        undefined,
+        undefined,
+        penaltyDelay,
+        setPenaltyDelay
+      );
       if (TokenService.getAccessToken() !== undefined && user === null)
         setIsAuth(null);
       else setIsAuth(TokenService.getAccessToken() !== undefined);
@@ -166,7 +178,7 @@ const Header = () => {
           setTimeBeforeGoSearch();
         } else setTimeBeforeGoSearch(nextTime);
       }
-    }, 100);
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
@@ -174,25 +186,26 @@ const Header = () => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (TokenService.getAccessToken()) {
-        try {
-          await userApi.get();
-          setUser({
-            image: await userApi.getImage(),
-            balance: user?.balance ?? 0,
-          });
-        } catch (err) {}
+        await Handler.error(
+          async () => {
+            await userApi.get();
+            setUser({
+              image: TokenService.getUser()?.image,
+              balance: user?.balance ?? 0,
+            });
+          },
+          undefined,
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay
+        );
       }
 
       setIsDate(TokenService.getExpiresAccessToken());
-    }, secondsBeforeRefresh());
+    }, secondsBeforeRefresh() + penaltyDelay);
 
     return () => clearInterval(interval);
   });
-
-  const goSearch = (e) => {
-    if (e.keyCode === 13) {
-    }
-  };
 
   return (
     <header className={styles.header}>
@@ -231,7 +244,6 @@ const Header = () => {
                 isApply={true}
                 color="#00ff82"
                 placeholder="Поиск"
-                onKeyDown={goSearch}
                 value={search}
                 setValue={async (v) => {
                   setTimeBeforeGoSearch(500);

@@ -3,12 +3,14 @@ import { TemplateItem as ItemImage } from "../../../assets/images/main";
 import { InCoin } from "../../../assets/images/icons";
 import { User as UserApi } from "../../../api";
 import { Converter } from "../../../helpers/converter";
-import Constants from "../../../constants";
 import { LoadingArrow as Loading } from "../../loading";
+import { Handler } from "../../../helpers/handler";
+import Constants from "../../../constants";
 import styles from "./withdrawn.module";
 
 const Withdrawn = (props) => {
   const userApi = new UserApi();
+
   const [gradientColor, setGradientColor] = useState(
     Constants.ItemGradients[
       props.history.item.rarity ? props.history.item.rarity : "white"
@@ -57,12 +59,10 @@ const Withdrawn = (props) => {
 
   const click = async () => {
     if (props.history.status === "cancel") {
-      try {
+      await Handler.error(async () => {
         await userApi.transferWithdrawn(props.history.id);
         window.location.reload();
-      } catch (err) {
-        console.log(err);
-      }
+      });
     }
   };
 

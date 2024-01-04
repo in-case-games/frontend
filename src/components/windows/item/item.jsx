@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { TemplateItem as ItemImage } from "../../../assets/images/main";
 import { Game as GameApi, Item as ItemApi } from "../../../api";
-import TokenService from "../../../services/token";
-import Constants from "../../../constants";
 import {
   LoadingHourglass as Hourglass,
   LoadingArrow as Loading,
 } from "../../loading";
 import { Input, ComboBox } from "../../common/inputs";
+import { Handler } from "../../../helpers/handler";
+import TokenService from "../../../services/token";
+import Constants from "../../../constants";
 import styles from "./item.module";
 
 const Item = (props) => {
@@ -20,14 +21,16 @@ const Item = (props) => {
   const [backOperation, setBackOperation] = useState(null);
   const [operation, setOperation] = useState(null);
 
-  const [gradient, setGradient] = useState(
-    Constants.ItemGradients[props.item?.rarity ? props.item.rarity : "white"]
-  );
-
   const [user, setUser] = useState(TokenService.getUser());
   const [item, setItem] = useState(
     props.item?.id ? props.item : Constants.TemplateItem
   );
+  const [gradient, setGradient] = useState(
+    Constants.ItemGradients[props.item?.rarity ? props.item.rarity : "white"]
+  );
+  const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
+
   const [rarities, setRarities] = useState([]);
   const [types, setTypes] = useState([]);
   const [qualities, setQualities] = useState([]);
@@ -47,7 +50,14 @@ const Item = (props) => {
         setBackOperation(t);
 
         if (t === 0) {
-          await operations[operation]();
+          await Handler.error(
+            async () => await operations[operation](),
+            async () => {
+              setIsLoading(true);
+              return false;
+            },
+            setErrorMessage
+          );
 
           setOperation(null);
           setBackOperation(null);
@@ -67,20 +77,28 @@ const Item = (props) => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (isLoading) {
-        setUser(TokenService.getUser());
-        setItem(
-          props.item?.id
-            ? await itemApi.getById(props.item?.id)
-            : Constants.TemplateItem
+        await Handler.error(
+          async () => {
+            setUser(TokenService.getUser());
+            setItem(
+              props.item?.id
+                ? await itemApi.getById(props.item?.id)
+                : Constants.TemplateItem
+            );
+
+            setTypes(await itemApi.getTypes());
+            setRarities(await itemApi.getRarities());
+            setQualities(await itemApi.getQualities());
+            setGames(await gameApi.get());
+            setGradient(Constants.ItemGradients[item.rarity]);
+
+            setIsLoading(false);
+          },
+          undefined,
+          setErrorMessage,
+          penaltyDelay,
+          setPenaltyDelay
         );
-
-        setTypes(await itemApi.getTypes());
-        setRarities(await itemApi.getRarities());
-        setQualities(await itemApi.getQualities());
-        setGames(await gameApi.get());
-        setGradient(Constants.ItemGradients[item.rarity]);
-
-        setIsLoading(false);
       }
 
       setGradient(
@@ -88,7 +106,7 @@ const Item = (props) => {
           props.item?.rarity ? props.item.rarity : "white"
         ]
       );
-    }, 100);
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
@@ -176,6 +194,7 @@ const Item = (props) => {
           </div>
           <div className={styles.tittle}>Информация по предмету</div>
         </div>
+        <div className={styles.error}>{errorMessage}</div>
         <div className={styles.item_info}>
           <div
             className={styles.item_display}

@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { TemplateBox as BoxImage } from "../../../assets/images/main";
 import { Link } from "../../../assets/images/icons";
 import { Box as BoxApi, Game as GameApi } from "../../../api";
-import TokenService from "../../../services/token";
 import { Input, ComboBox } from "../../common/inputs";
 import { LoadingArrow as Loading } from "../../loading";
-import styles from "./box.module";
+import { Handler } from "../../../helpers/handler";
 import Constants from "../../../constants";
+import TokenService from "../../../services/token";
+import styles from "./box.module";
 
 const Box = (props) => {
   const boxApi = new BoxApi();
@@ -17,10 +18,13 @@ const Box = (props) => {
 
   const [backOperation, setBackOperation] = useState(null);
   const [operation, setOperation] = useState(null);
+
   const [user, setUser] = useState(TokenService.getUser());
   const [box, setBox] = useState(
     props.box?.id ? props.box : Constants.TemplateBox
   );
+  const [errorMessage, setErrorMessage] = useState();
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   const [games, setGames] = useState([]);
 
@@ -33,19 +37,24 @@ const Box = (props) => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (isLoading) {
-        setUser(TokenService.getUser());
-
-        setBox(
-          props.box?.id
-            ? await boxApi.getById(props.box?.id)
-            : Constants.TemplateBox
+        await Handler.error(
+          async () => {
+            setUser(TokenService.getUser());
+            setBox(
+              props.box?.id
+                ? await boxApi.getById(props.box?.id)
+                : Constants.TemplateBox
+            );
+            setGames(await gameApi.get());
+            setIsLoading(false);
+          },
+          undefined,
+          setErrorMessage,
+          penaltyDelay,
+          setPenaltyDelay
         );
-
-        setGames(await gameApi.get());
-
-        setIsLoading(false);
       }
-    }, 100);
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
@@ -59,10 +68,14 @@ const Box = (props) => {
         setBackOperation(temp);
 
         if (temp === 0) {
-          await operations[operation]();
-
+          await Handler.error(
+            async () => await operations[operation](),
+            undefined,
+            setErrorMessage
+          );
           setOperation(null);
           setBackOperation(null);
+          setIsLoading(true);
         }
       }
     }, 1000);
@@ -151,15 +164,18 @@ const Box = (props) => {
             />
           </div>
           <div className={styles.tittle}>Информация по кейсу</div>
-          <a
-            className={styles.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            href={`/box/${props.box.id}`}
-          >
-            <img className={styles.image} alt="" src={Link} />
-          </a>
+          {props.box.id ? (
+            <a
+              className={styles.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`/box/${props.box.id}`}
+            >
+              <img className={styles.image} alt="" src={Link} />
+            </a>
+          ) : null}
         </div>
+        <div className={styles.error}>{errorMessage}</div>
         <div className={styles.box_info}>
           <div className={styles.box_display}>
             <img

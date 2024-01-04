@@ -2,45 +2,47 @@ import React, { useState } from "react";
 import { GunWhite as ItemIcon } from "../../../assets/images/icons";
 import { User as UserApi } from "../../../api";
 import { Small as Item } from "../../game-item";
+import { Handler } from "../../../helpers/handler";
 import TokenService from "../../../services/token";
 import styles from "./take-item-banner.module";
 
 const TakeItemBanner = (props) => {
   const userApi = new UserApi();
+  const role = TokenService.getUser()?.role;
 
   const [hovered, setHovered] = useState(false);
 
-  const role = TokenService.getUser()?.role;
+  const takeItem = async (id) =>
+    await Handler.error(async () => {
+      if (!role) return;
 
-  const takeItem = async (id) => {
-    if (!role) return;
+      if (props.pathBanner) {
+        if (props.pathBanner.item.id === id) return;
 
-    if (props.pathBanner) {
-      if (props.pathBanner.item.id === id) return;
+        await userApi.putPathBanner({
+          id: props.pathBanner.id,
+          itemId: id,
+          userId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          boxId: props.boxId,
+        });
+      } else {
+        await userApi.postPathBanner({
+          id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          itemId: id,
+          userId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          boxId: props.boxId,
+        });
+      }
 
-      await userApi.putPathBanner({
-        id: props.pathBanner.id,
-        itemId: id,
-        userId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        boxId: props.boxId,
-      });
-    } else {
-      await userApi.postPathBanner({
-        id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        itemId: id,
-        userId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        boxId: props.boxId,
-      });
-    }
+      props.close();
+    });
 
-    props.close();
-  };
+  const deletePath = async () =>
+    await Handler.error(async () => {
+      await userApi.deletePathBannerById(props.pathBanner.id);
 
-  const deletePath = async () => {
-    await userApi.deletePathBannerById(props.pathBanner.id);
-
-    props.close();
-  };
+      props.close();
+    });
 
   return (
     <div className={styles.take_item_banner}>

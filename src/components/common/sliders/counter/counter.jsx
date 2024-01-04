@@ -8,8 +8,9 @@ const Counter = (props) => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      setShowLeft(props.page > 1);
-      setShowRight(props.page < props.pages);
+      if (props.page > 1 !== showLeft) setShowLeft(props.page > 1);
+      if (props.page < props.pages !== showRight)
+        setShowRight(props.page < props.pages);
     }, 10);
 
     return () => clearInterval(interval);
@@ -34,4 +35,4 @@ const Counter = (props) => {
   );
 };
 
-export default Counter;
+export default React.memo(Counter);

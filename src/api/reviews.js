@@ -1,17 +1,18 @@
 import { TemplateLoadImage } from "../assets/images/main";
+import Constants from "../constants";
 import api from "./api";
-
-const RESOURCES_API_URL = "https://localhost:5000/api/";
 
 class Reviews {
   async getAll() {
-    const response = await api.get(RESOURCES_API_URL + "user/review/all");
+    const response = await api.get(
+      Constants.GATE_AWAY_API_URL + "user/review/all"
+    );
 
     return response.data.data;
   }
 
   async get() {
-    const response = await api.get(RESOURCES_API_URL + "user/review");
+    const response = await api.get(Constants.GATE_AWAY_API_URL + "user/review");
 
     return response.data.data;
   }
@@ -19,7 +20,7 @@ class Reviews {
   async getById(id) {
     try {
       const response = await api.get(
-        RESOURCES_API_URL + `user/review/id/${id}`
+        Constants.GATE_AWAY_API_URL + `user/review/id/${id}`
       );
 
       return response.data.data;
@@ -32,14 +33,22 @@ class Reviews {
     try {
       try {
         await api.get(
-          `http://localhost:8080/reviews/${reviewId}/${imageId}/${imageId}.jpg`
+          Constants.FILE_SERVER_URL +
+            `reviews/${reviewId}/${imageId}/${imageId}.jpg`
         );
-        return `http://localhost:8080/reviews/${reviewId}/${imageId}/${imageId}.jpg`;
+        return (
+          Constants.FILE_SERVER_URL +
+          `reviews/${reviewId}/${imageId}/${imageId}.jpg`
+        );
       } catch (err) {
         await api.get(
-          `http://localhost:8080/reviews/${reviewId}/${imageId}/${imageId}.jpeg`
+          Constants.FILE_SERVER_URL +
+            `reviews/${reviewId}/${imageId}/${imageId}.jpeg`
         );
-        return `http://localhost:8080/reviews/${reviewId}/${imageId}/${imageId}.jpeg`;
+        return (
+          Constants.FILE_SERVER_URL +
+          `reviews/${reviewId}/${imageId}/${imageId}.jpeg`
+        );
       }
     } catch (err) {
       return TemplateLoadImage;
@@ -49,7 +58,7 @@ class Reviews {
   async getByIdAdmin(id) {
     try {
       const response = await api.get(
-        RESOURCES_API_URL + `admin/review/id/${id}`
+        Constants.GATE_AWAY_API_URL + `admin/review/id/${id}`
       );
 
       return response.data.data;
@@ -59,20 +68,25 @@ class Reviews {
   }
 
   async getAllByAdmin() {
-    const response = await api.get(RESOURCES_API_URL + "admin/review");
+    const response = await api.get(
+      Constants.GATE_AWAY_API_URL + "admin/review"
+    );
 
     return response.data.data;
   }
 
   async post(data) {
-    const response = await api.post(RESOURCES_API_URL + "user/review", data);
+    const response = await api.post(
+      Constants.GATE_AWAY_API_URL + "user/review",
+      data
+    );
 
     return response.data.data;
   }
 
   async postImage(data) {
     const response = await api.post(
-      RESOURCES_API_URL + "user/review/image",
+      Constants.GATE_AWAY_API_URL + "user/review/image",
       data
     );
 
@@ -80,20 +94,25 @@ class Reviews {
   }
 
   async put(data) {
-    const response = await api.put(RESOURCES_API_URL + "user/review", data);
+    const response = await api.put(
+      Constants.GATE_AWAY_API_URL + "user/review",
+      data
+    );
 
     return response.data.data;
   }
 
   async delete(id) {
-    const response = await api.delete(RESOURCES_API_URL + `user/review/${id}`);
+    const response = await api.delete(
+      Constants.GATE_AWAY_API_URL + `user/review/${id}`
+    );
 
     return response.data.data;
   }
 
   async deleteImage(id) {
     const response = await api.delete(
-      RESOURCES_API_URL + `user/review/image/${id}`
+      Constants.GATE_AWAY_API_URL + `user/review/image/${id}`
     );
 
     return response.data.data;
@@ -101,7 +120,7 @@ class Reviews {
 
   async deleteImageByAdmin(id) {
     const response = await api.delete(
-      RESOURCES_API_URL + `admin/review/image/id/${id}`
+      Constants.GATE_AWAY_API_URL + `admin/review/image/id/${id}`
     );
 
     return response.data.data;
@@ -109,7 +128,7 @@ class Reviews {
 
   async approve(id) {
     const response = await api.get(
-      RESOURCES_API_URL + `user/review/${id}/approve`
+      Constants.GATE_AWAY_API_URL + `user/review/${id}/approve`
     );
 
     return response.data.data;
@@ -117,7 +136,7 @@ class Reviews {
 
   async denied(id) {
     const response = await api.get(
-      RESOURCES_API_URL + `user/review/${id}/denied`
+      Constants.GATE_AWAY_API_URL + `user/review/${id}/denied`
     );
 
     return response.data.data;

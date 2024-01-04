@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Promocode as PromocodeApi } from "../../../api";
 import { Input, ComboBox } from "../../common/inputs";
 import { Converter } from "../../../helpers/converter";
+import { Handler } from "../../../helpers/handler";
 import styles from "./promocode.module";
 
 const Promocode = (props) => {
   const promocodeApi = new PromocodeApi();
 
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [promo, setPromo] = useState();
   const [type, setType] = useState("box");
   const [types, setTypes] = useState([]);
@@ -14,15 +16,26 @@ const Promocode = (props) => {
   const [operation, setOperation] = useState();
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      if (!types || types.length === 0) setTypes(await promocodeApi.getTypes());
-      if (!promo && props.promo?.id) {
-        const result = await promocodeApi.getByName(props.promo.name);
+    const interval = setInterval(
+      async () =>
+        await Handler.error(
+          async () => {
+            if (!types || types.length === 0)
+              setTypes(await promocodeApi.getTypes());
+            if (!promo && props.promo?.id) {
+              const result = await promocodeApi.getByName(props.promo.name);
 
-        setType(result?.type?.name);
-        setPromo(result);
-      }
-    }, 100);
+              setType(result?.type?.name);
+              setPromo(result);
+            }
+          },
+          undefined,
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay
+        ),
+      100 + penaltyDelay
+    );
 
     return () => clearInterval(interval);
   });
@@ -36,7 +49,7 @@ const Promocode = (props) => {
         setBackOperation(temp);
 
         if (temp === 0) {
-          await operations[operation]();
+          await Handler.error(async () => await operations[operation]());
 
           setOperation(null);
           setBackOperation(null);
@@ -52,7 +65,7 @@ const Promocode = (props) => {
       setBackOperation();
       setOperation();
     } else if (!backOperation && promo) {
-      try {
+      await Handler.error(async () => {
         promo.typeId = types.find((p) => type === p.name).id;
         promo.expirationDate = new Date(promo.expirationDate);
 
@@ -62,7 +75,7 @@ const Promocode = (props) => {
 
         setBackOperation(5);
         setPromo(promo);
-      } catch (ex) {}
+      });
     }
   };
 

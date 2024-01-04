@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { delete_cookie } from "sfcookies";
-import { TemplateUser as UserImage } from "../../../../assets/images/main";
 import {
   ProfileBar as BarButton,
   ProfileHeaderBar as HeaderBarButton,
 } from "../../../../components/common/buttons";
-import { User as UserApi } from "../../../../api";
 import TokenService from "../../../../services/token";
 import styles from "../../profile.module";
 
 const Bar = (props) => {
-  const userApi = new UserApi();
   const [isStart, setIsStart] = useState(true);
   const [user, setUser] = useState(TokenService.getUser());
 
@@ -26,7 +23,6 @@ const Bar = (props) => {
         setIsStart(false);
 
         const temp = TokenService.getUser();
-        temp.image = await userApi.getImage();
 
         setUser(temp);
       },

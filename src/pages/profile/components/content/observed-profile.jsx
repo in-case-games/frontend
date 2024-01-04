@@ -1,44 +1,73 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Modal as ModalLayout } from "../../../../layouts";
 import { LoadImage as LoadImageWindow } from "../../../../components/windows";
 import { LoadingArrow as Loading } from "../../../../components/loading";
 import { User as UserApi } from "../../../../api";
 import { Observed as ProfileSettings } from "../../../../components/profile-settings";
+import { Handler } from "../../../../helpers/handler";
 import styles from "./content.module";
 
 const ObservedProfile = () => {
   const userApi = new UserApi();
 
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAllReload, setIsAllReload] = useState(true);
   const [isLoadImage, setIsLoadImage] = useState(false);
 
   const [image, setImage] = useState(null);
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   useEffect(() => {
-    const func = async () => {
-      const temp = await userApi.getById(id);
-      temp.image = await userApi.getImageByUserId(id);
-      setUser(temp);
-      setIsAllReload(true);
-      setIsLoading(true);
-    };
+    const func = async () =>
+      await Handler.error(
+        async () => {
+          const temp = await userApi.getById(id);
+          temp.image = await userApi.getImageByUserId(id);
+          setUser(temp);
+          setIsAllReload(true);
+          setIsLoading(true);
+        },
+        async (ex) => {
+          if (ex?.response?.status === 404) navigate("/not-found");
+
+          return false;
+        },
+        undefined,
+        penaltyDelay,
+        setPenaltyDelay
+      );
 
     func();
   }, [id]);
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      if (!user) {
-        const temp = await userApi.getById(id);
-        temp.image = await userApi.getImageByUserId(id);
+    const interval = setInterval(
+      async () =>
+        await Handler.error(
+          async () => {
+            if (!user) {
+              const temp = await userApi.getById(id);
+              temp.image = await userApi.getImageByUserId(id);
 
-        setUser(temp);
-      }
-    }, 100);
+              setUser(temp);
+            }
+          },
+          async () => {
+            if (ex?.response?.status === 404) navigate("/not-found");
+
+            return false;
+          },
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay
+        ),
+      100 + penaltyDelay
+    );
 
     return () => clearInterval(interval);
   });

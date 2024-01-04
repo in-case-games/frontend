@@ -11,6 +11,7 @@ import { LoadingArrow as Loading } from "../../../../components/loading";
 import { Game as GameApi, Item as ItemApi } from "../../../../api";
 import { Simple as Item } from "../../../../components/game-item";
 import { ComboBox, Input } from "../../../../components/common/inputs";
+import { Handler } from "../../../../helpers/handler";
 import styles from "./content.module";
 
 const AdminItems = (props) => {
@@ -30,13 +31,14 @@ const AdminItems = (props) => {
 
   useEffect(() => {
     const interval = setInterval(
-      async () => {
-        if (isStart) {
-          setIsStart(false);
-          await loadedGames();
-        }
-      },
-      isStart ? 50 : 10000
+      async () =>
+        await Handler.error(async () => {
+          if (isStart) {
+            setIsStart(false);
+            await loadedGames();
+          }
+        }),
+      isStart ? 50 : 5000
     );
 
     return () => clearInterval(interval);

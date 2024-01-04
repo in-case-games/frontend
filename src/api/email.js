@@ -1,12 +1,13 @@
 import TokenService from "../services/token";
+import Constants from "../constants";
 import api from "./api";
-
-const EMAIL_API_URL = "https://localhost:5000/api/";
 
 class Email {
   async confirmAccount(token) {
     const response = await api.get(
-      EMAIL_API_URL + "authentication/confirm/account?token=" + token
+      Constants.GATE_AWAY_API_URL +
+        "authentication/confirm/account?token=" +
+        token
     );
 
     if (response.data.data.accessToken)
@@ -17,7 +18,7 @@ class Email {
 
   async confirmLogin(login, token) {
     const response = await api.get(
-      EMAIL_API_URL +
+      Constants.GATE_AWAY_API_URL +
         "authentication/confirm/login/" +
         login +
         "?token=" +
@@ -29,7 +30,7 @@ class Email {
 
   async confirmEmail(email, token) {
     const response = await api.get(
-      EMAIL_API_URL +
+      Constants.GATE_AWAY_API_URL +
         "authentication/confirm/email/" +
         email +
         "?token=" +
@@ -41,7 +42,7 @@ class Email {
 
   async confirmPassword(password, token) {
     const response = await api.get(
-      EMAIL_API_URL +
+      Constants.GATE_AWAY_API_URL +
         "authentication/confirm/password/" +
         password +
         "?token=" +
@@ -53,7 +54,9 @@ class Email {
 
   async confirmDeleteAccount(token) {
     const response = await api.delete(
-      EMAIL_API_URL + "authentication/confirm/account?token=" + token
+      Constants.GATE_AWAY_API_URL +
+        "authentication/confirm/account?token=" +
+        token
     );
 
     return response.data.data;
@@ -63,7 +66,7 @@ class Email {
     const user = TokenService.getUser();
 
     const response = await api.put(
-      EMAIL_API_URL + "authentication/sending/login/" + password,
+      Constants.GATE_AWAY_API_URL + "authentication/sending/login/" + password,
       {
         login: user.login,
         email: user.email,
@@ -77,7 +80,7 @@ class Email {
     const user = TokenService.getUser();
 
     const response = await api.put(
-      EMAIL_API_URL + "authentication/sending/email/" + password,
+      Constants.GATE_AWAY_API_URL + "authentication/sending/email/" + password,
       {
         login: user.login,
         email: user.email,
@@ -91,7 +94,9 @@ class Email {
     const user = TokenService.getUser();
 
     const response = await api.put(
-      EMAIL_API_URL + "authentication/sending/password/" + password,
+      Constants.GATE_AWAY_API_URL +
+        "authentication/sending/password/" +
+        password,
       {
         login: user.login,
         email: user.email,
@@ -103,7 +108,7 @@ class Email {
 
   async sendForgotPassword(data) {
     const response = await api.put(
-      EMAIL_API_URL + "authentication/sending/forgot/password",
+      Constants.GATE_AWAY_API_URL + "authentication/sending/forgot/password",
       data
     );
 
@@ -114,7 +119,9 @@ class Email {
     const user = TokenService.getUser();
 
     const response = await api.delete(
-      EMAIL_API_URL + "authentication/sending/account/" + password,
+      Constants.GATE_AWAY_API_URL +
+        "authentication/sending/account/" +
+        password,
       {
         data: {
           login: user.login,

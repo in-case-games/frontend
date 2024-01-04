@@ -11,7 +11,6 @@ import {
   Item as ItemApi,
   Game as GameApi,
 } from "../../api";
-import TokenService from "../../services/token";
 import { Modal as ModalLayout } from "../../layouts";
 import {
   Item as ItemWindow,
@@ -25,9 +24,11 @@ import {
 import { Restriction } from "../restriction";
 import { LoadingArrow as Loading } from "../loading";
 import { Input, ComboBox } from "../common/inputs";
-import styles from "./profile-settings.module";
 import { Simple as SimpleBox } from "../loot-box";
 import { Simple as SimpleItem } from "../game-item";
+import { Handler } from "../../helpers/handler";
+import TokenService from "../../services/token";
+import styles from "./profile-settings.module";
 
 const Observed = (props) => {
   const userApi = new UserApi();
@@ -45,6 +46,7 @@ const Observed = (props) => {
   const [inventory, setInventory] = useState(null);
   const [restriction, setRestriction] = useState(null);
 
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [login, setLogin] = useState(props.user.login);
   const [email, setEmail] = useState(props.user.additionalInfo.email);
   const [balance, setBalance] = useState(null);
@@ -76,30 +78,41 @@ const Observed = (props) => {
   const [isErrorBalance, setIsErrorBalance] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(async () => {
-      props.setIsAllReload(false);
+    const interval = setInterval(
+      async () =>
+        await Handler.error(
+          async () => {
+            props.setIsAllReload(false);
 
-      if (props.isAllReload) resetToGlobalZero();
-      if (!balance && (observer?.role || "user") !== "user")
-        await loadBalance();
-      if (!games || games.length === 0) setGames(await gameApi.get());
-      if (!roles || roles.length === 0) setRoles(await userApi.getRoles());
-      if (
-        (showRestriction && !restrictions) ||
-        (props.isLoading && showRestriction)
-      )
-        await loadRestrictions();
-      if (
-        (showInventories && !inventories) ||
-        (props.isLoading && showInventories)
-      )
-        await loadItems();
+            if (props.isAllReload) resetToGlobalZero();
+            if (!balance && (observer?.role || "user") !== "user")
+              await loadBalance();
+            if (!games || games.length === 0) setGames(await gameApi.get());
+            if (!roles || roles.length === 0)
+              setRoles(await userApi.getRoles());
+            if (
+              (showRestriction && !restrictions) ||
+              (props.isLoading && showRestriction)
+            )
+              await loadRestrictions();
+            if (
+              (showInventories && !inventories) ||
+              (props.isLoading && showInventories)
+            )
+              await loadItems();
 
-      if (props.isLoading && (showItems || showBoxes))
-        await loadHistoryOpenings();
+            if (props.isLoading && (showItems || showBoxes))
+              await loadHistoryOpenings();
 
-      props.setIsLoading(false);
-    }, 500);
+            props.setIsLoading(false);
+          },
+          undefined,
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay
+        ),
+      500 + penaltyDelay
+    );
 
     return () => clearInterval(interval);
   });
@@ -209,62 +222,62 @@ const Observed = (props) => {
     setBalance(null);
   };
 
-  const changeEmail = async () => {
-    try {
-      await userApi.updateEmailByAdmin(props.user.id, email);
+  const changeEmail = async () =>
+    await Handler.error(
+      async () => {
+        await userApi.updateEmailByAdmin(props.user.id, email);
 
-      setIsErrorEmail(false);
-      setIsApplyEmail(true);
-    } catch (err) {
-      setIsApplyEmail(false);
-      setIsErrorEmail(true);
+        setIsErrorEmail(false);
+        setIsApplyEmail(true);
+      },
+      async () => {
+        setIsApplyEmail(false);
+        setIsErrorEmail(true);
+      }
+    );
 
-      console.log(err);
-    }
-  };
+  const changeLogin = async () =>
+    await Handler.error(
+      async () => {
+        await userApi.updateLoginByAdmin(props.user.id, login);
 
-  const changeLogin = async () => {
-    try {
-      await userApi.updateLoginByAdmin(props.user.id, login);
+        setIsErrorLogin(false);
+        setIsApplyLogin(true);
+      },
+      async () => {
+        setIsApplyLogin(false);
+        setIsErrorLogin(true);
+      }
+    );
 
-      setIsErrorLogin(false);
-      setIsApplyLogin(true);
-    } catch (err) {
-      setIsApplyLogin(false);
-      setIsErrorLogin(true);
+  const changeRole = async () =>
+    await Handler.error(
+      async () => {
+        const id = roles.find((r) => r.name === role).id;
+        await userApi.updateRoleByAdmin(props.user.id, id);
 
-      console.log(err);
-    }
-  };
+        setIsErrorRole(false);
+        setIsApplyRole(true);
+      },
+      async () => {
+        setIsApplyRole(false);
+        setIsErrorRole(true);
+      }
+    );
 
-  const changeRole = async () => {
-    try {
-      const id = roles.find((r) => r.name === role).id;
-      await userApi.updateRoleByAdmin(props.user.id, id);
+  const changeBalance = async () =>
+    await Handler.error(
+      async () => {
+        await userApi.updateBalanceByAdmin(props.user.id, balance);
 
-      setIsErrorRole(false);
-      setIsApplyRole(true);
-    } catch (err) {
-      setIsApplyRole(false);
-      setIsErrorRole(true);
-
-      console.log(err);
-    }
-  };
-
-  const changeBalance = async () => {
-    try {
-      await userApi.updateBalanceByAdmin(props.user.id, balance);
-
-      setIsErrorBalance(false);
-      setIsApplyBalance(true);
-    } catch (err) {
-      setIsApplyBalance(false);
-      setIsErrorBalance(true);
-
-      console.log(err);
-    }
-  };
+        setIsErrorBalance(false);
+        setIsApplyBalance(true);
+      },
+      async () => {
+        setIsApplyBalance(false);
+        setIsErrorBalance(true);
+      }
+    );
 
   return (
     <div className={styles.profile_settings}>

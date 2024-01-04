@@ -1,10 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { TemplateItem as ItemImage } from "../../../../assets/images/main";
-import Constants from "../../../../constants";
 import { AirplaneBlack, InCoinGray } from "../../../../assets/images/icons";
 import { Converter } from "../../../../helpers/converter";
 import { Item as ItemApi } from "../../../../api";
+import { Handler } from "../../../../helpers/handler";
+import Constants from "../../../../constants";
 import styles from "./item.module";
 
 const Item = (props) => {
@@ -39,10 +40,12 @@ const Item = (props) => {
       <div className={styles.part_bottom}>
         <div
           className={styles.button_sell}
-          onClick={async () => {
-            await itemApi.sellLastByItemId(props.item.id);
-            props.goBack();
-          }}
+          onClick={async () =>
+            await Handler.error(async () => {
+              await itemApi.sellLastByItemId(props.item.id);
+              props.goBack();
+            })
+          }
         >
           {props.item?.cost ? Converter.cutCost(props.item?.cost) : null}
           <img className={styles.image} alt="" src={InCoinGray} />
@@ -58,4 +61,4 @@ const Item = (props) => {
   );
 };
 
-export default Item;
+export default React.memo(Item);

@@ -7,6 +7,10 @@ import {
 } from "../assets/images/icons";
 import { GameCSGO as CSGO, GameDota2 as Dota2 } from "../assets/images/main";
 
+const GATE_AWAY_API_URL = "https://localhost:5000/api/";
+const FILE_SERVER_URL = "http://localhost:8080/";
+const SITE_URL = "http://localhost:3000/";
+
 const Games = [
   {
     id: 1,
@@ -58,6 +62,12 @@ const Infos = [
     id: 2,
     text: "Инфо",
     link: "info",
+    icon: Info,
+  },
+  {
+    id: 3,
+    text: "Отзывы",
+    link: "reviews",
     icon: Info,
   },
 ];
@@ -227,6 +237,9 @@ const Constants = {
   CommonTypeTimeDelays,
   CountDots,
   TypePayments,
+  GATE_AWAY_API_URL,
+  FILE_SERVER_URL,
+  SITE_URL,
 };
 
 export default Constants;

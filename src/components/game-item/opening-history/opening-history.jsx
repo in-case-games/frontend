@@ -6,21 +6,20 @@ import {
 } from "../../../assets/images/main";
 import { Box as BoxApi, User as UserApi } from "../../../api";
 import { LoadingArrow as Loading } from "../../loading";
-import Constants from "../../../constants";
 import { Converter } from "../../../helpers/converter";
+import { Handler } from "../../../helpers/handler";
+import Constants from "../../../constants";
 import styles from "./opening-history.module";
 
 const OpeningHistory = (props) => {
   const boxApi = new BoxApi();
   const userApi = new UserApi();
 
+  const date = Converter.getMiniDate(props.history.date);
+  const itemName = Converter.cutString(props.history.item.name, 20);
   const color = props.history.item.rarity ? props.history.item.rarity : "white";
   const itemColor = Constants.ItemColors[color];
   const gradientColor = Constants.ItemGradients[color];
-
-  const date = Converter.getMiniDate(props.history.date);
-
-  const itemName = Converter.cutString(props.history.item.name, 20);
 
   const [isStart, setIsStart] = useState(true);
   const [isFlipped, setIsFlipped] = useState(false);
@@ -28,6 +27,7 @@ const OpeningHistory = (props) => {
 
   const [box, setBox] = useState(null);
   const [userLogo, setUserLogo] = useState(UserLogo);
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(
@@ -44,13 +44,19 @@ const OpeningHistory = (props) => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (isClick && !box) {
-        setIsClick(false);
-
-        let box = await boxApi.getById(props.history.boxId);
-
-        setBox(await boxApi.pushImage(box));
+        await Handler.error(
+          async () => {
+            setIsClick(false);
+            let box = await boxApi.getById(props.history.boxId);
+            setBox(await boxApi.pushImage(box));
+          },
+          undefined,
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay
+        );
       }
-    }, 10);
+    }, 10 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
