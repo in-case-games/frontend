@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Authentication as AuthApi } from "../../../api";
 import { Input } from "../../common/inputs";
 import { Handler } from "../../../helpers/handler";
+import { Notification } from "../../../services/notification";
+import { Converter } from "../../../helpers/converter";
 import styles from "./sign-in.module.scss";
 
 const SignIn = (props) => {
@@ -14,7 +16,17 @@ const SignIn = (props) => {
   const signIn = async () => {
     await Handler.error(
       async () => {
-        await authApi.signIn(login, password);
+        var response = await authApi.signIn(login, password);
+        const utcDate = Converter.getUtcDate();
+        Notification.pushNotify({
+          id: Converter.generateGuid(),
+          tittle: "Успех",
+          content: response?.data?.data || "Сообщение отправлено",
+          utcDate: utcDate,
+          date: Converter.getMiniDate(utcDate),
+          status: "success",
+          code: 200,
+        });
         props.exchangeWindow("email");
       },
       undefined,
