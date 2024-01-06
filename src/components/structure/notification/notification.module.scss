@@ -1,0 +1,41 @@
+.notifications {
+  display: flex;
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  flex-direction: column;
+
+  max-width: 300px;
+  max-height: 100%;
+
+  z-index: 111;
+  overflow: hidden;
+}
+
+.notification {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  min-width: 240px;
+  max-width: 240px;
+
+  min-height: 80px;
+
+  border-radius: 15px;
+
+  transition: opacity 500ms;
+
+  cursor: pointer;
+
+  padding: 20px;
+  margin: 2px 0;
+
+  .header {
+    display: flex;
+
+    .tittle {
+      margin-left: 10px;
+    }
+  }
+}

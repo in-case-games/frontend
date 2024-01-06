@@ -225,10 +225,12 @@ const Observed = (props) => {
   const changeEmail = async () =>
     await Handler.error(
       async () => {
-        await userApi.updateEmailByAdmin(props.user.id, email);
+        const response = await userApi.updateEmailByAdmin(props.user.id, email);
 
         setIsErrorEmail(false);
         setIsApplyEmail(true);
+
+        return response;
       },
       async () => {
         setIsApplyEmail(false);
@@ -239,10 +241,12 @@ const Observed = (props) => {
   const changeLogin = async () =>
     await Handler.error(
       async () => {
-        await userApi.updateLoginByAdmin(props.user.id, login);
+        const response = await userApi.updateLoginByAdmin(props.user.id, login);
 
         setIsErrorLogin(false);
         setIsApplyLogin(true);
+
+        return response;
       },
       async () => {
         setIsApplyLogin(false);
@@ -254,10 +258,12 @@ const Observed = (props) => {
     await Handler.error(
       async () => {
         const id = roles.find((r) => r.name === role).id;
-        await userApi.updateRoleByAdmin(props.user.id, id);
+        const response = await userApi.updateRoleByAdmin(props.user.id, id);
 
         setIsErrorRole(false);
         setIsApplyRole(true);
+
+        return response;
       },
       async () => {
         setIsApplyRole(false);
@@ -268,10 +274,15 @@ const Observed = (props) => {
   const changeBalance = async () =>
     await Handler.error(
       async () => {
-        await userApi.updateBalanceByAdmin(props.user.id, balance);
+        const response = await userApi.updateBalanceByAdmin(
+          props.user.id,
+          balance
+        );
 
         setIsErrorBalance(false);
         setIsApplyBalance(true);
+
+        return response;
       },
       async () => {
         setIsApplyBalance(false);

@@ -97,6 +97,7 @@ const BoxInventory = (props) => {
     await boxApi.deleteInventory(props.inventory.id);
 
     props.close();
+    window.location.reload();
   };
 
   const updateInventory = async () => {
@@ -108,6 +109,7 @@ const BoxInventory = (props) => {
     });
 
     props.close();
+    window.location.reload();
   };
 
   const createInventory = async () => {
@@ -119,6 +121,7 @@ const BoxInventory = (props) => {
     });
 
     props.close();
+    window.location.reload();
   };
 
   const operations = {

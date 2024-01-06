@@ -11,16 +11,17 @@ const SignIn = (props) => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
-  const signIn = async () => {
+  const signIn = async () =>
     await Handler.error(
       async () => {
-        await authApi.signIn(login, password);
+        const response = await authApi.signIn(login, password);
         props.exchangeWindow("email");
+
+        return response;
       },
       undefined,
       setErrorMessage
     );
-  };
 
   return (
     <div className={styles.sign_in}>

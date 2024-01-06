@@ -66,6 +66,14 @@ const cutCost = (cost, rounding = (c) => Math.round(c)) => {
   return r;
 };
 
+const generateGuid = () =>
+  "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c) =>
+    (
+      c ^
+      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
+    ).toString(16)
+  );
+
 export const Converter = {
   getMiniDate,
   getMiniTime,
@@ -74,4 +82,5 @@ export const Converter = {
   getUtcDate,
   getDateIso,
   getRandomInt,
+  generateGuid,
 };

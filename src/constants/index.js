@@ -145,6 +145,20 @@ const generateGradient = (color, transparent = true) =>
     transparent ? color + ", 0" : "26, 26, 29, 1"
   }) 0%, rgb(${color}, ${transparent ? 0.6 : 1}) 60%)`;
 
+const NotifyBackgroundColors = {
+  error: generateGradient("255, 0, 0", false),
+  success: generateGradient("0, 255, 30", false),
+  info: generateGradient("5, 0, 255", false),
+  warn: generateGradient("255, 199, 0", false),
+};
+
+const NotifyFontColors = {
+  error: "#d3d3d3",
+  success: "black",
+  info: "#d3d3d3",
+  warn: "black",
+};
+
 const ItemGradients = {
   blue: generateGradient("5, 0, 255"),
   gold: generateGradient("255, 199, 0"),
@@ -229,6 +243,8 @@ const Constants = {
   ItemGradients,
   ItemGradientsNoTransparent,
   ItemColors,
+  NotifyBackgroundColors,
+  NotifyFontColors,
   TemplateItem,
   TemplateBox,
   StatusAndColor,

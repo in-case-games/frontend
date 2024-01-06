@@ -60,8 +60,11 @@ const Withdrawn = (props) => {
   const click = async () => {
     if (props.history.status === "cancel") {
       await Handler.error(async () => {
-        await userApi.transferWithdrawn(props.history.id);
-        window.location.reload();
+        var response = await userApi.transferWithdrawn(props.history.id);
+
+        setTimeout(() => window.location.reload(), 2000);
+
+        return response;
       });
     }
   };
