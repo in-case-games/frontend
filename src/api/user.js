@@ -118,11 +118,9 @@ class User {
     return response.data.data;
   }
   async transferWithdrawn(id) {
-    const response = await api.get(
+    return await api.get(
       Constants.GATE_AWAY_API_URL + `user/history/withdraw/${id}/transfer`
     );
-
-    return response.data.data;
   }
 
   async openBox(id) {
@@ -252,37 +250,29 @@ class User {
   }
 
   async updateEmailByAdmin(userId, email) {
-    const response = await api.get(
+    return await api.get(
       Constants.GATE_AWAY_API_URL +
         `authentication/confirm/${userId}/email/${email}`
     );
-
-    return response.data.data;
   }
 
   async updateLoginByAdmin(userId, login) {
-    const response = await api.get(
+    return await api.get(
       Constants.GATE_AWAY_API_URL +
         `authentication/confirm/${userId}/login/${login}`
     );
-
-    return response.data.data;
   }
 
   async updateRoleByAdmin(userId, roleId) {
-    const response = await api.get(
+    return await api.get(
       Constants.GATE_AWAY_API_URL + `user/${userId}/info/role/${roleId}`
     );
-
-    return response.data.data;
   }
 
   async updateBalanceByAdmin(userId, balance) {
-    const response = await api.get(
+    return await api.get(
       Constants.GATE_AWAY_API_URL + `user/${userId}/balance/${balance}/owner`
     );
-
-    return response.data.data;
   }
 
   async deleteUserInventoryByAdmin(id) {

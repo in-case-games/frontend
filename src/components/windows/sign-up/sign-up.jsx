@@ -23,8 +23,10 @@ const SignUp = (props) => {
     else {
       await Handler.error(
         async () => {
-          await authApi.signUp(login, email, password);
+          const response = await authApi.signUp(login, email, password);
           props.exchangeWindow("email");
+
+          return response;
         },
         undefined,
         setErrorMessage

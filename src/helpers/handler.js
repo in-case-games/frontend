@@ -9,14 +9,36 @@ const error = async (
   setPenaltyDelay
 ) => {
   try {
-    await action();
+    const response = await action();
+    const utcDate = Converter.getUtcDate();
+
+    if (response?.status === 200 && response?.data?.data) {
+      Notification.pushNotify({
+        id: Converter.generateGuid(),
+        tittle: "Успех",
+        content: response?.data?.data,
+        utcDate: utcDate,
+        date: Converter.getMiniDate(utcDate),
+        status: "success",
+        code: 200,
+      });
+    } else if (response) {
+      Notification.pushNotify({
+        id: Converter.generateGuid(),
+        tittle: "Необработанный ответ",
+        content: response?.data?.data || "Необработанный ответ",
+        utcDate: utcDate,
+        date: Converter.getMiniDate(utcDate),
+        status: "info",
+        code: response?.status,
+      });
+    }
   } catch (ex) {
     console.log(ex);
     const utcDate = Converter.getUtcDate();
-    const message =
-      ex?.response?.status < 500 && ex?.response?.data?.error?.message
-        ? ex.response.data.error.message
-        : "Неизвестная ошибка";
+    const message = ex?.response?.data?.error?.message
+      ? ex.response.data.error.message
+      : "Неизвестная ошибка";
 
     if ((!actionCatch || !(await actionCatch(ex))) && setErrorMessage) {
       setErrorMessage(message);
