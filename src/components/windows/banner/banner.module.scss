@@ -18,13 +18,17 @@
 
 .banner_header {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
 
   .tittle {
     font-size: 28px;
     margin-left: 5px;
   }
+}
+.error {
+  margin-bottom: 10px;
+  color: var(--color-red__1);
 }
 
 .banner_info {

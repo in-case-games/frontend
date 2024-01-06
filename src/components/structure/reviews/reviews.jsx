@@ -10,6 +10,7 @@ import {
   LoadImage as LoadImageWindow,
   Restriction as RestrictionWindow,
 } from "../../windows";
+import { Handler } from "../../../helpers/handler";
 
 const Reviews = () => {
   const userApi = new UserApi();
@@ -27,31 +28,32 @@ const Reviews = () => {
 
   useEffect(() => {
     const interval = setInterval(
-      async () => {
-        setIsStart(false);
-        const response = await userApi.getReviewLast(10);
-        const result = [];
+      async () =>
+        await Handler.error(async () => {
+          setIsStart(false);
+          const response = await userApi.getReviewLast(10);
+          const result = [];
 
-        for (let i = 0; i < response.length; i++) {
-          const r = response[i];
-          const image = await userApi.getImageByUserId(r.userId);
-          result.push(
-            <Review
-              id={r.id}
-              image={image}
-              name={r.title}
-              date={r.creationDate}
-              showMiniProfile={() => setMiniProfile(r.userId)}
-              content={r.content}
-              score={r.score}
-              key={r.id}
-            />
-          );
-        }
+          for (let i = 0; i < response.length; i++) {
+            const r = response[i];
+            const image = await userApi.getImageByUserId(r.userId);
+            result.push(
+              <Review
+                id={r.id}
+                image={image}
+                name={r.title}
+                date={r.creationDate}
+                showMiniProfile={() => setMiniProfile(r.userId)}
+                content={r.content}
+                score={r.score}
+                key={r.id}
+              />
+            );
+          }
 
-        setReviews(result);
-      },
-      isStart ? 100 : 50000
+          setReviews(result);
+        }),
+      isStart ? 100 : 5000
     );
 
     return () => clearInterval(interval);

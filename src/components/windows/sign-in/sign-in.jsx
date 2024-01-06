@@ -1,30 +1,34 @@
 import React, { useState } from "react";
 import { Authentication as AuthApi } from "../../../api";
-import styles from "./sign-in.module.scss";
 import { Input } from "../../common/inputs";
+import { Handler } from "../../../helpers/handler";
+import styles from "./sign-in.module.scss";
 
 const SignIn = (props) => {
   const authApi = new AuthApi();
 
-  const [error, setError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
-  const signIn = async () => {
-    try {
-      await authApi.signIn(login, password);
-      props.exchangeWindow("email");
-    } catch (err) {
-      setError(err.response.data.error.message);
-    }
-  };
+  const signIn = async () =>
+    await Handler.error(
+      async () => {
+        const response = await authApi.signIn(login, password);
+        props.exchangeWindow("email");
+
+        return response;
+      },
+      undefined,
+      setErrorMessage
+    );
 
   return (
     <div className={styles.sign_in}>
       <div className={styles.sign_in_content}>
         <div className={styles.content_header}>
           <div className={styles.tittle}>Вход</div>
-          <div className={styles.error}>{error}</div>
+          <div className={styles.error}>{errorMessage}</div>
         </div>
         <div className={styles.content_inputs}>
           <Input

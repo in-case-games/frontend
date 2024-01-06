@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import TokenService from "../../../../services/token";
+import { useParams } from "react-router-dom";
 import { Bar } from ".";
 import { Content } from ".";
-import styles from "../../profile.module";
-import { useParams } from "react-router-dom";
 import { ObservedProfile } from "../content";
+import TokenService from "../../../../services/token";
+import styles from "../../profile.module";
 
 const Panel = () => {
   const { id } = useParams();

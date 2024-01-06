@@ -16,4 +16,4 @@ const BoxItems = (props) => {
   return <Group name="Содержимое кейса">{items}</Group>;
 };
 
-export default BoxItems;
+export default React.memo(BoxItems);

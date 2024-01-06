@@ -1,14 +1,17 @@
+import Constants from "../constants";
 import api from "./api";
-
-const RESOURCES_API_URL = "https://localhost:5000/api/";
 
 class Site {
   async getStatistics() {
-    const response = await api.get(RESOURCES_API_URL + "site/statistics");
+    const response = await api.get(
+      Constants.GATE_AWAY_API_URL + "site/statistics"
+    );
     return response.data.data;
   }
   async getAdminStatistics() {
-    const response = await api.get(RESOURCES_API_URL + "admin/site/statistics");
+    const response = await api.get(
+      Constants.GATE_AWAY_API_URL + "admin/site/statistics"
+    );
     return response.data.data;
   }
 }

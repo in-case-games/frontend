@@ -9,14 +9,14 @@ import { Input } from "../../common/inputs";
 import { useNavigate } from "react-router-dom";
 import { Converter } from "../../../helpers/converter";
 import { InCoin } from "../../../assets/images/icons";
+import { Handler } from "../../../helpers/handler";
 import TokenService from "../../../services/token";
 import styles from "./inventory.module";
 
 const Inventory = (props) => {
-  const navigate = useNavigate();
   const userApi = new UserApi();
-
   const observerRole = TokenService.getUser()?.role ?? "user";
+  const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
   const [backRemove, setBackRemove] = useState(null);
@@ -30,10 +30,12 @@ const Inventory = (props) => {
         setBackRemove(t);
 
         if (t === 0) {
-          await userApi.deleteUserInventoryByAdmin(props.inventory.id);
-
           setBackRemove(null);
-          props.close();
+
+          await Handler.error(async () => {
+            await userApi.deleteUserInventoryByAdmin(props.inventory.id);
+            props.close();
+          });
         }
       }
 

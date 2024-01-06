@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TemplateBox as BoxImage } from "../../../../assets/images/main";
-import Constants from "../../../../constants";
 import { FlagBlack as Flag } from "../../../../assets/images/icons";
+import Constants from "../../../../constants";
 import styles from "./box.module";
 
 const Box = (props) => {
@@ -24,9 +24,6 @@ const Box = (props) => {
       <div className={styles.part_right}></div>
       <div className={styles.part_right__border}></div>
       <div className={styles.part_center}>
-        <div className={styles.button_back} onClick={() => {}}>
-          {"<"} Назад
-        </div>
         <div className={styles.content}>
           <div className={styles.tittle}>{props.box?.name}</div>
           <img
@@ -51,4 +48,4 @@ const Box = (props) => {
   );
 };
 
-export default Box;
+export default React.memo(Box);

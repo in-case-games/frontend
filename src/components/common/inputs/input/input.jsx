@@ -3,6 +3,7 @@ import styles from "./input.module";
 
 const Input = (props) => {
   const getBorderColor = () => {
+    if (props.color) return props.color;
     if (props.isError) return "red";
     else if (props.isApply) return "green";
     else return "#F8B415";
@@ -20,8 +21,12 @@ const Input = (props) => {
         maxLength={props.maxLength || 200}
         readOnly={props.isReadOnly || false}
         onInput={(e) => props.setValue(e.target.value)}
+        onKeyDown={(e) => {
+          if (props.onKeyDown) props.onKeyDown(e);
+        }}
         type={props.type || "text"}
         style={{
+          color: getBorderColor(),
           borderColor: getBorderColor(),
           cursor: props.isReadOnly ? "default" : "pointer",
         }}

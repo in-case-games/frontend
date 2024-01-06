@@ -18,6 +18,7 @@ import { Small as Box } from "../../loot-box";
 import { Restriction } from "../../restriction";
 import { LoadingArrow as Loading } from "../../loading";
 import { Converter } from "../../../helpers/converter";
+import { Handler } from "../../../helpers/handler";
 import TokenService from "../../../services/token";
 import styles from "./mini-profile.module";
 
@@ -38,11 +39,11 @@ const MiniProfileWindow = (props) => {
 
   const [user, setUser] = useState(null);
   const [history, setHistory] = useState(null);
-  const [restrictions, setRestrictions] = useState(null);
-
   const [item, setItem] = useState(false);
   const [box, setBox] = useState(false);
   const [restriction, setRestriction] = useState(false);
+  const [restrictions, setRestrictions] = useState(null);
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   const setBarActive = (action) => {
     setItem(false);
@@ -55,23 +56,31 @@ const MiniProfileWindow = (props) => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (isAllRefresh) {
-        setIsAllRefresh(false);
+        await Handler.error(
+          async () => {
+            setIsAllRefresh(false);
 
-        const user = await userApi.getById(props.userId);
+            const user = await userApi.getById(props.userId);
 
-        user.image = await userApi.getImageByUserId(user.id);
-        user.ownerRestrictions = user.ownerRestrictions.slice(0, 3);
-        user.restrictions = user.restrictions.slice(0, 3);
+            user.image = await userApi.getImageByUserId(user.id);
+            user.ownerRestrictions = user.ownerRestrictions.slice(0, 3);
+            user.restrictions = user.restrictions.slice(0, 3);
 
-        await loadRestrictions(user);
-        await loadHistory(user);
+            await loadRestrictions(user);
+            await loadHistory(user);
 
-        setUser(user);
-        setIsLoading(false);
-        setIsLoadingItems(false);
-        setIsStart(false);
+            setUser(user);
+            setIsLoading(false);
+            setIsLoadingItems(false);
+            setIsStart(false);
+          },
+          undefined,
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay
+        );
       }
-    }, 100);
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
@@ -83,28 +92,30 @@ const MiniProfileWindow = (props) => {
     if (isItem) setBarActive(() => setItem(!item));
     else if (isBox) setBarActive(() => setBox(!box));
 
-    if (
-      (isItem && (!history || !history[0]?.item)) ||
-      (isBox && (!history || !history[0]?.box))
-    ) {
-      let h = !history
-        ? await userApi.getOpeningsByUserId(props.userId)
-        : history;
-      h = h.slice(0, 15);
+    await Handler.error(async () => {
+      if (
+        (isItem && (!history || !history[0]?.item)) ||
+        (isBox && (!history || !history[0]?.box))
+      ) {
+        let h = !history
+          ? await userApi.getOpeningsByUserId(props.userId)
+          : history;
+        h = h.slice(0, 15);
 
-      for (let i = 0; i < h.length; i++) {
-        if (isBox) {
-          h[i].box = await boxApi.pushImage(await boxApi.getById(h[i].boxId));
-        } else if (isItem) {
-          h[i].item = await itemApi.getById(h[i].itemId);
-          const game = await gameApi.getByName(h[i].item.game);
-          h[i].item.gameId = game.id;
-          h[i].item = await itemApi.pushImage(h[i].item);
+        for (let i = 0; i < h.length; i++) {
+          if (isBox) {
+            h[i].box = await boxApi.pushImage(await boxApi.getById(h[i].boxId));
+          } else if (isItem) {
+            h[i].item = await itemApi.getById(h[i].itemId);
+            const game = await gameApi.getByName(h[i].item.game);
+            h[i].item.gameId = game.id;
+            h[i].item = await itemApi.pushImage(h[i].item);
+          }
         }
-      }
 
-      setHistory(h);
-    }
+        setHistory(h);
+      }
+    });
 
     setIsLoadingItems(false);
   };

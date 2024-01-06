@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import styles from "./automatic-dot.module";
 import Dot from "./dot";
+import styles from "./automatic-dot.module";
 
 const AutomaticDot = (props) => {
   const [isStart, setIsStart] = useState(true);
@@ -30,4 +30,4 @@ const AutomaticDot = (props) => {
   return <div className={styles.automatic_dot}>{dots}</div>;
 };
 
-export default AutomaticDot;
+export default React.memo(AutomaticDot);

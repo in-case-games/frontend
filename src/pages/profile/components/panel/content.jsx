@@ -1,5 +1,4 @@
 import React from "react";
-import styles from "../../profile.module";
 import {
   ObserverProfile as Profile,
   Inventory,
@@ -15,6 +14,7 @@ import {
   AdminBanners,
   AdminPromocodes,
 } from "../content";
+import styles from "../../profile.module";
 
 const Content = (props) => {
   const dictionary = {

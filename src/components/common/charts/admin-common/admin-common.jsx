@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { ComboBox } from "../../inputs";
 import StatisticsService from "../../../../services/statistics";
 import Constants from "../../../../constants";
-import { ComboBox } from "../../inputs";
 import styles from "./admin-common.module";
 
 const AdminCommon = (props) => {
@@ -79,4 +79,4 @@ const AdminCommon = (props) => {
   );
 };
 
-export default AdminCommon;
+export default React.memo(AdminCommon);

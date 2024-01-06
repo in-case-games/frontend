@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import {
-  Flag,
   FlagRUS,
   Gamepad,
   DotLightGreen,
   Info,
-  LootBox,
 } from "../../../assets/images/icons";
-import { User as UserApi } from "../../../api";
-import TokenService from "../../../services/token";
+import {
+  User as UserApi,
+  Box as BoxApi,
+  Item as ItemApi,
+  Game as GameApi,
+} from "../../../api";
 import { ListLunge, Logo, UserBar } from "../../common/buttons";
-import Constants from "../../../constants";
-import styles from "./header.module";
 import { Modal as ModalLayout } from "../../../layouts";
 import {
   EmailSend as EmailSendWindow,
@@ -20,9 +20,19 @@ import {
   SignIn as SignInWindow,
   SignUp as SignUpWindow,
 } from "../../windows";
+import { useNavigate } from "react-router-dom";
+import { Input } from "../../common/inputs";
+import { Handler } from "../../../helpers/handler";
+import TokenService from "../../../services/token";
+import Constants from "../../../constants";
+import styles from "./header.module";
 
 const Header = () => {
   const userApi = new UserApi();
+  const boxApi = new BoxApi();
+  const itemApi = new ItemApi();
+  const gameApi = new GameApi();
+  const navigate = useNavigate();
 
   const [user, setUser] = useState(null);
 
@@ -35,6 +45,13 @@ const Header = () => {
   const [paymentActive, setPaymentActive] = useState(false);
   const [forgotPasswordActive, setForgotPasswordActive] = useState(false);
   const [burgerActive, setBurgerActive] = useState();
+
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
+  const [search, setSearch] = useState();
+  const [searchDetected, setSearchDetected] = useState({ items: [] });
+  const [games, setGames] = useState();
+
+  const [timeBeforeGoSearch, setTimeBeforeGoSearch] = useState();
 
   const setWindow = {
     sign_in: () => setSignInActive(true),
@@ -68,19 +85,21 @@ const Header = () => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (TokenService.getAccessToken() !== undefined) {
-        let response = await userApi.getBalance();
+        await Handler.error(async () => {
+          let response = await userApi.getBalance();
 
-        response =
-          response >= 10000000
-            ? `${Math.ceil(response / 1000000)}M`
-            : Math.ceil(response);
+          response =
+            response >= 10000000
+              ? `${Math.ceil(response / 1000000)}M`
+              : Math.ceil(response);
 
-        let temp = {
-          image: user?.image,
-          balance: response,
-        };
+          let temp = {
+            image: user?.image,
+            balance: response,
+          };
 
-        setUser(temp);
+          setUser(temp);
+        });
       }
     }, 5000);
 
@@ -89,10 +108,77 @@ const Header = () => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
+      await Handler.error(
+        async () => {
+          if (!games) setGames(await gameApi.get());
+        },
+        undefined,
+        undefined,
+        penaltyDelay,
+        setPenaltyDelay
+      );
       if (TokenService.getAccessToken() !== undefined && user === null)
         setIsAuth(null);
       else setIsAuth(TokenService.getAccessToken() !== undefined);
-    }, 100);
+
+      if (timeBeforeGoSearch) {
+        const nextTime = timeBeforeGoSearch - 100;
+
+        if (nextTime <= 0) {
+          let result = [];
+
+          try {
+            const res = await userApi.getByLogin(search);
+
+            result.push({
+              id: res.id,
+              image: await userApi.getImageByUserId(res.id),
+              name: search,
+              click: () => {
+                setSearch();
+                setSearchDetected((prev) => ({ ...prev, items: [] }));
+                navigate(`/profile/${res.id}`);
+              },
+            });
+          } catch (ex) {}
+          try {
+            const res = await boxApi.getByName(search);
+            const box = await boxApi.pushImage(res);
+
+            result.push({
+              id: box.id,
+              image: box.image,
+              name: search,
+              click: () => {
+                setSearch();
+                setSearchDetected((prev) => ({ ...prev, items: [] }));
+                navigate(`/box/${box.id}`);
+              },
+            });
+          } catch (ex) {}
+          try {
+            let res = await itemApi.getByName(search);
+
+            for (let i = 0; i < res.length; i++) {
+              res[i].gameId = games.find((g) => g.name === res[i].game).id;
+              const item = await itemApi.pushImage(res[i]);
+              result.push({
+                id: item.id,
+                image: item.image,
+                name: search,
+                click: () => {
+                  setSearchDetected((prev) => ({ ...prev, items: [] }));
+                  setSearch();
+                },
+              });
+            }
+          } catch (ex) {}
+
+          setSearchDetected((prev) => ({ ...prev, items: result }));
+          setTimeBeforeGoSearch();
+        } else setTimeBeforeGoSearch(nextTime);
+      }
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
@@ -100,17 +186,23 @@ const Header = () => {
   useEffect(() => {
     const interval = setInterval(async () => {
       if (TokenService.getAccessToken()) {
-        try {
-          await userApi.get();
-          setUser({
-            image: await userApi.getImage(),
-            balance: user?.balance ?? 0,
-          });
-        } catch (err) {}
+        await Handler.error(
+          async () => {
+            await userApi.get();
+            setUser({
+              image: TokenService.getUser()?.image,
+              balance: user?.balance ?? 0,
+            });
+          },
+          undefined,
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay
+        );
       }
 
       setIsDate(TokenService.getExpiresAccessToken());
-    }, secondsBeforeRefresh());
+    }, secondsBeforeRefresh() + penaltyDelay);
 
     return () => clearInterval(interval);
   });
@@ -136,20 +228,6 @@ const Header = () => {
                 items={Constants.Games}
               />
               <ListLunge
-                isActive={false}
-                setIsActive={() => {}}
-                tittle="Баннеры"
-                icon={Flag}
-                items={null}
-              />
-              <ListLunge
-                isActive={false}
-                setIsActive={() => {}}
-                tittle="Кейсы"
-                icon={LootBox}
-                items={null}
-              />
-              <ListLunge
                 isActive={burgerActive === "infos"}
                 setIsActive={() =>
                   setBurgerActive(burgerActive === "infos" ? "" : "infos")
@@ -160,20 +238,52 @@ const Header = () => {
               />
             </nav>
           </div>
+          <div className={styles.header_search_bar}>
+            <div className={styles.search}>
+              <Input
+                isApply={true}
+                color="#00ff82"
+                placeholder="Поиск"
+                value={search}
+                setValue={async (v) => {
+                  setTimeBeforeGoSearch(500);
+                  setSearch(v);
+                }}
+              />
+              <div className={styles.search_items}>
+                {searchDetected.items?.length > 0
+                  ? searchDetected.items.map((i) => (
+                      <div
+                        className={styles.search_item}
+                        key={i.id + "search"}
+                        onClick={i.click}
+                      >
+                        <img alt="" src={i.image} className={styles.image} />
+                        <div className={styles.name}>{i.name}</div>
+                      </div>
+                    ))
+                  : null}
+              </div>
+            </div>
+          </div>
           <div className={styles.header_user_bar}>
-            <UserBar
-              user={user}
-              isAuth={isAuth === true}
-              isSignIn={isAuth === false}
-              showWindow={exchangeWindow}
-            />
-            <ListLunge
-              isActive={false}
-              setIsActive={() => {}}
-              tittle="RU"
-              icon={FlagRUS}
-              items={null}
-            />
+            <div className={styles.user_bar}>
+              <UserBar
+                user={user}
+                isAuth={isAuth === true}
+                isSignIn={isAuth === false}
+                showWindow={exchangeWindow}
+              />
+            </div>
+            <div className={styles.list_lunge}>
+              <ListLunge
+                isActive={false}
+                setIsActive={() => {}}
+                tittle="RU"
+                icon={FlagRUS}
+                items={null}
+              />
+            </div>
           </div>
         </div>
       </div>

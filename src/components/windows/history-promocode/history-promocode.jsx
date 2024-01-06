@@ -4,16 +4,28 @@ import { ComboBox, Input } from "../../common/inputs";
 import { Converter } from "../../../helpers/converter";
 import { useNavigate } from "react-router-dom";
 import { Promocode as PromocodeApi } from "../../../api";
+import { Handler } from "../../../helpers/handler";
 import styles from "./history-promocode.module";
 
 const HistoryPromocode = (props) => {
   const promocodeApi = new PromocodeApi();
   const navigate = useNavigate();
+
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
   const [types, setTypes] = useState([]);
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      if (!types || types.length === 0) setTypes(await promocodeApi.getTypes());
+      await Handler.error(
+        async () => {
+          if (!types || types.length === 0)
+            setTypes(await promocodeApi.getTypes());
+        },
+        undefined,
+        undefined,
+        penaltyDelay,
+        setPenaltyDelay
+      );
     }, 500);
 
     return () => clearInterval(interval);

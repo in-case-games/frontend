@@ -17,7 +17,10 @@
     align-items: center;
   }
 }
-
+.error {
+  margin-bottom: 10px;
+  color: var(--color-red__1);
+}
 .box_header {
   display: flex;
   align-items: center;

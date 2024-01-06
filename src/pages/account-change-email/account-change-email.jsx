@@ -2,9 +2,10 @@ import { React, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { delete_cookie } from "sfcookies";
 import { Email as EmailApi } from "../../api";
+import { Input } from "../../components/common/inputs";
+import { Handler } from "../../helpers/handler";
 import TokenService from "../../services/token";
 import styles from "./account-change-email.module";
-import { Input } from "../../components/common/inputs";
 
 const AccountChangeEmail = () => {
   const emailApi = new EmailApi();
@@ -15,28 +16,25 @@ const AccountChangeEmail = () => {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
+  const [errorMessage, setErrorMessage] = useState();
 
   const handleClick = async () => {
     if (isSuccess) navigate("/#");
 
-    const token = searchParams.get("token");
-    let err = "";
+    await Handler.error(async () => {
+      const token = searchParams.get("token");
 
-    if (!token) err = "Токен не валидный, повторите все еще раз";
-    else if (email === "") err = "Заполните все поля";
-    else {
-      try {
+      if (!token) setErrorMessage("Токен не валидный, повторите все еще раз");
+      else if (email === "") setErrorMessage("Заполните все поля");
+      else {
         await emailApi.confirmEmail(email, token);
         TokenService.removeUser();
         delete_cookie("user-balance");
         setIsSuccess(true);
-      } catch (e) {
-        err = e.response.data.error.message;
       }
-    }
 
-    setError(err);
+      setErrorMessage();
+    });
   };
 
   return (
@@ -44,7 +42,7 @@ const AccountChangeEmail = () => {
       <div className={styles.tittle}>
         {!isSuccess ? "Подтвердите новую почту" : "Ваш аккаунт сменил почту"}
       </div>
-      {error ? <div className={styles.error}>{error}</div> : null}
+      {errorMessage ? <div className={styles.error}>{errorMessage}</div> : null}
       {!isSuccess ? (
         <div className={styles.inputs}>
           <Input

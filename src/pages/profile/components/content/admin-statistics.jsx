@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { LoadingArrow as Loading } from "../../../../components/loading";
 import { Site as SiteApi } from "../../../../api";
 import { AdminCommon as ChartCommon } from "../../../../components/common/charts";
+import { Handler } from "../../../../helpers/handler";
 import styles from "./content.module";
 
 const AdminStatistics = (props) => {
@@ -9,6 +10,7 @@ const AdminStatistics = (props) => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [statistics, setStatistics] = useState([]);
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => setIsLoading(true), 1000);
@@ -17,19 +19,27 @@ const AdminStatistics = (props) => {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      if (isLoading) {
-        const stat = Object.assign(
-          await siteApi.getStatistics(),
-          await siteApi.getAdminStatistics()
-        );
-        stat.date = new Date();
-        statistics.push(stat);
-        const stats = statistics.slice(-3600);
+      await Handler.error(
+        async () => {
+          if (isLoading) {
+            const stat = Object.assign(
+              await siteApi.getStatistics(),
+              await siteApi.getAdminStatistics()
+            );
+            stat.date = new Date();
+            statistics.push(stat);
+            const stats = statistics.slice(-3600);
 
-        setStatistics(stats);
-        setIsLoading(false);
-      }
-    }, 100);
+            setStatistics(stats);
+            setIsLoading(false);
+          }
+        },
+        undefined,
+        undefined,
+        penaltyDelay,
+        setPenaltyDelay
+      );
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });

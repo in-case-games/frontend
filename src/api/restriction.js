@@ -1,11 +1,10 @@
 import api from "./api";
-
-const RESOURCES_API_URL = "https://localhost:5000/api/";
+import Constants from "../constants";
 
 class Restriction {
   async getTypes() {
     const response = await api.get(
-      RESOURCES_API_URL + "user/restriction/types"
+      Constants.GATE_AWAY_API_URL + "user/restriction/types"
     );
 
     return response.data.data;
@@ -13,7 +12,7 @@ class Restriction {
 
   async post(restriction) {
     const response = await api.post(
-      RESOURCES_API_URL + "user/restriction",
+      Constants.GATE_AWAY_API_URL + "user/restriction",
       restriction
     );
 
@@ -22,7 +21,7 @@ class Restriction {
 
   async put(restriction) {
     const response = await api.put(
-      RESOURCES_API_URL + "user/restriction",
+      Constants.GATE_AWAY_API_URL + "user/restriction",
       restriction
     );
 
@@ -31,7 +30,7 @@ class Restriction {
 
   async delete(id) {
     const response = await api.delete(
-      RESOURCES_API_URL + `user/restriction/${id}`
+      Constants.GATE_AWAY_API_URL + `user/restriction/${id}`
     );
 
     return response.data.data;

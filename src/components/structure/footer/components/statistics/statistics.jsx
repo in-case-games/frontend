@@ -8,8 +8,9 @@ import {
   StarBeige as StarImage,
 } from "../../../../../assets/images/icons";
 import { Site as SiteApi } from "../../../../../api";
-import styles from "./statistics.module";
+import { Handler } from "../../../../../helpers/handler";
 import Statistic from "./statistic";
+import styles from "./statistics.module";
 
 const Statistics = () => {
   const siteApi = new SiteApi();
@@ -18,11 +19,10 @@ const Statistics = () => {
 
   const [statistics, setStatistics] = useState(null);
 
-  //TODO add lock refresh if error
   useEffect(() => {
     const interval = setInterval(
-      async () => {
-        try {
+      async () =>
+        await Handler.error(async () => {
           setIsStart(false);
 
           const response = await siteApi.getStatistics();
@@ -35,8 +35,7 @@ const Statistics = () => {
             inCoins: response.withdrawnFunds,
             online: 0,
           });
-        } catch (err) {}
-      },
+        }),
       isStart ? 100 : 5000
     );
 

@@ -8,6 +8,7 @@ import { Simple as Item } from "../../game-item";
 import { LoadingArrow as Loading } from "../../loading";
 import { Converter } from "../../../helpers/converter";
 import { Input } from "../../common/inputs";
+import { Handler } from "../../../helpers/handler";
 import styles from "./exchange.module";
 
 const Exchange = (props) => {
@@ -27,6 +28,7 @@ const Exchange = (props) => {
   const [selectItems, setSelectItems] = useState({ items: [] });
   const [primaryItems, setPrimaryItems] = useState([]);
   const [showItems, setShowItems] = useState([]);
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   const loadedGames = async () => {
     const games = {};
@@ -90,33 +92,44 @@ const Exchange = (props) => {
         setShowItems(show);
       };
       if (!isBanned && (isLoading || isClickItem)) {
-        loaded(isLoading);
+        await Handler.error(
+          async () => {
+            await loaded(isLoading);
 
-        setIsClickItem(false);
-        setIsLoading(false);
+            setIsClickItem(false);
+            setIsLoading(false);
+          },
+          undefined,
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay
+        );
+
         setIsBanned(false);
       }
-    }, 100);
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
 
   const click = async () => {
     if (allowedCost >= 0) {
-      const index = props.selectItems.items.findIndex(
-        (s) => s.id === props.inventory.id
-      );
-      removeSelectItem(index);
-
-      if (selectItems.items.length === 0)
-        await itemApi.sell(props.inventory.id);
-      else
-        await itemApi.exchangeInventoryForItems(
-          props.inventory.id,
-          selectItems.items
+      await Handler.error(async () => {
+        const index = props.selectItems.items.findIndex(
+          (s) => s.id === props.inventory.id
         );
+        removeSelectItem(index);
 
-      props.close();
+        if (selectItems.items.length === 0)
+          await itemApi.sell(props.inventory.id);
+        else
+          await itemApi.exchangeInventoryForItems(
+            props.inventory.id,
+            selectItems.items
+          );
+
+        props.close();
+      });
     }
   };
 

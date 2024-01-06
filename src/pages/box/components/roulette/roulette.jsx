@@ -7,6 +7,7 @@ import { User as UserApi, Item as ItemApi } from "../../../../api";
 import { Converter } from "../../../../helpers/converter";
 import { Simple as Item } from "../../../../components/game-item";
 import { Roulette as Group } from "../../../../layouts";
+import { Handler } from "../../../../helpers/handler";
 import styles from "./roulette.module";
 
 const Roulette = (props) => {
@@ -24,28 +25,31 @@ const Roulette = (props) => {
   });
 
   const clickOpenBox = async () => {
-    if (
-      !props.box?.isLocked &&
-      props.user?.balance &&
-      props.box?.cost <= props.user?.balance
-    ) {
-      let winItem = await userApi.openBox(props.box.id);
-      const findItem = props.box.inventory.find(
-        (i) => i.item.id === winItem.id
-      )?.item;
-      const res = Object.assign(winItem, findItem || {});
+    if (!props.user) {
+      console.log("Need sign in");
+    } else if (!props.user?.balance || props.box?.cost > props.user?.balance) {
+      props.setIsShowPayment(true);
+    } else if (!props.box?.isLocked) {
+      await Handler.error(async () => {
+        let winItem = await userApi.openBox(props.box.id);
+        const findItem = props.box.inventory.find(
+          (i) => i.item.id === winItem.id
+        )?.item;
+        const res = Object.assign(winItem, findItem || {});
 
-      if (!winItem.image) winItem = await itemApi.pushImage(winItem);
+        if (!winItem.image) winItem = await itemApi.pushImage(winItem);
 
-      props.setWinItem(res);
-      props.setIsRollingRoulette(true);
+        props.setWinItem(res);
+        props.setIsRollingRoulette(true);
 
-      loadRandomParams(res);
+        loadRandomParams(res);
+      });
     }
   };
 
   const getTextButton = () => {
-    if (!props.user) return <div className={styles.text}>Вход</div>;
+    if (!props.user)
+      return <div className={styles.text}>Войдите в аккаунт</div>;
     if (!props.user.balance || props.box?.cost > props.user?.balance)
       return (
         <div className={styles.text}>
@@ -67,7 +71,7 @@ const Roulette = (props) => {
   };
 
   const getStyles = () => {
-    const isOrange = !props.user || !props.box?.isLocked;
+    const isOrange = props.user && !props.box?.isLocked;
 
     return {
       cursor: isOrange ? "pointer" : "default",

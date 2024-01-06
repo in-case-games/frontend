@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Bar, Content } from ".";
-import styles from "../../info.module";
 import { useNavigate, useParams } from "react-router-dom";
+import styles from "../../info.module";
 
 const Panel = () => {
   const params = useParams();
@@ -36,4 +36,4 @@ const Panel = () => {
   );
 };
 
-export default Panel;
+export default React.memo(Panel);

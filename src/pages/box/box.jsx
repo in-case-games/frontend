@@ -6,20 +6,22 @@ import {
   Item as ItemApi,
   User as UserApi,
 } from "../../api";
-import { Helmet } from "react-helmet";
-import { Reviews } from "../../components/structure";
-import { BoxItems } from "../../components/structure";
-import { read_cookie } from "sfcookies";
-import { Box as BoxDisplay, Item as ItemDisplay, Roulette } from "./components";
-import TokenService from "../../services/token";
-import { Modal as ModalLayout } from "../../layouts";
 import {
   TakeItemBanner as TakeItemBannerWindow,
   Box as BoxWindow,
   Item as ItemWindow,
   LoadImage as LoadImageWindow,
   BoxInventory as BoxInventoryWindow,
+  Payment as PaymentWindow,
 } from "../../components/windows";
+import { Helmet } from "react-helmet";
+import { Reviews } from "../../components/structure";
+import { BoxItems } from "../../components/structure";
+import { read_cookie } from "sfcookies";
+import { Box as BoxDisplay, Item as ItemDisplay, Roulette } from "./components";
+import { Modal as ModalLayout } from "../../layouts";
+import { Handler } from "../../helpers/handler";
+import TokenService from "../../services/token";
 import styles from "./box.module";
 
 const Box = () => {
@@ -27,22 +29,22 @@ const Box = () => {
   const itemApi = new ItemApi();
   const gameApi = new GameApi();
   const userApi = new UserApi();
-
+  const role = TokenService.getUser()?.role;
   const navigate = useNavigate();
   const { id } = useParams();
-  const role = TokenService.getUser()?.role;
 
   const [isStart, setIsStart] = useState(true);
   const [isRollingRoulette, setIsRollingRoulette] = useState(false);
   const [isShowTakeItemWindow, setIsShowTakeItemWindow] = useState(false);
   const [isShowImageWindow, setIsShowImageWindow] = useState();
+  const [isShowPaymentWindow, setIsShowPaymentWindow] = useState();
+
   const [showInventoryWindow, setShowInventoryWindow] = useState();
   const [showItemWindow, setShowItemWindow] = useState();
   const [showBoxWindow, setShowBoxWindow] = useState();
-  const [image, setImage] = useState();
 
   let [games, setGames] = useState();
-
+  const [image, setImage] = useState();
   const [user, setUser] = useState();
   const [box, setBox] = useState();
   const [inventory, setInventory] = useState();
@@ -52,70 +54,79 @@ const Box = () => {
 
   useEffect(() => {
     const interval = setInterval(
-      async () => {
-        setIsStart(false);
+      async () =>
+        await Handler.error(
+          async () => {
+            setIsStart(false);
 
-        const user = TokenService.getUser();
+            const user = TokenService.getUser();
 
-        if (user) user.balance = read_cookie("user-balance");
+            if (user) user.balance = read_cookie("user-balance");
 
-        if (!games) {
-          games = await gameApi.get();
-          setGames(games);
-        }
-
-        setUser(user);
-
-        try {
-          const result = [];
-          const inventories = await boxApi.getInventory(id);
-          let banner = await boxApi.getByIdBanner(id);
-          let box;
-
-          if (banner && banner?.box) {
-            box = banner.box;
-            try {
-              setPathBanner(await userApi.getPathBannerByBoxId(box.id));
-            } catch (ex) {
-              setPathBanner();
+            if (!games) {
+              games = await gameApi.get();
+              setGames(games);
             }
 
-            if (new Date(banner.expirationDate) <= new Date())
-              banner = undefined;
-          } else box = await boxApi.getById(id);
+            setUser(user);
 
-          box.inventory = inventories.sort(
-            (a, b) => a.chanceWining - b.chanceWining
-          );
-          box = await boxApi.pushImage(box);
+            const result = [];
+            const inventories = await boxApi.getInventory(id);
+            let banner;
+            let box;
 
-          let gameId;
+            try {
+              banner = await boxApi.getByIdBanner(id);
+            } catch (ex) {}
 
-          if (role && role !== "user") result.push({ id: "1", boxId: box.id });
+            if (banner && banner?.box) {
+              box = banner.box;
+              try {
+                setPathBanner(await userApi.getPathBannerByBoxId(box.id));
+              } catch (ex) {
+                setPathBanner();
+              }
 
-          for (let i = 0; i < inventories.length; i++) {
-            const inv = inventories[i];
-            gameId = gameId || games.find((g) => g.name === inv.item.game).id;
-            inv.item.chanceWining = inv.chanceWining / 100000;
-            inv.item.gameId = gameId;
-            inv.item = await itemApi.pushImage(inv.item);
-            inv.boxId = box.id;
-            result.push(inv);
+              if (new Date(banner.expirationDate) <= new Date())
+                banner = undefined;
+            } else box = await boxApi.getById(id);
+
+            box.inventory = inventories.sort(
+              (a, b) => a.chanceWining - b.chanceWining
+            );
+            box = await boxApi.pushImage(box);
+
+            let gameId;
+
+            if (role && role !== "user")
+              result.push({ id: "1", boxId: box.id });
+
+            for (let i = 0; i < inventories.length; i++) {
+              const inv = inventories[i];
+              gameId = gameId || games.find((g) => g.name === inv.item.game).id;
+              inv.item.chanceWining = inv.chanceWining / 100000;
+              inv.item.gameId = gameId;
+              inv.item = await itemApi.pushImage(inv.item);
+              inv.boxId = box.id;
+              result.push(inv);
+            }
+
+            setBox(box);
+            setBanner(banner);
+            setInventory(result);
+          },
+          async (ex) => {
+            if (
+              ex?.response?.data?.error?.code === 4 ||
+              ex?.response?.status === 404
+            ) {
+              navigate("/not-found");
+              return true;
+            }
+
+            return false;
           }
-
-          setBox(box);
-          setBanner(banner);
-          setInventory(result);
-        } catch (ex) {
-          console.log(ex);
-          if (
-            ex?.response?.data?.error?.code === 4 ||
-            ex?.response?.data?.errors?.id
-          ) {
-            navigate("/not-found");
-          }
-        }
-      },
+        ),
       isStart ? 100 : 5000
     );
     return () => clearInterval(interval);
@@ -133,9 +144,12 @@ const Box = () => {
     ) : (
       <BoxDisplay
         box={box}
-        isHasBanner={banner}
+        isHasBanner={banner && inventory.length > 1 && !box?.isLocked && role}
         pathBanner={pathBanner}
-        openBannerWindow={() => setIsShowTakeItemWindow(banner)}
+        openBannerWindow={() => {
+          if (inventory.length > 1 && !box?.isLocked && role)
+            setIsShowTakeItemWindow(banner);
+        }}
       />
     );
   };
@@ -148,22 +162,28 @@ const Box = () => {
       <div className={styles.container_small}>
         <div className={styles.display}>
           {whatShow()}
-          <Roulette
-            box={box}
-            user={user}
-            isRollingRoulette={isRollingRoulette}
-            pathBanner={pathBanner}
-            setWinItem={async (i) => {
-              try {
-                setPathBanner(await userApi.getPathBannerByBoxId(box.id));
-              } catch (ex) {
-                setPathBanner();
+          {inventory && inventory.length > 1 ? (
+            <Roulette
+              box={box}
+              user={user}
+              isRollingRoulette={isRollingRoulette}
+              pathBanner={pathBanner}
+              setWinItem={async (i) =>
+                await Handler.error(
+                  async () => {
+                    setWinItem(i);
+                    setPathBanner(await userApi.getPathBannerByBoxId(box.id));
+                  },
+                  async () => {
+                    setPathBanner();
+                    return true;
+                  }
+                )
               }
-
-              setWinItem(i);
-            }}
-            setIsRollingRoulette={setIsRollingRoulette}
-          />
+              setIsRollingRoulette={setIsRollingRoulette}
+              setIsShowPayment={setIsShowPaymentWindow}
+            />
+          ) : null}
         </div>
         <div className={styles.content}>
           {inventory ? (
@@ -177,18 +197,22 @@ const Box = () => {
       </div>
       <ModalLayout
         isActive={isShowTakeItemWindow}
-        close={async () => {
-          setIsShowTakeItemWindow();
-          try {
-            setPathBanner(await userApi.getPathBannerByBoxId(box.id));
-          } catch (ex) {
-            setPathBanner();
-          }
-        }}
+        close={async () =>
+          await Handler.error(
+            async () => {
+              setIsShowTakeItemWindow();
+              setPathBanner(await userApi.getPathBannerByBoxId(box.id));
+            },
+            async () => {
+              setPathBanner();
+              return true;
+            }
+          )
+        }
       >
         <TakeItemBannerWindow
           items={
-            inventory
+            inventory && inventory.length > 1
               ? inventory
                   .filter(
                     (i) =>
@@ -205,14 +229,18 @@ const Box = () => {
           }
           boxId={box?.id}
           pathBanner={pathBanner}
-          close={async () => {
-            setIsShowTakeItemWindow();
-            try {
-              setPathBanner(await userApi.getPathBannerByBoxId(box.id));
-            } catch (ex) {
-              setPathBanner();
-            }
-          }}
+          close={async () =>
+            await Handler.error(
+              async () => {
+                setIsShowTakeItemWindow();
+                setPathBanner(await userApi.getPathBannerByBoxId(box.id));
+              },
+              async () => {
+                setPathBanner();
+                return true;
+              }
+            )
+          }
         />
       </ModalLayout>
       <ModalLayout
@@ -270,6 +298,11 @@ const Box = () => {
           description={"PNG (MAX. 200x200px | 1MB)"}
         />
       </ModalLayout>
+      <ModalLayout
+        isActive={isShowPaymentWindow}
+        close={() => setIsShowPaymentWindow()}
+        children={<PaymentWindow />}
+      />
     </div>
   );
 };

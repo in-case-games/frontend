@@ -1,3 +1,5 @@
+import { Handler } from "../../helpers/handler";
+
 const LazyLoading = async (props) => {
   let loaded = props.loaded;
   let additional = [];
@@ -28,14 +30,18 @@ const LazyLoading = async (props) => {
       [0, additional.length].concat(additional)
     );
 
-  try {
-    const show = props.createShowByLoaded(loaded, start, end);
+  await Handler.error(
+    async () => {
+      const show = props.createShowByLoaded(loaded, start, end);
 
-    props.setLoaded(loaded);
-    props.setShow(show);
-  } catch (err) {
-    props.backAll();
-  }
+      props.setLoaded(loaded);
+      props.setShow(show);
+    },
+    async () => {
+      props.backAll();
+      return false;
+    }
+  );
 };
 
 export default LazyLoading;

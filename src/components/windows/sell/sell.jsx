@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Item as ItemApi } from "../../../api";
 import { Simple as Item } from "../../game-item";
 import { LoadingArrow as Loading } from "../../loading";
+import { Handler } from "../../../helpers/handler";
 import styles from "./sell.module";
 
 const Sell = (props) => {
@@ -16,6 +17,7 @@ const Sell = (props) => {
   const [remainingInventories, setRemainingInventories] = useState({
     items: [],
   });
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   const click = () => {
     setIsBanned(true);
@@ -38,25 +40,35 @@ const Sell = (props) => {
     for (let i = 0; i < items.length; i++) {
       const id = items[i].id;
       const index = props.selectItems.items.indexOf(id);
+      let error = false;
 
-      try {
-        if (items[i].status !== "success") {
-          items[i].status = "loading";
+      await Handler.error(
+        async () => {
+          if (items[i].status !== "success") {
+            items[i].status = "loading";
+            setFinishedInventories((prev) => ({ ...prev, items: items }));
+
+            await itemApi.sell(id);
+
+            items[i].status = "success";
+            setFinishedInventories((prev) => ({ ...prev, items: items }));
+          }
+        },
+        async () => {
+          error = true;
+          items[i].status = "cancel";
+          items[i].error = "Внутренняя ошибка, попробуйте еще раз";
           setFinishedInventories((prev) => ({ ...prev, items: items }));
+          return false;
+        },
+        undefined,
+        penaltyDelay,
+        setPenaltyDelay
+      );
 
-          await itemApi.sell(id);
+      removeSelectItem(index);
 
-          items[i].status = "success";
-          setFinishedInventories((prev) => ({ ...prev, items: items }));
-        }
-      } catch (err) {
-        items[i].status = "cancel";
-        items[i].error = "Внутренняя ошибка, попробуйте еще раз";
-        setFinishedInventories((prev) => ({ ...prev, items: items }));
-        break;
-      } finally {
-        removeSelectItem(index);
-      }
+      if (error) break;
     }
 
     setIsLoading(false);
@@ -81,7 +93,7 @@ const Sell = (props) => {
         setIsApply(remaining.length === 0);
         setIsDisplayedButton(remaining.length > 0);
       }
-    }, 100);
+    }, 100 + penaltyDelay);
 
     return () => clearInterval(interval);
   });
@@ -105,7 +117,7 @@ const Sell = (props) => {
         setIsLoading(false);
         setIsBanned(false);
       }
-    }, 10);
+    }, 10 + penaltyDelay);
 
     return () => clearInterval(interval);
   });

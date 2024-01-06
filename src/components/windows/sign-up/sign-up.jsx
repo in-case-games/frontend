@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { RegistrationMen } from "../../../assets/images/main";
 import { Authentication as AuthApi } from "../../../api";
-import styles from "./sign-up.module";
 import { CheckBox, Input } from "../../common/inputs";
+import { Handler } from "../../../helpers/handler";
+import styles from "./sign-up.module";
 
 const SignUp = (props) => {
   const authApi = new AuthApi();
 
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState();
 
   const [isAgree, setIsAgree] = useState(false);
   const [isLegalAge, setIsLegalAge] = useState(false);
@@ -20,12 +21,16 @@ const SignUp = (props) => {
     if (!isAgree) setErrorMessage("Примите пользовательское соглашение");
     else if (!isLegalAge) setErrorMessage("Примите если вам есть 18 лет");
     else {
-      try {
-        await authApi.signUp(login, email, password);
-        props.exchangeWindow("email");
-      } catch (err) {
-        setErrorMessage(err.response.data.error.message);
-      }
+      await Handler.error(
+        async () => {
+          const response = await authApi.signUp(login, email, password);
+          props.exchangeWindow("email");
+
+          return response;
+        },
+        undefined,
+        setErrorMessage
+      );
     }
   };
 

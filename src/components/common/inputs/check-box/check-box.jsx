@@ -1,6 +1,6 @@
 import React from "react";
-import styles from "./check-box.module";
 import { Link } from "../../buttons";
+import styles from "./check-box.module";
 
 const CheckBox = (props) => {
   const getStyle = () => {

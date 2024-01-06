@@ -5,7 +5,6 @@ import {
   Game as GameApi,
 } from "../../../api";
 import { OpeningHistory as Item } from "../../game-item";
-import styles from "./openings-roulette.module";
 import { Modal as ModalLayout } from "../../../layouts";
 import {
   MiniProfile as MiniProfileWindow,
@@ -15,12 +14,13 @@ import {
   Restriction as RestrictionWindow,
 } from "../../windows";
 import { Converter } from "../../../helpers/converter";
+import { Handler } from "../../../helpers/handler";
+import styles from "./openings-roulette.module";
 
 const OpeningsRoulette = () => {
   const userApi = new UserApi();
   const itemApi = new ItemApi();
   const gameApi = new GameApi();
-
   const windowWidth = useRef(window.innerWidth);
 
   const [isStart, setIsStart] = useState(true);
@@ -38,25 +38,27 @@ const OpeningsRoulette = () => {
   useEffect(() => {
     const interval = setInterval(
       async () => {
-        setIsStart(false);
+        await Handler.error(async () => {
+          setIsStart(false);
 
-        const g = games || (await loadedGames());
-        const history = await loadedHistory();
-        const result = [];
+          const g = games || (await loadedGames());
+          const history = await loadedHistory();
+          const result = [];
 
-        for (let i = 0; i < history.length; i++) {
-          let h = await pushItemToHistory(history[i], g);
+          for (let i = 0; i < history.length; i++) {
+            let h = await pushItemToHistory(history[i], g);
 
-          result.push(
-            <Item
-              history={h}
-              showMiniProfile={() => setMiniProfile(h.userId)}
-              key={h.id}
-            />
-          );
-        }
+            result.push(
+              <Item
+                history={h}
+                showMiniProfile={() => setMiniProfile(h.userId)}
+                key={h.id}
+              />
+            );
+          }
 
-        setItems(result);
+          setItems(result);
+        });
       },
       isStart ? 1000 : 5000
     );

@@ -1,0 +1,23 @@
+.faq {
+  height: 100%;
+  width: 100%;
+
+  .container_small {
+    max-width: 1060px;
+
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+}
+
+.questions {
+  display: flex;
+  flex-direction: column;
+}
+
+.tittle {
+  font-family: "Nunito";
+  font-size: 40px;
+
+  margin: 5px 0;
+}

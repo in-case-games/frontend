@@ -8,4 +8,4 @@ const Boxes = (props) => {
   return <Group name={props.name}>{boxes}</Group>;
 };
 
-export default Boxes;
+export default React.memo(Boxes);
