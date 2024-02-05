@@ -194,7 +194,11 @@ const Header = () => {
               balance: user?.balance ?? 0,
             });
           },
-          undefined,
+          (ex) => {
+            //TODO check not found user then TokenService.removeUser()
+            console.log(ex);
+            return true;
+          },
           undefined,
           penaltyDelay,
           setPenaltyDelay

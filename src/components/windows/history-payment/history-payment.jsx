@@ -12,7 +12,7 @@ const HistoryPayment = (props) => {
     <div className={styles.history_payment}>
       <div className={styles.payment_content}>
         <div className={styles.payment_header}>
-          <div className={styles.tittle}>История открытия</div>
+          <div className={styles.tittle}>История пополнения</div>
         </div>
         <div className={styles.payment_info}>
           <div className={styles.inputs}>
@@ -50,6 +50,12 @@ const HistoryPayment = (props) => {
               subTittle="Можно вернуть?"
               isReadOnly={true}
               value={props.history.isBackMoney ? "Да" : "Нет"}
+            />
+            <Input
+              name="history-status"
+              subTittle="Статус"
+              isReadOnly={true}
+              value={props.history.status.name}
             />
           </div>
           <div className={styles.delimiter}></div>

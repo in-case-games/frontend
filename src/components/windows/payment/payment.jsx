@@ -1,16 +1,35 @@
 import React, { useState } from "react";
 import { InCoin, InCoinGray } from "../../../assets/images/icons";
 import { ComboBox, Input } from "../../../components/common/inputs";
+import { Payment as PaymentApi } from "../../../api";
+import { LoadingArrow as Loading } from "../../loading";
+import { Handler } from "../../../helpers/handler";
 import Constants from "../../../constants";
 import styles from "./payment.module";
 
 const Payment = () => {
+  const paymentApi = new PaymentApi();
+
+  const [isLoading, setIsLoading] = useState(false);
   const [amount, setAmount] = useState(50);
   const [typePay, setTypePay] = useState(
     Constants.TypePayments.find((t) => t.id === 1)
   );
 
-  const sendToPaymentForm = () => {};
+  const sendToPaymentForm = async () => {
+    await Handler.error(async () => {
+      var response = await paymentApi.createInvoice({
+        value: amount,
+        currency: typePay.currency,
+      });
+      setIsLoading(false);
+      window.open(response?.data?.data?.url);
+
+      return response;
+    });
+
+    setIsLoading(false);
+  };
 
   return (
     <div className={styles.payment}>
@@ -46,10 +65,11 @@ const Payment = () => {
               name="real-amount"
               value={amount}
               setValue={(v) => {
-                if (/^\d+$/.test(v)) {
+                if (v === "") setAmount(0);
+                else if (/^\d+$/.test(v)) {
                   let newAmount = v;
 
-                  if (v < typePay.minAmount) newAmount = typePay.minAmount;
+                  if (v < 0) newAmount = 0;
                   if (v > typePay.maxAmount) newAmount = typePay.maxAmount;
 
                   setAmount(newAmount);
@@ -73,11 +93,26 @@ const Payment = () => {
           {typePay.description ? (
             <div className={styles.description}>{typePay.description}</div>
           ) : null}
-          <div className={styles.button_pay} onClick={sendToPaymentForm}>
-            {" "}
-            <img alt="" src={InCoinGray} className={styles.image} />
-            <div className={styles.text}>Пополнить</div>
-          </div>
+          {isLoading ? (
+            <div className={styles.button_pay}>
+              {" "}
+              <div className={styles.loading}>
+                <Loading isLoading={isLoading} />
+              </div>
+            </div>
+          ) : (
+            <div
+              className={styles.button_pay}
+              onClick={async () => {
+                setIsLoading(true);
+                await sendToPaymentForm();
+              }}
+            >
+              {" "}
+              <img alt="" src={InCoinGray} className={styles.image} />
+              <div className={styles.text}>Пополнить</div>
+            </div>
+          )}
         </div>
       </div>
     </div>
