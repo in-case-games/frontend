@@ -9,3 +9,4 @@ export { default as Promocode } from "./promocode";
 export { default as Restriction } from "./restriction";
 export { default as BoxGroup } from "./box-group";
 export { default as Reviews } from "./reviews";
+export { default as Payment } from "./payment";

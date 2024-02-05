@@ -1,44 +1,28 @@
-import React, { useState } from "react";
+import React from "react";
 import { LoadingArrow as Loading } from "../../loading";
 import { Converter } from "../../../helpers/converter";
 import styles from "./payment.module";
 
 const Payment = (props) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(false);
-
   const getBackgroundColor = () => {
-    if (isLoading || !props.history.isBackMoney) return "green";
-    else if (error) return "red";
-    else return "#006d7f";
+    if (props.history?.status?.name === "canceled") return "red";
+    else return "green";
   };
 
   const getColor = () => {
-    if (isLoading || !props.history.isBackMoney) return "greenyellow";
-    else if (error) return "black";
-    else return "rgb(141 254 255)";
+    if (props.history?.status?.name === "succeeded") return "greenyellow";
+    else if (props.history?.status?.name === "canceled") return "black";
   };
 
   const getStatus = () => {
-    if (isLoading)
+    if (props.history?.status?.name === "succeeded") return "✓";
+    else if (props.history?.status?.name === "canceled") return "✖";
+    else
       return (
         <div className={styles.loading}>
-          <Loading isLoading={isLoading} cursor="default" />
+          <Loading isLoading={true} cursor="pointer" />
         </div>
       );
-    else if (error) return "✖";
-    else if (props.history.isBackMoney) return "→";
-    else return "✓";
-  };
-
-  const click = (e) => {
-    e.stopPropagation();
-
-    if ((props.history.isBackMoney || error) && !isLoading) {
-      //TODO Back Money
-      setIsLoading(true);
-      setError(true);
-    }
   };
 
   return (
@@ -56,12 +40,10 @@ const Payment = (props) => {
       </div>
       <div
         className={styles.button_status}
-        onClick={click}
         style={{
           background: getBackgroundColor(),
           color: getColor(),
-          cursor:
-            props.history.isBackMoney && !isLoading ? "pointer" : "default",
+          cursor: "pointer",
         }}
       >
         {getStatus()}
