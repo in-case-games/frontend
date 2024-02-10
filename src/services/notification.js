@@ -10,6 +10,16 @@ const popNotifies = () => {
 };
 
 const pushNotify = (notify) => {
+<<<<<<< Updated upstream
+=======
+  var content = JSON.stringify(notify.content);
+
+  console.log(content);
+  if (content.length > 60 || content.includes(":")) {
+    console.log(notify.content);
+    notify.content = "Содержание в консоли";
+  }
+>>>>>>> Stashed changes
   var notifications = JSON.parse(localStorage.getItem("notifications"));
 
   if (!notifications || notifications.length > 0) {
