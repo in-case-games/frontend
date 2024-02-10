@@ -3,13 +3,13 @@ import api from "./api";
 
 class Promocode {
   async get() {
-    const response = await api.get(Constants.GATE_AWAY_API_URL + `promocode`);
+    const response = await api.get(Constants.GATE_AWAY_API_URL + `promo-code`);
 
     return response.data.data;
   }
   async post(promo) {
     const response = await api.post(
-      Constants.GATE_AWAY_API_URL + `promocode`,
+      Constants.GATE_AWAY_API_URL + `promo-code`,
       promo
     );
 
@@ -17,7 +17,7 @@ class Promocode {
   }
   async put(promo) {
     const response = await api.put(
-      Constants.GATE_AWAY_API_URL + `promocode`,
+      Constants.GATE_AWAY_API_URL + `promo-code`,
       promo
     );
 
@@ -25,21 +25,21 @@ class Promocode {
   }
   async delete(id) {
     const response = await api.delete(
-      Constants.GATE_AWAY_API_URL + `promocode/${id}`
+      Constants.GATE_AWAY_API_URL + `promo-code/${id}`
     );
 
     return response.data.data;
   }
   async getByName(name) {
     const response = await api.get(
-      Constants.GATE_AWAY_API_URL + `promocode/name/${name}`
+      Constants.GATE_AWAY_API_URL + `promo-code/name/${name}`
     );
 
     return response.data.data;
   }
   async getTypes() {
     const response = await api.get(
-      Constants.GATE_AWAY_API_URL + `promocode/types`
+      Constants.GATE_AWAY_API_URL + `promo-code/types`
     );
 
     return response.data.data;

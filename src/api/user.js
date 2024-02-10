@@ -62,7 +62,7 @@ class User {
   }
   async getPromocodes() {
     const response = await api.get(
-      Constants.GATE_AWAY_API_URL + `user/promocode`
+      Constants.GATE_AWAY_API_URL + `user/promo-code`
     );
 
     return response.data.data;
@@ -285,7 +285,7 @@ class User {
 
   async activatePromocode(name) {
     const response = await api.get(
-      Constants.GATE_AWAY_API_URL + `user/promocode/activate/${name}`
+      Constants.GATE_AWAY_API_URL + `user/promo-code/activate/${name}`
     );
 
     return response.data.data;
@@ -319,7 +319,7 @@ class User {
 
   async exchangePromocode(name) {
     const response = await api.get(
-      Constants.GATE_AWAY_API_URL + `user/promocode/exchange/${name}`
+      Constants.GATE_AWAY_API_URL + `user/promo-code/exchange/${name}`
     );
 
     return response.data.data;
