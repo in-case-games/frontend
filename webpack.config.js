@@ -1,8 +1,9 @@
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-
+const CompressionPlugin = require("compression-webpack-plugin");
 const path = require("path");
+const zlib = require("zlib");
 
 const production = process.env.NODE_ENV === "production";
 
@@ -10,8 +11,11 @@ module.exports = {
   entry: path.resolve(__dirname, "./src/index.js"),
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "[name].js",
-    assetModuleFilename: path.join("public", "[name][ext]"),
+    filename: production ? "[name].[contenthash].js" : "[name].js",
+    assetModuleFilename: path.join(
+      "public",
+      production ? "[name].[contenthash][ext]" : "[name][ext]"
+    ),
     publicPath: "/",
   },
   module: {
@@ -52,7 +56,10 @@ module.exports = {
         exclude: "/node_modules/",
         type: "asset/resource",
         generator: {
-          filename: path.join("public/assets/images", "[name][ext]"),
+          filename: path.join(
+            "public/assets/images",
+            production ? "[name].[contenthash][ext]" : "[name][ext]"
+          ),
         },
       },
       {
@@ -60,7 +67,10 @@ module.exports = {
         exclude: "/node_modules/",
         type: "asset/resource",
         generator: {
-          filename: path.join("public/assets/icons", "[name][ext]"),
+          filename: path.join(
+            "public/assets/icons",
+            production ? "[name].[contenthash][ext]" : "[name][ext]"
+          ),
         },
       },
       {
@@ -68,7 +78,10 @@ module.exports = {
         exclude: "/node_modules/",
         type: "asset/resource",
         generator: {
-          filename: path.join("public/assets/fonts", "[name][ext]"),
+          filename: path.join(
+            "public/assets/fonts",
+            production ? "[name].[contenthash][ext]" : "[name][ext]"
+          ),
         },
       },
     ],
@@ -82,11 +95,54 @@ module.exports = {
       title: "InCase",
       template: "./public/index.html",
       favicon: "./public/favicon.ico",
+      inject: "body",
     }),
     new MiniCssExtractPlugin({
-      filename: "[name].css",
+      filename: production ? "[name].[contenthash].css" : "[name].css",
+    }),
+    new CompressionPlugin({
+      filename: "[path][base].gz",
+      algorithm: "gzip",
+      test: /\.js$|\.css$|\.html$/,
+      threshold: 10240,
+      minRatio: 0.8,
+    }),
+    new CompressionPlugin({
+      filename: "[path][base].br",
+      algorithm: "brotliCompress",
+      test: /\.(js|css|html|svg)$/,
+      compressionOptions: {
+        params: {
+          [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+        },
+      },
+      threshold: 10240,
+      minRatio: 0.8,
     }),
   ],
+  optimization: {
+    splitChunks: {
+      chunks: "all",
+      minSize: 20000,
+      minRemainingSize: 0,
+      minChunks: 1,
+      maxAsyncRequests: 30,
+      maxInitialRequests: 30,
+      enforceSizeThreshold: 50000,
+      cacheGroups: {
+        defaultVendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: -10,
+          reuseExistingChunk: true,
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
+        },
+      },
+    },
+  },
   devServer: {
     historyApiFallback: true,
     hot: true,
