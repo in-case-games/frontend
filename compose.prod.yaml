@@ -2,10 +2,9 @@ version: "3.8"
 services:
   frontend:
     image: "frontend"
-    build:
-      context: .
-      dockerfile: Dockerfile
     volumes:
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ~/nginx/conf.d/:/etc/nginx/conf.d/
+      - ~/.ssl/:/etc/.ssl/private/
     ports:
       - "80:80"
+      - "443:443"
