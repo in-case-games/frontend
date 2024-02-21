@@ -7,9 +7,16 @@ import {
 } from "../assets/images/icons";
 import { GameCSGO as CSGO, GameDota2 as Dota2 } from "../assets/images/main";
 
-const GATE_AWAY_API_URL = "https://localhost:5000/api/";
-const FILE_SERVER_URL = "http://localhost:8080/";
-const SITE_URL = "http://localhost:3000/";
+const production = process.env.NODE_ENV === "production";
+const GATE_AWAY_API_URL = production
+  ? "https://api.in-case.games/api/"
+  : "https://localhost:5000/api/";
+const FILE_SERVER_URL = production
+  ? "https://fileserver.in-case.games:8080/"
+  : "http://localhost:8080/";
+const SITE_URL = production
+  ? "https://in-case.games/"
+  : "http://localhost:3000/";
 
 const Games = [
   {
