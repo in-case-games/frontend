@@ -19,6 +19,7 @@ const Reviews = () => {
   const [isOpenLoadWindow, setIsOpenLoadWindow] = useState(false);
 
   const [reviews, setReviews] = useState([]);
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   const [miniProfile, setMiniProfile] = useState();
   const [item, setItem] = useState();
@@ -29,31 +30,38 @@ const Reviews = () => {
   useEffect(() => {
     const interval = setInterval(
       async () =>
-        await Handler.error(async () => {
-          setIsStart(false);
-          const response = await userApi.getReviewLast(10);
-          const result = [];
+        await Handler.error(
+          async () => {
+            setIsStart(false);
+            const response = await userApi.getReviewLast(10);
+            const result = [];
 
-          for (let i = 0; i < response.length; i++) {
-            const r = response[i];
-            const image = await userApi.getImageByUserId(r.userId);
-            result.push(
-              <Review
-                id={r.id}
-                image={image}
-                name={r.title}
-                date={r.creationDate}
-                showMiniProfile={() => setMiniProfile(r.userId)}
-                content={r.content}
-                score={r.score}
-                key={r.id}
-              />
-            );
-          }
+            for (let i = 0; i < response.length; i++) {
+              const r = response[i];
+              const image = await userApi.getImageByUserId(r.userId);
+              result.push(
+                <Review
+                  id={r.id}
+                  image={image}
+                  name={r.title}
+                  date={r.creationDate}
+                  showMiniProfile={() => setMiniProfile(r.userId)}
+                  content={r.content}
+                  score={r.score}
+                  key={r.id}
+                />
+              );
+            }
 
-          setReviews(result);
-        }),
-      isStart ? 100 : 5000
+            setReviews(result);
+          },
+          undefined,
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay,
+          "REVIEWS"
+        ),
+      isStart ? 100 + penaltyDelay : 5000 + penaltyDelay
     );
 
     return () => clearInterval(interval);

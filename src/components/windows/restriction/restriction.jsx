@@ -42,7 +42,8 @@ const Restriction = (props) => {
           undefined,
           undefined,
           penaltyDelay,
-          setPenaltyDelay
+          setPenaltyDelay,
+          "RESTRICTION"
         ),
       100 + penaltyDelay
     );

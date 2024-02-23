@@ -6,9 +6,14 @@ const error = async (
   actionCatch,
   setErrorMessage,
   penaltyDelay,
-  setPenaltyDelay
+  setPenaltyDelay,
+  sourceMethodName
 ) => {
   try {
+    if (setPenaltyDelay !== undefined && penaltyDelay !== undefined) {
+      setPenaltyDelay(penaltyDelay + 2000);
+    }
+
     const response = await action();
     const utcDate = Converter.getUtcDate();
 
@@ -33,8 +38,18 @@ const error = async (
         code: response?.status,
       });
     }
+
+    if (
+      setPenaltyDelay !== undefined &&
+      penaltyDelay !== undefined &&
+      penaltyDelay > 0
+    ) {
+      setPenaltyDelay(penaltyDelay - 2000 < 0 ? 0 : penaltyDelay - 2000);
+    }
   } catch (ex) {
-    console.log(ex);
+    console.log(
+      `${ex} - ${sourceMethodName} - ${setPenaltyDelay} - ${penaltyDelay}`
+    );
     const utcDate = Converter.getUtcDate();
     const message = ex?.response?.data?.error?.message
       ? ex.response.data.error.message
@@ -43,12 +58,13 @@ const error = async (
     if ((!actionCatch || !(await actionCatch(ex))) && setErrorMessage) {
       setErrorMessage(message);
     }
-    if (setPenaltyDelay && penaltyDelay) {
-      setPenaltyDelay(penaltyDelay + 1000);
+
+    if (setPenaltyDelay !== undefined && penaltyDelay !== undefined) {
+      setPenaltyDelay(penaltyDelay + 5000);
       setTimeout(
         () =>
           setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
-        1000
+        5000
       );
     }
 

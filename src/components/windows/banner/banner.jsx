@@ -30,7 +30,8 @@ const Banner = (props) => {
           undefined,
           setErrorMessage,
           penaltyDelay,
-          setPenaltyDelay
+          setPenaltyDelay,
+          "BANNER"
         );
       }
     }, 100 + penaltyDelay);

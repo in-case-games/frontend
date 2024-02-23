@@ -46,7 +46,8 @@ const BoxInventory = (props) => {
           undefined,
           undefined,
           penaltyDelay,
-          setPenaltyDelay
+          setPenaltyDelay,
+          "BOX_INVENTORY"
         ),
       500 + penaltyDelay
     );

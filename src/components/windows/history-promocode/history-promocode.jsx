@@ -24,9 +24,10 @@ const HistoryPromocode = (props) => {
         undefined,
         undefined,
         penaltyDelay,
-        setPenaltyDelay
+        setPenaltyDelay,
+        "HISTORY_PROMOCODE"
       );
-    }, 500);
+    }, 500 + penaltyDelay);
 
     return () => clearInterval(interval);
   });

@@ -50,7 +50,8 @@ const BoxGroup = (props) => {
           undefined,
           undefined,
           penaltyDelay,
-          setPenaltyDelay
+          setPenaltyDelay,
+          "BOX_GROUP"
         ),
       100 + penaltyDelay
     );

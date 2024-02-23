@@ -77,7 +77,8 @@ const MiniProfileWindow = (props) => {
           undefined,
           undefined,
           penaltyDelay,
-          setPenaltyDelay
+          setPenaltyDelay,
+          "MINI_PROFILE"
         );
       }
     }, 100 + penaltyDelay);

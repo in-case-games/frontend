@@ -54,7 +54,8 @@ const HistoryOpening = (props) => {
         undefined,
         undefined,
         penaltyDelay,
-        setPenaltyDelay
+        setPenaltyDelay,
+        "HISTORY_OPENING"
       );
 
       if (temp.box && temp.item) setIsLoading(false);

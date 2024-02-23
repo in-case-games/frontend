@@ -68,7 +68,8 @@ const Boxes = (props) => {
           undefined,
           undefined,
           penaltyDelay,
-          setPenaltyDelay
+          setPenaltyDelay,
+          "BOXES"
         );
         setIsBanned(false);
       }

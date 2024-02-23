@@ -53,7 +53,8 @@ const OpeningHistory = (props) => {
           undefined,
           undefined,
           penaltyDelay,
-          setPenaltyDelay
+          setPenaltyDelay,
+          "OPENING_HISTORY"
         );
       }
     }, 10 + penaltyDelay);

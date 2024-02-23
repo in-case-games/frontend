@@ -22,20 +22,9 @@
   height: 100%;
 }
 
-.header_online {
+.header_language {
   display: flex;
   margin-right: 40px;
-
-  img {
-    margin-right: 5px;
-  }
-
-  .online {
-    color: white;
-    font-size: 16px;
-    font-family: "Play";
-    text-align: center;
-  }
 }
 
 .header_navbar {
@@ -55,11 +44,6 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-
-  .list_lunge {
-    display: flex;
-    align-items: center;
-  }
 }
 
 .header_search_bar {
@@ -111,7 +95,7 @@
   }
 }
 
-@media (max-width: 1162px) {
+@media (max-width: 1166px) {
   .header {
     height: 120px;
   }
@@ -120,8 +104,8 @@
   }
 }
 
-@media (max-width: 1010px) {
-  .header_online {
+@media (max-width: 1012px) {
+  .header_language {
     margin-right: 10px;
   }
   .container {
@@ -129,7 +113,7 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 902px) {
   .header {
     height: 180px;
   }
@@ -144,11 +128,11 @@
 
   .header_user_bar,
   .header_search_bar,
-  .header_online {
+  .header_language {
     margin-top: 20px;
   }
 
-  .header_online {
+  .header_language {
     order: -1;
   }
 
@@ -162,34 +146,33 @@
   }
 }
 
-@media (max-width: 700px) {
-  .header_search_bar {
+@media (max-width: 848px) {
+  .header_navbar {
     order: 1;
   }
 }
 
-@media (max-width: 550px) {
+@media (max-width: 706px) {
   .container {
     padding: 0 10px;
   }
+}
 
-  .header {
-    height: 200px;
+@media (max-width: 646px) {
+  .header_user_bar {
+    order: -1;
   }
+}
 
+@media (max-width: 616px) {
   .header_navbar nav {
     margin-left: -20px;
     flex-wrap: wrap;
     justify-content: center;
-    height: 60px;
   }
 }
 
 @media (max-width: 500px) {
-  .header {
-    height: 240px;
-  }
-
   .header__wrapper {
     align-content: space-between;
     justify-content: center;
@@ -198,7 +181,7 @@
 
 @media (max-width: 458px) {
   .header {
-    height: 350px;
+    height: 190px;
   }
 
   .header_user_bar {
@@ -208,11 +191,13 @@
   }
 }
 
-@media (max-width: 336px) {
+@media (max-width: 426px) {
   .header {
-    height: 440px;
+    height: 230px;
   }
+}
 
+@media (max-width: 338px) {
   .header_user_bar {
     display: flex;
     align-items: center;
@@ -222,5 +207,11 @@
       align-items: center;
       justify-content: center;
     }
+  }
+}
+
+@media (max-width: 315px) {
+  .header {
+    height: 300px;
   }
 }

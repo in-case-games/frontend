@@ -24,6 +24,7 @@ const OpeningsRoulette = () => {
   const windowWidth = useRef(window.innerWidth);
 
   const [isStart, setIsStart] = useState(true);
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   const [items, setItems] = useState();
   const [games, setGames] = useState();
@@ -38,29 +39,36 @@ const OpeningsRoulette = () => {
   useEffect(() => {
     const interval = setInterval(
       async () => {
-        await Handler.error(async () => {
-          setIsStart(false);
+        await Handler.error(
+          async () => {
+            setIsStart(false);
 
-          const g = games || (await loadedGames());
-          const history = await loadedHistory();
-          const result = [];
+            const g = games || (await loadedGames());
+            const history = await loadedHistory();
+            const result = [];
 
-          for (let i = 0; i < history.length; i++) {
-            let h = await pushItemToHistory(history[i], g);
+            for (let i = 0; i < history.length; i++) {
+              let h = await pushItemToHistory(history[i], g);
 
-            result.push(
-              <Item
-                history={h}
-                showMiniProfile={() => setMiniProfile(h.userId)}
-                key={h.id}
-              />
-            );
-          }
+              result.push(
+                <Item
+                  history={h}
+                  showMiniProfile={() => setMiniProfile(h.userId)}
+                  key={h.id}
+                />
+              );
+            }
 
-          setItems(result);
-        });
+            setItems(result);
+          },
+          undefined,
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay,
+          "OPENINGS_ROULETTE"
+        );
       },
-      isStart ? 1000 : 5000
+      isStart ? 1000 + penaltyDelay : 5000 + penaltyDelay
     );
 
     return () => {

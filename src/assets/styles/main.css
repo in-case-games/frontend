@@ -15,38 +15,32 @@ header footer {
   flex: 0 0 auto;
 }
 
-@media (max-width: 1150px) {
+@media (max-width: 1166px) {
   main {
     margin-top: 120px;
   }
 }
 
-@media (max-width: 890px) {
+@media (max-width: 902px) {
   main {
     margin-top: 180px;
   }
 }
 
-@media (max-width: 550px) {
-  main {
-    margin-top: 200px;
-  }
-}
-
-@media (max-width: 500px) {
-  main {
-    margin-top: 240px;
-  }
-}
-
 @media (max-width: 458px) {
   main {
-    margin-top: 350px;
+    margin-top: 190px;
   }
 }
 
-@media (max-width: 336px) {
+@media (max-width: 426px) {
   main {
-    margin-top: 440px;
+    margin-top: 230px;
+  }
+}
+
+@media (max-width: 315px) {
+  main {
+    margin-top: 300px;
   }
 }

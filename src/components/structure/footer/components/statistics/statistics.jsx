@@ -18,25 +18,33 @@ const Statistics = () => {
   const [isStart, setIsStart] = useState(true);
 
   const [statistics, setStatistics] = useState(null);
+  const [penaltyDelay, setPenaltyDelay] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(
       async () =>
-        await Handler.error(async () => {
-          setIsStart(false);
+        await Handler.error(
+          async () => {
+            setIsStart(false);
 
-          const response = await siteApi.getStatistics();
+            const response = await siteApi.getStatistics();
 
-          setStatistics({
-            reviews: response.reviews,
-            users: response.users,
-            boxes: response.lootBoxes,
-            items: response.withdrawnItems,
-            inCoins: response.withdrawnFunds,
-            online: 0,
-          });
-        }),
-      isStart ? 100 : 5000
+            setStatistics({
+              reviews: response.reviews,
+              users: response.users,
+              boxes: response.lootBoxes,
+              items: response.withdrawnItems,
+              inCoins: response.withdrawnFunds,
+              online: 0,
+            });
+          },
+          undefined,
+          undefined,
+          penaltyDelay,
+          setPenaltyDelay,
+          "STATISTICS"
+        ),
+      isStart ? 100 + penaltyDelay : 5000 + penaltyDelay
     );
 
     return () => {

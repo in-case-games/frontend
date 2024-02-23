@@ -51,7 +51,8 @@ const Box = (props) => {
           undefined,
           setErrorMessage,
           penaltyDelay,
-          setPenaltyDelay
+          setPenaltyDelay,
+          "BOX"
         );
       }
     }, 100 + penaltyDelay);

@@ -28,6 +28,7 @@ import Constants from "../../../constants";
 import styles from "./header.module";
 
 const Header = () => {
+  const width = window.innerWidth;
   const userApi = new UserApi();
   const boxApi = new BoxApi();
   const itemApi = new ItemApi();
@@ -115,7 +116,8 @@ const Header = () => {
         undefined,
         undefined,
         penaltyDelay,
-        setPenaltyDelay
+        setPenaltyDelay,
+        "HEADER"
       );
       if (TokenService.getAccessToken() !== undefined && user === null)
         setIsAuth(null);
@@ -215,9 +217,16 @@ const Header = () => {
     <header className={styles.header}>
       <div className={styles.container}>
         <div className={styles.header__wrapper}>
-          <div className={styles.header_online}>
-            <img alt="" src={DotLightGreen}></img>
-            <div className={styles.online}>1000</div>
+          <div className={styles.header_language}>
+            <div className={styles.list_lunge}>
+              <ListLunge
+                isActive={false}
+                setIsActive={() => {}}
+                tittle="RU"
+                icon={FlagRUS}
+                items={null}
+              />
+            </div>
           </div>
           <div className={styles.header_navbar}>
             <Logo />
@@ -242,34 +251,36 @@ const Header = () => {
               />
             </nav>
           </div>
-          <div className={styles.header_search_bar}>
-            <div className={styles.search}>
-              <Input
-                isApply={true}
-                color="#00ff82"
-                placeholder="Поиск"
-                value={search}
-                setValue={async (v) => {
-                  setTimeBeforeGoSearch(500);
-                  setSearch(v);
-                }}
-              />
-              <div className={styles.search_items}>
-                {searchDetected.items?.length > 0
-                  ? searchDetected.items.map((i) => (
-                      <div
-                        className={styles.search_item}
-                        key={i.id + "search"}
-                        onClick={i.click}
-                      >
-                        <img alt="" src={i.image} className={styles.image} />
-                        <div className={styles.name}>{i.name}</div>
-                      </div>
-                    ))
-                  : null}
+          {width > 458 ? (
+            <div className={styles.header_search_bar}>
+              <div className={styles.search}>
+                <Input
+                  isApply={true}
+                  color="#00ff82"
+                  placeholder="Поиск"
+                  value={search}
+                  setValue={async (v) => {
+                    setTimeBeforeGoSearch(500);
+                    setSearch(v);
+                  }}
+                />
+                <div className={styles.search_items}>
+                  {searchDetected.items?.length > 0
+                    ? searchDetected.items.map((i) => (
+                        <div
+                          className={styles.search_item}
+                          key={i.id + "search"}
+                          onClick={i.click}
+                        >
+                          <img alt="" src={i.image} className={styles.image} />
+                          <div className={styles.name}>{i.name}</div>
+                        </div>
+                      ))
+                    : null}
+                </div>
               </div>
             </div>
-          </div>
+          ) : null}
           <div className={styles.header_user_bar}>
             <div className={styles.user_bar}>
               <UserBar
@@ -277,15 +288,6 @@ const Header = () => {
                 isAuth={isAuth === true}
                 isSignIn={isAuth === false}
                 showWindow={exchangeWindow}
-              />
-            </div>
-            <div className={styles.list_lunge}>
-              <ListLunge
-                isActive={false}
-                setIsActive={() => {}}
-                tittle="RU"
-                icon={FlagRUS}
-                items={null}
               />
             </div>
           </div>

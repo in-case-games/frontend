@@ -32,7 +32,8 @@ const Promocode = (props) => {
           undefined,
           undefined,
           penaltyDelay,
-          setPenaltyDelay
+          setPenaltyDelay,
+          "PROMOCODE"
         ),
       100 + penaltyDelay
     );
