@@ -1,10 +1,10 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 
-const Email = ({ children }) => (
+const Email = ({ children, title = "InCase - Подтверждение через почту" }) => (
   <div>
     <Helmet>
-      <title>InCase - Подтверждение через почту</title>
+      <title>{title}</title>
     </Helmet>
     {children}
   </div>

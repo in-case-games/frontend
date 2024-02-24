@@ -11,7 +11,7 @@ const error = async (
 ) => {
   try {
     if (setPenaltyDelay !== undefined && penaltyDelay !== undefined) {
-      setPenaltyDelay(penaltyDelay + 2000);
+      setPenaltyDelay(penaltyDelay + 1000);
     }
 
     const response = await action();
@@ -44,7 +44,7 @@ const error = async (
       penaltyDelay !== undefined &&
       penaltyDelay > 0
     ) {
-      setPenaltyDelay(penaltyDelay - 2000 < 0 ? 0 : penaltyDelay - 2000);
+      setPenaltyDelay(penaltyDelay - 1000 < 0 ? 0 : penaltyDelay - 1000);
     }
   } catch (ex) {
     console.log(
@@ -60,11 +60,11 @@ const error = async (
     }
 
     if (setPenaltyDelay !== undefined && penaltyDelay !== undefined) {
-      setPenaltyDelay(penaltyDelay + 5000);
+      setPenaltyDelay(penaltyDelay + 1000);
       setTimeout(
         () =>
           setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
-        5000
+        1500
       );
     }
 

@@ -13,7 +13,7 @@ const Email = () => (
     <Route
       path="confirm/account"
       element={
-        <Layout>
+        <Layout title="InCase - Подтверждение аккаунта">
           <AccountConfirmPage />
         </Layout>
       }
@@ -21,7 +21,7 @@ const Email = () => (
     <Route
       path="confirm/delete"
       element={
-        <Layout>
+        <Layout title="InCase - Удаление аккаунта">
           <AccountDeletePage />
         </Layout>
       }
@@ -29,7 +29,7 @@ const Email = () => (
     <Route
       path="confirm/update/login"
       element={
-        <Layout>
+        <Layout title="InCase - Смена логина">
           <AccountChangeLoginPage />
         </Layout>
       }
@@ -37,7 +37,7 @@ const Email = () => (
     <Route
       path="confirm/update/email"
       element={
-        <Layout>
+        <Layout title="InCase - Смена почты">
           <AccountChangeEmailPage />
         </Layout>
       }
@@ -45,7 +45,7 @@ const Email = () => (
     <Route
       path="confirm/update/password"
       element={
-        <Layout>
+        <Layout title="InCase - Смена пароля">
           <AccountChangePasswordPage />
         </Layout>
       }

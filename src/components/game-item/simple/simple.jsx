@@ -5,7 +5,7 @@ import {
   Info,
   TransferIvory as Transfer,
 } from "../../../assets/images/icons";
-import { LoadingHourglass as Loading, LoadingArrow } from "../../loading";
+import { LoadingHourglass as Hourglass, LoadingArrow } from "../../loading";
 import { Converter } from "../../../helpers/converter";
 import { StripCounterSlider } from "../../common/inputs";
 import Constants from "../../../constants";
@@ -70,7 +70,10 @@ const Simple = (props) => {
       </div>
       {props.isShowUpdate ? (
         <div className={styles.loading}>
-          <Loading updateDate={props.item?.updateDate} rate={300} />
+          <Hourglass
+            updateTo={props.item?.updateTo}
+            updatedIn={props.item?.updatedIn}
+          />
         </div>
       ) : null}
       {props.sliderStripProps ? (

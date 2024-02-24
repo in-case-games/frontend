@@ -64,9 +64,9 @@ const BoxInventory = (props) => {
         setBackOperation(t);
 
         if (t === 0) {
-          await Handler.error(async () => await operations[operation]());
           setOperation(null);
           setBackOperation(null);
+          await Handler.error(async () => await operations[operation]());
         }
       }
     }, 1000);

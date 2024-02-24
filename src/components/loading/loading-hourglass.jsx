@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./loading.module";
+import { Converter } from "../../helpers/converter";
 
 const LoadingHourglass = (props) => {
   const observer = useRef(null);
@@ -19,14 +20,14 @@ const LoadingHourglass = (props) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const date = Math.round(new Date(props.updateDate) / 1000);
-      const newDate = Math.round(new Date() / 1000);
+      const updatedIn = Math.round(new Date(props.updatedIn) / 1000);
+      const updateTo = Math.round(new Date(props.updateTo) / 1000);
+      const currentDate = Math.round(new Date(Converter.getUtcDate()) / 1000);
 
-      const difference = newDate - date;
-      const rate = props.rate ? props.rate : 200;
+      const totalTime = updateTo - updatedIn;
+      const remainedTime = updateTo - currentDate;
 
-      let temp = 1 - difference / rate;
-
+      let temp = remainedTime / totalTime;
       temp = temp < 0 ? 0 : temp;
 
       if (temp >= 0.7) setColor("green");

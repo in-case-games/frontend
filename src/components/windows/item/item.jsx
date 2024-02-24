@@ -50,6 +50,9 @@ const Item = (props) => {
         setBackOperation(t);
 
         if (t === 0) {
+          setOperation(null);
+          setBackOperation(null);
+
           await Handler.error(
             async () => await operations[operation](),
             async () => {
@@ -58,9 +61,6 @@ const Item = (props) => {
             },
             setErrorMessage
           );
-
-          setOperation(null);
-          setBackOperation(null);
         }
       }
     }, 1000);
@@ -210,7 +210,7 @@ const Item = (props) => {
                 style={{ background: gradient }}
               />
             }
-            <Hourglass updateDate={item?.updateDate} rate={300} />
+            <Hourglass updateTo={item?.updateTo} updatedIn={item?.updatedIn} />
           </div>
           <div className={styles.delimiter}></div>
           <div className={styles.tittle}>Подробная информация</div>

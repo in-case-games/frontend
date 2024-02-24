@@ -69,13 +69,13 @@ const Box = (props) => {
         setBackOperation(temp);
 
         if (temp === 0) {
+          setOperation(null);
+          setBackOperation(null);
           await Handler.error(
             async () => await operations[operation](),
             undefined,
             setErrorMessage
           );
-          setOperation(null);
-          setBackOperation(null);
           setIsLoading(true);
         }
       }
