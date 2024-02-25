@@ -1,56 +1,72 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
-import { Email as Layout } from "../layouts";
-import { NotFound as NotFoundPage } from "../pages/not-found";
-import { AccountConfirm as AccountConfirmPage } from "../pages/account-confirm";
-import { AccountDelete as AccountDeletePage } from "../pages/account-delete";
-import { AccountChangeLogin as AccountChangeLoginPage } from "../pages/account-change-login";
-import { AccountChangeEmail as AccountChangeEmailPage } from "../pages/account-change-email";
-import { AccountChangePassword as AccountChangePasswordPage } from "../pages/account-change-password";
+import { BootScreenSaver } from "../components/loading";
+
+const NotFoundPage = lazy(() => import("../pages/not-found/not-found"));
+const AccountConfirmPage = lazy(() =>
+  import("../pages/account-confirm/account-confirm")
+);
+const AccountDeletePage = lazy(() => import("../pages/account-delete"));
+const AccountChangeLoginPage = lazy(() =>
+  import("../pages/account-change-login/account-change-login")
+);
+const AccountChangeEmailPage = lazy(() =>
+  import("../pages/account-change-email/account-change-email")
+);
+const AccountChangePasswordPage = lazy(() =>
+  import("../pages/account-change-password/account-change-password")
+);
 
 const Email = () => (
   <Routes>
     <Route
       path="confirm/account"
       element={
-        <Layout title="InCase - Подтверждение аккаунта">
+        <Suspense fallback={<BootScreenSaver />}>
           <AccountConfirmPage />
-        </Layout>
+        </Suspense>
       }
     />
     <Route
       path="confirm/delete"
       element={
-        <Layout title="InCase - Удаление аккаунта">
+        <Suspense fallback={<BootScreenSaver />}>
           <AccountDeletePage />
-        </Layout>
+        </Suspense>
       }
     />
     <Route
       path="confirm/update/login"
       element={
-        <Layout title="InCase - Смена логина">
+        <Suspense fallback={<BootScreenSaver />}>
           <AccountChangeLoginPage />
-        </Layout>
+        </Suspense>
       }
     />
     <Route
       path="confirm/update/email"
       element={
-        <Layout title="InCase - Смена почты">
+        <Suspense fallback={<BootScreenSaver />}>
           <AccountChangeEmailPage />
-        </Layout>
+        </Suspense>
       }
     />
     <Route
       path="confirm/update/password"
       element={
-        <Layout title="InCase - Смена пароля">
+        <Suspense fallback={<BootScreenSaver />}>
           <AccountChangePasswordPage />
-        </Layout>
+        </Suspense>
       }
     />
-    <Route path="*" element={<NotFoundPage />} />
+    <Route
+      path="*"
+      element={
+        <Suspense fallback={<BootScreenSaver />}>
+          <NotFoundPage />
+        </Suspense>
+      }
+    />
   </Routes>
 );
 

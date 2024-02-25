@@ -8,6 +8,10 @@ const FAQ = () => (
   <div className={styles.faq}>
     <Helmet>
       <title>InCase - FAQ</title>
+      <meta
+        name="description"
+        content="InCase кейсы по кс го, дота 2. FAQ информация для гостей и наших клиентов, подскажем по популярным вопросам. По любым вопросам обращаться в наши соц.сети."
+      />
     </Helmet>
     <div className={styles.container_small}>
       <div className={styles.tittle}>Вопросы и ответы</div>

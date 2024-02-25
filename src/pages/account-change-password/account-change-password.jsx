@@ -44,6 +44,14 @@ const AccountChangePassword = () => {
 
   return (
     <div className={styles.account_change_password}>
+      <Helmet>
+        <title>InCase - Смена пароля</title>
+        <meta
+          name="description"
+          content="InCase поменяем ваш пароль на другую. Будьте уверены мы сделаем все качественно, открывайте кейсы и оставьте все хлопоты на нас."
+        />
+        <meta name="robots" content="noindex" />
+      </Helmet>
       <div className={styles.tittle}>
         {!isSuccess ? "Подтвердите новый пароль" : "Ваш аккаунт сменил пароль"}
       </div>

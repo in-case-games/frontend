@@ -1,7 +1,22 @@
+.boot_screen_saver {
+  width: 100%;
+  height: 200px;
+
+  display: flex;
+  justify-content: center;
+
+  .screen_saver__inner {
+    max-width: 150px;
+  }
+}
+
 .loading {
   height: 100%;
   width: 100%;
+}
 
+.loading,
+.screen_saver__inner {
   .loading_static {
     height: 100%;
     width: 100%;

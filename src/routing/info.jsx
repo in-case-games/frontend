@@ -1,11 +1,27 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
-import { Info as InfoPage } from "../pages/info";
+import { BootScreenSaver } from "../components/loading";
+
+const InfoPage = lazy(() => import("../pages/info/info"));
 
 const Info = () => (
   <Routes>
-    <Route path=":id" element={<InfoPage />} />
-    <Route path="*" element={<InfoPage />} />
+    <Route
+      path=":id"
+      element={
+        <Suspense fallback={<BootScreenSaver />}>
+          <InfoPage />
+        </Suspense>
+      }
+    />
+    <Route
+      path="*"
+      element={
+        <Suspense fallback={<BootScreenSaver />}>
+          <InfoPage />
+        </Suspense>
+      }
+    />
   </Routes>
 );
 

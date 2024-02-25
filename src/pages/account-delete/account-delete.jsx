@@ -46,6 +46,14 @@ const AccountDeleteHandler = () => {
 
   return (
     <div className={styles.account_delete}>
+      <Helmet>
+        <title>InCase - Удаление аккаунта</title>
+        <meta
+          name="description"
+          content="InCase ждем вас вновь, ведь только у нас лучший дроп."
+        />
+        <meta name="robots" content="noindex" />
+      </Helmet>
       {errorMessage ? <div className={styles.error}>{errorMessage}</div> : null}
       {isSuccess ? (
         <div className={styles.tittle}>

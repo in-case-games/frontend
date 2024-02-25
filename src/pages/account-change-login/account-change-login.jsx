@@ -39,6 +39,14 @@ const AccountChangeLogin = () => {
 
   return (
     <div className={styles.account_change_login}>
+      <Helmet>
+        <title>InCase - Смена логина</title>
+        <meta
+          name="description"
+          content="InCase поменяем ваш логин на другой. Будьте уверены мы сделаем все качественно, открывайте кейсы и оставьте все хлопоты на нас."
+        />
+        <meta name="robots" content="noindex" />
+      </Helmet>
       <div className={styles.tittle}>
         {!isSuccess ? "Подтвердите новый логин" : "Ваш аккаунт сменил логин"}
       </div>

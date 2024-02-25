@@ -7,6 +7,7 @@ const Profile = () => (
   <div className={styles.profile}>
     <Helmet>
       <title>InCase - Профиль</title>
+      <meta name="robots" content="noindex" />
     </Helmet>
     <div className={styles.container}>
       <Panel />

@@ -28,7 +28,16 @@ import Constants from "../../../constants";
 import styles from "./header.module";
 
 const Header = () => {
-  const width = window.innerWidth;
+  const [width, setWidth] = useState(window.innerWidth);
+  function handleWindowSizeChange() {
+    setWidth(window.innerWidth);
+  }
+  useEffect(() => {
+    window.addEventListener("resize", handleWindowSizeChange);
+    return () => {
+      window.removeEventListener("resize", handleWindowSizeChange);
+    };
+  }, []);
   const userApi = new UserApi();
   const boxApi = new BoxApi();
   const itemApi = new ItemApi();

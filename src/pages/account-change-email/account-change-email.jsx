@@ -39,6 +39,14 @@ const AccountChangeEmail = () => {
 
   return (
     <div className={styles.account_change_email}>
+      <Helmet>
+        <title>InCase - Смена почты</title>
+        <meta
+          name="description"
+          content="InCase поменяем вашу почту на другую. Будьте уверены мы сделаем все качественно, открывайте кейсы и оставьте все хлопоты на нас."
+        />
+        <meta name="robots" content="noindex" />
+      </Helmet>
       <div className={styles.tittle}>
         {!isSuccess ? "Подтвердите новую почту" : "Ваш аккаунт сменил почту"}
       </div>

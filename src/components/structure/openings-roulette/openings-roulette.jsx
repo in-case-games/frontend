@@ -21,8 +21,8 @@ const OpeningsRoulette = () => {
   const userApi = new UserApi();
   const itemApi = new ItemApi();
   const gameApi = new GameApi();
-  const windowWidth = useRef(window.innerWidth);
 
+  const [width, setWidth] = useState(window.innerWidth);
   const [isStart, setIsStart] = useState(true);
   const [penaltyDelay, setPenaltyDelay] = useState(0);
 
@@ -35,6 +35,17 @@ const OpeningsRoulette = () => {
 
   const [miniProfile, setMiniProfile] = useState();
   const [isOpenLoadWindow, setIsOpenLoadWindow] = useState(false);
+
+  function handleWindowSizeChange() {
+    setWidth(window.innerWidth);
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleWindowSizeChange);
+    return () => {
+      window.removeEventListener("resize", handleWindowSizeChange);
+    };
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(
@@ -101,7 +112,7 @@ const OpeningsRoulette = () => {
 
     if (history.length === 0) history = await userApi.getRouletteOpenings();
 
-    const maxItemsWindow = Math.floor(windowWidth.current / 160) + 1;
+    const maxItemsWindow = Math.floor(width.current / 160) + 1;
 
     history = history.slice(0, maxItemsWindow);
 

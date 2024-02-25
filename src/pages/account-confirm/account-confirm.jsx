@@ -41,6 +41,14 @@ const AccountConfirm = () => {
 
   return (
     <div className={styles.account_confirm}>
+      <Helmet>
+        <title>InCase - Подтверждение аккаунта</title>
+        <meta
+          name="description"
+          content="InCase подтвердите аккаунт и будьте уверены, мы лучший сайт по открытию кейсов cs go, dota 2."
+        />
+        <meta name="robots" content="noindex" />
+      </Helmet>
       {errorMessage ? <div className={styles.error}>{errorMessage}</div> : null}
       {!errorMessage && !isAuth() ? (
         <div className={styles.tittle}>Успешно произведен вход в аккаунт</div>

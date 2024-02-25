@@ -7,6 +7,10 @@ const Info = () => (
   <div className={styles.info}>
     <Helmet>
       <title>InCase - Информация</title>
+      <meta
+        name="description"
+        content="InCase информация для клиентов и гостей, ознакомьтесь, наша политика современна и справедлива. По любым вопросам обращаться в наши соц.сети."
+      />
     </Helmet>
     <div className={styles.container_small}>
       <InfoPanel />

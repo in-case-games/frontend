@@ -157,7 +157,13 @@ const Box = () => {
   return (
     <div className={styles.box}>
       <Helmet>
-        <title>InCase - Кейс</title>
+        <title>{`InCase - Кейс ${box?.name || ""}`}</title>
+        <meta
+          name="description"
+          content={`InCase самый сочный дроп в кейсе ${
+            box?.name || ""
+          }. Будьте уверены, мы лучшие в сфере скинов.`}
+        />
       </Helmet>
       <div className={styles.container_small}>
         <div className={styles.display}>
