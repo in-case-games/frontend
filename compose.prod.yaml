@@ -3,7 +3,8 @@ services:
   frontend:
     image: "frontend"
     volumes:
-      - ~/nginx/conf.prod.d/:/etc/nginx/conf.prod.d/
+      - ~/nginx/conf.prod.d/:/etc/nginx/conf.d/
+      - ~/.ssl/ca.crt:/etc/ssl/ca.crt
       - ~/.ssl/:/etc/.ssl/private/
     ports:
       - "80:80"
