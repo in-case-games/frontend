@@ -1,1 +1,1 @@
-export { default as LoadImage } from "./load-image";
+export { default as LoadImage } from './load-image'

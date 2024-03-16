@@ -1,1 +1,1 @@
-export { default as UserBar } from "./user-bar";
+export { default as UserBar } from './user-bar'

@@ -1,1 +1,1 @@
-export { default as HistoryPromocode } from "./history-promocode";
+export { default as HistoryPromocode } from './history-promocode'

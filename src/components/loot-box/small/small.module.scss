@@ -1,21 +1,21 @@
 .box_small {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
-  height: 70px;
-  width: 80px;
+	height: 70px;
+	width: 80px;
 
-  border-radius: 15px;
-  background: var(--color-black__4);
+	border-radius: 15px;
+	background: var(--color-black__4);
 
-  cursor: pointer;
+	cursor: pointer;
 
-  margin: 3px;
+	margin: 3px;
 
-  .image {
-    height: 50px;
+	.image {
+		height: 50px;
 
-    padding: 10px;
-  }
+		padding: 10px;
+	}
 }

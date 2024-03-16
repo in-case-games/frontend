@@ -1,128 +1,128 @@
 .box_group {
-  display: flex;
-  justify-content: center;
-  text-align: center;
+	display: flex;
+	justify-content: center;
+	text-align: center;
 
-  border-radius: 15px;
-  background: var(--color-black__2);
+	border-radius: 15px;
+	background: var(--color-black__2);
 
-  padding: 40px;
+	padding: 40px;
 
-  .group_content {
-    display: flex;
-    justify-content: space-evenly;
-    flex-direction: column;
-    align-items: center;
-  }
+	.group_content {
+		display: flex;
+		justify-content: space-evenly;
+		flex-direction: column;
+		align-items: center;
+	}
 }
 
 .group_header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
 
-  .tittle {
-    font-size: 28px;
-    margin-left: 5px;
-  }
+	.tittle {
+		font-size: 28px;
+		margin-left: 5px;
+	}
 }
 
 .group_info {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
 
-  .component {
-    display: flex;
-    align-items: center;
+	.component {
+		display: flex;
+		align-items: center;
 
-    min-width: 300px;
-  }
+		min-width: 300px;
+	}
 
-  .button_add {
-    border: 2px solid var(--color-orange__1);
-    border-radius: 8px;
+	.button_add {
+		border: 2px solid var(--color-orange__1);
+		border-radius: 8px;
 
-    cursor: pointer;
+		cursor: pointer;
 
-    padding: 8px 10px;
-  }
+		padding: 8px 10px;
+	}
 
-  .delimiter {
-    border: 1px solid var(--color-orange__1);
-    width: 100%;
-    margin: 20px 0;
-  }
+	.delimiter {
+		border: 1px solid var(--color-orange__1);
+		width: 100%;
+		margin: 20px 0;
+	}
 
-  .buttons {
-    display: flex;
-    margin-top: 15px;
+	.buttons {
+		display: flex;
+		margin-top: 15px;
 
-    .button_send,
-    .button_delete,
-    .button_back {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
+		.button_send,
+		.button_delete,
+		.button_back {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			text-align: center;
 
-      border-radius: 8px;
+			border-radius: 8px;
 
-      font-family: "Play";
-      font-weight: 400;
-      font-size: 20px;
-      font-weight: 400;
-      font-size: 20px;
+			font-family: 'Play';
+			font-weight: 400;
+			font-size: 20px;
+			font-weight: 400;
+			font-size: 20px;
 
-      cursor: pointer;
+			cursor: pointer;
 
-      padding: 8px 10px;
-    }
-    .button_send {
-      width: 150px;
+			padding: 8px 10px;
+		}
+		.button_send {
+			width: 150px;
 
-      background: var(--color-orange__1);
-      color: var(--color-black__2);
+			background: var(--color-orange__1);
+			color: var(--color-black__2);
 
-      margin-right: 5px;
-    }
+			margin-right: 5px;
+		}
 
-    .button_delete {
-      width: 150px;
+		.button_delete {
+			width: 150px;
 
-      background: var(--color-red__1);
-      color: var(--color-black__2);
+			background: var(--color-red__1);
+			color: var(--color-black__2);
 
-      margin-left: 5px;
-    }
+			margin-left: 5px;
+		}
 
-    .button_back {
-      width: 200px;
+		.button_back {
+			width: 200px;
 
-      background: var(--color-green__1);
-      color: var(--color-black__2);
+			background: var(--color-green__1);
+			color: var(--color-black__2);
 
-      .timer {
-        margin-left: 5px;
-      }
-    }
-  }
+			.timer {
+				margin-left: 5px;
+			}
+		}
+	}
 }
 
 @media (max-width: 500px) or (max-height: 700px) {
-  .group_header {
-    .tittle {
-      font-size: 20px;
-    }
-  }
-  .group {
-    padding: 10px;
-  }
+	.group_header {
+		.tittle {
+			font-size: 20px;
+		}
+	}
+	.group {
+		padding: 10px;
+	}
 
-  .group_info {
-    .tittle {
-      font-size: 18px;
-    }
-  }
+	.group_info {
+		.tittle {
+			font-size: 18px;
+		}
+	}
 }

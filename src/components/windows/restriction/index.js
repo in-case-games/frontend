@@ -1,1 +1,1 @@
-export { default as Restriction } from "./restriction";
+export { default as Restriction } from './restriction'

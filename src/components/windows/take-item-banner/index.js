@@ -1,1 +1,1 @@
-export { default as TakeItemBanner } from "./take-item-banner";
+export { default as TakeItemBanner } from './take-item-banner'

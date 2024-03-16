@@ -1,34 +1,34 @@
-import React, { useEffect, useState } from "react";
-import { TemplateUser as UserImage } from "../../assets/images/main";
+import React, { useEffect, useState } from "react"
+import {
+  Box as BoxApi,
+  Game as GameApi,
+  Item as ItemApi,
+  User as UserApi,
+} from "../../api"
 import {
   AirplaneBlack,
   ArrowBottomGray as Arrow,
   DownloadWhite as Download,
-} from "../../assets/images/icons";
+} from "../../assets/images/icons"
+import { TemplateUser as UserImage } from "../../assets/images/main"
+import { Handler } from "../../helpers/handler"
+import { Modal as ModalLayout } from "../../layouts"
+import TokenService from "../../services/token"
+import { ComboBox, Input } from "../common/inputs"
+import { Simple as SimpleItem } from "../game-item"
+import { LoadingArrow as Loading } from "../loading"
+import { Simple as SimpleBox } from "../loot-box"
+import { Restriction } from "../restriction"
 import {
-  User as UserApi,
-  Box as BoxApi,
-  Item as ItemApi,
-  Game as GameApi,
-} from "../../api";
-import { Modal as ModalLayout } from "../../layouts";
-import {
-  Item as ItemWindow,
-  LoadImage as LoadImageWindow,
-  MiniProfile as MiniProfileWindow,
   Box as BoxWindow,
   HistoryOpening as HistoryOpeningWindow,
   Inventory as InventoryWindow,
+  Item as ItemWindow,
+  LoadImage as LoadImageWindow,
+  MiniProfile as MiniProfileWindow,
   Restriction as RestrictionWindow,
-} from "../windows";
-import { Restriction } from "../restriction";
-import { LoadingArrow as Loading } from "../loading";
-import { Input, ComboBox } from "../common/inputs";
-import { Simple as SimpleBox } from "../loot-box";
-import { Simple as SimpleItem } from "../game-item";
-import { Handler } from "../../helpers/handler";
-import TokenService from "../../services/token";
-import styles from "./profile-settings.module";
+} from "../windows"
+import styles from "./profile-settings.module"
 
 const Observed = (props) => {
   const userApi = new UserApi();

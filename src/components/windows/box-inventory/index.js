@@ -1,1 +1,1 @@
-export { default as BoxInventory } from "./box-inventory";
+export { default as BoxInventory } from './box-inventory'

@@ -1,3 +1,3 @@
-export { Small } from "./small";
-export { Big } from "./big";
-export { Simple } from "./simple";
+export { Big } from './big'
+export { Simple } from './simple'
+export { Small } from './small'

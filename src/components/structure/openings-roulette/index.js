@@ -1,1 +1,1 @@
-export { default as OpeningsRoulette } from "./openings-roulette";
+export { default as OpeningsRoulette } from './openings-roulette'

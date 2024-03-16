@@ -1,129 +1,129 @@
 $border_color: var(--color-orange__1);
 
 .group {
-  max-width: 100%;
+	max-width: 100%;
 
-  color: $border_color;
+	color: $border_color;
 
-  margin: 20px 0;
+	margin: 20px 0;
 
-  .group_header {
-  }
+	.group_header {
+	}
 }
 
 .group_tittle {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
 
-  .tittle {
-    font-size: 40px;
-    font-family: "Nunito";
-    font-weight: 900;
-  }
+	.tittle {
+		font-size: 40px;
+		font-family: 'Nunito';
+		font-weight: 900;
+	}
 
-  .image {
-    height: 20px;
-    margin-left: 20px;
+	.image {
+		height: 20px;
+		margin-left: 20px;
 
-    transition: all 200ms;
+		transition: all 200ms;
 
-    cursor: pointer;
-  }
+		cursor: pointer;
+	}
 }
 
 .group_delimiter {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
 
-  .top {
-    border: 1px solid $border_color;
-  }
+	.top {
+		border: 1px solid $border_color;
+	}
 
-  .bottom {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+	.bottom {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
 
-    .vertical {
-      height: 40px;
-      border-left: 2px solid $border_color;
-    }
+		.vertical {
+			height: 40px;
+			border-left: 2px solid $border_color;
+		}
 
-    .center {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-evenly;
+		.center {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: space-evenly;
 
-      .line_one {
-        width: 200px;
-        border: 1px solid $border_color;
-      }
+			.line_one {
+				width: 200px;
+				border: 1px solid $border_color;
+			}
 
-      .line_two {
-        width: 100px;
-        border: 1px solid $border_color;
-      }
-    }
-  }
+			.line_two {
+				width: 100px;
+				border: 1px solid $border_color;
+			}
+		}
+	}
 }
 
 .inner {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
 
-  transition: all 500ms;
+	transition: all 500ms;
 
-  & * {
-    margin: 0 5px;
-  }
+	& * {
+		margin: 0 5px;
+	}
 
-  .text {
-    text-align: center;
+	.text {
+		text-align: center;
 
-    font-family: "Nunito";
-    font-size: 32px;
-    font-weight: 900;
+		font-family: 'Nunito';
+		font-size: 32px;
+		font-weight: 900;
 
-    color: var(--color-gray__5);
+		color: var(--color-gray__5);
 
-    margin: 0 auto;
-  }
+		margin: 0 auto;
+	}
 }
 
 @media (max-width: 700px) {
-  .group_tittle {
-    .tittle {
-      font-size: 32px;
-    }
-  }
+	.group_tittle {
+		.tittle {
+			font-size: 32px;
+		}
+	}
 }
 
 @media (max-width: 600px) {
-  .group_tittle {
-    .tittle {
-      font-size: 24px;
-    }
-  }
+	.group_tittle {
+		.tittle {
+			font-size: 24px;
+		}
+	}
 }
 
 @media (max-width: 500px) {
-  .group_tittle {
-    .tittle {
-      font-size: 18px;
-    }
-  }
+	.group_tittle {
+		.tittle {
+			font-size: 18px;
+		}
+	}
 }
 
 @media (max-width: 400px) {
-  .group_tittle {
-    .tittle {
-      font-size: 14px;
-    }
-  }
+	.group_tittle {
+		.tittle {
+			font-size: 14px;
+		}
+	}
 }

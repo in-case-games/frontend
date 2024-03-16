@@ -1,30 +1,30 @@
 .send_email {
-  display: flex;
-  justify-content: center;
-  text-align: center;
+	display: flex;
+	justify-content: center;
+	text-align: center;
 
-  width: 250px;
+	width: 250px;
 
-  border-radius: 15px;
-  background: var(--color-black__2);
+	border-radius: 15px;
+	background: var(--color-black__2);
 
-  padding: 40px;
+	padding: 40px;
 }
 
 .send_email_content {
-  display: flex;
-  justify-content: space-evenly;
-  flex-direction: column;
-  align-items: center;
+	display: flex;
+	justify-content: space-evenly;
+	flex-direction: column;
+	align-items: center;
 
-  .tittle {
-    font-size: 32px;
-  }
-  .description {
-    padding: 10px 0;
-    max-width: 300px;
-  }
-  .loading {
-    max-height: 120px;
-  }
+	.tittle {
+		font-size: 32px;
+	}
+	.description {
+		padding: 10px 0;
+		max-width: 300px;
+	}
+	.loading {
+		max-height: 120px;
+	}
 }

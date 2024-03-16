@@ -1,1 +1,1 @@
-export { default as Withdrawn } from "./withdrawn";
+export { default as Withdrawn } from './withdrawn'

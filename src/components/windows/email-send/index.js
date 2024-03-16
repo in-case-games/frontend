@@ -1,1 +1,1 @@
-export { default as EmailSend } from "./email-send";
+export { default as EmailSend } from './email-send'

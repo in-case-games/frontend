@@ -1,1 +1,1 @@
-export { default as SquarePanel } from "./square-panel";
+export { default as SquarePanel } from './square-panel'

@@ -1,129 +1,129 @@
 .item_simple {
-  position: relative;
-  display: flex;
+	position: relative;
+	display: flex;
 
-  width: 230px;
-  height: 100px;
+	width: 230px;
+	height: 100px;
 
-  background: var(--color-black__8);
-  border-radius: 15px;
+	background: var(--color-black__8);
+	border-radius: 15px;
 
-  transition: all 0.3s;
-  cursor: pointer;
+	transition: all 0.3s;
+	cursor: pointer;
 
-  margin: 5px 10px;
+	margin: 5px 10px;
 
-  .item_image {
-    height: 80px;
-    max-width: 80px;
+	.item_image {
+		height: 80px;
+		max-width: 80px;
 
-    border-radius: 15px 0 0 15px;
+		border-radius: 15px 0 0 15px;
 
-    padding: 10px;
-    margin: 0;
-  }
+		padding: 10px;
+		margin: 0;
+	}
 
-  &:hover {
-    background: var(--color-black__3);
-    transition: all 0.3s;
-  }
+	&:hover {
+		background: var(--color-black__3);
+		transition: all 0.3s;
+	}
 
-  .loading {
-    width: 20px;
-  }
+	.loading {
+		width: 20px;
+	}
 
-  .info {
-    position: absolute;
+	.info {
+		position: absolute;
 
-    bottom: 5px;
-    right: 5px;
+		bottom: 5px;
+		right: 5px;
 
-    width: 20px;
-    height: 20px;
-  }
+		width: 20px;
+		height: 20px;
+	}
 }
 
 .item_status {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-around;
 
-  height: 100px;
-  min-width: 25px;
+	height: 100px;
+	min-width: 25px;
 
-  border-radius: 0 13px 13px 0;
-  color: black;
+	border-radius: 0 13px 13px 0;
+	color: black;
 
-  font-size: 28px;
+	font-size: 28px;
 
-  cursor: pointer;
+	cursor: pointer;
 
-  .image {
-    height: 35px;
-  }
+	.image {
+		height: 35px;
+	}
 
-  .loading {
-    height: 20px;
-  }
+	.loading {
+		height: 20px;
+	}
 
-  .error {
-    position: absolute;
+	.error {
+		position: absolute;
 
-    width: 200px;
+		width: 200px;
 
-    left: 10px;
-    opacity: 0;
-    visibility: hidden;
+		left: 10px;
+		opacity: 0;
+		visibility: hidden;
 
-    font-size: 15px;
-    color: black;
+		font-size: 15px;
+		color: black;
 
-    background: var(--color-gray__8);
-    border-radius: 10px;
+		background: var(--color-gray__8);
+		border-radius: 10px;
 
-    transition: all 400ms ease-out;
+		transition: all 400ms ease-out;
 
-    padding: 20px 0;
-  }
+		padding: 20px 0;
+	}
 
-  &:hover {
-    .error {
-      visibility: visible;
-      transition: all 400ms ease-out;
-      opacity: 1;
-    }
-  }
+	&:hover {
+		.error {
+			visibility: visible;
+			transition: all 400ms ease-out;
+			opacity: 1;
+		}
+	}
 }
 
 .item_info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 
-  width: 100%;
+	width: 100%;
 
-  font-size: 15px;
-  font-family: "Play";
+	font-size: 15px;
+	font-family: 'Play';
 
-  margin: 0 10px;
+	margin: 0 10px;
 
-  .name {
-  }
+	.name {
+	}
 
-  .game {
-  }
+	.game {
+	}
 
-  .cost {
-    display: flex;
-    align-items: center;
-    font-family: "Nunito";
-    font-weight: 700;
-    font-size: 16px;
+	.cost {
+		display: flex;
+		align-items: center;
+		font-family: 'Nunito';
+		font-weight: 700;
+		font-size: 16px;
 
-    .image {
-      width: 20px;
-      height: 20px;
-    }
-  }
+		.image {
+			width: 20px;
+			height: 20px;
+		}
+	}
 }

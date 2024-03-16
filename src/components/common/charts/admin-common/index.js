@@ -1,1 +1,1 @@
-export { default as AdminCommon } from "./admin-common";
+export { default as AdminCommon } from './admin-common'

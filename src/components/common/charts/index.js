@@ -1,1 +1,1 @@
-export { AdminCommon } from "./admin-common";
+export { AdminCommon } from './admin-common'

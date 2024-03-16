@@ -1,11 +1,11 @@
-version: "3.8"
+version: '3.8'
 services:
   frontend:
-    image: "frontend"
+    image: 'frontend'
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./nginx/conf.dev.d/:/etc/nginx/conf.dev.d/
+      - './nginx/conf.dev.d/:/etc/nginx/conf.d/'
     ports:
-      - "3000:80"
+      - '3000:80'
