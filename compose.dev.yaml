@@ -1,11 +1,12 @@
 version: '3.8'
 services:
   frontend:
-    image: 'frontend'
+    container_name: frontend
+    image: frontend:1.0.0
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - './nginx/conf.dev.d/:/etc/nginx/conf.d/'
+      - ~/nginx/conf.dev.d/:/etc/nginx/conf.d/
     ports:
-      - '3000:80'
+      - 3000:80

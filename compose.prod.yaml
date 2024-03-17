@@ -1,11 +1,15 @@
 version: '3.8'
 services:
   frontend:
-    image: 'frontend'
+    container_name: frontend
+    image: frontend:1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
-      - '~/nginx/conf.prod.d/:/etc/nginx/conf.d/'
-      - '~/.ssl/ca.crt:/etc/ssl/ca.crt'
-      - '~/.ssl/:/etc/.ssl/private/'
+      - ~/nginx/conf.prod.d/:/etc/nginx/conf.d/
+      - ~/.ssl/ca.crt:/etc/ssl/ca.crt
+      - ~/.ssl/:/etc/.ssl/private/
     ports:
-      - '80:80'
-      - '443:443'
+      - 80:80
+      - 443:443

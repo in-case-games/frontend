@@ -60,7 +60,7 @@ const error = async (
 		}
 
 		if (setPenaltyDelay !== undefined && penaltyDelay !== undefined) {
-			setPenaltyDelay(penaltyDelay + 1000)
+			setPenaltyDelay(penaltyDelay + 1000 >= 4000 ? 4000 : penaltyDelay + 1000)
 			setTimeout(
 				() =>
 					setPenaltyDelay(penaltyDelay - 1000 <= 0 ? 0 : penaltyDelay - 1000),
