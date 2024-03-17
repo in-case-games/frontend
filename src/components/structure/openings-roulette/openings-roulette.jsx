@@ -75,12 +75,10 @@ const OpeningsRoulette = () => {
 					'OPENINGS_ROULETTE'
 				)
 			},
-			isStart ? 1000 + penaltyDelay : 5000 + penaltyDelay
+			isStart ? 100 + penaltyDelay : 1000 + penaltyDelay
 		)
 
-		return () => {
-			clearInterval(interval)
-		}
+		return () => clearInterval(interval)
 	})
 
 	const loadedGames = async () => {
@@ -108,7 +106,7 @@ const OpeningsRoulette = () => {
 
 		if (history.length === 0) history = await userApi.getRouletteOpenings()
 
-		const maxItemsWindow = Math.floor(width.current / 160) + 1
+		const maxItemsWindow = Math.floor(width / 160) + 1
 
 		history = history.slice(0, maxItemsWindow)
 

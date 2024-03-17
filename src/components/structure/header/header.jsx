@@ -187,7 +187,7 @@ const Header = () => {
 							: Math.ceil(response)
 
 					let temp = {
-						image: user?.image,
+						image: TokenService.getUser()?.image,
 						balance: response,
 					}
 
@@ -196,13 +196,7 @@ const Header = () => {
 			}
 			if (secondsBeforeRefresh() <= 1000 && isAuth) {
 				await Handler.error(
-					async () => {
-						await userApi.get()
-						setUser({
-							image: TokenService.getUser()?.image,
-							balance: user?.balance ?? 0,
-						})
-					},
+					async () => await userApi.get(),
 					ex => {
 						//TODO check not found user then TokenService.removeUser()
 						console.log(ex)
