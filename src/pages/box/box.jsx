@@ -172,18 +172,14 @@ const Box = () => {
 							user={user}
 							isRollingRoulette={isRollingRoulette}
 							pathBanner={pathBanner}
-							setWinItem={async i =>
-								await Handler.error(
-									async () => {
-										setWinItem(i)
-										setPathBanner(await userApi.getPathBannerByBoxId(box.id))
-									},
-									async () => {
-										setPathBanner()
-										return true
-									}
-								)
-							}
+							setWinItem={async i => {
+								setWinItem(i)
+								try {
+									setPathBanner(await userApi.getPathBannerByBoxId(box.id))
+								} catch (ex) {
+									setPathBanner()
+								}
+							}}
 							setIsRollingRoulette={setIsRollingRoulette}
 							setIsShowPayment={setIsShowPaymentWindow}
 						/>
@@ -201,18 +197,14 @@ const Box = () => {
 			</div>
 			<ModalLayout
 				isActive={isShowTakeItemWindow}
-				close={async () =>
-					await Handler.error(
-						async () => {
-							setIsShowTakeItemWindow()
-							setPathBanner(await userApi.getPathBannerByBoxId(box.id))
-						},
-						async () => {
-							setPathBanner()
-							return true
-						}
-					)
-				}
+				close={async () => {
+					setIsShowTakeItemWindow()
+					try {
+						setPathBanner(await userApi.getPathBannerByBoxId(box.id))
+					} catch (ex) {
+						setPathBanner()
+					}
+				}}
 			>
 				<TakeItemBannerWindow
 					items={
@@ -233,18 +225,14 @@ const Box = () => {
 					}
 					boxId={box?.id}
 					pathBanner={pathBanner}
-					close={async () =>
-						await Handler.error(
-							async () => {
-								setIsShowTakeItemWindow()
-								setPathBanner(await userApi.getPathBannerByBoxId(box.id))
-							},
-							async () => {
-								setPathBanner()
-								return true
-							}
-						)
-					}
+					close={async () => {
+						setIsShowTakeItemWindow()
+						try {
+							setPathBanner(await userApi.getPathBannerByBoxId(box.id))
+						} catch (ex) {
+							setPathBanner()
+						}
+					}}
 				/>
 			</ModalLayout>
 			<ModalLayout

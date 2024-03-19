@@ -29,6 +29,7 @@ const LoadingHourglass = props => {
 
 			let temp = remainedTime / totalTime
 			temp = temp < 0 ? 0 : temp
+			temp = temp >= 1 ? 1 : temp
 
 			if (temp >= 0.7) setColor('green')
 			else if (temp >= 0.4) setColor('orange')

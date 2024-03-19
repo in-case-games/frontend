@@ -101,8 +101,8 @@ const Withdraw = props => {
 						removeSelectItem(index, item)
 					}
 				},
-				async () => {
-					const code = err.response.data.error.code
+				async err => {
+					const code = err?.response?.data?.error?.code
 
 					items[i].status = 'cancel'
 					items[i].error =
