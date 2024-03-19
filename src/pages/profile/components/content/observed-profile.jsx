@@ -20,7 +20,6 @@ const ObservedProfile = () => {
 	const [isLoadImage, setIsLoadImage] = useState(false)
 
 	const [image, setImage] = useState(null)
-	const [penaltyDelay, setPenaltyDelay] = useState(0)
 
 	useEffect(() => {
 		const func = async () =>
@@ -36,41 +35,11 @@ const ObservedProfile = () => {
 					if (ex?.response?.status === 404) navigate('/not-found')
 
 					return false
-				},
-				undefined,
-				penaltyDelay,
-				setPenaltyDelay
+				}
 			)
 
 		func()
 	}, [id])
-
-	useEffect(() => {
-		const interval = setInterval(
-			async () =>
-				await Handler.error(
-					async () => {
-						if (!user) {
-							const temp = await userApi.getById(id)
-							temp.image = await userApi.getImageByUserId(id)
-
-							setUser(temp)
-						}
-					},
-					async () => {
-						if (ex?.response?.status === 404) navigate('/not-found')
-
-						return false
-					},
-					undefined,
-					penaltyDelay,
-					setPenaltyDelay
-				),
-			100 + penaltyDelay
-		)
-
-		return () => clearInterval(interval)
-	})
 
 	return (
 		<div className={styles.observed_profile}>
