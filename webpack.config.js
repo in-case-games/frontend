@@ -143,7 +143,7 @@ module.exports = {
 							reuseExistingChunk: true,
 						},
 					},
-			  }
+				}
 			: {},
 	},
 	devServer: {

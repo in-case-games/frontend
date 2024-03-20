@@ -14,7 +14,6 @@ const Inventory = props => {
 	const [loadedInventory, setLoadedInventory] = useState([])
 	const [showInventory, setShowInventory] = useState(null)
 
-	const [penaltyDelay, setPenaltyDelay] = useState(0)
 	const [pages, setPages] = useState(1)
 	const [page, setPage] = useState(1)
 
@@ -73,10 +72,11 @@ const Inventory = props => {
 						props.setIsLoading(false)
 						setIsClickSlider(false)
 					},
-					undefined,
-					undefined,
-					penaltyDelay,
-					setPenaltyDelay
+					async () => {
+						props.setIsLoading(false)
+						setIsClickSlider(false)
+						return false
+					}
 				)
 			} else if (currentFilter !== props.filterName) {
 				setCurrentFilter(props.filterName)
@@ -85,7 +85,7 @@ const Inventory = props => {
 
 				props.setIsLoading(true)
 			}
-		}, 100 + penaltyDelay)
+		}, 100)
 
 		return () => clearInterval(interval)
 	})

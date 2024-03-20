@@ -54,7 +54,7 @@ const Simple = props => {
 			<img
 				alt=''
 				src={props.item?.image ?? ItemImage}
-				style={{ background: gradientColor }}
+				style={{ background: gradientColor, margin: 0 }}
 				className={styles.item_image}
 			/>
 			<div className={styles.item_info}>
