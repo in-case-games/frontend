@@ -28,6 +28,7 @@ const error = async (
 				code: 200,
 			})
 		} else if (response) {
+			console.log(response)
 			Notification.pushNotify({
 				id: Converter.generateGuid(),
 				tittle: 'Необработанный ответ',

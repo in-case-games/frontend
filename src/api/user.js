@@ -17,6 +17,14 @@ class User {
 
 		return response.data.data
 	}
+	async refreshTokens() {
+		const rs = await api.get(
+			Constants.GATE_AWAY_API_URL +
+				'authentication/refresh?token=' +
+				TokenService.getRefreshToken()
+		)
+		return rs
+	}
 	async getByLogin(login) {
 		const response = await api.get(
 			Constants.GATE_AWAY_API_URL + `user/login/${login}`

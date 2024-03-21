@@ -12,9 +12,12 @@ const popNotifies = () => {
 const pushNotify = notify => {
 	var content = JSON.stringify(notify.content)
 
-	if (content.length > 15 || content.includes(':')) {
+	console.log(content)
+
+	if (content.length > 50 || content.includes(':')) {
 		console.log(notify.content)
-		notify.content = 'Содержание в консоли'
+
+		notify.content = content.substring(0, 47) + '...'
 	}
 	var notifications = JSON.parse(localStorage.getItem('notifications'))
 

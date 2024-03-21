@@ -70,12 +70,12 @@ const Header = () => {
 	}
 
 	const secondsBeforeRefresh = () => {
-		if (isDate === null) return 100
+		if (isDate === null) return 0
 
 		const expiryToken = new Date(isDate).getTime() + 300000
 		const dateNow = new Date().getTime()
 
-		return expiryToken <= dateNow ? 1000 : expiryToken - dateNow
+		return expiryToken - dateNow
 	}
 
 	function handleWindowSizeChange() {
@@ -164,7 +164,15 @@ const Header = () => {
 
 	useEffect(() => {
 		const interval = setInterval(async () => {
-			const isAuthUser = TokenService.getAccessToken() !== undefined
+			const accessToken = TokenService.getAccessToken()
+
+			if (accessToken && !isDate) {
+				const expiresTime = TokenService.getExpiresAccessToken()
+
+				setIsDate(expiresTime ? expiresTime : 100)
+
+				if (expiresTime) return
+			}
 
 			await Handler.error(
 				async () => {
@@ -177,7 +185,7 @@ const Header = () => {
 				'HEADER'
 			)
 
-			if (isAuthUser) {
+			if (accessToken) {
 				await Handler.error(async () => {
 					let response = await userApi.getBalance()
 
@@ -194,9 +202,14 @@ const Header = () => {
 					setUser(temp)
 				})
 			}
-			if (secondsBeforeRefresh() <= 1000 && isAuth) {
+
+			if (secondsBeforeRefresh() <= 20000 && isAuth) {
 				await Handler.error(
-					async () => await userApi.get(),
+					async () => {
+						var rs = await userApi.refreshTokens()
+
+						if (rs.status === 200) await TokenService.setUser(rs.data.data)
+					},
 					ex => {
 						//TODO check not found user then TokenService.removeUser()
 						console.log(ex)
@@ -275,7 +288,7 @@ const Header = () => {
 													<img alt='' src={i.image} className={styles.image} />
 													<div className={styles.name}>{i.name}</div>
 												</div>
-										  ))
+											))
 										: null}
 								</div>
 							</div>
