@@ -74,6 +74,17 @@ module.exports = {
 				},
 			},
 			{
+				test: /\.(mp3|wav)$/,
+				exclude: '/node_modules/',
+				type: 'asset/resource',
+				generator: {
+					filename: path.join(
+						'public/assets/sounds',
+						production ? '[name].[contenthash][ext]' : '[name][ext]'
+					),
+				},
+			},
+			{
 				test: /\.(ttf|otf|eot|woff|woff2)$/,
 				exclude: '/node_modules/',
 				type: 'asset/resource',

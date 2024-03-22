@@ -14,6 +14,8 @@ const Roulette = props => {
 	const userApi = new UserApi()
 	const itemApi = new ItemApi()
 
+	const production = process.env.NODE_ENV === 'production'
+
 	const [hovered, setHovered] = useState(false)
 	const [items, setItems] = useState()
 
@@ -38,11 +40,13 @@ const Roulette = props => {
 				const res = Object.assign(winItem, findItem || {})
 
 				if (!winItem.image) winItem = await itemApi.pushImage(winItem)
+				if (!production) winItem.rarity = 'green'
 
 				props.setWinItem(res)
-				props.setIsRollingRoulette(true)
 
 				loadRandomParams(res)
+
+				props.setIsRollingRoulette(true)
 			})
 		}
 	}
@@ -88,6 +92,7 @@ const Roulette = props => {
 				0,
 				props.box.inventory.at(-1).chanceWining
 			)
+
 			const item =
 				target === i && winItem && winItem.image
 					? winItem
