@@ -211,6 +211,7 @@ const Inventory = () => {
 			<ModalLayout
 				isActive={isOpenSellWindow}
 				close={() => {
+					setSelectItems(prev => ({ ...prev, items: [] }))
 					setIsOpenSellWindow(false)
 					setIsLoading(true)
 				}}
@@ -224,6 +225,7 @@ const Inventory = () => {
 			<ModalLayout
 				isActive={isOpenWithdrawWindow}
 				close={() => {
+					setSelectItems(prev => ({ ...prev, items: [] }))
 					setIsOpenWithdrawWindow(false)
 					setIsLoading(true)
 				}}
