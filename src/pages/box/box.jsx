@@ -21,7 +21,13 @@ import { Handler } from '../../helpers/handler'
 import { Modal as ModalLayout } from '../../layouts'
 import TokenService from '../../services/token'
 import styles from './box.module'
-import { Box as BoxDisplay, Item as ItemDisplay, Roulette } from './components'
+import {
+	Box as BoxDisplay,
+	BoxMobile as BoxMobileDisplay,
+	Item as ItemDisplay,
+	ItemMobile as ItemMobileDisplay,
+	Roulette,
+} from './components'
 
 const Box = () => {
 	const boxApi = new BoxApi()
@@ -51,67 +57,38 @@ const Box = () => {
 	const [banner, setBanner] = useState()
 	const [pathBanner, setPathBanner] = useState()
 
+	const [width, setWidth] = useState(window.innerWidth)
+
+	useEffect(() => {
+		window.addEventListener('resize', () => setWidth(window.innerWidth))
+		return () => {
+			window.removeEventListener('resize', () => setWidth(window.innerWidth))
+		}
+	}, [])
+
 	useEffect(() => {
 		const interval = setInterval(
-			async () =>
+			async () => {
+				setIsStart(false)
+
+				let inventories
+				let banner
+				let box
+
+				const result = []
+				const user = TokenService.getUser()
+
+				if (user) user.balance = read_cookie('user-balance')
+				if (!games) {
+					games = await gameApi.get()
+					setGames(games)
+				}
+
+				setUser(user)
+
 				await Handler.error(
 					async () => {
-						setIsStart(false)
-
-						const user = TokenService.getUser()
-
-						if (user) user.balance = read_cookie('user-balance')
-
-						if (!games) {
-							games = await gameApi.get()
-							setGames(games)
-						}
-
-						setUser(user)
-
-						const result = []
-						const inventories = await boxApi.getInventory(id)
-						let banner
-						let box
-
-						try {
-							banner = await boxApi.getByIdBanner(id)
-						} catch (ex) {}
-
-						if (banner && banner?.box) {
-							box = banner.box
-							try {
-								setPathBanner(await userApi.getPathBannerByBoxId(box.id))
-							} catch (ex) {
-								setPathBanner()
-							}
-
-							if (new Date(banner.expirationDate) <= new Date())
-								banner = undefined
-						} else box = await boxApi.getById(id)
-
-						box.inventory = inventories.sort(
-							(a, b) => a.chanceWining - b.chanceWining
-						)
-						box = await boxApi.pushImage(box)
-
-						let gameId
-
-						if (role && role !== 'user') result.push({ id: '1', boxId: box.id })
-
-						for (let i = 0; i < inventories.length; i++) {
-							const inv = inventories[i]
-							gameId = gameId || games.find(g => g.name === inv.item.game).id
-							inv.item.chanceWining = inv.chanceWining / 100000
-							inv.item.gameId = gameId
-							inv.item = await itemApi.pushImage(inv.item)
-							inv.boxId = box.id
-							result.push(inv)
-						}
-
-						setBox(box)
-						setBanner(banner)
-						setInventory(result)
+						inventories = await boxApi.getInventory(id)
 					},
 					async ex => {
 						if (
@@ -124,7 +101,46 @@ const Box = () => {
 
 						return false
 					}
-				),
+				)
+
+				try {
+					banner = await boxApi.getByIdBanner(id)
+				} catch (ex) {}
+
+				if (banner && banner?.box) {
+					box = banner.box
+					try {
+						setPathBanner(await userApi.getPathBannerByBoxId(box.id))
+					} catch (ex) {
+						setPathBanner()
+					}
+
+					if (new Date(banner.expirationDate) <= new Date()) banner = undefined
+				} else box = await boxApi.getById(id)
+
+				box.inventory = inventories.sort(
+					(a, b) => a.chanceWining - b.chanceWining
+				)
+				box = await boxApi.pushImage(box)
+
+				let gameId
+
+				if (role && role !== 'user') result.push({ id: '1', boxId: box.id })
+
+				for (let i = 0; i < inventories.length; i++) {
+					const inv = inventories[i]
+					gameId = gameId || games.find(g => g.name === inv.item.game).id
+					inv.item.chanceWining = inv.chanceWining / 100000
+					inv.item.gameId = gameId
+					inv.item = await itemApi.pushImage(inv.item)
+					inv.boxId = box.id
+					result.push(inv)
+				}
+
+				setBox(box)
+				setBanner(banner)
+				setInventory(result)
+			},
 			isStart ? 100 : 5000
 		)
 		return () => clearInterval(interval)
@@ -133,23 +149,42 @@ const Box = () => {
 	const whatShow = () => {
 		if (isRollingRoulette) return null
 
-		return winItem ? (
-			<ItemDisplay
-				item={winItem}
-				pathBanner={pathBanner}
-				goBack={() => setWinItem()}
-			/>
-		) : (
-			<BoxDisplay
-				box={box}
-				isHasBanner={banner && inventory.length > 1 && !box?.isLocked && role}
-				pathBanner={pathBanner}
-				openBannerWindow={() => {
-					if (inventory.length > 1 && !box?.isLocked && role)
-						setIsShowTakeItemWindow(banner)
-				}}
-			/>
-		)
+		if (winItem)
+			return width >= 830 ? (
+				<ItemDisplay
+					item={winItem}
+					pathBanner={pathBanner}
+					goBack={() => setWinItem()}
+				/>
+			) : (
+				<ItemMobileDisplay
+					item={winItem}
+					pathBanner={pathBanner}
+					goBack={() => setWinItem()}
+				/>
+			)
+		else
+			return width >= 830 ? (
+				<BoxDisplay
+					box={box}
+					isHasBanner={banner && inventory.length > 1 && !box?.isLocked && role}
+					pathBanner={pathBanner}
+					openBannerWindow={() => {
+						if (inventory.length > 1 && !box?.isLocked && role)
+							setIsShowTakeItemWindow(banner)
+					}}
+				/>
+			) : (
+				<BoxMobileDisplay
+					box={box}
+					isHasBanner={banner && inventory.length > 1 && !box?.isLocked && role}
+					pathBanner={pathBanner}
+					openBannerWindow={() => {
+						if (inventory.length > 1 && !box?.isLocked && role)
+							setIsShowTakeItemWindow(banner)
+					}}
+				/>
+			)
 	}
 
 	return (

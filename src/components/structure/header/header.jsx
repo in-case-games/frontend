@@ -78,18 +78,19 @@ const Header = () => {
 		return expiryToken - dateNow
 	}
 
-	function handleWindowSizeChange() {
-		setWidth(window.innerWidth)
-	}
 	useEffect(() => {
-		window.addEventListener('resize', handleWindowSizeChange)
+		window.addEventListener('resize', () => setWidth(window.innerWidth))
 		return () => {
-			window.removeEventListener('resize', handleWindowSizeChange)
+			window.removeEventListener('resize', () => setWidth(window.innerWidth))
 		}
 	}, [])
 
 	useEffect(() => {
 		const interval = setInterval(async () => {
+			const isAuthUser = TokenService.getAccessToken() !== undefined
+
+			setIsAuth(isAuthUser && user === null ? null : isAuthUser)
+
 			if (timeBeforeGoSearch) {
 				const nextTime = timeBeforeGoSearch - 100
 
@@ -154,16 +155,6 @@ const Header = () => {
 
 	useEffect(() => {
 		const interval = setInterval(async () => {
-			const isAuthUser = TokenService.getAccessToken() !== undefined
-
-			setIsAuth(isAuthUser && user === null ? null : isAuthUser)
-		}, 500)
-
-		return () => clearInterval(interval)
-	})
-
-	useEffect(() => {
-		const interval = setInterval(async () => {
 			const accessToken = TokenService.getAccessToken()
 
 			if (accessToken && !isDate) {
@@ -221,7 +212,7 @@ const Header = () => {
 				)
 			}
 			setIsDate(TokenService.getExpiresAccessToken())
-		}, 1000 + penaltyDelay)
+		}, 500 + penaltyDelay)
 
 		return () => clearInterval(interval)
 	})
@@ -288,7 +279,7 @@ const Header = () => {
 													<img alt='' src={i.image} className={styles.image} />
 													<div className={styles.name}>{i.name}</div>
 												</div>
-											))
+										  ))
 										: null}
 								</div>
 							</div>

@@ -10,16 +10,9 @@ const LoadingHourglass = props => {
 	const [height, setHeight] = useState(null)
 
 	useEffect(() => {
-		const interval = setInterval(
-			() => setHeight(observer.current.clientHeight),
-			100
-		)
-
-		return () => clearInterval(interval)
-	})
-
-	useEffect(() => {
 		const interval = setInterval(() => {
+			setHeight(observer.current.clientHeight)
+
 			const updatedIn = Math.round(new Date(props.updatedIn) / 1000)
 			const updateTo = Math.round(new Date(props.updateTo) / 1000)
 			const currentDate = Math.round(new Date(Converter.getUtcDate()) / 1000)

@@ -60,11 +60,9 @@ const Withdrawn = props => {
 	const click = async () => {
 		if (props.history.status === 'cancel') {
 			await Handler.error(async () => {
-				var response = await userApi.transferWithdrawn(props.history.id)
-
 				setTimeout(() => window.location.reload(), 2000)
 
-				return response
+				return await userApi.transferWithdrawn(props.history.id)
 			})
 		}
 	}

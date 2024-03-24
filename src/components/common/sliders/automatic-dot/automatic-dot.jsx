@@ -12,13 +12,13 @@ const AutomaticDot = props => {
 				setIsStart(false)
 
 				const result = []
-				let c = props.counter >= props.maxValue ? 1 : props.counter + 1
+				let counter = props.counter >= props.maxValue ? 1 : props.counter + 1
 
 				for (let i = 1; i <= props.maxValue; i++) {
-					result.push(<Dot isActive={i === c} key={i} />)
+					result.push(<Dot isActive={i === counter} key={i} />)
 				}
 
-				props.setCounter(c)
+				props.setCounter(counter)
 				setDots(result)
 			},
 			isStart ? 1000 : 3000

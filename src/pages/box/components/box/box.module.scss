@@ -85,25 +85,20 @@
 
 		border-top: 5px solid var(--color-orange__1);
 		border-bottom: 5px solid var(--color-orange__1);
+		border-right: 2px solid var(--color-orange__1);
 
 		color: var(--color-black__2);
 
-		transition: background 300ms;
-
-		.image {
-			height: 25px;
-		}
-	}
-
-	.button_banner {
-		border-right: 2px solid var(--color-orange__1);
-
 		cursor: pointer;
 
-		transition: background 500ms;
+		transition: background 300ms;
 
 		&:hover {
 			transition: background 500ms;
+		}
+
+		.image {
+			height: 25px;
 		}
 	}
 }
@@ -149,6 +144,52 @@
 		}
 		.image {
 			max-height: 200px;
+		}
+	}
+}
+
+.box_mobile {
+	display: flex;
+	flex-direction: column;
+	border: 2px solid var(--color-orange__1);
+
+	.content {
+		display: flex;
+		justify-content: center;
+		flex-direction: column;
+		align-items: center;
+
+		.tittle {
+			font-size: 18px;
+			font-weight: 800;
+			font-family: 'Nunito';
+
+			margin: 10px 0;
+		}
+		.image {
+			padding: 0 40px;
+			max-height: 200px;
+		}
+	}
+	.button_banner {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		border-top: 2px solid var(--color-orange__1);
+
+		cursor: pointer;
+
+		transition: background 300ms;
+
+		&:hover {
+			transition: background 500ms;
+		}
+
+		.image {
+			height: 20px;
+
+			padding: 10px 0;
 		}
 	}
 }

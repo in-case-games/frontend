@@ -16,8 +16,8 @@ const OpeningHistory = props => {
 	const userApi = new UserApi()
 
 	const date = Converter.getMiniDate(props.history.date)
-	const itemName = Converter.cutString(props.history.item.name, 20)
 	const color = props.history.item.rarity ? props.history.item.rarity : 'white'
+	const itemName = Converter.cutString(props.history.item.name, 20)
 	const itemColor = Constants.ItemColors[color]
 	const gradientColor = Constants.ItemGradients[color]
 
@@ -27,7 +27,6 @@ const OpeningHistory = props => {
 
 	const [box, setBox] = useState(null)
 	const [userLogo, setUserLogo] = useState(UserLogo)
-	const [penaltyDelay, setPenaltyDelay] = useState(0)
 
 	useEffect(() => {
 		const interval = setInterval(
@@ -44,20 +43,13 @@ const OpeningHistory = props => {
 	useEffect(() => {
 		const interval = setInterval(async () => {
 			if (isClick && !box) {
-				await Handler.error(
-					async () => {
-						setIsClick(false)
-						let box = await boxApi.getById(props.history.boxId)
-						setBox(await boxApi.pushImage(box))
-					},
-					undefined,
-					undefined,
-					penaltyDelay,
-					setPenaltyDelay,
-					'OPENING_HISTORY'
-				)
+				await Handler.error(async () => {
+					setIsClick(false)
+					let box = await boxApi.getById(props.history.boxId)
+					setBox(await boxApi.pushImage(box))
+				})
 			}
-		}, 10 + penaltyDelay)
+		}, 10)
 
 		return () => clearInterval(interval)
 	})
