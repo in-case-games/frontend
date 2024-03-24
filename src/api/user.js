@@ -118,7 +118,7 @@ class User {
 	}
 	async getWithdrawn100Last() {
 		const response = await api.get(
-			Constants.GATE_AWAY_API_URL + 'user/history/withdraw/100/last'
+			Constants.GATE_AWAY_API_URL + 'user/history/withdraw'
 		)
 
 		return response.data.data
