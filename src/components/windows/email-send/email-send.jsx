@@ -11,7 +11,10 @@ const EmailSend = () => {
 					Вам на почту отправлено сообщение. Зайдите и проверьте, возможно
 					письмо попало в спам
 				</div>
-				<div className={styles.loading}>
+				<div
+					className={styles.loading}
+					style={{ maxHeight: '120px', width: '90px' }}
+				>
 					<Loading />
 				</div>
 			</div>
