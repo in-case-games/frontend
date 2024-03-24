@@ -34,7 +34,13 @@ const Opening = props => {
 			<div className={styles.tittle}>
 				{Converter.getMiniDate(props.history.date)}
 			</div>
-			<div className={styles.opening_content}>
+			<div
+				className={
+					props.isMobile
+						? styles.opening_content_mobile
+						: styles.opening_content
+				}
+			>
 				<div className={styles.opening_box}>
 					<img
 						alt=''
@@ -45,35 +51,39 @@ const Opening = props => {
 						}}
 						className={styles.image}
 					/>
-					<div className={styles.box_content}>
-						<div className={styles.tittle}>Кейс:</div>
-						<div className={styles.info}>
-							<div className={styles.name}>
-								{Converter.cutString(props.history.box.name, 25)}
+					{!props.isMobile ? (
+						<div className={styles.box_content}>
+							<div className={styles.tittle}>Кейс:</div>
+							<div className={styles.info}>
+								<div className={styles.name}>
+									{Converter.cutString(props.history.box.name, 25)}
+								</div>
+								<div className={styles.cost}>
+									{Converter.cutCost(props.history.box.cost)}
+									<img alt='' src={InCoin} className={styles.image} />
+								</div>
 							</div>
-							<div className={styles.cost}>
-								{Converter.cutCost(props.history.box.cost)}
-								<img alt='' src={InCoin} className={styles.image} />
-							</div>
+							<div className={styles.game}>{props.history.box.game}</div>
 						</div>
-						<div className={styles.game}>{props.history.box.game}</div>
-					</div>
+					) : null}
 				</div>
 				<div className={styles.vertical_delimiter}></div>
 				<div className={styles.opening_item}>
-					<div className={styles.item_content}>
-						<div className={styles.tittle}>Предмет:</div>
-						<div className={styles.info}>
-							<div className={styles.name}>
-								{Converter.cutString(props.history.item.name, 25)}
+					{!props.isMobile ? (
+						<div className={styles.item_content}>
+							<div className={styles.tittle}>Предмет:</div>
+							<div className={styles.info}>
+								<div className={styles.name}>
+									{Converter.cutString(props.history.item.name, 25)}
+								</div>
+								<div className={styles.cost}>
+									{Converter.cutCost(props.history.item.cost)}
+									<img alt='' src={InCoin} className={styles.image} />
+								</div>
 							</div>
-							<div className={styles.cost}>
-								{Converter.cutCost(props.history.item.cost)}
-								<img alt='' src={InCoin} className={styles.image} />
-							</div>
+							<div className={styles.game}>{props.history.item.game}</div>
 						</div>
-						<div className={styles.game}>{props.history.item.game}</div>
-					</div>
+					) : null}
 					<img
 						className={styles.image}
 						alt=''

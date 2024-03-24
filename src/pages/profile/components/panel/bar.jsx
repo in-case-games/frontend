@@ -33,45 +33,54 @@ const Bar = props => {
 	})
 
 	return (
-		<div className={styles.panel_bar}>
+		<div
+			className={props.isMobile ? styles.panel_bar_mobile : styles.panel_bar}
+		>
 			<HeaderBarButton
 				user={user}
 				click={() => props.exchange('profile')}
 				isActive={props.content === 'profile'}
+				isMobile={props.isMobile}
 			/>
 			<BarButton
 				text='Инвентарь'
 				click={() => props.exchange('inventory')}
 				isActive={props.content === 'inventory'}
+				isMobile={props.isMobile}
 			/>
 			<BarButton
 				text='Открытые кейсы'
 				click={() => props.exchange('history_opening')}
 				isActive={props.content === 'history_opening'}
+				isMobile={props.isMobile}
 			/>
 			<BarButton
 				text='Пополнения'
 				click={() => props.exchange('payment')}
 				isActive={props.content === 'payment'}
+				isMobile={props.isMobile}
 			/>
 			<BarButton
 				text='Выводы'
 				click={() => props.exchange('withdrawn')}
 				isActive={props.content === 'withdrawn'}
+				isMobile={props.isMobile}
 			/>
 			<BarButton
 				text='Промокоды'
 				click={() => props.exchange('promocode')}
 				isActive={props.content === 'promocode'}
+				isMobile={props.isMobile}
 			/>
 			{user && user.role === 'owner' ? (
 				<BarButton
 					text='Админ панель'
 					click={() => props.exchange('admin')}
 					isActive={props.content.split('_')[0] === 'admin'}
+					isMobile={props.isMobile}
 				/>
 			) : null}
-			<BarButton click={exit} text='Выйти' />
+			<BarButton click={exit} text='Выйти' isMobile={props.isMobile} />
 		</div>
 	)
 }

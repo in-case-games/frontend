@@ -18,7 +18,10 @@
 	justify-content: center;
 	padding: 50px 0;
 
-	.panel_bar {
+	.panel_bar_mobile {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
 	}
 
 	.panel_content {

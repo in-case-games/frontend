@@ -9,6 +9,7 @@
 	}
 
 	.settings {
+		position: relative;
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: space-between;
@@ -46,15 +47,17 @@
 
 			cursor: pointer;
 		}
-		.loading {
-		}
 		.actions {
+			position: absolute;
 			display: flex;
 			flex-direction: column;
-			align-items: flex-end;
-			justify-content: space-between;
+			align-items: flex-start;
 
+			bottom: 20px;
+			left: 0;
 			opacity: 0;
+			z-index: 11;
+
 			visibility: hidden;
 			transition: all 0.3s ease-out;
 		}

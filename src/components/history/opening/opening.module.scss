@@ -17,7 +17,8 @@
 	}
 }
 
-.opening_content {
+.opening_content,
+.opening_content_mobile {
 	display: flex;
 	align-items: center;
 
@@ -118,5 +119,14 @@
 	.game {
 		font-family: 'Play';
 		color: var(--color-gray__8);
+	}
+}
+
+.opening_content_mobile {
+	width: auto;
+
+	.opening_box,
+	.opening_item {
+		width: auto;
 	}
 }

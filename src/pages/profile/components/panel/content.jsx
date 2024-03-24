@@ -20,7 +20,7 @@ const Content = props => {
 	const dictionary = {
 		profile: <Profile />,
 		inventory: <Inventory />,
-		history_opening: <Openings />,
+		history_opening: <Openings isMobile={props.isMobile} />,
 		payment: <Payments />,
 		withdrawn: <Withdrawn />,
 		promocode: <Promocodes />,

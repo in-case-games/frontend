@@ -19,7 +19,7 @@ import {
 } from '../../../../layouts'
 import styles from './content.module'
 
-const HistoryOpening = () => {
+const HistoryOpening = props => {
 	const userApi = new UserApi()
 	const itemApi = new ItemApi()
 	const boxApi = new BoxApi()
@@ -69,6 +69,7 @@ const HistoryOpening = () => {
 					click={() => setHistory(h)}
 					showItem={() => setItem(h.item)}
 					showBox={() => setBox(h.box)}
+					isMobile={props.isMobile}
 					key={h.id}
 				/>
 			)

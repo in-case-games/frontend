@@ -1,5 +1,7 @@
 .profile_header_bar,
-.profile_header_bar__active {
+.profile_header_bar__active,
+.profile_header_bar_mobile,
+.profile_header_bar_mobile__active {
 	display: flex;
 	justify-content: flex-start;
 	align-items: center;
@@ -40,13 +42,10 @@
 	}
 }
 
-.profile_header_bar__active {
-	color: var(--color-black__2);
-	background: var(--color-orange__1);
-}
-
 .profile_bar,
-.profile_bar__active {
+.profile_bar__active,
+.profile_bar_mobile,
+.profile_bar_mobile__active {
 	width: 250px;
 
 	text-align: center;
@@ -62,12 +61,31 @@
 	padding: 20px 0;
 
 	cursor: pointer;
-
-	.text {
-	}
 }
 
-.profile_bar__active {
+.profile_bar_mobile,
+.profile_bar_mobile__active,
+.profile_header_bar_mobile,
+.profile_header_bar_mobile__active {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+
+	width: 180px;
+	height: 75px;
+
+	border: 1px solid var(--color-gray__2);
+	border-radius: 8px;
+
+	padding: 5px 0;
+	margin: 5px;
+}
+
+.profile_header_bar__active,
+.profile_header_bar_mobile__active,
+.profile_bar__active,
+.profile_bar_mobile__active {
 	color: var(--color-black__2);
 	background: var(--color-orange__1);
 }
