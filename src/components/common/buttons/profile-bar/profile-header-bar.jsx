@@ -21,7 +21,9 @@ const ProfileHeaderBar = props => {
 				alt=''
 				src={props.user?.image ?? UserImage}
 			/>
-			<div className={styles.name}>{props.user?.login || ''}</div>
+			{!props.isMobile ? (
+				<div className={styles.name}>{props.user?.login || ''}</div>
+			) : null}
 		</div>
 	)
 }
