@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Box as BoxApi } from '../../../api'
 import { Handler } from '../../../helpers/handler'
@@ -8,13 +8,20 @@ import styles from './banners.module'
 
 const Banners = () => {
 	const boxApi = new BoxApi()
-	const windowWidth = useRef(window.innerWidth)
 	const navigate = useNavigate()
 
 	const [isStart, setIsStart] = useState(true)
 	const [banners, setBanners] = useState([])
 	const [counter, setCounter] = useState(1)
 	const [penaltyDelay, setPenaltyDelay] = useState(0)
+	const [width, setWidth] = useState(window.innerWidth)
+
+	useEffect(() => {
+		window.addEventListener('resize', () => setWidth(window.innerWidth))
+		return () => {
+			window.removeEventListener('resize', () => setWidth(window.innerWidth))
+		}
+	}, [])
 
 	useEffect(() => {
 		const interval = setInterval(
@@ -44,17 +51,11 @@ const Banners = () => {
 					'BANNER'
 				)
 			},
-			isStart ? 100 + penaltyDelay : 5000 + penaltyDelay
+			isStart ? 100 + penaltyDelay : 5000
 		)
 
 		return () => clearInterval(interval)
 	})
-
-	const getMarginLeft = () => {
-		const width = windowWidth.current > 1000 ? 1000 : windowWidth.current
-
-		return `${-width * (counter - 1)}px`
-	}
 
 	return (
 		<div className={styles.banners}>
@@ -62,7 +63,7 @@ const Banners = () => {
 				<div
 					className={styles.inner}
 					style={{
-						marginLeft: getMarginLeft(),
+						marginLeft: `${-(width > 1000 ? 1000 : width) * (counter - 1)}px`,
 					}}
 				>
 					{banners}
