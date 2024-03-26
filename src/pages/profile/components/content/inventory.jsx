@@ -242,6 +242,8 @@ const Inventory = () => {
 				isActive={exchangeItem}
 				close={() => {
 					setExchangeItem()
+					setSelectItems(prev => ({ ...prev, items: [] }))
+					setIsOpenWithdrawWindow(false)
 					setIsLoading(true)
 				}}
 			>

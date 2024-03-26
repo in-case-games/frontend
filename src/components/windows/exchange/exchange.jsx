@@ -28,7 +28,6 @@ const Exchange = props => {
 	const [selectItems, setSelectItems] = useState({ items: [] })
 	const [primaryItems, setPrimaryItems] = useState([])
 	const [showItems, setShowItems] = useState([])
-	const [penaltyDelay, setPenaltyDelay] = useState(0)
 
 	const loadedGames = async () => {
 		const games = {}
@@ -92,22 +91,16 @@ const Exchange = props => {
 				setShowItems(show)
 			}
 			if (!isBanned && (isLoading || isClickItem)) {
-				await Handler.error(
-					async () => {
-						await loaded(isLoading)
+				await Handler.error(async () => {
+					await loaded(isLoading)
 
-						setIsClickItem(false)
-						setIsLoading(false)
-					},
-					undefined,
-					undefined,
-					penaltyDelay,
-					setPenaltyDelay
-				)
+					setIsClickItem(false)
+					setIsLoading(false)
+				})
 
 				setIsBanned(false)
 			}
-		}, 100 + penaltyDelay)
+		}, 100)
 
 		return () => clearInterval(interval)
 	})
