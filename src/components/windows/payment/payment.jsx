@@ -23,7 +23,8 @@ const Payment = () => {
 				currency: typePay.currency,
 			})
 			setIsLoading(false)
-			window.open(response?.data?.data?.url)
+
+			window.location.replace(response?.data?.data?.url)
 
 			return response
 		})
