@@ -41,7 +41,8 @@
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
-	padding: 0 20px;
+	justify-content: center;
+
 	width: 100%;
 	min-height: 100px;
 
@@ -50,12 +51,6 @@
 	&:hover {
 		transition: background 200ms;
 		background: var(--color-black__7);
-	}
-
-	.input {
-	}
-
-	.combo_box {
 	}
 }
 
