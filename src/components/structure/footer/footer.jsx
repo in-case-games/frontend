@@ -36,9 +36,23 @@ const Footer = () => {
 						<div className={styles.footer_links}>
 							<div className={styles.footer_social}>
 								<div className={styles.social_bar}>
-									<img alt='' src={YouTubeImage} href='#' />
-									<img alt='' src={TelegramImage} href='#' />
-									<img alt='' src={VkImage} href='#' />
+									<a href='https://t.me/+IdWrGtInH9AwNWZi' target='_blank'>
+										<img alt='' src={YouTubeImage} />
+									</a>
+									<a href='https://t.me/+IdWrGtInH9AwNWZi' target='_blank'>
+										<img
+											alt=''
+											src={TelegramImage}
+											href='https://t.me/+IdWrGtInH9AwNWZi'
+										/>
+									</a>
+									<a href='https://t.me/+IdWrGtInH9AwNWZi' target='_blank'>
+										<img
+											alt=''
+											src={VkImage}
+											href='https://t.me/+IdWrGtInH9AwNWZi'
+										/>
+									</a>
 								</div>
 								<div className={styles.text}>Мы в социальных сетях</div>
 							</div>
@@ -78,7 +92,11 @@ const Footer = () => {
 								<img alt='' src={PeoplesImage}></img>
 								<div>Партнерам</div>
 							</a>
-							<a className={styles.link} href='#'>
+							<a
+								className={styles.link}
+								href='https://github.com/InCase-buy-and-opening-cases'
+								target='_blank'
+							>
 								<img alt='' src={SettingImage}></img>
 								<div>Наши проекты</div>
 							</a>
