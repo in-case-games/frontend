@@ -1,44 +1,44 @@
 .pull_out_profile {
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly;
 
-  width: 40px;
-  height: 30px;
+	width: 40px;
+	height: 30px;
 
-  color: black;
-  border-radius: 5px 0 0 5px;
+	color: black;
+	border-radius: 0 5px 5px 0;
 
-  transition: width 0.3s;
+	transition: width 0.3s;
 
-  cursor: pointer;
+	cursor: pointer;
 
-  &:hover {
-    width: 200px;
+	&:hover {
+		width: 200px;
 
-    .image {
-      margin-left: 10px;
-    }
+		.image {
+			margin-left: 10px;
+		}
 
-    .text {
-      opacity: 1;
-      visibility: visible;
-      width: 100%;
-      text-align: center;
-      transition: width 0.3s, opacity 0.5s, visibility 0.5s;
-    }
-  }
+		.text {
+			opacity: 1;
+			visibility: visible;
+			width: 100%;
+			text-align: center;
+			transition: width 0.3s, opacity 0.5s, visibility 0.5s;
+		}
+	}
 
-  .image {
-    height: 20px;
-    max-width: 40px;
-  }
+	.image {
+		height: 20px;
+		max-width: 40px;
+	}
 
-  .text {
-    visibility: hidden;
-    opacity: 0;
-    width: 0px;
+	.text {
+		visibility: hidden;
+		opacity: 0;
+		width: 0px;
 
-    font-size: 18px;
-  }
+		font-size: 18px;
+	}
 }

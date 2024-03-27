@@ -1,1 +1,1 @@
-export { default as Small } from "./small";
+export { default as Small } from './small'

@@ -1,1 +1,1 @@
-export { default as HistoryOpening } from "./history-opening";
+export { default as HistoryOpening } from './history-opening'

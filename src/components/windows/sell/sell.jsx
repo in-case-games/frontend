@@ -1,181 +1,154 @@
-import React, { useEffect, useState } from "react";
-import { Item as ItemApi } from "../../../api";
-import { Simple as Item } from "../../game-item";
-import { LoadingArrow as Loading } from "../../loading";
-import { Handler } from "../../../helpers/handler";
-import styles from "./sell.module";
+import React, { useEffect, useState } from 'react'
+import { Item as ItemApi } from '../../../api'
+import { Common } from '../../../helpers/common'
+import { Handler } from '../../../helpers/handler'
+import { Simple as Item } from '../../game-item'
+import { LoadingArrow as Loading } from '../../loading'
+import styles from './sell.module'
 
-const Sell = (props) => {
-  const itemApi = new ItemApi();
+const Sell = props => {
+	const itemApi = new ItemApi()
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [isBanned, setIsBanned] = useState(false);
-  const [isApply, setIsApply] = useState(false);
-  const [isDisplayedButton, setIsDisplayedButton] = useState(false);
+	const [isLoading, setIsLoading] = useState(true)
+	const [isBanned, setIsBanned] = useState(false)
+	const [isApply, setIsApply] = useState(false)
+	const [isButton, setIsButton] = useState(false)
 
-  const [finishedInventories, setFinishedInventories] = useState({ items: [] });
-  const [remainingInventories, setRemainingInventories] = useState({
-    items: [],
-  });
-  const [penaltyDelay, setPenaltyDelay] = useState(0);
+	const [finishedItems, setFinishedItems] = useState({ items: [] })
+	const [remainingItems, setRemainingItems] = useState({ items: [] })
 
-  const click = () => {
-    setIsBanned(true);
-    setIsLoading(true);
-    setIsDisplayedButton(false);
-    selling();
-  };
+	useEffect(() => {
+		const interval = setInterval(async () => {
+			const finished = finishedItems.items
+			const remaining = finished.filter(i => i.status !== 'success')
 
-  const selling = async () => {
-    const items = finishedInventories.items;
+			if (remainingItems.items.length !== remaining.length) {
+				setRemainingItems({ ...remainingItems, items: remaining })
+			}
+			if ((remaining.length === 0) !== isApply) {
+				setIsApply(remaining.length === 0)
+			}
+			if (remaining.length > 0 !== isButton) {
+				setIsButton(remaining.length > 0)
+			}
 
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].status !== "success") {
-        items[i].status = "wait";
-        items[i].error = null;
-        setFinishedInventories((prev) => ({ ...prev, items: items }));
-      }
-    }
+			if (finished.length === 0 && !isBanned) {
+				setIsBanned(true)
+				setIsLoading(true)
 
-    for (let i = 0; i < items.length; i++) {
-      const id = items[i].id;
-      const index = props.selectItems.items.indexOf(id);
-      let error = false;
+				let selected = props.selectItems.items
 
-      await Handler.error(
-        async () => {
-          if (items[i].status !== "success") {
-            items[i].status = "loading";
-            setFinishedInventories((prev) => ({ ...prev, items: items }));
+				if (!selected || selected.length === 0) selected = props.loadedItems
 
-            await itemApi.sell(id);
+				setFinishedItems({
+					...finishedItems,
+					items: Common.zeroingStatusesAndErrorsItems(selected),
+				})
+				setIsLoading(false)
+				setIsBanned(false)
+			}
+		}, 10)
 
-            items[i].status = "success";
-            setFinishedInventories((prev) => ({ ...prev, items: items }));
-          }
-        },
-        async () => {
-          error = true;
-          items[i].status = "cancel";
-          items[i].error = "Внутренняя ошибка, попробуйте еще раз";
-          setFinishedInventories((prev) => ({ ...prev, items: items }));
-          return false;
-        },
-        undefined,
-        penaltyDelay,
-        setPenaltyDelay
-      );
+		return () => clearInterval(interval)
+	})
 
-      removeSelectItem(index);
+	const selling = async () => {
+		const finished = Common.zeroingStatusesAndErrorsItemsRealTime(
+			finishedItems.items,
+			setFinishedItems
+		)
 
-      if (error) break;
-    }
+		for (let i = 0; i < finished.length; i++) {
+			let error = false
 
-    setIsLoading(false);
-    setIsBanned(false);
-  };
+			if (finished[i].status !== 'success') {
+				finished[i].status = 'loading'
+				setFinishedItems(prev => ({ ...prev, items: finished }))
 
-  const removeSelectItem = (index) => {
-    if (index > -1) {
-      let items = props.selectItems.items;
-      items.splice(index, 1);
-      props.setSelectItems({ ...props.selectItems, ...items });
-    }
-  };
+				await Handler.error(
+					async () => {
+						await itemApi.sell(finished[i].id)
+						finished[i].status = 'success'
+					},
+					async () => {
+						error = true
+						finished[i].status = 'cancel'
+						finished[i].error = 'Внутренняя ошибка, попробуйте еще раз'
+						return false
+					}
+				)
 
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      const items = finishedInventories.items;
-      const remaining = items.filter((i) => i.status !== "success");
-      setRemainingInventories({ ...remainingInventories, items: remaining });
+				setFinishedItems(prev => ({ ...prev, items: finished }))
 
-      if (items.length > 0 && !isBanned) {
-        setIsApply(remaining.length === 0);
-        setIsDisplayedButton(remaining.length > 0);
-      }
-    }, 100 + penaltyDelay);
+				if (error) break
+			}
+		}
 
-    return () => clearInterval(interval);
-  });
+		setIsLoading(false)
+		setIsBanned(false)
+	}
 
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      if (finishedInventories.items.length === 0 && !isBanned) {
-        setIsBanned(true);
-        setIsLoading(true);
+	const click = () => {
+		setIsBanned(true)
+		setIsLoading(true)
+		setIsButton(false)
+		selling()
+	}
 
-        let inv = props.selectItems.items;
+	return (
+		<div className={styles.sell}>
+			<div className={styles.sell_content}>
+				<div className={styles.sell_header}>
+					<div className={styles.loading}>
+						<Loading isLoading={isLoading} click={() => {}} cursor='default' />
+					</div>
+					<div className={styles.tittle}>Продажа предметов</div>
+				</div>
+				{finishedItems.items.length > 0 ? (
+					<div className={styles.counter}>
+						{finishedItems.items.length -
+							remainingItems.items.length +
+							'/' +
+							finishedItems.items.length}
+					</div>
+				) : null}
+				{isApply ? (
+					<div className={styles.description}>Все предметы проданы :)</div>
+				) : null}
+				{isButton ? (
+					<div className={styles.button_sell} onClick={click}>
+						Продать
+					</div>
+				) : null}
+				{finishedItems.items.length > 0 ? (
+					<div className={styles.delimiter_first}></div>
+				) : null}
+				<div
+					className={styles.items}
+					style={
+						finishedItems.items.length > 3
+							? { overflowY: 'scroll' }
+							: { overflowY: 'hidden' }
+					}
+				>
+					{finishedItems.items.map(i => (
+						<Item
+							id={i.id}
+							item={i.item}
+							isLoading={isLoading}
+							showStatus={true}
+							status={i.status}
+							error={i.error}
+							key={i.id}
+						/>
+					))}
+				</div>
+				{finishedItems.items.length > 0 ? (
+					<div className={styles.delimiter_second}></div>
+				) : null}
+			</div>
+		</div>
+	)
+}
 
-        if (!inv || inv.length === 0) inv = props.loadedItems;
-
-        for (let i = 0; i < inv.length; i++) {
-          inv[i].status = "wait";
-          inv[i].error = null;
-        }
-
-        setFinishedInventories({ ...finishedInventories, items: inv });
-        setIsLoading(false);
-        setIsBanned(false);
-      }
-    }, 10 + penaltyDelay);
-
-    return () => clearInterval(interval);
-  });
-
-  return (
-    <div className={styles.sell}>
-      <div className={styles.sell_content}>
-        <div className={styles.sell_header}>
-          <div className={styles.loading}>
-            <Loading isLoading={isLoading} click={() => {}} cursor="default" />
-          </div>
-          <div className={styles.tittle}>Продажа предметов</div>
-        </div>
-        {finishedInventories.items.length > 0 ? (
-          <div className={styles.counter}>
-            {finishedInventories.items.length -
-              remainingInventories.items.length +
-              "/" +
-              finishedInventories.items.length}
-          </div>
-        ) : null}
-        {isApply ? (
-          <div className={styles.description}>Все предметы проданы :)</div>
-        ) : null}
-        {isDisplayedButton ? (
-          <div className={styles.button_sell} onClick={click}>
-            Продать
-          </div>
-        ) : null}
-        {finishedInventories.items.length > 0 ? (
-          <div className={styles.delimiter_first}></div>
-        ) : null}
-        <div
-          className={styles.items}
-          style={
-            finishedInventories.items.length > 3
-              ? { overflowY: "scroll" }
-              : { overflowY: "hidden" }
-          }
-        >
-          {finishedInventories.items.map((i) => (
-            <Item
-              id={i.id}
-              item={i.item}
-              isLoading={isLoading}
-              showStatus={true}
-              status={i.status}
-              error={i.error}
-              key={i.id}
-            />
-          ))}
-        </div>
-        {finishedInventories.items.length > 0 ? (
-          <div className={styles.delimiter_second}></div>
-        ) : null}
-      </div>
-    </div>
-  );
-};
-
-export default Sell;
+export default Sell

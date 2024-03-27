@@ -1,1 +1,1 @@
-export { default as AccountConfirm } from "./account-confirm";
+export { default as AccountConfirm } from './account-confirm'

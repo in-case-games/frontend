@@ -1,194 +1,207 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from 'react'
+import { Game as GameApi, Item as ItemApi, User as UserApi } from '../../../api'
+import { Converter } from '../../../helpers/converter'
+import { Handler } from '../../../helpers/handler'
+import { Modal as ModalLayout } from '../../../layouts'
+import { OpeningHistory as Item } from '../../game-item'
 import {
-  Item as ItemApi,
-  User as UserApi,
-  Game as GameApi,
-} from "../../../api";
-import { OpeningHistory as Item } from "../../game-item";
-import { Modal as ModalLayout } from "../../../layouts";
-import {
-  MiniProfile as MiniProfileWindow,
-  Item as ItemWindow,
-  Box as BoxWindow,
-  LoadImage as LoadImageWindow,
-  Restriction as RestrictionWindow,
-} from "../../windows";
-import { Converter } from "../../../helpers/converter";
-import { Handler } from "../../../helpers/handler";
-import styles from "./openings-roulette.module";
+	Box as BoxWindow,
+	Item as ItemWindow,
+	LoadImage as LoadImageWindow,
+	MiniProfile as MiniProfileWindow,
+	Restriction as RestrictionWindow,
+} from '../../windows'
+import styles from './openings-roulette.module'
 
 const OpeningsRoulette = () => {
-  const userApi = new UserApi();
-  const itemApi = new ItemApi();
-  const gameApi = new GameApi();
-  const windowWidth = useRef(window.innerWidth);
+	const userApi = new UserApi()
+	const itemApi = new ItemApi()
+	const gameApi = new GameApi()
 
-  const [isStart, setIsStart] = useState(true);
+	const [width, setWidth] = useState(window.innerWidth)
+	const [isStart, setIsStart] = useState(true)
+	const [penaltyDelay, setPenaltyDelay] = useState(0)
 
-  const [items, setItems] = useState();
-  const [games, setGames] = useState();
-  const [item, setItem] = useState();
-  const [box, setBox] = useState();
-  const [image, setImage] = useState();
-  const [restriction, setRestriction] = useState();
+	const [items, setItems] = useState()
+	const [games, setGames] = useState()
+	const [item, setItem] = useState()
+	const [box, setBox] = useState()
+	const [image, setImage] = useState()
+	const [restriction, setRestriction] = useState()
 
-  const [miniProfile, setMiniProfile] = useState();
-  const [isOpenLoadWindow, setIsOpenLoadWindow] = useState(false);
+	const [miniProfile, setMiniProfile] = useState()
+	const [isOpenLoadWindow, setIsOpenLoadWindow] = useState(false)
 
-  useEffect(() => {
-    const interval = setInterval(
-      async () => {
-        await Handler.error(async () => {
-          setIsStart(false);
+	function handleWindowSizeChange() {
+		setWidth(window.innerWidth)
+	}
 
-          const g = games || (await loadedGames());
-          const history = await loadedHistory();
-          const result = [];
+	useEffect(() => {
+		window.addEventListener('resize', handleWindowSizeChange)
+		return () => {
+			window.removeEventListener('resize', handleWindowSizeChange)
+		}
+	}, [])
 
-          for (let i = 0; i < history.length; i++) {
-            let h = await pushItemToHistory(history[i], g);
+	useEffect(() => {
+		const interval = setInterval(
+			async () => {
+				await Handler.error(
+					async () => {
+						setIsStart(false)
 
-            result.push(
-              <Item
-                history={h}
-                showMiniProfile={() => setMiniProfile(h.userId)}
-                key={h.id}
-              />
-            );
-          }
+						const g = games || (await loadedGames())
+						const history = await loadedHistory()
+						const result = []
 
-          setItems(result);
-        });
-      },
-      isStart ? 1000 : 5000
-    );
+						for (let i = 0; i < history.length; i++) {
+							let h = await pushItemToHistory(history[i], g)
 
-    return () => {
-      clearInterval(interval);
-    };
-  });
+							result.push(
+								<Item
+									history={h}
+									showMiniProfile={() => setMiniProfile(h.userId)}
+									key={h.id}
+								/>
+							)
+						}
 
-  const loadedGames = async () => {
-    const games = {};
-    const response = await gameApi.get();
+						setItems(result)
+					},
+					undefined,
+					undefined,
+					penaltyDelay,
+					setPenaltyDelay,
+					'OPENINGS_ROULETTE'
+				)
+			},
+			isStart ? 100 + penaltyDelay : 1000 + penaltyDelay
+		)
 
-    for (let i = 0; i < response.length; i++) {
-      games[response[i].name] = response[i].id;
-    }
+		return () => clearInterval(interval)
+	})
 
-    setGames(games);
+	const loadedGames = async () => {
+		const games = {}
+		const response = await gameApi.get()
 
-    return games;
-  };
+		for (let i = 0; i < response.length; i++) {
+			games[response[i].name] = response[i].id
+		}
 
-  const loadedHistory = async () => {
-    let history = [];
-    const url = window.location.href.split("/");
+		setGames(games)
 
-    if (url.at(-2) === "box") {
-      try {
-        history = await userApi.getRouletteOpeningsByBoxId(url.at(-1));
-      } catch (err) {}
-    }
+		return games
+	}
 
-    if (history.length === 0) history = await userApi.getRouletteOpenings();
+	const loadedHistory = async () => {
+		let history = []
+		const url = window.location.href.split('/')
 
-    const maxItemsWindow = Math.floor(windowWidth.current / 160) + 1;
+		if (url.at(-2) === 'box') {
+			try {
+				history = await userApi.getRouletteOpeningsByBoxId(url.at(-1))
+			} catch (err) {}
+		}
 
-    history = history.slice(0, maxItemsWindow);
+		if (history.length === 0) history = await userApi.getRouletteOpenings()
 
-    return history;
-  };
+		const maxItemsWindow = Math.floor(width / 160) + 1
 
-  const pushItemToHistory = async (history, games) => {
-    if (items) {
-      const f = items.find((i) => i.props.history.id === history.id)?.props
-        ?.history?.item;
+		history = history.slice(0, maxItemsWindow)
 
-      if (f) history.item = f;
-    }
+		return history
+	}
 
-    var now_utc = Converter.getUtcDate();
+	const pushItemToHistory = async (history, games) => {
+		if (items) {
+			const f = items.find(i => i.props.history.id === history.id)?.props
+				?.history?.item
 
-    if (
-      !history.item ||
-      !history.item?.image ||
-      (history.item?.updateDate &&
-        new Date(history.item?.updateDate) < new Date(now_utc - 300000))
-    ) {
-      history.item = await itemApi.getById(history.itemId);
-      history.item.gameId = games[history.item.game];
-      history.item = await itemApi.pushImage(history.item);
-    }
+			if (f) history.item = f
+		}
 
-    return history;
-  };
+		var now_utc = Converter.getUtcDate()
 
-  return (
-    <div className={styles.openings_roulette}>
-      {items}
-      <ModalLayout isActive={miniProfile} close={() => setMiniProfile()}>
-        <MiniProfileWindow
-          userId={miniProfile}
-          openRestrictionWindow={(r) => setRestriction(r)}
-          openItemWindow={(item) => setItem(item)}
-          openBoxWindow={(box) => setBox(box)}
-          exchangeWindow={(id) => setMiniProfile(id)}
-        />
-      </ModalLayout>
-      <ModalLayout isActive={restriction} close={() => setRestriction()}>
-        <RestrictionWindow
-          restriction={restriction}
-          setRestriction={setRestriction}
-          close={() => setRestriction()}
-        />
-      </ModalLayout>
-      <ModalLayout
-        isActive={item}
-        close={() => {
-          setItem();
-          setImage();
-        }}
-      >
-        <ItemWindow
-          item={item}
-          image={image}
-          setImage={setImage}
-          setItem={setItem}
-          openLoadWindow={setIsOpenLoadWindow}
-        />
-      </ModalLayout>
-      <ModalLayout
-        isActive={box}
-        close={() => {
-          setBox();
-          setImage();
-        }}
-      >
-        <BoxWindow
-          box={box}
-          image={image}
-          setImage={setImage}
-          setBox={setBox}
-          openLoadWindow={setIsOpenLoadWindow}
-        />
-      </ModalLayout>
-      <ModalLayout
-        isActive={isOpenLoadWindow}
-        close={() => setIsOpenLoadWindow(false)}
-      >
-        <LoadImageWindow
-          file={image}
-          setFile={setImage}
-          width={200}
-          height={200}
-          sizeMb={1}
-          regular={/\.(png)$/}
-          description={"PNG (MAX. 200x200px | 1MB)"}
-        />
-      </ModalLayout>
-    </div>
-  );
-};
+		if (
+			!history.item ||
+			!history.item?.image ||
+			(history.item?.updateDate &&
+				new Date(history.item?.updateDate) < new Date(now_utc - 300000))
+		) {
+			history.item = await itemApi.getById(history.itemId)
+			history.item.gameId = games[history.item.game]
+			history.item = await itemApi.pushImage(history.item)
+		}
 
-export default OpeningsRoulette;
+		return history
+	}
+
+	return (
+		<div className={styles.openings_roulette}>
+			{items}
+			<ModalLayout isActive={miniProfile} close={() => setMiniProfile()}>
+				<MiniProfileWindow
+					userId={miniProfile}
+					openRestrictionWindow={r => setRestriction(r)}
+					openItemWindow={item => setItem(item)}
+					openBoxWindow={box => setBox(box)}
+					exchangeWindow={id => setMiniProfile(id)}
+				/>
+			</ModalLayout>
+			<ModalLayout isActive={restriction} close={() => setRestriction()}>
+				<RestrictionWindow
+					restriction={restriction}
+					setRestriction={setRestriction}
+					close={() => setRestriction()}
+				/>
+			</ModalLayout>
+			<ModalLayout
+				isActive={item}
+				close={() => {
+					setItem()
+					setImage()
+				}}
+			>
+				<ItemWindow
+					item={item}
+					image={image}
+					setImage={setImage}
+					setItem={setItem}
+					openLoadWindow={setIsOpenLoadWindow}
+				/>
+			</ModalLayout>
+			<ModalLayout
+				isActive={box}
+				close={() => {
+					setBox()
+					setImage()
+				}}
+			>
+				<BoxWindow
+					box={box}
+					image={image}
+					setImage={setImage}
+					setBox={setBox}
+					openLoadWindow={setIsOpenLoadWindow}
+				/>
+			</ModalLayout>
+			<ModalLayout
+				isActive={isOpenLoadWindow}
+				close={() => setIsOpenLoadWindow(false)}
+			>
+				<LoadImageWindow
+					file={image}
+					setFile={setImage}
+					width={200}
+					height={200}
+					sizeMb={1}
+					regular={/\.(png)$/}
+					description={'PNG (MAX. 200x200px | 1MB)'}
+				/>
+			</ModalLayout>
+		</div>
+	)
+}
+
+export default OpeningsRoulette

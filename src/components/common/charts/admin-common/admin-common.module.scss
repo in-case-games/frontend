@@ -1,28 +1,28 @@
 .chart {
-  .inner {
-    width: 800px;
-    height: 400px;
-  }
+	.inner {
+		width: 800px;
+		height: 400px;
+	}
 }
 
 .chart_tittle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 20px 0 0px 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin: 20px 0 0px 0;
 
-  .tittle {
-    font-family: "Play";
-    font-size: 24px;
-    text-align: center;
-  }
+	.tittle {
+		font-family: 'Play';
+		font-size: 24px;
+		text-align: center;
+	}
 
-  .dots {
-    flex: 0.2 1 auto;
-  }
+	.dots {
+		flex: 0.2 1 auto;
+	}
 
-  .delay {
-    display: flex;
-    flex: 0.2 1 auto;
-  }
+	.delay {
+		display: flex;
+		flex: 0.2 1 auto;
+	}
 }

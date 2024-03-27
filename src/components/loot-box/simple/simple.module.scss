@@ -1,62 +1,62 @@
 .box_simple {
-  display: flex;
+	display: flex;
 
-  max-width: 300px;
+	max-width: 300px;
 
-  background: var(--color-black__8);
-  border-radius: 15px;
+	background: var(--color-black__8);
+	border-radius: 15px;
 
-  transition: all 0.3s;
+	transition: all 0.3s;
 
-  cursor: pointer;
+	cursor: pointer;
 
-  margin: 5px 10px;
+	margin: 5px 10px;
 
-  .box_image {
-    height: 80px;
-    max-width: 100px;
+	.box_image {
+		height: 80px;
+		max-width: 100px;
 
-    border-radius: 15px 0 0 15px;
+		border-radius: 15px 0 0 15px;
 
-    padding: 10px;
-  }
+		padding: 10px;
+	}
 
-  &:hover {
-    background: var(--color-black__3);
-    transition: all 0.3s;
-  }
+	&:hover {
+		background: var(--color-black__3);
+		transition: all 0.3s;
+	}
 }
 
 .box_info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 
-  width: 100%;
+	width: 100%;
 
-  font-size: 15px;
-  font-family: "Play";
+	font-size: 15px;
+	font-family: 'Play';
 
-  margin: 0 25px;
+	margin: 0 25px;
 
-  .name {
-  }
+	.name {
+	}
 
-  .cost {
-    display: flex;
-    align-items: center;
+	.cost {
+		display: flex;
+		align-items: center;
 
-    font-family: "Nunito";
-    font-weight: 700;
-    font-size: 16px;
+		font-family: 'Nunito';
+		font-weight: 700;
+		font-size: 16px;
 
-    .image {
-      width: 20px;
-      height: 20px;
-    }
-  }
+		.image {
+			width: 20px;
+			height: 20px;
+		}
+	}
 
-  .game {
-    color: var(--color-gray__7);
-  }
+	.game {
+		color: var(--color-gray__7);
+	}
 }

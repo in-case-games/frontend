@@ -1,192 +1,192 @@
 .review,
 .review__flipped {
-  position: relative;
+	position: relative;
 
-  transition: transform 1s, margin 200ms;
-  transform-style: preserve-3d;
+	transition: transform 1s, margin 200ms;
+	transform-style: preserve-3d;
 
-  width: 200px;
-  height: 200px;
+	width: 200px;
+	height: 200px;
 
-  background: linear-gradient(var(--gradient-1__0-100));
-  border-radius: 15px;
+	background: linear-gradient(var(--gradient-1__0-100));
+	border-radius: 15px;
 
-  font-family: "Nunito";
-  color: black;
+	font-family: 'Nunito';
+	color: black;
 
-  padding: 30px 10px;
+	padding: 30px 10px;
 
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .review_line {
-  display: block;
-  width: 100%;
+	display: block;
+	width: 100%;
 
-  cursor: pointer;
+	cursor: pointer;
 
-  &:hover {
-    transition: background 200ms;
-    background: var(--color-black__7);
-  }
+	&:hover {
+		transition: background 200ms;
+		background: var(--color-black__7);
+	}
 
-  .content {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+	.content {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
 
-    padding: 10px 40px;
+		padding: 10px 40px;
 
-    border-top: 1px var(--color-black__6) solid;
-    border-bottom: 1px var(--color-black__6) solid;
+		border-top: 1px var(--color-black__6) solid;
+		border-bottom: 1px var(--color-black__6) solid;
 
-    .group {
-      display: flex;
-      align-items: center;
+		.group {
+			display: flex;
+			align-items: center;
 
-      .approve,
-      .denied {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
+			.approve,
+			.denied {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				text-align: center;
 
-        width: 15px;
-        height: 15px;
+				width: 15px;
+				height: 15px;
 
-        font-family: "Play";
-        font-weight: 400;
-        font-size: 20px;
-        font-weight: 400;
-        font-size: 20px;
+				font-family: 'Play';
+				font-weight: 400;
+				font-size: 20px;
+				font-weight: 400;
+				font-size: 20px;
 
-        border-radius: 8px;
+				border-radius: 8px;
 
-        padding: 8px 10px;
-      }
+				padding: 8px 10px;
+			}
 
-      .approve {
-        background: var(--color-green__3);
-        color: var(--color-black__2);
-      }
+			.approve {
+				background: var(--color-green__3);
+				color: var(--color-black__2);
+			}
 
-      .denied {
-        background: var(--color-red__3);
-        color: var(--color-black__2);
-      }
+			.denied {
+				background: var(--color-red__3);
+				color: var(--color-black__2);
+			}
 
-      .image {
-        background-repeat: no-repeat;
-        background-position: 50%;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
-        cursor: pointer;
+			.image {
+				background-repeat: no-repeat;
+				background-position: 50%;
+				border-radius: 50%;
+				width: 50px;
+				height: 50px;
+				cursor: pointer;
 
-        margin-left: 15px;
-        object-fit: cover;
-      }
-    }
+				margin-left: 15px;
+				object-fit: cover;
+			}
+		}
 
-    .approve,
-    .denied {
-      font-family: "Play";
-      font-weight: 400;
-      font-size: 20px;
-      font-weight: 400;
-      font-size: 20px;
-    }
+		.approve,
+		.denied {
+			font-family: 'Play';
+			font-weight: 400;
+			font-size: 20px;
+			font-weight: 400;
+			font-size: 20px;
+		}
 
-    .tittle {
-    }
+		.tittle {
+		}
 
-    .description {
-    }
+		.description {
+		}
 
-    .date {
-    }
-  }
+		.date {
+		}
+	}
 }
 
 .review__flipped,
 .review_face__back {
-  transform: rotateY(180deg);
+	transform: rotateY(180deg);
 }
 
 .review_face__front,
 .review_face__back {
-  position: absolute;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  overflow: hidden;
+	position: absolute;
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+	overflow: hidden;
 
-  height: 200px;
-  width: 200px;
+	height: 200px;
+	width: 200px;
 
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: space-around;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	justify-content: space-around;
 
-  .score {
-    font-size: 60px;
-    font-family: "Megrim";
-    text-align: center;
-  }
+	.score {
+		font-size: 60px;
+		font-family: 'Megrim';
+		text-align: center;
+	}
 
-  .inner {
-    font-size: 16px;
-    text-align: center;
-  }
+	.inner {
+		font-size: 16px;
+		text-align: center;
+	}
 
-  .info {
-    max-width: 25px;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-  }
+	.info {
+		max-width: 25px;
+		position: absolute;
+		right: 0;
+		bottom: 0;
+	}
 }
 
 .review_header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
 
-  .image {
-    width: 50px;
-    height: 50px;
-    background-repeat: no-repeat;
-    background-position: 50%;
-    border-radius: 15px;
+	.image {
+		width: 50px;
+		height: 50px;
+		background-repeat: no-repeat;
+		background-position: 50%;
+		border-radius: 15px;
 
-    object-fit: cover;
-  }
+		object-fit: cover;
+	}
 }
 
 .mini_info {
-  display: flex;
-  flex-direction: column;
-  justify-content: left;
-  align-items: flex-start;
+	display: flex;
+	flex-direction: column;
+	justify-content: left;
+	align-items: flex-start;
 
-  .name {
-    font-size: 20px;
-    margin: 0 0 5px 0;
-    font-weight: 800;
-  }
+	.name {
+		font-size: 20px;
+		margin: 0 0 5px 0;
+		font-weight: 800;
+	}
 
-  .date {
-    font-size: 12px;
-    font-weight: 600;
-    margin: 0;
-  }
+	.date {
+		font-size: 12px;
+		font-weight: 600;
+		margin: 0;
+	}
 }
 
 @media (max-width: 725px) {
-  .review_line {
-    .content {
-      padding: 10px;
-    }
-  }
+	.review_line {
+		.content {
+			padding: 10px;
+		}
+	}
 }

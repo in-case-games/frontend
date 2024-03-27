@@ -1,324 +1,319 @@
 .home {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
 
-  max-width: 1500px;
-  width: 100%;
+	max-width: 1500px;
+	width: 100%;
 
-  .inner {
-    display: flex;
+	.inner {
+		display: flex;
 
-    width: 100%;
-    min-height: 700px;
+		width: 100%;
+		min-height: 700px;
 
-    border: 1px var(--color-black__6) solid;
-  }
+		border: 1px var(--color-black__6) solid;
+	}
 
-  .delimiter {
-    border: 1px solid var(--color-orange__1);
-    margin-top: 5px;
-    width: 100%;
-  }
+	.delimiter {
+		border: 1px solid var(--color-orange__1);
+		margin-top: 5px;
+		width: 100%;
+	}
 }
 
 .menu_left {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
-  flex: 1 1 auto;
+	flex: 1 1 auto;
 
-  min-height: 200px;
+	min-height: 200px;
 
-  .reviews {
-    flex: 1 0 auto;
+	.reviews {
+		flex: 1 0 auto;
 
-    width: 100%;
-  }
+		width: 100%;
+	}
 }
 
 .menu_top {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  padding: 0 20px;
-  width: 100%;
-  min-height: 100px;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	justify-content: center;
 
-  border-bottom: 1px var(--color-black__6) solid;
+	width: 100%;
+	min-height: 100px;
 
-  &:hover {
-    transition: background 200ms;
-    background: var(--color-black__7);
-  }
+	border-bottom: 1px var(--color-black__6) solid;
 
-  .input {
-  }
-
-  .combo_box {
-  }
+	&:hover {
+		transition: background 200ms;
+		background: var(--color-black__7);
+	}
 }
 
 .menu_right {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
-  min-height: 200px;
-  min-width: 350px;
-  max-width: 350px;
+	min-height: 200px;
+	min-width: 350px;
+	max-width: 350px;
 
-  flex: 1 1 auto;
+	flex: 1 1 auto;
 
-  border-left: 1px var(--color-black__6) solid;
+	border-left: 1px var(--color-black__6) solid;
 
-  .review_images {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
+	.review_images {
+		display: flex;
+		align-items: center;
+		justify-content: space-evenly;
 
-    width: 100%;
-    min-height: 100px;
-    max-height: 100px;
+		width: 100%;
+		min-height: 100px;
+		max-height: 100px;
 
-    border-top: 1px var(--color-black__6) solid;
+		border-top: 1px var(--color-black__6) solid;
 
-    &:hover {
-      transition: background 200ms;
-      background: var(--color-black__7);
-    }
-  }
+		&:hover {
+			transition: background 200ms;
+			background: var(--color-black__7);
+		}
+	}
 }
 
 .review_image {
-  display: flex;
-  position: relative;
-  flex-direction: column;
+	display: flex;
+	position: relative;
+	flex-direction: column;
 
-  border: 1px var(--color-black__6) solid;
+	border: 1px var(--color-black__6) solid;
 
-  cursor: pointer;
+	cursor: pointer;
 
-  .image {
-    height: 80px;
-    width: 80px;
+	.image {
+		height: 80px;
+		width: 80px;
 
-    transition: opacity 200ms;
-  }
+		transition: opacity 200ms;
+	}
 
-  .show_image {
-    display: flex;
-    position: absolute;
-    align-items: center;
-    justify-content: center;
+	.show_image {
+		display: flex;
+		position: absolute;
+		align-items: center;
+		justify-content: center;
 
-    width: 100%;
-    height: 100%;
+		width: 100%;
+		height: 100%;
 
-    left: 0;
-    top: 0;
+		left: 0;
+		top: 0;
 
-    transition: opacity 100ms;
+		transition: opacity 100ms;
 
-    .image {
-      width: 30px;
-      height: 30px;
-    }
-  }
+		.image {
+			width: 30px;
+			height: 30px;
+		}
+	}
 }
 
 .review_info {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
-  flex: 1 0 auto;
+	flex: 1 0 auto;
 
-  width: 100%;
+	width: 100%;
 
-  padding: 20px 0;
+	padding: 20px 0;
 
-  &:hover {
-    transition: background 200ms;
-    background: var(--color-black__7);
-  }
+	&:hover {
+		transition: background 200ms;
+		background: var(--color-black__7);
+	}
 
-  .date {
-    display: flex;
-    justify-content: center;
-  }
+	.date {
+		display: flex;
+		justify-content: center;
+	}
 
-  .main_info {
-    flex: 1 0 auto;
-  }
+	.main_info {
+		flex: 1 0 auto;
+	}
 
-  .delimiter {
-    width: 70%;
+	.delimiter {
+		width: 70%;
 
-    margin: 0 auto;
-  }
+		margin: 0 auto;
+	}
 
-  .review_header {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
+	.review_header {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
 
-    padding: 0 20px;
-    margin-bottom: 20px;
+		padding: 0 20px;
+		margin-bottom: 20px;
 
-    .logo {
-      width: 100px;
-      height: 100px;
+		.logo {
+			width: 100px;
+			height: 100px;
 
-      background-repeat: no-repeat;
-      background-position: 50%;
-      border-radius: 50%;
+			background-repeat: no-repeat;
+			background-position: 50%;
+			border-radius: 50%;
 
-      cursor: pointer;
-      object-fit: cover;
+			cursor: pointer;
+			object-fit: cover;
 
-      margin-right: 10px;
-    }
+			margin-right: 10px;
+		}
 
-    .close_review {
-      color: var(--color-red__1);
-      font-size: 30px;
+		.close_review {
+			color: var(--color-red__1);
+			font-size: 30px;
 
-      cursor: pointer;
+			cursor: pointer;
 
-      margin-left: 5px;
-    }
-  }
+			margin-left: 5px;
+		}
+	}
 }
 
 .review_buttons {
-  display: flex;
-  justify-content: center;
+	display: flex;
+	justify-content: center;
 
-  margin-top: 15px;
+	margin-top: 15px;
 
-  padding: 0 20px;
+	padding: 0 20px;
 
-  .button_send,
-  .button_delete,
-  .button_back,
-  .button_approve,
-  .button_denied {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+	.button_send,
+	.button_delete,
+	.button_back,
+	.button_approve,
+	.button_denied {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
 
-    border-radius: 8px;
+		border-radius: 8px;
 
-    font-family: "Play";
-    font-weight: 400;
-    font-size: 20px;
-    font-weight: 400;
-    font-size: 20px;
+		font-family: 'Play';
+		font-weight: 400;
+		font-size: 20px;
+		font-weight: 400;
+		font-size: 20px;
 
-    cursor: pointer;
+		cursor: pointer;
 
-    padding: 8px 10px;
-  }
-  .button_send {
-    width: 150px;
+		padding: 8px 10px;
+	}
+	.button_send {
+		width: 150px;
 
-    background: var(--color-orange__1);
-    color: var(--color-black__2);
+		background: var(--color-orange__1);
+		color: var(--color-black__2);
 
-    margin-right: 5px;
-  }
+		margin-right: 5px;
+	}
 
-  .button_delete {
-    width: 150px;
+	.button_delete {
+		width: 150px;
 
-    background: var(--color-red__1);
-    color: var(--color-black__2);
+		background: var(--color-red__1);
+		color: var(--color-black__2);
 
-    margin-left: 5px;
-  }
+		margin-left: 5px;
+	}
 
-  .button_back {
-    width: 200px;
+	.button_back {
+		width: 200px;
 
-    background: var(--color-green__1);
-    color: var(--color-black__2);
+		background: var(--color-green__1);
+		color: var(--color-black__2);
 
-    .timer {
-      margin-left: 5px;
-    }
-  }
+		.timer {
+			margin-left: 5px;
+		}
+	}
 
-  .button_approve {
-    width: 50px;
+	.button_approve {
+		width: 50px;
 
-    background: var(--color-green__3);
-    color: var(--color-black__2);
-  }
+		background: var(--color-green__3);
+		color: var(--color-black__2);
+	}
 
-  .button_denied {
-    width: 50px;
+	.button_denied {
+		width: 50px;
 
-    background: var(--color-red__3);
-    color: var(--color-black__2);
-  }
+		background: var(--color-red__3);
+		color: var(--color-black__2);
+	}
 }
 
 .content_tittle {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: space-between;
 
-  padding: 0 20px;
+	padding: 0 20px;
 
-  .tittle {
-    display: flex;
-    padding: 0 20px;
-    align-items: center;
+	.tittle {
+		display: flex;
+		padding: 0 20px;
+		align-items: center;
 
-    .name {
-      font-family: "Play";
-      margin-right: 20px;
+		.name {
+			font-family: 'Play';
+			margin-right: 20px;
 
-      font-size: 30px;
-    }
+			font-size: 30px;
+		}
 
-    .loading {
-      margin-right: 15px;
-    }
-  }
+		.loading {
+			margin-right: 15px;
+		}
+	}
 }
 
 @media (max-width: 1200px) {
-  .home {
-    .inner {
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-  }
-  .menu_left {
-    width: 100%;
-  }
-  .menu_right {
-    order: -1;
-  }
+	.home {
+		.inner {
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+	}
+	.menu_left {
+		width: 100%;
+	}
+	.menu_right {
+		order: -1;
+	}
 }
 
 @media (min-width: 400px) and (max-width: 1200px) {
-  .menu_left {
-    border-bottom: 1px var(--color-black__6) solid;
-  }
-  .menu_right {
-    border-right: 1px var(--color-black__6) solid;
-  }
-  .menu_top {
-    border-top: 1px var(--color-black__6) solid;
-  }
+	.menu_left {
+		border-bottom: 1px var(--color-black__6) solid;
+	}
+	.menu_right {
+		border-right: 1px var(--color-black__6) solid;
+	}
+	.menu_top {
+		border-top: 1px var(--color-black__6) solid;
+	}
 }
 
 @media (max-width: 400px) {
-  .menu_right {
-    border: none;
-  }
+	.menu_right {
+		border: none;
+	}
 }

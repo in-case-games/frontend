@@ -1,8 +1,8 @@
-export { Header } from "./header";
-export { Footer } from "./footer";
-export { OpeningsRoulette } from "./openings-roulette";
-export { Reviews } from "./reviews";
-export { Games } from "./games";
-export { Banners } from "./banners";
-export { Boxes } from "./boxes";
-export { BoxItems } from "./box-items";
+export { Banners } from './banners'
+export { BoxItems } from './box-items'
+export { Boxes } from './boxes'
+export { Footer } from './footer'
+export { Games } from './games'
+export { Header } from './header'
+export { OpeningsRoulette } from './openings-roulette'
+export { Reviews } from './reviews'

@@ -1,29 +1,93 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
-import { NotFound as NotFoundPage } from "../pages/not-found";
-import { Email as EmailRouting } from ".";
-import { Home as HomePage } from "../pages/home";
-import { Game as GamePage } from "../pages/game";
-import { Info as InfoRouting } from ".";
-import { Profile as ProfilePage } from "../pages/profile";
-import { Box as BoxPage } from "../pages/box";
-import { Reviews as ReviewsPage } from "../pages/reviews";
-import { FAQ as FAQPage } from "../pages/faq";
+import React, { lazy, Suspense } from 'react'
+import { Route, Routes } from 'react-router-dom'
+import { Email as EmailRouting, Info as InfoRouting } from '.'
+import { BootScreenSaver } from '../components/loading'
+
+const FAQPage = lazy(() => import('../pages/faq/faq'))
+const ReviewsPage = lazy(() => import('../pages/reviews/reviews'))
+const BoxPage = lazy(() => import('../pages/box/box'))
+const ProfilePage = lazy(() => import('../pages/profile/profile'))
+const GamePage = lazy(() => import('../pages/game/game'))
+const HomePage = lazy(() => import('../pages/home/home'))
+const NotFoundPage = lazy(() => import('../pages/not-found/not-found'))
 
 const Main = () => (
-  <Routes>
-    <Route path="/faq/*" element={<FAQPage />} />
-    <Route path="/reviews/:id" element={<ReviewsPage />} />
-    <Route path="/reviews/*" element={<ReviewsPage />} />
-    <Route path="/profile/:id" element={<ProfilePage />} />
-    <Route path="/profile/*" element={<ProfilePage />} />
-    <Route path="/email/*" element={<EmailRouting />} />
-    <Route path="/info/*" element={<InfoRouting />} />
-    <Route path="/game/:name" element={<GamePage />} />
-    <Route path="/box/:id" element={<BoxPage />} />
-    <Route path="/" element={<HomePage />} />
-    <Route path="*" element={<NotFoundPage />} />
-  </Routes>
-);
+	<Routes>
+		<Route
+			path='/faq/*'
+			element={
+				<Suspense fallback={<BootScreenSaver />}>
+					<FAQPage />
+				</Suspense>
+			}
+		/>
+		<Route
+			path='/reviews/:id'
+			element={
+				<Suspense fallback={<BootScreenSaver />}>
+					<ReviewsPage />
+				</Suspense>
+			}
+		/>
+		<Route
+			path='/reviews/*'
+			element={
+				<Suspense fallback={<BootScreenSaver />}>
+					<ReviewsPage />
+				</Suspense>
+			}
+		/>
+		<Route
+			path='/profile/:id'
+			element={
+				<Suspense fallback={<BootScreenSaver />}>
+					<ProfilePage />
+				</Suspense>
+			}
+		/>
+		<Route
+			path='/profile/*'
+			element={
+				<Suspense fallback={<BootScreenSaver />}>
+					<ProfilePage />
+				</Suspense>
+			}
+		/>
+		<Route path='/email/*' element={<EmailRouting />} />
+		<Route path='/info/*' element={<InfoRouting />} />
+		<Route
+			path='/game/:name'
+			element={
+				<Suspense fallback={<BootScreenSaver />}>
+					<GamePage />
+				</Suspense>
+			}
+		/>
+		<Route
+			path='/box/:id'
+			element={
+				<Suspense fallback={<BootScreenSaver />}>
+					<BoxPage />
+				</Suspense>
+			}
+		/>
+		<Route
+			path='/'
+			element={
+				<Suspense fallback={<BootScreenSaver />}>
+					<HomePage />
+				</Suspense>
+			}
+		/>
+		<Route
+			path='*'
+			element={
+				<Suspense fallback={<BootScreenSaver />}>
+					<NotFoundPage />
+				</Suspense>
+			}
+		/>
+	</Routes>
+)
 
-export default Main;
+export default Main

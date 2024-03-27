@@ -1,1 +1,1 @@
-export { default as AccountChangePassword } from "./account-change-password";
+export { default as AccountChangePassword } from './account-change-password'

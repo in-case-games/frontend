@@ -1,1 +1,1 @@
-export { default as Big } from "./big";
+export { default as Big } from './big'

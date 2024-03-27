@@ -1,2 +1,2 @@
-export { Panel } from "./panel";
-export { Home } from "./home";
+export { Home } from './home'
+export { Panel } from './panel'

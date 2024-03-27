@@ -1,1 +1,1 @@
-export { default as HistoryWithdrawn } from "./history-withdrawn";
+export { default as HistoryWithdrawn } from './history-withdrawn'

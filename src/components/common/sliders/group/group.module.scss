@@ -1,66 +1,66 @@
 .group_slider {
-  position: relative;
-  min-height: 60px;
+	position: relative;
+	min-height: 60px;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
-  overflow: hidden;
+	overflow: hidden;
 
-  .inner {
-    display: -webkit-inline-box;
+	.inner {
+		display: -webkit-inline-box;
 
-    overflow: hidden;
+		overflow: hidden;
 
-    transition: all 500ms;
+		transition: all 500ms;
 
-    & * {
-      margin: 0 5px;
-    }
+		& * {
+			margin: 0 5px;
+		}
 
-    &:nth-child(1) {
-      margin: 0;
-    }
-  }
+		&:nth-child(1) {
+			margin: 0;
+		}
+	}
 }
 
 .button_slider {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
-  width: 40px;
-  height: 40px;
+	width: 40px;
+	height: 40px;
 
-  border-radius: 20px;
-  background: var(--color-gray__7);
+	border-radius: 20px;
+	background: var(--color-gray__7);
 
-  cursor: pointer;
+	cursor: pointer;
 
-  &:has(.arrow_left) {
-    position: absolute;
-    z-index: 9;
-    left: 10px;
-  }
+	&:has(.arrow_left) {
+		position: absolute;
+		z-index: 9;
+		left: 10px;
+	}
 
-  &:has(.arrow_right) {
-    position: absolute;
-    z-index: 9;
-    right: 10px;
-  }
+	&:has(.arrow_right) {
+		position: absolute;
+		z-index: 9;
+		right: 10px;
+	}
 
-  .arrow_left {
-    margin: 0;
-    width: 20px;
-    height: 20px;
-    transform: rotate(90deg);
-  }
+	.arrow_left {
+		margin: 0;
+		width: 20px;
+		height: 20px;
+		transform: rotate(90deg);
+	}
 
-  .arrow_right {
-    margin: 0;
-    width: 20px;
-    height: 20px;
-    transform: rotate(-90deg);
-  }
+	.arrow_right {
+		margin: 0;
+		width: 20px;
+		height: 20px;
+		transform: rotate(-90deg);
+	}
 }

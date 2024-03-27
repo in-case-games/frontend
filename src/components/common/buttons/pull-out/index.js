@@ -1,1 +1,1 @@
-export { default as PullOutProfile } from "./pull-out-profile";
+export { default as PullOutProfile } from './pull-out-profile'

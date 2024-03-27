@@ -1,1 +1,1 @@
-export { default as BoxGroup } from "./box-group";
+export { default as BoxGroup } from './box-group'

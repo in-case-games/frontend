@@ -1,20 +1,20 @@
 .box {
-  height: 100%;
-  width: 100%;
+	height: 100%;
+	width: 100%;
 
-  .display {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+	.display {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
 
-  .content {
-  }
+	.content {
+	}
 
-  .container_small {
-    max-width: 1060px;
+	.container_small {
+		max-width: 1060px;
 
-    margin: 0 auto;
-    padding: 0 40px;
-  }
+		margin: 0 auto;
+		padding: 0 40px;
+	}
 }

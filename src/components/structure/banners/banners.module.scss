@@ -1,31 +1,31 @@
 .banners {
-  position: relative;
+	position: relative;
 
-  height: 400px;
+	height: 400px;
 
-  display: flex;
-  justify-content: center;
+	display: flex;
+	justify-content: center;
 
-  background: var(--color-orange__1);
+	background: var(--color-orange__1);
 }
 
 .banners_inner {
-  position: relative;
-  width: 1000px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+	position: relative;
+	width: 1000px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
 
-  .inner {
-    display: -webkit-inline-box;
-    overflow: hidden;
-    transition: all 500ms;
-  }
+	.inner {
+		display: -webkit-inline-box;
+		overflow: hidden;
+		transition: all 500ms;
+	}
 }
 
 @media (max-width: 1000px) {
-  .banners {
-    height: auto;
-  }
+	.banners {
+		height: auto;
+	}
 }

@@ -1,26 +1,26 @@
 .automatic_dot {
-  display: flex;
-  position: absolute;
-  justify-content: center;
-  align-items: center;
-  bottom: 0;
+	display: flex;
+	position: absolute;
+	justify-content: center;
+	align-items: center;
+	bottom: 0;
 
-  z-index: 9;
-  margin-bottom: 10px;
+	z-index: 9;
+	margin-bottom: 10px;
 
-  .dot,
-  .dot__active {
-    height: 15px;
-    width: 15px;
-    border-radius: 10px;
-    margin: 0 2px;
-  }
+	.dot,
+	.dot__active {
+		height: 15px;
+		width: 15px;
+		border-radius: 10px;
+		margin: 0 2px;
+	}
 
-  .dot {
-    background: var(--color-gray__3);
-  }
+	.dot {
+		background: var(--color-gray__3);
+	}
 
-  .dot__active {
-    background: var(--color-orange__1);
-  }
+	.dot__active {
+		background: var(--color-orange__1);
+	}
 }

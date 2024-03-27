@@ -1,1 +1,1 @@
-export { default as StripCounterSlider } from "./strip-counter-slider";
+export { default as StripCounterSlider } from './strip-counter-slider'
