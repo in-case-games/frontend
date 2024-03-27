@@ -25,8 +25,6 @@ const Payment = () => {
 			setIsLoading(false)
 
 			window.location.replace(response?.data?.data?.url)
-
-			return response
 		})
 
 		setIsLoading(false)
