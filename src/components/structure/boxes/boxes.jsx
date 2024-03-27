@@ -1,11 +1,11 @@
-import React from "react";
-import { Group } from "../../../layouts/group";
-import { Big as Box } from "../../loot-box";
+import React from 'react'
+import { Group } from '../../../layouts/group'
+import { Big as Box } from '../../loot-box'
 
-const Boxes = (props) => {
-  const boxes = props.boxes?.map((b) => <Box box={b} key={b.id} />);
+const Boxes = props => {
+	const boxes = props.boxes?.map(b => <Box box={b} key={b.id} />)
 
-  return <Group name={props.name}>{boxes}</Group>;
-};
+	return <Group name={props.name}>{boxes}</Group>
+}
 
-export default React.memo(Boxes);
+export default React.memo(Boxes)

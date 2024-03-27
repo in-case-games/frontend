@@ -1,2 +1,2 @@
-export { Statistics } from "./statistics";
-export { Anchor } from "./anchor";
+export { Anchor } from './anchor'
+export { Statistics } from './statistics'

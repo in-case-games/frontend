@@ -1,1 +1,1 @@
-export { default as AccountDelete } from "./account-delete";
+export { default as AccountDelete } from './account-delete'

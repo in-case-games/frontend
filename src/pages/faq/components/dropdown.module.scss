@@ -1,39 +1,39 @@
 .dropdown {
-  width: 100%;
+	width: 100%;
 
-  margin: 5px 0;
+	margin: 5px 0;
 
-  cursor: pointer;
+	cursor: pointer;
 
-  .question {
-    display: flex;
-    align-items: center;
+	.question {
+		display: flex;
+		align-items: center;
 
-    background: var(--color-orange__3);
-    color: var(--color-black__1);
-    border-radius: 15px;
+		background: var(--color-orange__3);
+		color: var(--color-black__1);
+		border-radius: 15px;
 
-    padding: 20px;
+		padding: 20px;
 
-    .text {
-      font-family: "Nunito";
-      font-size: 20px;
-    }
+		.text {
+			font-family: 'Nunito';
+			font-size: 20px;
+		}
 
-    .button_show {
-      font-size: 40px;
-      margin-right: 5px;
+		.button_show {
+			font-size: 40px;
+			margin-right: 5px;
 
-      color: #1e1e1e;
-    }
-  }
+			color: #1e1e1e;
+		}
+	}
 
-  .answer {
-    background: var(--color-black__9);
-    color: var(--color-orange__1);
+	.answer {
+		background: var(--color-black__9);
+		color: var(--color-orange__1);
 
-    padding: 20px;
+		padding: 20px;
 
-    border-radius: 0 0 15px 15px;
-  }
+		border-radius: 0 0 15px 15px;
+	}
 }

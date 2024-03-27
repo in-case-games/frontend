@@ -1,26 +1,35 @@
 const popNotifies = () => {
-  var notifications = JSON.parse(localStorage.getItem("notifications"));
+	var notifications = JSON.parse(localStorage.getItem('notifications'))
 
-  if (!notifications || notifications.length > 0) {
-    notifications = notifications || [];
-    localStorage.setItem("notifications", JSON.stringify([]));
-  }
+	if (!notifications || notifications.length > 0) {
+		notifications = notifications || []
+		localStorage.setItem('notifications', JSON.stringify([]))
+	}
 
-  return notifications;
-};
+	return notifications
+}
 
-const pushNotify = (notify) => {
-  var notifications = JSON.parse(localStorage.getItem("notifications"));
+const pushNotify = notify => {
+	var content = JSON.stringify(notify.content)
 
-  if (!notifications || notifications.length > 0) {
-    notifications = notifications || [];
-  }
+	console.log(content)
 
-  notifications.push(notify);
-  localStorage.setItem("notifications", JSON.stringify(notifications));
-};
+	if (content.length > 50 || content.includes(':')) {
+		console.log(notify.content)
+
+		notify.content = content.substring(0, 47) + '...'
+	}
+	var notifications = JSON.parse(localStorage.getItem('notifications'))
+
+	if (!notifications || notifications.length > 0) {
+		notifications = notifications || []
+	}
+
+	notifications.push(notify)
+	localStorage.setItem('notifications', JSON.stringify(notifications))
+}
 
 export const Notification = {
-  popNotifies,
-  pushNotify,
-};
+	popNotifies,
+	pushNotify,
+}

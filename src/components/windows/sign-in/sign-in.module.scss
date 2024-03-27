@@ -1,93 +1,93 @@
 .sign_in {
-  display: flex;
-  justify-content: center;
-  text-align: center;
+	display: flex;
+	justify-content: center;
+	text-align: center;
 
-  border-radius: 15px;
-  background: var(--color-black__2);
+	border-radius: 15px;
+	background: var(--color-black__2);
 
-  padding: 40px;
+	padding: 40px;
 
-  .sign_in_content {
-    display: flex;
-    justify-content: space-evenly;
-    flex-direction: column;
-    align-items: center;
-  }
+	.sign_in_content {
+		display: flex;
+		justify-content: space-evenly;
+		flex-direction: column;
+		align-items: center;
+	}
 }
 
 .content_header {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 
-  .tittle {
-    font-size: 32px;
-  }
+	.tittle {
+		font-size: 32px;
+	}
 
-  .error {
-    font-size: 14px;
-    color: red;
-  }
+	.error {
+		font-size: 14px;
+		color: red;
+	}
 }
 
 .content_inputs {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
-  width: 100%;
+	width: 100%;
 
-  padding: 10px 0;
+	padding: 10px 0;
 }
 
 .content_buttons {
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 
-  width: 100%;
+	width: 100%;
 
-  .button_send {
-    width: 250px;
+	.button_send {
+		width: 250px;
 
-    border-radius: 8px;
-    background: var(--color-orange__1);
-    color: var(--color-black__2);
-    background-size: 1px 80px;
+		border-radius: 8px;
+		background: var(--color-orange__1);
+		color: var(--color-black__2);
+		background-size: 1px 80px;
 
-    font-family: "Play";
-    font-weight: 400;
-    font-size: 20px;
-    font-weight: 400;
-    font-size: 20px;
+		font-family: 'Play';
+		font-weight: 400;
+		font-size: 20px;
+		font-weight: 400;
+		font-size: 20px;
 
-    cursor: pointer;
+		cursor: pointer;
 
-    padding: 8px 10px;
-    margin-top: 5px;
-  }
+		padding: 8px 10px;
+		margin-top: 5px;
+	}
 
-  .button_not_account {
-    width: 200px;
+	.button_not_account {
+		width: 200px;
 
-    border-radius: 8px;
-    border: 2px solid var(--color-orange__1);
-    color: var(--color-gray__3);
+		border-radius: 8px;
+		border: 2px solid var(--color-orange__1);
+		color: var(--color-gray__3);
 
-    font-family: "Play";
-    font-weight: 400;
-    font-size: 20px;
-    font-weight: 400;
-    font-size: 20px;
+		font-family: 'Play';
+		font-weight: 400;
+		font-size: 20px;
+		font-weight: 400;
+		font-size: 20px;
 
-    cursor: pointer;
+		cursor: pointer;
 
-    padding: 8px 10px;
-    margin: 10px auto;
-  }
+		padding: 8px 10px;
+		margin: 10px auto;
+	}
 
-  .button_forgot_password {
-    color: var(--color-gray__4);
-    margin-top: 5px;
-    cursor: pointer;
-  }
+	.button_forgot_password {
+		color: var(--color-gray__4);
+		margin-top: 5px;
+		cursor: pointer;
+	}
 }

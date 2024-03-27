@@ -2,95 +2,95 @@
 }
 
 .user_bar__auth {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
 
-  img {
-    background-repeat: no-repeat;
-    background-position: 50%;
-    border-radius: 50%;
-    width: 65px;
-    height: 65px;
-    cursor: pointer;
-    object-fit: cover;
-  }
+	img {
+		background-repeat: no-repeat;
+		background-position: 50%;
+		border-radius: 50%;
+		width: 65px;
+		height: 65px;
+		cursor: pointer;
+		object-fit: cover;
+	}
 }
 
 .user_bar__sign_in {
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 
-  .sign_in_button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	.sign_in_button {
+		display: flex;
+		justify-content: center;
+		align-items: center;
 
-    width: 200px;
+		width: 200px;
 
-    color: var(--color-black__2);
-    background-color: var(--color-orange__1);
-    border-radius: 8px;
+		color: var(--color-black__2);
+		background-color: var(--color-orange__1);
+		border-radius: 8px;
 
-    font-family: "Play";
-    font-weight: 400;
-    font-size: 16px;
+		font-family: 'Play';
+		font-weight: 400;
+		font-size: 16px;
 
-    cursor: pointer;
+		cursor: pointer;
 
-    padding: 8px 10px;
-  }
+		padding: 8px 10px;
+	}
 }
 
 .button_balance {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 
-  width: 170px;
-  height: 20px;
+	width: 170px;
+	height: 20px;
 
-  border-radius: 8px;
-  border: 2px solid var(--color-green__1);
-  cursor: pointer;
+	border-radius: 8px;
+	border: 2px solid var(--color-green__1);
+	cursor: pointer;
 
-  font-size: 22px;
-  font-family: "Play";
-  font-weight: 500;
+	font-size: 22px;
+	font-family: 'Play';
+	font-weight: 500;
 
-  color: var(--color-green__1);
+	color: var(--color-green__1);
 
-  margin-right: 20px;
-  padding: 8px 20px;
+	margin-right: 20px;
+	padding: 8px 20px;
 
-  img {
-    height: 15px;
-    width: 15px;
-  }
+	img {
+		height: 15px;
+		width: 15px;
+	}
 }
 
 .user_bar_balance {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
+	flex: 0 0 auto;
+	display: flex;
+	align-items: center;
 
-  .balance_amount {
-    margin-right: 10px;
-  }
+	.balance_amount {
+		margin-right: 10px;
+	}
 
-  img {
-    height: 20px;
-    width: 20px;
-  }
+	img {
+		height: 20px;
+		width: 20px;
+	}
 }
 
 @media (max-width: 338px) {
-  .button_balance {
-    margin: 20px 0;
-  }
+	.button_balance {
+		margin: 20px 0;
+	}
 
-  .user_bar__sign_in {
-    margin-top: 20px;
-  }
+	.user_bar__sign_in {
+		margin-top: 20px;
+	}
 }

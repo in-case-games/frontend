@@ -1,52 +1,47 @@
-import React, { useEffect, useRef, useState } from "react";
-import styles from "./loading.module";
+import React, { useEffect, useRef, useState } from 'react'
+import { Converter } from '../../helpers/converter'
+import styles from './loading.module'
 
-const LoadingHourglass = (props) => {
-  const observer = useRef(null);
+const LoadingHourglass = props => {
+	const observer = useRef(null)
 
-  const [percent, setPercent] = useState(1);
-  const [color, setColor] = useState("transparent");
-  const [height, setHeight] = useState(null);
+	const [percent, setPercent] = useState(1)
+	const [color, setColor] = useState('transparent')
+	const [height, setHeight] = useState(null)
 
-  useEffect(() => {
-    const interval = setInterval(
-      () => setHeight(observer.current.clientHeight),
-      100
-    );
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setHeight(observer.current.clientHeight)
 
-    return () => clearInterval(interval);
-  });
+			const updatedIn = Math.round(new Date(props.updatedIn) / 1000)
+			const updateTo = Math.round(new Date(props.updateTo) / 1000)
+			const currentDate = Math.round(new Date(Converter.getUtcDate()) / 1000)
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const date = Math.round(new Date(props.updateDate) / 1000);
-      const newDate = Math.round(new Date() / 1000);
+			const totalTime = updateTo - updatedIn
+			const remainedTime = updateTo - currentDate
 
-      const difference = newDate - date;
-      const rate = props.rate ? props.rate : 200;
+			let temp = remainedTime / totalTime
+			temp = temp < 0 ? 0 : temp
+			temp = temp >= 1 ? 1 : temp
 
-      let temp = 1 - difference / rate;
+			if (temp >= 0.7) setColor('green')
+			else if (temp >= 0.4) setColor('orange')
+			else setColor('red')
 
-      temp = temp < 0 ? 0 : temp;
+			setPercent(temp)
+		}, 100)
 
-      if (temp >= 0.7) setColor("green");
-      else if (temp >= 0.4) setColor("orange");
-      else setColor("red");
+		return () => clearInterval(interval)
+	})
 
-      setPercent(temp);
-    }, 100);
+	return (
+		<div className={styles.loading_hourglass} ref={observer}>
+			<div
+				className={styles.hourglass}
+				style={{ height: `${height * percent}px`, background: color }}
+			></div>
+		</div>
+	)
+}
 
-    return () => clearInterval(interval);
-  });
-
-  return (
-    <div className={styles.loading_hourglass} ref={observer}>
-      <div
-        className={styles.hourglass}
-        style={{ height: `${height * percent}px`, background: color }}
-      ></div>
-    </div>
-  );
-};
-
-export default React.memo(LoadingHourglass);
+export default React.memo(LoadingHourglass)

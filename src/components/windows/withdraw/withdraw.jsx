@@ -1,249 +1,206 @@
-import React, { useEffect, useState } from "react";
-import { Item as ItemApi } from "../../../api";
-import { Simple as Item } from "../../game-item";
-import { LoadingArrow as Loading } from "../../loading";
-import { Handler } from "../../../helpers/handler";
-import Constants from "../../../constants";
-import TradeUrlService from "../../../services/trade-url";
-import styles from "./withdraw.module";
+import React, { useEffect, useState } from 'react'
+import { Item as ItemApi } from '../../../api'
+import Constants from '../../../constants'
+import { Common } from '../../../helpers/common'
+import { Handler } from '../../../helpers/handler'
+import TradeUrlService from '../../../services/trade-url'
+import { Simple as Item } from '../../game-item'
+import { LoadingArrow as Loading } from '../../loading'
+import styles from './withdraw.module'
 
-const Withdraw = (props) => {
-  const itemApi = new ItemApi();
+const Withdraw = props => {
+	const itemApi = new ItemApi()
 
-  const [finishedInventories, setFinishedInventories] = useState({ items: [] });
-  const [remainingInventories, setRemainingInventories] = useState({
-    items: [],
-  });
+	const [finishedItems, setFinishedItems] = useState({ items: [] })
+	const [remainingItems, setRemainingItems] = useState({ items: [] })
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [isApply, setIsApply] = useState(false);
-  const [isBanned, setIsBanned] = useState(false);
-  const [isDisplayedButton, setIsDisplayedButton] = useState(false);
-  const [errorMessage, setErrorMessage] = useState();
-  const [penaltyDelay, setPenaltyDelay] = useState(0);
+	const [isLoading, setIsLoading] = useState(true)
+	const [isApply, setIsApply] = useState(false)
+	const [isBanned, setIsBanned] = useState(false)
+	const [isButton, setIsButton] = useState(false)
+	const [errorMessage, setErrorMessage] = useState()
 
-  const isValidTradeUrls = () => {
-    let error = null;
-    const checked = [];
+	const isValidTradeUrls = () => {
+		const checked = []
+		let error = null
 
-    for (let i = 0; i < remainingInventories.items.length; i++) {
-      const game = remainingInventories?.items[i]?.item?.game;
+		for (let i = 0; i < remainingItems.items.length; i++) {
+			const game = remainingItems?.items[i]?.item?.game
 
-      if (checked.indexOf(game) === -1) {
-        const isValid = TradeUrlService.IsValidTradeUrlByGame(game);
-        checked.push(game);
+			if (checked.indexOf(game) === -1) {
+				const isValid = TradeUrlService.IsValidTradeUrlByGame(game)
+				checked.push(game)
 
-        if (!isValid)
-          error = error ?? "Измените трейд ссылки в профиле: " + game;
-      }
-    }
+				if (!isValid)
+					error = error ?? 'Измените трейд ссылки в профиле: ' + game + '\n'
+			}
+		}
 
-    setErrorMessage(error);
+		setErrorMessage(error)
 
-    return error === null;
-  };
+		return error === null
+	}
 
-  const zeroingOutStatusAndErrorsItems = (items) => {
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].status !== "success") {
-        items[i].status = "wait";
-        items[i].error = null;
-      }
-    }
+	const click = () => {
+		if (isValidTradeUrls()) {
+			setIsButton(false)
+			setIsBanned(true)
+			setIsLoading(true)
+			loader()
+		}
+	}
 
-    return items;
-  };
+	const loader = async () => {
+		const finished = Common.zeroingStatusesAndErrorsItemsRealTime(
+			finishedItems.items,
+			setFinishedItems
+		)
 
-  const click = () => {
-    if (isValidTradeUrls()) {
-      setIsDisplayedButton(false);
-      setIsBanned(true);
-      setIsLoading(true);
-      loader();
-    }
-  };
+		for (let i = 0; i < finished.length; i++) {
+			const item = finished[i]
+			let error = false
 
-  const loader = async () => {
-    let items = zeroingOutStatusAndErrorsItems(finishedInventories.items);
+			if (item.status !== 'success') {
+				finished[i].status = 'loading'
+				setFinishedItems(prev => ({
+					...prev,
+					items: finished,
+				}))
+				await Handler.error(
+					async () => {
+						await itemApi.withdraw(
+							item.id,
+							TradeUrlService.GetUrlByGame[item.item.game]()
+						)
 
-    setFinishedInventories((prev) => ({
-      ...prev,
-      items: items,
-    }));
+						finished[i].status = 'success'
+					},
+					async err => {
+						const code = err?.response?.data?.error?.code
 
-    for (let i = 0; i < items.length; i++) {
-      const item = items[i];
-      const selected = props.selectItems.items;
-      let error = false;
+						finished[i].status = 'cancel'
+						finished[i].error =
+							Constants.WithdrawErrors[code] === undefined
+								? 'Подождите или напишите в тех. поддержку'
+								: Constants.WithdrawErrors[code]
 
-      await Handler.error(
-        async () => {
-          if (item.status !== "success") {
-            items[i].status = "loading";
-            setFinishedInventories((prev) => ({
-              ...prev,
-              items: items,
-            }));
+						if (code === 4) finished.push(finished[i])
+						else if (code === 5) finished[i].status = 'exchange'
+						else error = true
 
-            const index = selected.indexOf(item.id);
+						return false
+					},
+					setErrorMessage
+				)
+				setFinishedItems(prev => ({
+					...prev,
+					items: finished,
+				}))
+				if (error) break
+			}
+		}
+		setIsLoading(false)
+		setIsBanned(false)
+	}
 
-            await itemApi.withdraw(
-              item.id,
-              TradeUrlService.GetUrlByGame[item.item.game]()
-            );
+	useEffect(() => {
+		const interval = setInterval(async () => {
+			const finished = finishedItems.items
+			const remaining = finished.filter(i => i.status !== 'success')
 
-            items[i].status = "success";
-            setFinishedInventories((prev) => ({
-              ...prev,
-              items: items,
-            }));
+			if (remainingItems.items.length !== remaining.length) {
+				setRemainingItems({ ...remainingItems, items: remaining })
+			}
+			if ((remaining.length === 0) !== isApply) {
+				setIsApply(remaining.length === 0)
+			}
+			if (remaining.length > 0 !== isButton) {
+				setIsButton(remaining.length > 0)
+			}
 
-            removeSelectItem(index, item);
-          }
-        },
-        async () => {
-          const code = err.response.data.error.code;
+			if (finished.length === 0 && !isBanned) {
+				setIsBanned(true)
+				setIsLoading(true)
 
-          items[i].status = "cancel";
-          items[i].error =
-            Constants.WithdrawErrors[code] === undefined
-              ? "Подождите или напишите в тех. поддержку"
-              : Constants.WithdrawErrors[code];
+				let selected = props.selectItems.items
 
-          setFinishedInventories((prev) => ({
-            ...prev,
-            items: items,
-          }));
+				if (!selected || selected.length === 0) selected = props.loadedItems
 
-          if (code === 4) {
-            const index = props.selectItems.items.indexOf(item.id);
+				setFinishedItems(prev => ({
+					...prev,
+					items: Common.zeroingStatusesAndErrorsItems(selected),
+				}))
+				setIsLoading(false)
+				setIsBanned(false)
+			}
+		}, 10)
 
-            items.push(item);
+		return () => clearInterval(interval)
+	})
 
-            removeSelectItem(index);
-          } else if (code === 5) {
-            items[i].status = "exchange";
+	return (
+		<div className={styles.withdraw}>
+			<div className={styles.withdraw_content}>
+				<div className={styles.withdraw_header}>
+					<div className={styles.loading}>
+						<Loading isLoading={isLoading} click={() => {}} cursor='default' />
+					</div>
+					<div className={styles.tittle}>Вывод предметов</div>
+				</div>
+				{finishedItems.items.length > 0 ? (
+					<div className={styles.counter}>
+						{finishedItems.items.length -
+							remainingItems.items.length +
+							'/' +
+							finishedItems.items.length}
+					</div>
+				) : null}
+				{errorMessage ? (
+					<div className={styles.error}>{errorMessage}</div>
+				) : null}
+				{isButton ? (
+					<div className={styles.button_withdraw} onClick={click}>
+						Вывести
+					</div>
+				) : null}
+				{isApply ? (
+					<div className={styles.description}>
+						Все предметы отправлены :)
+						<br />
+						Для просмотра статуса, перейдите в выводы
+					</div>
+				) : null}
+				{finishedItems.items.length > 0 ? (
+					<div className={styles.delimiter_first}></div>
+				) : null}
+				<div
+					className={styles.items}
+					style={
+						finishedItems.items.length > 3
+							? { overflowY: 'scroll' }
+							: { overflowY: 'hidden' }
+					}
+				>
+					{finishedItems.items.map(i => (
+						<Item
+							id={i.id}
+							item={i.item}
+							showItem={() => {
+								if (i.status === 'exchange') props.setExchangeItem(i)
+							}}
+							showStatus={true}
+							status={i.status}
+							error={i.error}
+							key={i.id}
+						/>
+					))}
+				</div>
+				{finishedItems.items.length > 0 ? (
+					<div className={styles.delimiter_second}></div>
+				) : null}
+			</div>
+		</div>
+	)
+}
 
-            setFinishedInventories((prev) => ({
-              ...prev,
-              items: items,
-            }));
-          } else error = true;
-
-          return false;
-        },
-        setErrorMessage,
-        penaltyDelay,
-        setPenaltyDelay
-      );
-
-      if (error) break;
-    }
-    setIsLoading(false);
-    setIsBanned(false);
-  };
-
-  const removeSelectItem = (index) => {
-    if (index > -1) {
-      let selected = props.selectItems.items;
-      selected.splice(index, 1);
-      props.setSelectItems((prev) => ({ ...prev, items: selected }));
-    }
-  };
-
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      const items = finishedInventories.items;
-      const remaining = items.filter((i) => i.status !== "success");
-      setRemainingInventories((prev) => ({ ...prev, items: remaining }));
-
-      if (items.length > 0 && !isBanned) {
-        setIsApply(remaining.length === 0);
-        setIsDisplayedButton(remaining.length > 0);
-      }
-
-      if (items.length === 0 && !isBanned) {
-        setIsBanned(true);
-        setIsLoading(true);
-
-        let inv = props.selectItems.items;
-
-        if (!inv || inv.length === 0) inv = props.loadedItems;
-
-        inv = zeroingOutStatusAndErrorsItems(inv);
-
-        setFinishedInventories((prev) => ({ ...prev, items: inv }));
-        setIsLoading(false);
-        setIsBanned(false);
-      }
-    }, 100 + penaltyDelay);
-
-    return () => clearInterval(interval);
-  });
-
-  return (
-    <div className={styles.withdraw}>
-      <div className={styles.withdraw_content}>
-        <div className={styles.withdraw_header}>
-          <div className={styles.loading}>
-            <Loading isLoading={isLoading} click={() => {}} cursor="default" />
-          </div>
-          <div className={styles.tittle}>Вывод предметов</div>
-        </div>
-        {finishedInventories.items.length > 0 ? (
-          <div className={styles.counter}>
-            {finishedInventories.items.length -
-              remainingInventories.items.length +
-              "/" +
-              finishedInventories.items.length}
-          </div>
-        ) : null}
-        {errorMessage ? (
-          <div className={styles.error}>{errorMessage}</div>
-        ) : null}
-        {isDisplayedButton ? (
-          <div className={styles.button_withdraw} onClick={click}>
-            Вывести
-          </div>
-        ) : null}
-        {isApply ? (
-          <div className={styles.description}>
-            Все предметы отправлены :)
-            <br />
-            Для просмотра статуса, перейдите в выводы
-          </div>
-        ) : null}
-        {finishedInventories.items.length > 0 ? (
-          <div className={styles.delimiter_first}></div>
-        ) : null}
-        <div
-          className={styles.items}
-          style={
-            finishedInventories.items.length > 3
-              ? { overflowY: "scroll" }
-              : { overflowY: "hidden" }
-          }
-        >
-          {finishedInventories.items.map((i) => (
-            <Item
-              id={i.id}
-              item={i.item}
-              showItem={() => {
-                if (i.status === "exchange") props.setExchangeItem(i);
-              }}
-              showStatus={true}
-              status={i.status}
-              error={i.error}
-              key={i.id}
-            />
-          ))}
-        </div>
-        {finishedInventories.items.length > 0 ? (
-          <div className={styles.delimiter_second}></div>
-        ) : null}
-      </div>
-    </div>
-  );
-};
-
-export default Withdraw;
+export default Withdraw

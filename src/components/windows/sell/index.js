@@ -1,1 +1,1 @@
-export { default as Sell } from "./sell";
+export { default as Sell } from './sell'

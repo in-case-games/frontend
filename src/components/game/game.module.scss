@@ -1,42 +1,42 @@
 .game {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-wrap: wrap;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex-wrap: wrap;
 
-  width: 200px;
+	width: 200px;
 
-  cursor: pointer;
+	cursor: pointer;
 
-  &:hover {
-    .delimiter {
-      border-color: var(--color-orange__1);
+	&:hover {
+		.delimiter {
+			border-color: var(--color-orange__1);
 
-      -webkit-transition: border-color 400ms linear;
-      -ms-transition: border-color 400ms linear;
-      transition: border-color 400ms linear;
-    }
-  }
+			-webkit-transition: border-color 400ms linear;
+			-ms-transition: border-color 400ms linear;
+			transition: border-color 400ms linear;
+		}
+	}
 
-  .image {
-    width: 200px;
-    height: 112px;
-  }
+	.image {
+		width: 200px;
+		height: 112px;
+	}
 
-  .delimiter {
-    width: 100%;
+	.delimiter {
+		width: 100%;
 
-    border: 1px solid var(--color-gray__5);
-    transition: 0.4s border-color;
+		border: 1px solid var(--color-gray__5);
+		transition: 0.4s border-color;
 
-    margin: 10px 0;
+		margin: 10px 0;
 
-    &:hover {
-      border-color: var(--color-orange__1);
+		&:hover {
+			border-color: var(--color-orange__1);
 
-      -webkit-transition: border-color 400ms linear;
-      -ms-transition: border-color 400ms linear;
-      transition: border-color 400ms linear;
-    }
-  }
+			-webkit-transition: border-color 400ms linear;
+			-ms-transition: border-color 400ms linear;
+			transition: border-color 400ms linear;
+		}
+	}
 }

@@ -1,11 +1,11 @@
-import React from "react";
-import { LogoMen } from "../../assets/images/main";
-import styles from "./loading.module.scss";
+import React from 'react'
+import { LogoMen } from '../../assets/images/main'
+import styles from './loading.module.scss'
 
 const LoadingStatic = () => (
-  <div className={styles.loading}>
-    <img alt="" src={LogoMen} className={styles.loading_static}></img>
-  </div>
-);
+	<div className={styles.loading}>
+		<img alt='' src={LogoMen} className={styles.loading_static}></img>
+	</div>
+)
 
-export default React.memo(LoadingStatic);
+export default React.memo(LoadingStatic)

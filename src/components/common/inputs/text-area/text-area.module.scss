@@ -1,27 +1,27 @@
 .text_area {
-  display: flex;
+	display: flex;
 
-  .sub_tittle {
-    font-size: 14px;
-    flex: 1 1 250px;
-  }
+	.sub_tittle {
+		font-size: 14px;
+		flex: 1 1 250px;
+	}
 
-  textarea {
-    width: 100%;
-    flex: 0 1 auto;
+	textarea {
+		width: 100%;
+		flex: 0 1 auto;
 
-    color: var(--color-orange__1);
-    background: none;
+		color: var(--color-orange__1);
+		background: none;
 
-    border: 2px solid var(--color-orange__1);
-    border-radius: 8px;
+		border: 2px solid var(--color-orange__1);
+		border-radius: 8px;
 
-    font-size: 16px;
-    font-family: Nunito;
+		font-size: 16px;
+		font-family: Nunito;
 
-    outline: none;
+		outline: none;
 
-    margin: 5px;
-    padding: 10px 20px;
-  }
+		margin: 5px;
+		padding: 10px 20px;
+	}
 }

@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  frontend:
+    volumes:
+      - ~/nginx/conf.prod.d/:/etc/nginx/conf.d/
+      - ~/.ssl/ca.crt:/etc/ssl/ca.crt
+      - ~/.ssl/:/etc/.ssl/private/
+    ports:
+      - 80:80
+      - 443:443

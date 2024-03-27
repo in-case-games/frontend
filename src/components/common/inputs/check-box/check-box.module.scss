@@ -1,62 +1,62 @@
 .check_box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
-  color: var(--color-orange__1);
+	color: var(--color-orange__1);
 
-  font-size: 16px;
-  font-family: "Nunito";
-  font-weight: 600;
+	font-size: 16px;
+	font-family: 'Nunito';
+	font-weight: 600;
 
-  margin: 5px 0;
+	margin: 5px 0;
 
-  .check_box_on,
-  .check_box_off,
-  .check_box_on__disabled,
-  .check_box_off__disabled {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	.check_box_on,
+	.check_box_off,
+	.check_box_on__disabled,
+	.check_box_off__disabled {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 
-    width: 20px;
-    height: 20px;
+		width: 20px;
+		height: 20px;
 
-    border-radius: 2px;
-    margin-right: 5px;
+		border-radius: 2px;
+		margin-right: 5px;
 
-    cursor: pointer;
-  }
+		cursor: pointer;
+	}
 
-  .check_box_on {
-    color: black;
+	.check_box_on {
+		color: black;
 
-    background: var(--color-orange__1);
-    border: 1px solid var(--color-orange__1);
-  }
+		background: var(--color-orange__1);
+		border: 1px solid var(--color-orange__1);
+	}
 
-  .check_box_on__disabled {
-    color: black;
+	.check_box_on__disabled {
+		color: black;
 
-    background: var(--color-orange__4);
-    border: 1px solid var(--color-orange__4);
+		background: var(--color-orange__4);
+		border: 1px solid var(--color-orange__4);
 
-    cursor: default;
-  }
+		cursor: default;
+	}
 
-  .check_box_off {
-    border: 1px solid var(--color-orange__1);
-  }
+	.check_box_off {
+		border: 1px solid var(--color-orange__1);
+	}
 
-  .check_box_off__disabled {
-    border: 1px solid var(--color-orange__4);
+	.check_box_off__disabled {
+		border: 1px solid var(--color-orange__4);
 
-    cursor: default;
-  }
+		cursor: default;
+	}
 
-  .subTittle {
-    color: var(--color-orange__1);
+	.subTittle {
+		color: var(--color-orange__1);
 
-    font-size: 18px;
-  }
+		font-size: 18px;
+	}
 }

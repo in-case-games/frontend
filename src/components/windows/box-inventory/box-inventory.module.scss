@@ -1,143 +1,143 @@
 .box_inventory {
-  display: flex;
-  justify-content: center;
-  text-align: center;
+	display: flex;
+	justify-content: center;
+	text-align: center;
 
-  border-radius: 15px;
-  background: var(--color-black__2);
+	border-radius: 15px;
+	background: var(--color-black__2);
 
-  padding: 40px;
+	padding: 40px;
 
-  .inventory_content {
-    display: flex;
-    justify-content: space-evenly;
-    flex-direction: column;
-    align-items: center;
-  }
+	.inventory_content {
+		display: flex;
+		justify-content: space-evenly;
+		flex-direction: column;
+		align-items: center;
+	}
 }
 
 .inventory_header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
 
-  .loading {
-    flex: 0 0 auto;
-  }
+	.loading {
+		flex: 0 0 auto;
+	}
 
-  .tittle {
-    font-size: 28px;
-    margin-left: 5px;
-  }
+	.tittle {
+		font-size: 28px;
+		margin-left: 5px;
+	}
 }
 
 .inventory_info {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
+	align-items: center;
 
-  .delimiter {
-    border: 1px solid var(--color-orange__1);
-    width: 100%;
-    margin: 20px 0;
-  }
+	.delimiter {
+		border: 1px solid var(--color-orange__1);
+		width: 100%;
+		margin: 20px 0;
+	}
 
-  .inputs {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
+	.inputs {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
 
-    width: 350px;
+		width: 350px;
 
-    .input {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+		.input {
+			display: flex;
+			justify-content: center;
+			align-items: center;
 
-      .image {
-        height: 60px;
-        max-width: 60px;
+			.image {
+				height: 60px;
+				max-width: 60px;
 
-        background-repeat: no-repeat;
-        background-position: 50%;
-        border-radius: 50%;
+				background-repeat: no-repeat;
+				background-position: 50%;
+				border-radius: 50%;
 
-        object-fit: cover;
+				object-fit: cover;
 
-        cursor: pointer;
-      }
-    }
-  }
+				cursor: pointer;
+			}
+		}
+	}
 }
 
 .inventory_buttons {
-  display: flex;
-  margin-top: 15px;
+	display: flex;
+	margin-top: 15px;
 
-  .button_send,
-  .button_delete,
-  .button_back {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+	.button_send,
+	.button_delete,
+	.button_back {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
 
-    border-radius: 8px;
+		border-radius: 8px;
 
-    font-family: "Play";
-    font-weight: 400;
-    font-size: 20px;
-    font-weight: 400;
-    font-size: 20px;
+		font-family: 'Play';
+		font-weight: 400;
+		font-size: 20px;
+		font-weight: 400;
+		font-size: 20px;
 
-    cursor: pointer;
+		cursor: pointer;
 
-    padding: 8px 10px;
-  }
-  .button_send {
-    width: 150px;
+		padding: 8px 10px;
+	}
+	.button_send {
+		width: 150px;
 
-    background: var(--color-orange__1);
-    color: var(--color-black__2);
+		background: var(--color-orange__1);
+		color: var(--color-black__2);
 
-    margin-right: 5px;
-  }
+		margin-right: 5px;
+	}
 
-  .button_delete {
-    width: 150px;
+	.button_delete {
+		width: 150px;
 
-    background: var(--color-red__1);
-    color: var(--color-black__2);
+		background: var(--color-red__1);
+		color: var(--color-black__2);
 
-    margin-left: 5px;
-  }
+		margin-left: 5px;
+	}
 
-  .button_back {
-    width: 200px;
+	.button_back {
+		width: 200px;
 
-    background: var(--color-green__1);
-    color: var(--color-black__2);
+		background: var(--color-green__1);
+		color: var(--color-black__2);
 
-    .timer {
-      margin-left: 5px;
-    }
-  }
+		.timer {
+			margin-left: 5px;
+		}
+	}
 }
 
 @media (max-width: 500px) or (max-height: 700px) {
-  .inventory_header {
-    .tittle {
-      font-size: 20px;
-    }
-  }
-  .box_inventory {
-    padding: 10px;
-  }
+	.inventory_header {
+		.tittle {
+			font-size: 20px;
+		}
+	}
+	.box_inventory {
+		padding: 10px;
+	}
 
-  .inventory_info {
-    .tittle {
-      font-size: 18px;
-    }
-  }
+	.inventory_info {
+		.tittle {
+			font-size: 18px;
+		}
+	}
 }

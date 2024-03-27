@@ -1,1 +1,1 @@
-export { default as AccountChangeEmail } from "./account-change-email";
+export { default as AccountChangeEmail } from './account-change-email'

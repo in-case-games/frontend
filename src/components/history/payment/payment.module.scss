@@ -1,61 +1,61 @@
 .history {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
 
-  margin: 3px 5px;
+	margin: 3px 5px;
 
-  .button_status {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	.button_status {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 
-    height: 80px;
-    width: 40px;
+		height: 80px;
+		width: 40px;
 
-    font-size: 28px;
-    font-weight: 900;
-    border-radius: 0 15px 15px 0;
-  }
+		font-size: 28px;
+		font-weight: 900;
+		border-radius: 0 15px 15px 0;
+	}
 }
 
 .history_content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
 
-  height: 80px;
-  width: 180px;
+	height: 80px;
+	width: 180px;
 
-  background: var(--color-black__8);
-  border-radius: 15px 0 0 15px;
+	background: var(--color-black__8);
+	border-radius: 15px 0 0 15px;
 
-  transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
 
-  cursor: pointer;
+	cursor: pointer;
 
-  &:hover {
-    background: var(--color-black__9);
+	&:hover {
+		background: var(--color-black__9);
 
-    transition: all 0.3s ease-out;
-  }
+		transition: all 0.3s ease-out;
+	}
 
-  .date {
-    color: var(--color-gray__8);
+	.date {
+		color: var(--color-gray__8);
 
-    font-family: "Play";
-    font-size: 14px;
-  }
+		font-family: 'Play';
+		font-size: 14px;
+	}
 }
 
 .history_money {
-  display: flex;
+	display: flex;
 
-  .amount {
-    margin-right: 5px;
-  }
+	.amount {
+		margin-right: 5px;
+	}
 
-  .currency {
-  }
+	.currency {
+	}
 }

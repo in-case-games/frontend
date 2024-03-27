@@ -1,39 +1,39 @@
 .account_confirm {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 
-  .error {
-    font-size: 18px;
-    color: red;
-    text-align: center;
-    margin: 20px 0;
-  }
+	.error {
+		font-size: 18px;
+		color: red;
+		text-align: center;
+		margin: 20px 0;
+	}
 
-  .tittle {
-    margin-top: 50px;
-    color: var(--color-orange__1);
-    font-size: 24px;
-    text-align: center;
-  }
+	.tittle {
+		margin-top: 50px;
+		color: var(--color-orange__1);
+		font-size: 24px;
+		text-align: center;
+	}
 
-  .button_back {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	.button_back {
+		display: flex;
+		justify-content: center;
+		align-items: center;
 
-    width: 250px;
+		width: 250px;
 
-    color: var(--color-black__2);
-    background-color: var(--color-orange__1);
-    border-radius: 8px;
+		color: var(--color-black__2);
+		background-color: var(--color-orange__1);
+		border-radius: 8px;
 
-    font-family: "Play";
-    font-weight: 400;
-    font-size: 20px;
+		font-family: 'Play';
+		font-weight: 400;
+		font-size: 20px;
 
-    cursor: pointer;
+		cursor: pointer;
 
-    padding: 8px 10px;
-  }
+		padding: 8px 10px;
+	}
 }

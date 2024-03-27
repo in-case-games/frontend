@@ -1,1 +1,1 @@
-export { default as Promocode } from "./promocode";
+export { default as Promocode } from './promocode'

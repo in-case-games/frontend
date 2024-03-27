@@ -1,48 +1,48 @@
 .history {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
 
-  margin: 3px 5px;
+	margin: 3px 5px;
 }
 
 .history_content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
 
-  height: 80px;
-  width: 180px;
+	height: 80px;
+	width: 180px;
 
-  background: var(--color-black__8);
-  border-radius: 15px;
-  border-bottom: 2px solid;
+	background: var(--color-black__8);
+	border-radius: 15px;
+	border-bottom: 2px solid;
 
-  transition: all 0.3s ease-out;
+	transition: all 0.3s ease-out;
 
-  cursor: pointer;
+	cursor: pointer;
 
-  &:hover {
-    background: var(--color-black__9);
+	&:hover {
+		background: var(--color-black__9);
 
-    transition: all 0.3s ease-out;
-  }
+		transition: all 0.3s ease-out;
+	}
 
-  .name {
-  }
+	.name {
+	}
 
-  .date {
-    color: var(--color-gray__8);
+	.date {
+		color: var(--color-gray__8);
 
-    font-family: "Play";
-    font-size: 14px;
-  }
+		font-family: 'Play';
+		font-size: 14px;
+	}
 
-  .discount {
-    display: flex;
+	.discount {
+		display: flex;
 
-    .percent {
-    }
-  }
+		.percent {
+		}
+	}
 }

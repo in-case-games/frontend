@@ -1,20 +1,27 @@
-import React, { useRef } from "react";
-import styles from "./banner.module";
+import React, { useEffect, useState } from 'react'
+import styles from './banner.module'
 
-const Banner = (props) => {
-  const windowWidth = useRef(window.innerWidth);
+const Banner = props => {
+	const [width, setWidth] = useState(window.innerWidth)
 
-  return (
-    <div
-      className={styles.banner}
-      onClick={props.click}
-      style={{
-        width: `${windowWidth.current > 1000 ? 1000 : windowWidth.current}px`,
-      }}
-    >
-      <img className={styles.image} alt="" src={props.image} />
-    </div>
-  );
-};
+	useEffect(() => {
+		window.addEventListener('resize', () => setWidth(window.innerWidth))
+		return () => {
+			window.removeEventListener('resize', () => setWidth(window.innerWidth))
+		}
+	}, [])
 
-export default React.memo(Banner);
+	return (
+		<div
+			className={styles.banner}
+			onClick={props.click}
+			style={{
+				width: `${width > 1000 ? 1000 : width}px`,
+			}}
+		>
+			<img className={styles.image} alt='' src={props.image} />
+		</div>
+	)
+}
+
+export default React.memo(Banner)

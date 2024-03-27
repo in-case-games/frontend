@@ -1,40 +1,40 @@
-import api from "./api";
-import Constants from "../constants";
+import Constants from '../constants'
+import api from './api'
 
 class Restriction {
-  async getTypes() {
-    const response = await api.get(
-      Constants.GATE_AWAY_API_URL + "user/restriction/types"
-    );
+	async getTypes() {
+		const response = await api.get(
+			Constants.GATE_AWAY_API_URL + 'user/restriction/types'
+		)
 
-    return response.data.data;
-  }
+		return response.data.data
+	}
 
-  async post(restriction) {
-    const response = await api.post(
-      Constants.GATE_AWAY_API_URL + "user/restriction",
-      restriction
-    );
+	async post(restriction) {
+		const response = await api.post(
+			Constants.GATE_AWAY_API_URL + 'user/restriction',
+			restriction
+		)
 
-    return response.data.data;
-  }
+		return response.data.data
+	}
 
-  async put(restriction) {
-    const response = await api.put(
-      Constants.GATE_AWAY_API_URL + "user/restriction",
-      restriction
-    );
+	async put(restriction) {
+		const response = await api.put(
+			Constants.GATE_AWAY_API_URL + 'user/restriction',
+			restriction
+		)
 
-    return response.data.data;
-  }
+		return response.data.data
+	}
 
-  async delete(id) {
-    const response = await api.delete(
-      Constants.GATE_AWAY_API_URL + `user/restriction/${id}`
-    );
+	async delete(id) {
+		const response = await api.delete(
+			Constants.GATE_AWAY_API_URL + `user/restriction/${id}`
+		)
 
-    return response.data.data;
-  }
+		return response.data.data
+	}
 }
 
-export default Restriction;
+export default Restriction

@@ -1,41 +1,41 @@
 .counter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
-  .pages {
-    margin: 0 20px;
-  }
+	.pages {
+		margin: 0 20px;
+	}
 }
 
 .button_slider {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 
-  width: 40px;
-  height: 40px;
+	width: 40px;
+	height: 40px;
 
-  border-radius: 20px;
-  background: var(--color-orange__1);
+	border-radius: 20px;
+	background: var(--color-orange__1);
 
-  cursor: pointer;
+	cursor: pointer;
 
-  .arrow_left {
-    width: 20px;
-    height: 20px;
+	.arrow_left {
+		width: 20px;
+		height: 20px;
 
-    transform: rotate(90deg);
+		transform: rotate(90deg);
 
-    margin-right: 0;
-  }
+		margin-right: 0;
+	}
 
-  .arrow_right {
-    width: 20px;
-    height: 20px;
+	.arrow_right {
+		width: 20px;
+		height: 20px;
 
-    transform: rotate(-90deg);
+		transform: rotate(-90deg);
 
-    margin-left: 0;
-  }
+		margin-left: 0;
+	}
 }
