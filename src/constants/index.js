@@ -10,7 +10,7 @@ import { GameCSGO as CSGO, GameDota2 as Dota2 } from '../assets/images/main'
 const production = process.env.NODE_ENV === 'production'
 const GATE_AWAY_API_URL = production
 	? 'https://api.in-case.games/api/'
-	: 'https://localhost:5000/api/'
+	: 'http://localhost:5000/api/'
 const FILE_SERVER_URL = production
 	? 'https://fileserver.in-case.games:8080/'
 	: 'http://localhost:8080/'
