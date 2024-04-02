@@ -11,6 +11,8 @@
 	padding: 40px;
 }
 
+
+
 .send_email_content {
 	display: flex;
 	justify-content: space-evenly;
@@ -27,5 +29,24 @@
 	.loading {
 		max-height: 120px;
 		width: 90px;
+	}
+	.button_send{
+		width: 250px;
+	
+		border-radius: 8px;
+		background: var(--color-orange__1);
+		color: var(--color-black__2);
+		background-size: 1px 80px;
+
+		font-family: 'Play';
+		font-weight: 400;
+		font-size: 15px;
+		font-weight: 400;
+		font-size: 20px;
+	
+		cursor: pointer;
+	
+		padding: 8px 10px;
+		margin-top: 5px;
 	}
 }

@@ -36,8 +36,9 @@ const AccountConfirm = () => {
 			},
 			isStart ? 100 : 10000
 		)
-
+		localStorage.removeItem('cred')
 		return () => clearInterval(interval)
+		
 	})
 
 	return (
