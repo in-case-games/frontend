@@ -30,16 +30,16 @@
 <b>Разработка:</b>
 
 1. Меняем .env файлы конфигураций
-2. `docker-compose -f compose.yaml -f compose.dev.yaml --verbose up --build`
+2. `docker-compose -f compose.yml -f compose.dev.yml --verbose up --build`
 
 <b>Выпуск:</b>
 
 1. Меняем .env файлы конфигураций
-2. `docker-compose -f compose.yaml -f compose.dev.yaml --verbose build`
+2. `docker-compose -f compose.yml -f compose.dev.yml --verbose build`
 3. `docker save -o images.tar frontend`
 4. Переносим images.tar на сервер
 5. `docker load -i images.tar`
-6. `docker-compose -f compose.yaml -f compose.prod.yaml --verbose up`
+6. `docker-compose -f compose.yml -f compose.prod.yml --verbose up`
 
 > [!IMPORTANT]
 >
