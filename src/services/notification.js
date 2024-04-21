@@ -1,8 +1,8 @@
 const popNotifies = () => {
-	var notifications = JSON.parse(localStorage.getItem('notifications'))
+	var notifications = JSON.parse(localStorage.getItem('notifications')) || []
 
-	if (!notifications || notifications.length > 0) {
-		notifications = notifications || []
+	if (notifications.length > 0) 
+	{
 		localStorage.setItem('notifications', JSON.stringify([]))
 	}
 
@@ -11,18 +11,13 @@ const popNotifies = () => {
 
 const pushNotify = notify => {
 	var content = JSON.stringify(notify.content)
+	var notifications = JSON.parse(localStorage.getItem('notifications')) || []
 
 	console.log(content)
 
-	if (content.length > 50 || content.includes(':')) {
-		console.log(notify.content)
-
+	if (content.length > 50 || content.includes(':')) 
+	{
 		notify.content = content.substring(0, 47) + '...'
-	}
-	var notifications = JSON.parse(localStorage.getItem('notifications'))
-
-	if (!notifications || notifications.length > 0) {
-		notifications = notifications || []
 	}
 
 	notifications.push(notify)

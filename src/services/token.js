@@ -2,6 +2,17 @@ import { jwtDecode } from 'jwt-decode'
 import { User as UserApi } from '../api'
 
 const getUser = () => JSON.parse(localStorage.getItem('user'))
+const removeUser = () => localStorage.removeItem('user')
+
+const getAccessClaims = () => jwtDecode(getAccessToken())
+const getRefreshClaims = () => jwtDecode(getRefreshToken())
+
+const getAccessToken = () => JSON.parse(localStorage.getItem('user'))?.accessToken
+const getRefreshToken = () => JSON.parse(localStorage.getItem('user'))?.refreshToken
+
+const getExpiresAccessToken = () => JSON.parse(localStorage.getItem('user'))?.expiresAccess
+const getExpiresRefreshToken = () => JSON.parse(localStorage.getItem('user'))?.expiresRefresh
+
 const setUser = async user => {
 	const userApi = new UserApi()
 	const decodeAccess = jwtDecode(user.accessToken)
@@ -21,26 +32,13 @@ const setUser = async user => {
 
 	localStorage.setItem('user', JSON.stringify(user))
 }
-const removeUser = () => localStorage.removeItem('user')
 
-const getAccessClaims = () => jwtDecode(getAccessToken())
-const getRefreshClaims = () => jwtDecode(getRefreshToken())
-
-const getAccessToken = () =>
-	JSON.parse(localStorage.getItem('user'))?.accessToken
 const updateAccessToken = token => {
 	let user = JSON.parse(localStorage.getItem('user'))
 
 	user.accessToken = token
 	localStorage.setItem('user', JSON.stringify(user))
 }
-const getRefreshToken = () =>
-	JSON.parse(localStorage.getItem('user'))?.refreshToken
-
-const getExpiresAccessToken = () =>
-	JSON.parse(localStorage.getItem('user'))?.expiresAccess
-const getExpiresRefreshToken = () =>
-	JSON.parse(localStorage.getItem('user'))?.expiresRefresh
 
 const TokenService = {
 	getRefreshToken,
