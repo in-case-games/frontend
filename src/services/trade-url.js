@@ -10,8 +10,8 @@ const GetUrlByGame = {
 }
 
 const UpdateUrlByGame = {
-	csgo: v => wrapperUpdateUrls(u => (u = { ...u, steam: v })),
-	dota2: v => wrapperUpdateUrls(u => (u = { ...u, steam: v })),
+	csgo: v => UpdateUrls(u => (u = { ...u, steam: v })),
+	dota2: v => UpdateUrls(u => (u = { ...u, steam: v })),
 }
 
 const GetUrls = () => JSON.parse(localStorage.getItem('trade-urls'))
@@ -23,7 +23,7 @@ const IsValidTradeUrlByGame = game => {
 	return url && regex.test(url)
 }
 
-const wrapperUpdateUrls = action => {
+const UpdateUrls = action => {
 	let urls = GetUrls()
 
 	urls = action(urls || template)
