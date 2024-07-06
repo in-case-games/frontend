@@ -16,7 +16,11 @@ const SignIn = props => {
 			async () => {
 				const response = await authApi.signIn(login, password)
 				props.exchangeWindow('email')
-
+				localStorage.setItem('cred', `
+				{
+					"password": "${password}",
+					"login": "${login}"
+				}`)
 				return response
 			},
 			undefined,
